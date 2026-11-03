@@ -36,6 +36,9 @@ PAGINAS = [
     ("contenidos/ud3-vision.md", "ud3-vision.html", "ud3-vision"),
     ("contenidos/ud4-lenguaje.md", "ud4-lenguaje.html", "ud4-lenguaje"),
     ("contenidos/ud5-ml.md", "ud5-ml.html", "ud5-ml"),
+    ("contenidos/asignatura.md", "asignatura.html", "asignatura"),
+    ("contenidos/datos.md", "datos.html", "datos"),
+    ("contenidos/libro.md", "libro.html", "libro"),
     ("descargas/Teoria_Fundamental_Conceptos_UD2.md", "teoria.html", "teoria"),
 ]
 

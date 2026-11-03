@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El libro · IA Apuntes</title>
+<meta name="description" content="Tecnologías Inteligentes de J. F.
+Puentes Calvo, capítulo a capítulo, con sus notebooks y un banco de
+prompts para practicar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="brand" href="./">IA<span>·</span>Apuntes</a>
+  <nav aria-label="Principal">
+    <a href="./">Inicio</a>
+    <a href="asignatura.html" title="Programación, criterios y evaluación">Asignatura</a>
+    <a href="ud1.html" title="Conceptos clave de la IA">UD1</a>
+    <a href="teoria.html" title="Programación en Python: teoría">UD2 Teoría</a>
+    <a href="ejercicios.html" title="Ejercicios de Python E1–E27">UD2 Ejercicios</a>
+    <a href="ud3-vision.html" title="Visión artificial">UD3 Visión</a>
+    <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural">UD4 Lenguaje</a>
+    <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
+    <a href="datos.html" title="Análisis de datos: de los datos al modelo">Datos</a>
+    <a href="libro.html" title="El libro de referencia, capítulo a capítulo" aria-current="page">Libro</a>
+    <a href="mapa.html">Mapa</a>
+  </nav>
+</div></header>
+<main class="doc">
+  <div>
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="TOC">Índice ▾</button>
+<nav id="TOC" aria-label="Índice">
+<ul>
+<li><a href="#el-libro-de-referencia-capítulo-a-capítulo"
+id="toc-el-libro-de-referencia-capítulo-a-capítulo">El libro de
+referencia, capítulo a capítulo</a>
+<ul>
+<li><a href="#estructura-general" id="toc-estructura-general">Estructura
+general</a></li>
+<li><a href="#parte-i--fundamentos-ud1"
+id="toc-parte-i--fundamentos-ud1">Parte I · Fundamentos (UD1)</a>
+<ul>
+<li><a href="#capítulo-1--qué-es-la-inteligencia-artificial-págs-1136"
+id="toc-capítulo-1--qué-es-la-inteligencia-artificial-págs-1136">Capítulo
+1 · ¿Qué es la inteligencia artificial? (págs. 11–36)</a></li>
+<li><a href="#capítulo-2--fundamentos-de-la-ia-págs-3762"
+id="toc-capítulo-2--fundamentos-de-la-ia-págs-3762">Capítulo 2 ·
+Fundamentos de la IA (págs. 37–62)</a></li>
+<li><a href="#capítulo-3--ia-en-el-mundo-real-págs-6378"
+id="toc-capítulo-3--ia-en-el-mundo-real-págs-6378">Capítulo 3 · IA en el
+mundo real (págs. 63–78)</a></li>
+</ul></li>
+<li><a href="#parte-ii--visión-artificial"
+id="toc-parte-ii--visión-artificial">Parte II · Visión artificial</a>
+<ul>
+<li><a
+href="#capítulo-4--elementos-y-procesamiento-básico-de-una-imagen-págs-8194"
+id="toc-capítulo-4--elementos-y-procesamiento-básico-de-una-imagen-págs-8194">Capítulo
+4 · Elementos y procesamiento básico de una imagen (págs.
+81–94)</a></li>
+<li><a
+href="#capítulo-5--clasificación-identificación-y-segmentación-págs-95122"
+id="toc-capítulo-5--clasificación-identificación-y-segmentación-págs-95122">Capítulo
+5 · Clasificación, identificación y segmentación (págs. 95–122)</a></li>
+<li><a href="#capítulo-6--percepción-de-alto-nivel-págs-123148"
+id="toc-capítulo-6--percepción-de-alto-nivel-págs-123148">Capítulo 6 ·
+Percepción de alto nivel (págs. 123–148)</a></li>
+<li><a
+href="#capítulo-7--impacto-de-la-visión-artificial-en-la-sociedad-págs-149160"
+id="toc-capítulo-7--impacto-de-la-visión-artificial-en-la-sociedad-págs-149160">Capítulo
+7 · Impacto de la visión artificial en la sociedad (págs.
+149–160)</a></li>
+</ul></li>
+<li><a href="#parte-iii--procesamiento-del-lenguaje-natural"
+id="toc-parte-iii--procesamiento-del-lenguaje-natural">Parte III ·
+Procesamiento del lenguaje natural</a>
+<ul>
+<li><a href="#capítulo-8--codificando-datos-págs-163184"
+id="toc-capítulo-8--codificando-datos-págs-163184">Capítulo 8 ·
+Codificando datos (págs. 163–184)</a></li>
+<li><a
+href="#capítulo-9--de-audio-a-texto-y-de-nuevo-a-audio-págs-185192"
+id="toc-capítulo-9--de-audio-a-texto-y-de-nuevo-a-audio-págs-185192">Capítulo
+9 · De audio a texto y de nuevo a audio (págs. 185–192)</a></li>
+<li><a href="#capítulo-10--similitud-entre-textos-págs-193204"
+id="toc-capítulo-10--similitud-entre-textos-págs-193204">Capítulo 10 ·
+Similitud entre textos (págs. 193–204)</a></li>
+<li><a href="#capítulo-11--análisis-de-sentimientos-págs-205216"
+id="toc-capítulo-11--análisis-de-sentimientos-págs-205216">Capítulo 11 ·
+Análisis de sentimientos (págs. 205–216)</a></li>
+<li><a href="#capítulo-12--los-modelos-de-lenguaje-págs-217238"
+id="toc-capítulo-12--los-modelos-de-lenguaje-págs-217238">Capítulo 12 ·
+Los modelos de lenguaje (págs. 217–238)</a></li>
+<li><a href="#capítulo-13--repercusión-social-del-pln-págs-239246"
+id="toc-capítulo-13--repercusión-social-del-pln-págs-239246">Capítulo 13
+· Repercusión social del PLN (págs. 239–246)</a></li>
+</ul></li>
+<li><a href="#parte-iv--aprendizaje-automático-ud5"
+id="toc-parte-iv--aprendizaje-automático-ud5">Parte IV · Aprendizaje
+automático (UD5)</a>
+<ul>
+<li><a href="#capítulo-14--algoritmos-y-modelos-págs-249264"
+id="toc-capítulo-14--algoritmos-y-modelos-págs-249264">Capítulo 14 ·
+Algoritmos y modelos (págs. 249–264)</a></li>
+<li><a href="#capítulo-15--la-ciencia-de-los-datos-págs-265276"
+id="toc-capítulo-15--la-ciencia-de-los-datos-págs-265276">Capítulo 15 ·
+La ciencia de los datos (págs. 265–276)</a></li>
+<li><a
+href="#capítulo-16--entrenamiento-y-evaluación-de-modelos-págs-277302"
+id="toc-capítulo-16--entrenamiento-y-evaluación-de-modelos-págs-277302">Capítulo
+16 · Entrenamiento y evaluación de modelos (págs. 277–302)</a></li>
+<li><a href="#capítulo-17--redes-neuronales-artificiales-págs-303328"
+id="toc-capítulo-17--redes-neuronales-artificiales-págs-303328">Capítulo
+17 · Redes neuronales artificiales (págs. 303–328)</a></li>
+<li><a
+href="#capítulo-18--la-ética-en-la-era-del-aprendizaje-automático-págs-329340"
+id="toc-capítulo-18--la-ética-en-la-era-del-aprendizaje-automático-págs-329340">Capítulo
+18 · La ética en la era del aprendizaje automático (págs.
+329–340)</a></li>
+<li><a
+href="#capítulo-19--metodología-educativa-págs-343355-para-el-docente"
+id="toc-capítulo-19--metodología-educativa-págs-343355-para-el-docente">Capítulo
+19 · Metodología educativa (págs. 343–355, para el docente)</a></li>
+</ul></li>
+<li><a href="#banco-de-prompts" id="toc-banco-de-prompts">Banco de
+prompts</a></li>
+<li><a href="#relación-con-la-teoría-de-la-ud2"
+id="toc-relación-con-la-teoría-de-la-ud2">Relación con la teoría de la
+UD2</a></li>
+<li><a href="#avisos-sobre-el-libro"
+id="toc-avisos-sobre-el-libro">Avisos sobre el libro</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+  <article class="content">
+<h1 id="el-libro-de-referencia-capítulo-a-capítulo">El libro de
+referencia, capítulo a capítulo</h1>
+<p><strong>Libro:</strong> Juan Francisco Puentes Calvo, <em>Tecnologías
+Inteligentes. Más que una introducción a la inteligencia
+artificial</em>, edición 2025, 371 páginas. Prólogo de Francisco Bellas.
+<strong>Licencia:</strong> CC BY-NC-ND 4.0. Se puede compartir el PDF
+tal cual, citando al autor. No se puede vender ni modificar, ni crear
+obras derivadas. <strong>Repositorio de notebooks:</strong> <a
+href="https://github.com/FranPuentes/iTI2025">https://github.com/FranPuentes/iTI2025</a>
+(GPL 3.0; se pueden adaptar). Este resumen es propio: no reproduce el
+texto del libro. El PDF completo se puede descargar y compartir
+libremente citando al autor.</p>
+<blockquote>
+<p><strong>Contexto:</strong> el autor formó parte del grupo de trabajo
+de la Consellería de Educación (2023) que definió los currículos
+gallegos de IA de ESO y de 1.º de Bachillerato. Por eso el libro sigue
+de cerca los contenidos oficiales de Tecnoloxías Intelixentes.</p>
+</blockquote>
+<blockquote>
+<p><strong>Método del libro: «prompt → código».</strong> El libro no
+enseña Python línea a línea. El alumnado escribe un <em>prompt</em> a su
+IA favorita (el autor usa ChatGPT; en Colab sirve Gemini), ejecuta la
+celda generada, la entiende y la verifica. Cada notebook del repositorio
+es la solución de una cadena de prompts. Abajo hay un <strong>banco de
+prompts</strong> extraído del libro, útil como ejercicios graduados para
+UD2–UD5.</p>
+</blockquote>
+<hr />
+<h2 id="estructura-general">Estructura general</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Parte</th>
+<th>Capítulos</th>
+<th>Págs.</th>
+<th>Unidad del curso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fundamentos</td>
+<td>1–3</td>
+<td>11–78</td>
+<td><a href="ud1.html">UD1</a></td>
+</tr>
+<tr class="even">
+<td>Visión artificial</td>
+<td>4–7</td>
+<td>81–160</td>
+<td><a href="ud3-vision.html">Visión artificial</a></td>
+</tr>
+<tr class="odd">
+<td>Procesamiento del lenguaje natural</td>
+<td>8–13</td>
+<td>163–246</td>
+<td><a href="ud4-lenguaje.html">Lenguaje natural</a></td>
+</tr>
+<tr class="even">
+<td>Aprendizaje automático</td>
+<td>14–18</td>
+<td>249–340</td>
+<td><a href="ud5-ml.html">UD5</a></td>
+</tr>
+<tr class="odd">
+<td>Metodología educativa (para el docente)</td>
+<td>19</td>
+<td>343–355</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>No hay capítulo de Python: el anexo «Herramientas» se eliminó en la
+edición 2025. La UD2 se apoya en el notebook
+<code>00 Introducción a Python.ipynb</code> y en el banco de
+prompts.</p>
+<blockquote>
+<p><strong>Orden de unidades:</strong> el libro trata la visión (caps.
+4–7) antes que el lenguaje (caps. 8–13), igual que la programación
+oficial del 08/10/2026. El aula virtual y la teoría de la UD2 ponen
+Lenguaje Natural antes que Visión Artificial. Lo que cambia es la
+numeración UD3/UD4, no los contenidos.</p>
+</blockquote>
+<hr />
+<h2 id="parte-i--fundamentos-ud1">Parte I · Fundamentos (UD1)</h2>
+<h3
+id="capítulo-1--qué-es-la-inteligencia-artificial-págs-1136">Capítulo 1
+· ¿Qué es la inteligencia artificial? (págs. 11–36)</h3>
+<ul>
+<li><strong>1.1–1.2 Inteligencia e IA</strong>:
+<ul>
+<li>La inteligencia como constructo social y las inteligencias múltiples
+de Gardner.</li>
+<li>La definición de consenso: razonar, planificar, resolver problemas,
+pensar en abstracto, aprender rápido y, sobre todo, aprender de la
+experiencia.</li>
+</ul></li>
+<li><strong>1.3 Datos, información y conocimiento</strong>: el ejemplo
+del semáforo. Además:
+<ul>
+<li><strong>1.3.1 La realidad hecha de patrones</strong>: una fuente que
+siempre emite lo mismo no informa, y una aleatoria no permite
+predecir.</li>
+<li><strong>1.3.2 La sociedad del conocimiento</strong>.</li>
+<li>Los sentidos humanos y animales, y su ampliación tecnológica con
+sensores.</li>
+</ul></li>
+<li><strong>1.4 Historia</strong>:
+<ul>
+<li>Precursores.</li>
+<li><strong>1.4.1</strong> Nacimiento formal en Dartmouth, 1956.</li>
+<li><strong>1.4.2</strong> Los «fríos inviernos».</li>
+<li><strong>1.4.3</strong> El Big Data.</li>
+<li><strong>1.4.4</strong> El «mejor verano»: deep learning,
+Transformers, GPT, imagen y música generativas.</li>
+</ul></li>
+<li><strong>1.5 Qué no es IA</strong>: algoritmos deterministas,
+automatización, estadística, sensores e IoT, simulación, bases de datos
+y redes. Son piezas de los sistemas de IA, pero no son IA por sí
+mismos.</li>
+<li><strong>Retos</strong>: galería de pioneros y pioneras, conceptos
+para preguntar a la IA y películas sobre IA.</li>
+</ul>
+<h3 id="capítulo-2--fundamentos-de-la-ia-págs-3762">Capítulo 2 ·
+Fundamentos de la IA (págs. 37–62)</h3>
+<ul>
+<li><strong>2.1 Tipos de IA</strong>:
+<ul>
+<li>Según la tarea: débil o fuerte.</li>
+<li>Según la escuela de pensamiento: simbólica o conexionista.</li>
+</ul></li>
+<li><strong>2.2 Aprendizaje</strong>:
+<ul>
+<li>Lo que puede hacer un modelo: predecir, encontrar patrones, agrupar,
+reducir dimensiones, generar y optimizar acciones.</li>
+<li>Los tipos: supervisado, no supervisado y por refuerzo.</li>
+<li><strong>2.2.1</strong> El entrenamiento supervisado en 5 pasos, y el
+concepto de época.</li>
+</ul></li>
+<li><strong>2.3 Resolución de problemas</strong>:
+<ul>
+<li><strong>2.3.1 Espacio de estados</strong>: grafos y TSP con
+ciudades, 3 y 4 reinas, explosión combinatoria, poda y minimax en
+ajedrez.</li>
+<li><strong>2.3.2 Optimización</strong>: la fábrica A/B (Z = 3x + 4y;
+óptimo 40/20 con 200 €), algoritmos genéticos, enjambre de partículas y
+descenso del gradiente («la montaña con los ojos vendados»).</li>
+</ul></li>
+<li><strong>2.4 Agentes inteligentes</strong>:
+<ul>
+<li>Definición y cinco componentes: percepción, actuación,
+procesamiento, conocimiento y aprendizaje.</li>
+<li>El robot aspirador frente al agente de ajedrez, y el androide.</li>
+</ul></li>
+<li><strong>Notebooks</strong>: <code>01 Dijkstra – ciudades</code>,
+<code>01 ¿Jugamos al ajedrez?</code>.</li>
+</ul>
+<h3 id="capítulo-3--ia-en-el-mundo-real-págs-6378">Capítulo 3 · IA en el
+mundo real (págs. 63–78)</h3>
+<ul>
+<li><strong>Ámbitos</strong>: automatización, aprendizaje automático,
+análisis de datos, robótica, medicina, transporte, entretenimiento,
+finanzas, RR. HH., educación, medios, agricultura, energía y medio
+ambiente, y derecho.</li>
+<li>El autor declara que este capítulo lo generó una IA. Sirve como
+ejercicio crítico: ¿se nota?</li>
+</ul>
+<hr />
+<h2 id="parte-ii--visión-artificial">Parte II · Visión artificial</h2>
+<h3
+id="capítulo-4--elementos-y-procesamiento-básico-de-una-imagen-págs-8194">Capítulo
+4 · Elementos y procesamiento básico de una imagen (págs. 81–94)</h3>
+<ul>
+<li><strong>4.1 Píxeles</strong>: la imagen como cuadrícula; alto ×
+ancho × canales.</li>
+<li><strong>4.2 Resolución</strong>.</li>
+<li><strong>4.3 Espacios de color</strong>: RGB (0–255 por canal),
+escala de grises, HSV y otros.</li>
+<li><strong>4.4 Formatos de archivo</strong>: JPEG, PNG, GIF, TIFF,
+BMP…</li>
+<li><strong>4.5 Histogramas</strong>: distribución tonal.</li>
+<li><strong>4.6 Transformaciones geométricas</strong>: traslación,
+escala, rotación, perspectiva.</li>
+<li><strong>4.7 Operaciones entre imágenes</strong>: la imagen como
+matriz n×m×k; suma, resta, máscaras.</li>
+<li><strong>Convolución</strong>: filtro que recorre la imagen, por
+ejemplo para detectar bordes (<em>skimage</em>).</li>
+<li><strong>Notebook</strong>:
+<code>04 Operaciones básicas con imágenes</code>.</li>
+<li><strong>Conexión con la teoría de UD2</strong>: sección 7 (NumPy:
+una imagen es un array) y sección 0.2 (sensores CMOS).</li>
+</ul>
+<h3
+id="capítulo-5--clasificación-identificación-y-segmentación-págs-95122">Capítulo
+5 · Clasificación, identificación y segmentación (págs. 95–122)</h3>
+<ul>
+<li><strong>5.1 Visión artificial</strong>: preprocesado y análisis.
+<ul>
+<li><strong>5.1.1 Mejorar la imagen</strong>: filtros de media y
+mediana, ecualización, eliminación de ruido con redes.</li>
+</ul></li>
+<li><strong>5.2 Clasificación</strong>: redes convolucionales
+(CNN).</li>
+<li><strong>5.3 Identificación de objetos</strong>:
+<ul>
+<li>Cajas con score y clase.</li>
+<li>YOLOv8 con imágenes del dataset COCO.</li>
+<li>Hacer zoom mejora la detección de objetos pequeños.</li>
+</ul></li>
+<li><strong>5.4 Segmentación</strong>: agrupar píxeles por color,
+textura o contorno; YOLOv8-seg.</li>
+<li><strong>5.5 Manos a la obra</strong>:
+<ul>
+<li><strong>5.5.1 Clasificador de dígitos (MNIST)</strong>: XGBoost con
+validación cruzada (unos 42 min, precisión ≈ 0,975) frente a una CNN, y
+matriz de confusión en grises.</li>
+<li><strong>5.5.2 Entrenar YOLOv8 con un dataset propio</strong>
+(<code>gshapes.zip</code> del repositorio): <em>transfer learning</em>
+sobre una red de más de 3 millones de parámetros.</li>
+</ul></li>
+<li><strong>Notebooks</strong>:
+<code>05 clasificación de imágenes</code>,
+<code>05 identificación de objetos</code>,
+<code>05 segmentación</code>.</li>
+</ul>
+<h3 id="capítulo-6--percepción-de-alto-nivel-págs-123148">Capítulo 6 ·
+Percepción de alto nivel (págs. 123–148)</h3>
+<ul>
+<li><strong>6.1 Estimación de pose</strong>: marcadores frente a
+<em>keypoints</em>; YOLOv8-pose.</li>
+<li><strong>6.2 Seguimiento de objetos</strong>: diferencia entre
+secuencia de imágenes y flujo de vídeo; mantener la identidad de cada
+objeto.</li>
+<li><strong>6.3 Estimación de profundidad</strong>: visión binocular
+frente a modelos monoculares.</li>
+<li><strong>6.4 Extracción de características</strong>: vectores de
+características, comparables con el «recuerdo» humano, y distancia y
+similitud del coseno.
+<ul>
+<li><strong>6.4.1 Expresiones faciales</strong>: landmarks (vector de
+1404 componentes), clustering y representación en 2D.</li>
+<li><strong>6.4.2 Reconocimiento de personas</strong>: 5 etapas
+(detectar, alinear, normalizar, representar, reconocer).</li>
+<li><strong>6.4.3 Gestos</strong>: piedra, papel o tijera con
+GaussianMixture + t-SNE y un clasificador RandomForest.</li>
+</ul></li>
+<li><strong>Notebooks</strong>: <code>06 estimación de pose</code>,
+<code>07 Object tracking</code>, <code>06 detección de emociones</code>,
+<code>06 detección de expresiones faciales</code>,
+<code>06 reconocimiento de caras</code>,
+<code>06 reconocimiento de manos</code>.</li>
+</ul>
+<h3
+id="capítulo-7--impacto-de-la-visión-artificial-en-la-sociedad-págs-149160">Capítulo
+7 · Impacto de la visión artificial en la sociedad (págs. 149–160)</h3>
+<ul>
+<li><strong>Ámbitos</strong>: automatización y eficiencia, seguridad y
+vigilancia, salud, interacción persona-máquina, accesibilidad,
+entretenimiento, ética y responsabilidad.</li>
+<li><strong>7.8 IA generativa y deepfakes</strong>.</li>
+<li><strong>Legislación</strong>: LOPDGDD (LO 3/2018). El marco
+regulatorio cambia según el país; hay que contrastarlo con el Reglamento
+europeo de IA vigente.</li>
+</ul>
+<hr />
+<h2 id="parte-iii--procesamiento-del-lenguaje-natural">Parte III ·
+Procesamiento del lenguaje natural</h2>
+<h3 id="capítulo-8--codificando-datos-págs-163184">Capítulo 8 ·
+Codificando datos (págs. 163–184)</h3>
+<ul>
+<li><strong>8.1 Números</strong>:
+<ul>
+<li>Naturales en binario y enteros con signo (bit de signo y complemento
+a dos).</li>
+<li>Punto flotante IEEE 754.</li>
+<li><strong>8.1.4 Escalares, vectores, matrices y
+tensores</strong>.</li>
+</ul></li>
+<li><strong>8.2 Texto</strong>: ASCII, <strong>8.2.1 Unicode</strong>,
+<strong>8.2.2</strong> el texto como secuencia de códigos («Hola mundo»
+→ 72 111 108 97…).</li>
+<li><strong>8.3 Imágenes como tensores</strong>.</li>
+<li><strong>8.4 Sonido</strong>: onda, frecuencia, amplitud,
+muestreo.</li>
+<li><strong>8.5 PLN</strong>:
+<ul>
+<li><strong>8.5.1 Tokens</strong>.</li>
+<li><strong>8.5.2 Estrategias</strong>: por palabras, por caracteres,
+por subpalabras.</li>
+<li><strong>8.5.3 Consideraciones</strong>: puntuación, mayúsculas,
+abreviaturas…</li>
+</ul></li>
+<li><strong>8.6 Vectores de características</strong>: por qué numerar
+los tokens introduce un orden falso. <em>One-hot</em> y embeddings.</li>
+<li><strong>Notebook</strong>: <code>Cap. 9 - Tokenización</code>.</li>
+<li><strong>Conexión con la teoría de UD2</strong>: secciones 2 (str),
+0.3 (ceros y unos) y 14.8 (tokens y embeddings).</li>
+</ul>
+<h3
+id="capítulo-9--de-audio-a-texto-y-de-nuevo-a-audio-págs-185192">Capítulo
+9 · De audio a texto y de nuevo a audio (págs. 185–192)</h3>
+<ul>
+<li><strong>9.1 Reconocimiento de voz</strong>.</li>
+<li><strong>9.2 Síntesis de voz</strong>: concatenativa, por formantes,
+por unidades y con redes neuronales.</li>
+<li><strong>9.3 Transcripción de audio</strong>: el audio leído como
+tensor y luego transcrito.</li>
+<li><strong>Notebooks</strong>: los de voz del repositorio.</li>
+</ul>
+<h3 id="capítulo-10--similitud-entre-textos-págs-193204">Capítulo 10 ·
+Similitud entre textos (págs. 193–204)</h3>
+<ul>
+<li><strong>10.1 Representación</strong>: bolsa de palabras (BoW),
+TF-IDF, embeddings.</li>
+<li><strong>10.2 Modelos de similitud</strong>.</li>
+<li><strong>10.3 Métricas</strong>: coseno, Jaccard, Dice, distancia
+euclídea.</li>
+<li><strong>10.4 Aplicaciones</strong>: plagio, recuperación de
+información, agrupar documentos.</li>
+<li><strong>Práctica</strong>: dos textos sobre el Titanic y uno sobre
+montañismo. Se recorre BoW → intersección sin <em>stop words</em> →
+Jaccard → Dice → word2vec (embeddings en 3D) → Transformers.</li>
+<li><strong>Notebook</strong>: <code>10 Comparando textos</code>.</li>
+</ul>
+<h3 id="capítulo-11--análisis-de-sentimientos-págs-205216">Capítulo 11 ·
+Análisis de sentimientos (págs. 205–216)</h3>
+<ul>
+<li><strong>11.1 Conceptos</strong>: polaridad y emociones.</li>
+<li><strong>11.2 Preprocesado</strong>: normalización, tokenización,
+<em>stemming</em> frente a lematización, negaciones.</li>
+<li><strong>11.3 Enfoques</strong>: por reglas (léxicos con +1 y −1),
+por aprendizaje automático, híbridos.</li>
+<li><strong>11.4 Modelos</strong>.</li>
+<li><strong>11.5 Práctica</strong>: tres críticas de <em>Salvar al
+soldado Ryan</em> (positiva, neutra y negativa); embeddings de 768
+dimensiones en 2D y Transformers (POS/NEU/NEG con su score).</li>
+<li><strong>11.6 Retos</strong>: ironía, sarcasmo, contexto.</li>
+<li><strong>Notebook</strong>:
+<code>11 Análisis de sentimientos en textos</code>.</li>
+</ul>
+<h3 id="capítulo-12--los-modelos-de-lenguaje-págs-217238">Capítulo 12 ·
+Los modelos de lenguaje (págs. 217–238)</h3>
+<ul>
+<li><strong>12.1 Historia</strong>: reglas → n-gramas → redes →
+Transformers.
+<ul>
+<li><strong>12.1.1 Propiedades emergentes</strong>: a partir de unos mil
+millones de parámetros hablamos de LLM.</li>
+<li><strong>12.1.2 Encoder, decoder y encoder-decoder</strong>.</li>
+</ul></li>
+<li><strong>12.2 Entrenamiento</strong>: un corpus enorme y limpio.
+Entrenar un LLM queda fuera del alcance del aula.</li>
+<li><strong>12.3 Evaluación</strong>: perplejidad, BLEU y otras
+métricas.</li>
+<li><strong>12.4 Un LLM en modo decoder</strong>:
+<ul>
+<li>Completar secuencias en el <em>playground</em>.</li>
+<li><strong>12.4.1</strong> Cómo se hace un chat: el contexto con
+instrucciones y un personaje.</li>
+<li><strong>12.4.2</strong> Qué ocurre al pulsar Enter en ChatGPT:
+contexto inicial + historial de preguntas y respuestas + la pregunta
+nueva.</li>
+</ul></li>
+<li><strong>12.5 «Chat barato»</strong>: un diccionario de respuestas,
+embeddings con <code>sentence-transformers/all-MiniLM-L6-v2</code> y
+búsqueda de la respuesta más parecida.</li>
+<li><strong>12.6 Ética</strong>: sesgos, desinformación,
+privacidad.</li>
+<li><strong>Notebook</strong>: <code>12 modelos de lenguaje</code>.</li>
+</ul>
+<h3 id="capítulo-13--repercusión-social-del-pln-págs-239246">Capítulo 13
+· Repercusión social del PLN (págs. 239–246)</h3>
+<ul>
+<li><strong>13.1 Aplicaciones</strong>: asistentes, traducción,
+resúmenes, análisis de opiniones.</li>
+<li><strong>13.2 Límites</strong>: ambigüedad («banco»), lenguas con
+menos recursos (relevante para el gallego).</li>
+<li><strong>13.3 Impacto</strong> en la comunicación y la
+multiculturalidad.</li>
+<li><strong>13.4 Futuro</strong>: Transformers, <em>zero-shot</em> y
+<em>few-shot</em>, <em>fine-tuning</em>, multimodalidad.</li>
+</ul>
+<hr />
+<h2 id="parte-iv--aprendizaje-automático-ud5">Parte IV · Aprendizaje
+automático (UD5)</h2>
+<h3 id="capítulo-14--algoritmos-y-modelos-págs-249264">Capítulo 14 ·
+Algoritmos y modelos (págs. 249–264)</h3>
+<ul>
+<li><strong>14.2</strong> Diferencia entre aprendizaje automático y
+ciencia de datos.</li>
+<li><strong>14.3 Algoritmos</strong>:
+<ul>
+<li><strong>14.3.1 Supervisados</strong>: Iris como ejemplo de dataset
+(muestras, características, etiqueta), SVM y el dataset de cáncer de
+mama.</li>
+<li><strong>14.3.2 No supervisados</strong>: clustering y reducción de
+dimensionalidad.</li>
+<li><strong>14.3.3 Por refuerzo</strong>: agente, entorno,
+recompensa.</li>
+</ul></li>
+<li><strong>14.4 Evaluación</strong>: métricas, <em>overfitting</em> y
+<em>underfitting</em>, reparto en entrenamiento y prueba.</li>
+<li><strong>14.5 Hiperparámetros</strong>: elegir algoritmo y ajustar
+sus parámetros.</li>
+</ul>
+<h3 id="capítulo-15--la-ciencia-de-los-datos-págs-265276">Capítulo 15 ·
+La ciencia de los datos (págs. 265–276)</h3>
+<ul>
+<li><strong>15.1 Origen</strong> del término.</li>
+<li><strong>15.2 Big Data</strong>.</li>
+<li><strong>15.3 Ciclo de vida</strong>: recolección y selección →
+limpieza → EDA → modelos → despliegue, con los roles de cada fase.</li>
+<li><strong>15.4 Aplicaciones</strong>: medicina, finanzas, marketing,
+transporte, entretenimiento.</li>
+<li><strong>15.5 Tendencias</strong>: aprendizaje automático en tiempo
+real, entre otras.</li>
+<li>Sus retos aparecen como «Retos del capítulo 16» por un error de
+numeración del libro.</li>
+</ul>
+<h3
+id="capítulo-16--entrenamiento-y-evaluación-de-modelos-págs-277302">Capítulo
+16 · Entrenamiento y evaluación de modelos (págs. 277–302)</h3>
+<ul>
+<li><strong>16.1 Regresión lineal</strong>: simple, con un dataset de 30
+muestras.</li>
+<li><strong>16.2 Regresión logística</strong>: clasificación binaria con
+métricas y matriz de confusión.</li>
+<li><strong>16.3 Árboles de decisión</strong>.</li>
+<li><strong>16.4 Bosques aleatorios</strong>: <em>bagging</em> y
+<em>bootstrapping</em>; el símil de un jurado.</li>
+<li><strong>16.5 XGBoost</strong>: <em>boosting</em>.</li>
+<li><strong>16.6 Clasificación multiclase</strong>:
+<em>One-vs-Rest</em>; MNIST (70 000 imágenes) y Fashion-MNIST.</li>
+<li><strong>16.7 Agrupamiento</strong>: Iris sin la etiqueta.</li>
+<li><strong>Librerías</strong>: scikit-learn
+(<code>train_test_split</code>, <code>SVC</code>,
+<code>LogisticRegression</code>, <code>RandomForestClassifier</code>,
+<code>OneVsRestClassifier</code>, métricas) y TensorFlow/Keras
+(<code>Sequential</code>, <code>Dense</code>, <code>Conv2D</code>).</li>
+</ul>
+<h3 id="capítulo-17--redes-neuronales-artificiales-págs-303328">Capítulo
+17 · Redes neuronales artificiales (págs. 303–328)</h3>
+<ul>
+<li><strong>17.1</strong> De la neurona biológica a la artificial
+(McCulloch y Pitts).</li>
+<li><strong>17.2 Aprendizaje</strong>: buscar los pesos que dan la
+salida deseada.</li>
+<li><strong>17.3 Estructura</strong>: capas de entrada, ocultas y de
+salida; red <em>feedforward</em>.</li>
+<li><strong>17.4 Arquitecturas</strong>: perceptrón, MLP, CNN, RNN y
+otras.</li>
+<li><strong>17.5 Ejemplos</strong>:
+<ul>
+<li><strong>17.5.1 Autoencoders</strong>: la entrada igual a la salida,
+con un estado latente.</li>
+<li><strong>17.5.2 GAN</strong>: un generador frente a un
+discriminador.</li>
+<li><strong>17.5.3 Texto a imagen</strong>: DALL·E, Midjourney, Stable
+Diffusion.</li>
+</ul></li>
+</ul>
+<h3
+id="capítulo-18--la-ética-en-la-era-del-aprendizaje-automático-págs-329340">Capítulo
+18 · La ética en la era del aprendizaje automático (págs. 329–340)</h3>
+<ul>
+<li><strong>18.3 Riesgos</strong>:
+<ul>
+<li><strong>18.3.1</strong> Sesgos y discriminación.</li>
+<li><strong>18.3.2</strong> Privacidad y seguridad.</li>
+<li><strong>18.3.3</strong> Responsabilidad y transparencia.</li>
+</ul></li>
+<li><strong>18.4 Beneficios</strong>.</li>
+<li><strong>Retos</strong>: el documental <em>Coded Bias</em>, casos
+reales de sesgo y una encuesta familiar anonimizada.</li>
+</ul>
+<h3
+id="capítulo-19--metodología-educativa-págs-343355-para-el-docente">Capítulo
+19 · Metodología educativa (págs. 343–355, para el docente)</h3>
+<ul>
+<li><strong>19.1</strong> Uso de la IA en educación.</li>
+<li><strong>19.2</strong> Procesos de enseñanza y aprendizaje asistidos
+por IA.</li>
+<li><strong>19.3</strong> Patrones de aprendizaje asistido.</li>
+<li><strong>19.4</strong> El aula del futuro.</li>
+<li>Útil para justificar la metodología en la programación
+didáctica.</li>
+</ul>
+<hr />
+<h2 id="banco-de-prompts">Banco de prompts</h2>
+<p>Para usarlos como ejercicios: el alumnado escribe el prompt, ejecuta
+el código, explica cada línea y lo compara con el notebook del
+repositorio. Los prompts están ligeramente resumidos.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Cap.</th>
+<th>Prompt (resumido)</th>
+<th>Librerías previsibles</th>
+<th>Nivel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4</td>
+<td>Leer una imagen desde una URL, mostrarla a tamaño limitado y hacer
+<em>zoom</em> a una región donde se vean los píxeles</td>
+<td>requests, PIL/imageio, Matplotlib</td>
+<td>🟢</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Calcular y mostrar el histograma de una imagen dada por URL, como
+una sola línea</td>
+<td>NumPy, Matplotlib</td>
+<td>🟢</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Aplicar un filtro de convolución para detectar bordes y mostrar
+también el filtro como imagen, con <em>skimage</em></td>
+<td>scikit-image</td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Con YOLOv8, mostrar los scores y las etiquetas de una imagen</td>
+<td>ultralytics</td>
+<td>🟡</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Con YOLOv8, mostrar las detecciones (posición, clase, score) y la
+imagen rotulada</td>
+<td>ultralytics</td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Hacer <em>zoom</em> a la mitad inferior y volver a predecir</td>
+<td>ultralytics, PIL</td>
+<td>🟡</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Segmentar una imagen con YOLOv8 y mostrar la original y la
+segmentada</td>
+<td>ultralytics</td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Descargar MNIST en un DataFrame y mostrar 10 imágenes con su
+etiqueta en una fila</td>
+<td>Pandas, Keras/sklearn</td>
+<td>🟢</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Entrenar XGBoost con validación cruzada sin usar el conjunto de
+prueba</td>
+<td>xgboost, sklearn</td>
+<td>🔴</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Entrenar una CNN; mostrar la pérdida en 10 épocas; evaluar con
+matriz de confusión en grises</td>
+<td>TensorFlow/Keras</td>
+<td>🔴</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Descargar <code>gshapes.zip</code>, mostrar una imagen y sus
+etiquetas YOLO, y entrenar YOLOv8 con ese dataset</td>
+<td>ultralytics</td>
+<td>🔴</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Estimar la pose de las personas de una imagen con YOLOv8</td>
+<td>ultralytics</td>
+<td>🟡</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>Generar dos vectores de 8 enteros y calcular su distancia y su
+similitud del coseno</td>
+<td>NumPy, SciPy</td>
+<td>🟢</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Mostrar los <em>landmarks</em> de las caras, convertirlos en un
+vector por rostro y comparar dos rostros por coseno</td>
+<td>NumPy (y una librería de landmarks, p. ej. MediaPipe)</td>
+<td>🟡</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>Cargar un CSV desde una URL y mostrar las primeras filas y un
+resumen</td>
+<td>Pandas</td>
+<td>🟢</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Agrupar con clustering todas las columnas menos
+<code>__TARGET__</code> y colorear con esa columna; representar en
+2D</td>
+<td>sklearn, Matplotlib</td>
+<td>🟡</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>GaussianMixture con 3 grupos + t-SNE en 2D con los gestos de la
+mano</td>
+<td>sklearn</td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>RandomForest para predecir la columna «Etiqueta» con 20 filas de
+prueba, y luego clasificar las manos de una foto</td>
+<td>sklearn</td>
+<td>🔴</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td>Histograma de frecuencias de la BoW de un texto (top 20)</td>
+<td>collections, Matplotlib</td>
+<td>🟢</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>Intersección de las BoW de dos textos tras quitar las 25 palabras
+más frecuentes</td>
+<td>Python puro</td>
+<td>🟢</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td>Distancias de Jaccard y de Dice entre tres textos sin <em>stop
+words</em></td>
+<td>Python puro</td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>Entrenar word2vec con los tres textos y representar los embeddings
+en 3D interactivo</td>
+<td>gensim, Plotly</td>
+<td>🔴</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td>Similitud de los tres textos con Transformers</td>
+<td>sentence-transformers</td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td><em>Stemming</em> y lematización de un texto, y comparar</td>
+<td>NLTK, spaCy</td>
+<td>🟡</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>Embeddings de tres textos y representación en 2D</td>
+<td>sentence-transformers, sklearn</td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td>Análisis de sentimientos de tres textos con Transformers</td>
+<td>transformers</td>
+<td>🟡</td>
+</tr>
+<tr class="odd">
+<td>12</td>
+<td>Cargar un modelo de Hugging Face para embeddings, calcular los de un
+diccionario de respuestas y hacer un bucle de chat que devuelva la
+respuesta más parecida</td>
+<td>sentence-transformers</td>
+<td>🔴</td>
+</tr>
+</tbody>
+</table>
+<p>Los prompts del capítulo 6 sobre CSV y vectores, y los del capítulo
+10 sobre BoW y Jaccard, se pueden hacer <strong>en la UD2</strong>
+porque solo necesitan Python, NumPy y Pandas.</p>
+<hr />
+<h2 id="relación-con-la-teoría-de-la-ud2">Relación con la teoría de la
+UD2</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Teoría UD2</th>
+<th>Capítulos del libro</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sección 0: conceptos de IA (UD1)</td>
+<td>1, 2, 3</td>
+</tr>
+<tr class="even">
+<td>Sección 2: tipos de datos, str, booleanos</td>
+<td>8.1, 8.2</td>
+</tr>
+<tr class="odd">
+<td>Sección 7: NumPy (vectores, matrices)</td>
+<td>4.1, 4.7, 8.1.4, 8.3</td>
+</tr>
+<tr class="even">
+<td>Sección 9: ETL y EDA</td>
+<td>15.3</td>
+</tr>
+<tr class="odd">
+<td>Sección 10: introducción a ML</td>
+<td>2.2, 14</td>
+</tr>
+<tr class="even">
+<td>Sección 11: Big Data</td>
+<td>1.4.3, 15.2</td>
+</tr>
+<tr class="odd">
+<td>Sección 12: scikit-learn, PyTorch</td>
+<td>16, 17</td>
+</tr>
+<tr class="even">
+<td>14.4 Pipeline de ML y métricas</td>
+<td>14.4, 14.5, 16</td>
+</tr>
+<tr class="odd">
+<td>14.7 Redes neuronales</td>
+<td>5.2, 17</td>
+</tr>
+<tr class="even">
+<td>14.8 IA generativa y LLM</td>
+<td>8.5–8.6, 10, 12, 17.5</td>
+</tr>
+<tr class="odd">
+<td>0.10 y 14.8: ética</td>
+<td>7.7–7.8, 12.6, 18</td>
+</tr>
+</tbody>
+</table>
+<h2 id="avisos-sobre-el-libro">Avisos sobre el libro</h2>
+<ul>
+<li>Algunos datos de modelos (versiones de YOLO, tamaños de LLM,
+servicios) son de 2023–2024. Comprobar y actualizar esos datos puede ser
+una tarea para el alumnado.</li>
+<li>Los tiempos de entrenamiento (XGBoost con MNIST, unos 42 min)
+dependen del hardware. En Colab conviene usar subconjuntos.</li>
+<li>Los notebooks con webcam no funcionan en Colab, como avisa el propio
+autor.</li>
+<li>En las prácticas con caras, voz o vídeo del aula hace falta
+consentimiento y no hay que subir nada a servicios externos.</li>
+</ul>
+  </article>
+</main>
+<footer class="site"><div class="in">
+  <span>IA · Apuntes · Tecnoloxías Intelixentes · 1.º Bacharelato</span>
+  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0)</span>
+</div></footer>
+<a class="up" href="#">↑ Arriba</a>
+<script>
+(function () {
+  document.querySelectorAll("article.content table").forEach(function (t) {
+    var w = document.createElement("div"); w.className = "table-wrap";
+    t.parentNode.insertBefore(w, t); w.appendChild(t);
+  });
+  var toc = document.getElementById("TOC"), btn = document.querySelector(".toc-toggle");
+  if (btn && toc) btn.addEventListener("click", function () {
+    var o = toc.classList.toggle("open"); btn.setAttribute("aria-expanded", o);
+  });
+  if (!toc || !("IntersectionObserver" in window)) return;
+  var links = {}; toc.querySelectorAll("a").forEach(function (a) { links[decodeURIComponent(a.getAttribute("href").slice(1))] = a; });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting && links[e.target.id]) {
+        toc.querySelectorAll("a.on").forEach(function (x) { x.classList.remove("on"); });
+        links[e.target.id].classList.add("on");
+      }
+    });
+  }, { rootMargin: "-70px 0px -70% 0px" });
+  document.querySelectorAll("article.content h2[id], article.content h3[id]").forEach(function (h) { io.observe(h); });
+})();
+</script>
+<script>
+/* Soluciones cifradas (AES-GCM + PBKDF2). Sin la contraseña, el contenido no se puede leer. */
+(function () {
+  var art = document.querySelector("article.content[data-salt]");
+  if (!art) return;
+  var locks = art.querySelectorAll(".sol-lock");
+  if (!locks.length) return;
+  var KEY = "ia-apuntes-sol";
+  function b64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function derive(pass) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(art.dataset.salt), iterations: +art.dataset.iter, hash: "SHA-256" },
+        k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    });
+  }
+  function unlockAll(pass) {
+    return derive(pass).then(function (key) {
+      var first = locks[0];
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(first.dataset.iv) }, key, b64(first.dataset.ct)).then(function () {
+        var dec = new TextDecoder();
+        return Promise.all(Array.prototype.map.call(locks, function (el) {
+          return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(el.dataset.iv) }, key, b64(el.dataset.ct)).then(function (buf) {
+            var tmp = document.createElement("div"); tmp.innerHTML = dec.decode(buf);
+            var d = tmp.firstElementChild; el.replaceWith(d);
+            return d;
+          });
+        }));
+      });
+    }).then(function (opened) {
+      try { sessionStorage.setItem(KEY, pass); } catch (e) {}
+      return opened;
+    });
+  }
+  locks.forEach(function (el) {
+    var label = el.dataset.label || "Solución";
+    el.innerHTML =
+      '<button type="button" class="sol-btn"><span aria-hidden="true">🔒</span> ' + label + ' <small>· con contraseña</small></button>' +
+      '<form class="sol-form" hidden><label>Contraseña del profesorado <input type="password" autocomplete="off" required></label>' +
+      '<button type="submit">Abrir</button><span class="sol-msg" role="status"></span></form>';
+    var b = el.querySelector(".sol-btn"), f = el.querySelector(".sol-form"), msg = el.querySelector(".sol-msg");
+    b.addEventListener("click", function () { f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); });
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var pass = f.querySelector("input").value;
+      msg.textContent = "Comprobando…";
+      var idx = Array.prototype.indexOf.call(locks, el);
+      unlockAll(pass).then(function (opened) {
+        var mine = opened[idx]; if (mine) { mine.open = true; mine.scrollIntoView({ block: "nearest" }); }
+      }).catch(function () { msg.textContent = "Contraseña incorrecta."; });
+    });
+  });
+  var saved = null; try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlockAll(saved).catch(function () { try { sessionStorage.removeItem(KEY); } catch (e) {} });
+})();
+</script>
+</body>
+</html>

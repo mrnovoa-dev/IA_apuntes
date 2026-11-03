@@ -1,0 +1,1031 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análisis de datos · IA Apuntes</title>
+<meta name="description" content="Itinerario práctico de análisis de
+datos con Python para Tecnoloxías Intelixentes: adquirir, explorar,
+limpiar y modelar. Une la UD2 con la UD5 y sigue el ciclo de vida de los
+datos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="brand" href="./">IA<span>·</span>Apuntes</a>
+  <nav aria-label="Principal">
+    <a href="./">Inicio</a>
+    <a href="asignatura.html" title="Programación, criterios y evaluación">Asignatura</a>
+    <a href="ud1.html" title="Conceptos clave de la IA">UD1</a>
+    <a href="teoria.html" title="Programación en Python: teoría">UD2 Teoría</a>
+    <a href="ejercicios.html" title="Ejercicios de Python E1–E27">UD2 Ejercicios</a>
+    <a href="ud3-vision.html" title="Visión artificial">UD3 Visión</a>
+    <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural">UD4 Lenguaje</a>
+    <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
+    <a href="datos.html" title="Análisis de datos: de los datos al modelo" aria-current="page">Datos</a>
+    <a href="libro.html" title="El libro de referencia, capítulo a capítulo">Libro</a>
+    <a href="mapa.html">Mapa</a>
+  </nav>
+</div></header>
+<main class="doc">
+  <div>
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="TOC">Índice ▾</button>
+<nav id="TOC" aria-label="Índice">
+<ul>
+<li><a href="#análisis-de-datos-con-python-de-los-datos-al-modelo"
+id="toc-análisis-de-datos-con-python-de-los-datos-al-modelo">Análisis de
+datos con Python: de los datos al modelo</a>
+<ul>
+<li><a href="#mapa-del-itinerario" id="toc-mapa-del-itinerario">Mapa del
+itinerario</a></li>
+<li><a href="#bloque-1--adquirir-y-manejar-datos"
+id="toc-bloque-1--adquirir-y-manejar-datos">Bloque 1 · Adquirir y
+manejar datos</a>
+<ul>
+<li><a href="#11-el-entorno-de-trabajo"
+id="toc-11-el-entorno-de-trabajo">1.1 El entorno de trabajo</a></li>
+<li><a href="#12-leer-y-escribir-en-distintos-formatos"
+id="toc-12-leer-y-escribir-en-distintos-formatos">1.2 Leer y escribir en
+distintos formatos</a></li>
+<li><a href="#13-validar-lo-que-se-ha-leído"
+id="toc-13-validar-lo-que-se-ha-leído">1.3 Validar lo que se ha
+leído</a></li>
+<li><a href="#ejercicios-del-bloque-1"
+id="toc-ejercicios-del-bloque-1">Ejercicios del bloque 1</a></li>
+</ul></li>
+<li><a href="#bloque-2--explorar-los-datos-eda"
+id="toc-bloque-2--explorar-los-datos-eda">Bloque 2 · Explorar los datos
+(EDA)</a>
+<ul>
+<li><a href="#21-resumir-con-números"
+id="toc-21-resumir-con-números">2.1 Resumir con números</a></li>
+<li><a href="#22-elegir-el-gráfico-por-la-pregunta"
+id="toc-22-elegir-el-gráfico-por-la-pregunta">2.2 Elegir el gráfico por
+la pregunta</a></li>
+<li><a href="#ejercicios-del-bloque-2"
+id="toc-ejercicios-del-bloque-2">Ejercicios del bloque 2</a></li>
+</ul></li>
+<li><a href="#bloque-3--limpiar-y-normalizar"
+id="toc-bloque-3--limpiar-y-normalizar">Bloque 3 · Limpiar y
+normalizar</a>
+<ul>
+<li><a href="#31-análisis-preliminar-y-limpieza-básica"
+id="toc-31-análisis-preliminar-y-limpieza-básica">3.1 Análisis
+preliminar y limpieza básica</a></li>
+<li><a href="#32-transformar-agrupar-codificar-y-escalar"
+id="toc-32-transformar-agrupar-codificar-y-escalar">3.2 Transformar:
+agrupar, codificar y escalar</a></li>
+<li><a href="#33-checklist-de-preprocesamiento"
+id="toc-33-checklist-de-preprocesamiento">3.3 Checklist de
+preprocesamiento</a></li>
+<li><a href="#ejercicios-del-bloque-3"
+id="toc-ejercicios-del-bloque-3">Ejercicios del bloque 3</a></li>
+</ul></li>
+<li><a href="#bloque-4--modelar-y-predecir"
+id="toc-bloque-4--modelar-y-predecir">Bloque 4 · Modelar y predecir</a>
+<ul>
+<li><a href="#41-el-flujo-de-scikit-learn"
+id="toc-41-el-flujo-de-scikit-learn">4.1 El flujo de
+scikit-learn</a></li>
+<li><a href="#42-modelos-de-regresión"
+id="toc-42-modelos-de-regresión">4.2 Modelos de regresión</a></li>
+<li><a href="#43-métricas-de-error" id="toc-43-métricas-de-error">4.3
+Métricas de error</a></li>
+<li><a href="#44-ejemplo-precio-de-viviendas-y-sobreajuste"
+id="toc-44-ejemplo-precio-de-viviendas-y-sobreajuste">4.4 Ejemplo:
+precio de viviendas y sobreajuste</a></li>
+<li><a href="#45-sobreajuste-y-subajuste"
+id="toc-45-sobreajuste-y-subajuste">4.5 Sobreajuste y subajuste</a></li>
+<li><a href="#ejercicios-del-bloque-4"
+id="toc-ejercicios-del-bloque-4">Ejercicios del bloque 4</a></li>
+</ul></li>
+<li><a href="#rúbrica-de-las-prácticas-de-este-itinerario"
+id="toc-rúbrica-de-las-prácticas-de-este-itinerario">Rúbrica de las
+prácticas de este itinerario</a></li>
+<li><a href="#recursos" id="toc-recursos">Recursos</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+  <article class="content">
+<h1 id="análisis-de-datos-con-python-de-los-datos-al-modelo">Análisis de
+datos con Python: de los datos al modelo</h1>
+<div class="ud-head" style="--c:var(--c-datos)">
+<span class="k">Itinerario transversal · UD2 → UD5 · CA1.2, CA1.3, CA5.1–CA5.3, CA5.5–CA5.7</span>
+<p>Cuatro bloques que recorren el <b>ciclo de vida de los datos</b>: conseguirlos, entenderlos, prepararlos y usarlos para predecir. Es el puente entre la programación de la UD2 (E18–E27) y el aprendizaje automático de la UD5.</p>
+</div>
+
+<blockquote>
+<p><strong>De dónde sale este itinerario.</strong> La estructura en
+cuatro bloques sigue la del módulo <strong>«Análisis de datos
+(AD)»</strong> publicado en <a
+href="https://mp5101-ad.vercel.app/">mp5101-ad.vercel.app</a>:
+adquisición y manejo de datos, EDA, limpieza y normalización, y modelado
+y predicción. Aquí está <strong>adaptado al nivel y a los criterios de
+Tecnoloxías Intelixentes</strong>. Los textos, ejemplos y ejercicios son
+propios, y se enlaza al original para quien quiera ampliar.</p>
+<p><strong>Una diferencia de enfoque.</strong> Ese módulo prohíbe
+entregar código generado por IA. En nuestra materia la IA conversacional
+<strong>sí se usa para generar código</strong>, como dice la
+programación. A cambio, cada línea se <strong>entiende, se ejecuta, se
+comprueba y se explica</strong>. En las prácticas de este itinerario se
+pide siempre el <em>prompt</em> usado y una explicación propia del
+resultado.</p>
+</blockquote>
+<h2 id="mapa-del-itinerario">Mapa del itinerario</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Bloque</th>
+<th>Pregunta</th>
+<th>Criterios</th>
+<th>Ejercicios UD2</th>
+<th>Teoría</th>
+<th>Libro de Puentes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 · Adquirir</td>
+<td>¿De dónde salen los datos y cómo los leo y guardo?</td>
+<td>CA1.2, CA1.3, CA5.1</td>
+<td>E18–E20, E25</td>
+<td><a href="teoria.html#7️⃣-librerías-científicas">Secc. 7</a> · <a
+href="teoria.html#9️⃣-conceptos-etl-y-análisis-de-datos">9</a> · <a
+href="teoria.html#1410-automatización-con-python">14.10–14.11</a></td>
+<td>15.3</td>
+</tr>
+<tr class="even">
+<td>2 · Explorar (EDA)</td>
+<td>¿Qué cuentan los datos?</td>
+<td>CA5.1, CA5.7</td>
+<td>E21–E24, E26</td>
+<td><a href="teoria.html#6️⃣-conceptos-estadísticos-básicos">Secc. 6</a>
+· <a href="teoria.html#8️⃣-visualización-con-matplotlib">8</a> · <a
+href="teoria.html#145-catálogo-de-gráficos-de-seaborn-para-eda">14.5–14.6</a></td>
+<td>15.3</td>
+</tr>
+<tr class="odd">
+<td>3 · Limpiar y normalizar</td>
+<td>¿Están listos para un modelo?</td>
+<td>CA5.2, CA5.3</td>
+<td>E25, E27</td>
+<td><a href="teoria.html#9️⃣-conceptos-etl-y-análisis-de-datos">Secc.
+9</a> · <a
+href="teoria.html#144-pipeline-completo-de-machine-learning-con-scikit-learn">14.4</a></td>
+<td>15.3</td>
+</tr>
+<tr class="even">
+<td>4 · Modelar y predecir</td>
+<td>¿Puedo predecir y cuánto me equivoco?</td>
+<td>CA5.4–CA5.7</td>
+<td>— (UD5)</td>
+<td><a href="teoria.html#-introducción-a-machine-learning">Secc. 10</a>
+· <a
+href="teoria.html#144-pipeline-completo-de-machine-learning-con-scikit-learn">14.4</a></td>
+<td>14, 16</td>
+</tr>
+</tbody>
+</table>
+<pre><code> ADQUIRIR ──► EXPLORAR ──► LIMPIAR Y NORMALIZAR ──► MODELAR ──► COMUNICAR
+ CSV, JSON,   medidas,     nulos, duplicados,       entrenar,    gráficos,
+ SQLite, API  gráficos,    tipos, escalado,         evaluar,     informe,
+              correlación  codificación             ajustar      app (Streamlit)
+        ▲                                                            │
+        └──────────── nuevas preguntas, nuevos datos ◄───────────────┘</code></pre>
+<p>Todos los ejemplos usan un mismo dataset inventado de <strong>pedidos
+de una tienda online</strong> que se genera con el propio código, así se
+pueden ejecutar en Colab sin descargar nada.</p>
+<hr />
+<h2 id="bloque-1--adquirir-y-manejar-datos">Bloque 1 · Adquirir y
+manejar datos</h2>
+<h3 id="11-el-entorno-de-trabajo">1.1 El entorno de trabajo</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Opción</th>
+<th>Cuándo</th>
+<th>Cómo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Google Colab</strong></td>
+<td>En clase y en casa, sin instalar nada</td>
+<td>Cuenta del centro; las librerías principales ya vienen
+instaladas</td>
+</tr>
+<tr class="even">
+<td><strong>Jupyter en el ordenador</strong></td>
+<td>Proyectos con ficheros propios</td>
+<td><code>pip install notebook pandas matplotlib seaborn scikit-learn</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Entorno virtual</strong> (<code>venv</code>)</td>
+<td>Separar las librerías de cada proyecto</td>
+<td><code>python -m venv .venv</code> y activarlo antes de instalar (<a
+href="teoria.html#1410-automatización-con-python">teoría 14.10</a>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-leer-y-escribir-en-distintos-formatos">1.2 Leer y escribir en
+distintos formatos</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Formato</th>
+<th>Leer</th>
+<th>Escribir</th>
+<th>Ideal para</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CSV</td>
+<td><code>pd.read_csv("f.csv", sep=";", encoding="utf-8")</code></td>
+<td><code>df.to_csv("f.csv", index=False)</code></td>
+<td>Tablas sencillas, datos abiertos</td>
+</tr>
+<tr class="even">
+<td>Excel</td>
+<td><code>pd.read_excel("f.xlsx", sheet_name="Hoja1")</code></td>
+<td><code>df.to_excel("f.xlsx", index=False)</code></td>
+<td>Hojas de cálculo de la administración o del centro</td>
+</tr>
+<tr class="odd">
+<td>JSON</td>
+<td><code>pd.read_json("f.json")</code> o <code>json.load()</code></td>
+<td><code>df.to_json("f.json", orient="records")</code></td>
+<td>Respuestas de APIs web</td>
+</tr>
+<tr class="even">
+<td>SQLite</td>
+<td><code>pd.read_sql("SELECT …", con)</code></td>
+<td><code>df.to_sql("tabla", con)</code></td>
+<td>Varias tablas relacionadas, consultas</td>
+</tr>
+<tr class="odd">
+<td>API web</td>
+<td><code>requests.get(url).json()</code></td>
+<td>—</td>
+<td>Datos actualizados (tiempo, transporte)</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd, sqlite3</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Dataset de ejemplo: 200 pedidos con algunos huecos y 3 filas repetidas</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">7</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;id&quot;</span>: <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">+</span> <span class="dv">1</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;fecha&quot;</span>: pd.date_range(<span class="st">&quot;2026-01-01&quot;</span>, periods<span class="op">=</span>n, freq<span class="op">=</span><span class="st">&quot;D&quot;</span>).strftime(<span class="st">&quot;%Y-%m-</span><span class="sc">%d</span><span class="st">&quot;</span>),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;categoria&quot;</span>: rng.choice([<span class="st">&quot;Libros&quot;</span>, <span class="st">&quot;Música&quot;</span>, <span class="st">&quot;Deporte&quot;</span>, <span class="st">&quot;Hogar&quot;</span>], n),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;cantidad&quot;</span>: rng.integers(<span class="dv">1</span>, <span class="dv">6</span>, n),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;precio_unitario&quot;</span>: rng.normal(<span class="dv">20</span>, <span class="dv">6</span>, n).<span class="bu">round</span>(<span class="dv">2</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;edad&quot;</span>: rng.integers(<span class="dv">16</span>, <span class="dv">70</span>, n).astype(<span class="bu">float</span>),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;total&quot;</span>] <span class="op">=</span> (df[<span class="st">&quot;cantidad&quot;</span>] <span class="op">*</span> df[<span class="st">&quot;precio_unitario&quot;</span>]).<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>df.loc[rng.choice(n, <span class="dv">12</span>, replace<span class="op">=</span><span class="va">False</span>), <span class="st">&quot;edad&quot;</span>] <span class="op">=</span> np.nan     <span class="co"># huecos</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df, df.iloc[:<span class="dv">3</span>]], ignore_index<span class="op">=</span><span class="va">True</span>)           <span class="co"># duplicados</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">&quot;pedidos.csv&quot;</span>, index<span class="op">=</span><span class="va">False</span>)                          <span class="co"># CSV</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>df.to_json(<span class="st">&quot;pedidos.json&quot;</span>, orient<span class="op">=</span><span class="st">&quot;records&quot;</span>, force_ascii<span class="op">=</span><span class="va">False</span>)  <span class="co"># JSON</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">&quot;tienda.db&quot;</span>)                             <span class="co"># base de datos en un archivo</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>df.to_sql(<span class="st">&quot;pedidos&quot;</span>, con, if_exists<span class="op">=</span><span class="st">&quot;replace&quot;</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.read_sql(<span class="st">&quot;&quot;&quot;SELECT categoria, ROUND(SUM(total), 2) AS ventas</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="st">                     FROM pedidos GROUP BY categoria ORDER BY ventas DESC&quot;&quot;&quot;</span>, con))</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>con.close()</span></code></pre></div>
+<h3 id="13-validar-lo-que-se-ha-leído">1.3 Validar lo que se ha
+leído</h3>
+<p>Antes de analizar, hay que comprobar <strong>cuántas filas</strong>
+hay, <strong>qué falta</strong>, <strong>qué se repite</strong> y si hay
+<strong>valores imposibles</strong>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> validar(df):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;filas&quot;</span>: <span class="bu">len</span>(df),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;nulos_%&quot;</span>: (df.isnull().mean() <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">1</span>)[<span class="kw">lambda</span> s: s <span class="op">&gt;</span> <span class="dv">0</span>].to_dict(),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;duplicados&quot;</span>: <span class="bu">int</span>(df.duplicated().<span class="bu">sum</span>()),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;precios_negativos&quot;</span>: <span class="bu">int</span>((df[<span class="st">&quot;precio_unitario&quot;</span>] <span class="op">&lt;</span> <span class="dv">0</span>).<span class="bu">sum</span>()),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(validar(pd.read_csv(<span class="st">&quot;pedidos.csv&quot;</span>)))</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># {&#39;filas&#39;: 203, &#39;nulos_%&#39;: {&#39;edad&#39;: 5.9}, &#39;duplicados&#39;: 3, &#39;precios_negativos&#39;: 0}</span></span></code></pre></div>
+<h3 id="ejercicios-del-bloque-1">Ejercicios del bloque 1</h3>
+<p><strong>D1.1 · Arrays con NumPy</strong> 🟢 (E18): crea un vector del
+1 al 10, una matriz 3×3 de ceros, otra 2×4 de unos, los pares del 2 al
+20, una identidad 4×4, cinco valores entre 0 y 1 equiespaciados y seis
+enteros aleatorios entre 0 y 10 con semilla. Muestra <code>shape</code>,
+<code>ndim</code> y <code>dtype</code> de cada uno. <em>Pista</em>:
+<code>np.arange</code>, <code>np.zeros</code>, <code>np.ones</code>,
+<code>np.eye</code>, <code>np.linspace</code>,
+<code>np.random.default_rng(42).integers</code>.</p>
+<p><strong>D1.2 · Del CSV a la base de datos</strong> 🟡 (E20): guarda
+<code>pedidos.csv</code> en una tabla SQLite y responde con <strong>una
+consulta SQL</strong> y con <strong>Pandas</strong>: ¿qué categoría
+vende más?, ¿cuál es el pedido más caro?, ¿cuántos pedidos hay por mes?
+Comprueba que los dos caminos dan lo mismo. <em>Pista</em>:
+<code>GROUP BY</code>, <code>ORDER BY … DESC LIMIT 1</code>,
+<code>strftime('%m', fecha)</code>; en Pandas, <code>groupby</code>,
+<code>idxmax</code>, <code>.dt.month</code>.</p>
+<p><strong>D1.3 · Datos abiertos de Galicia</strong> 🟡 (CA5.1):
+descarga un CSV de <a
+href="https://abertos.xunta.gal/">abertos.xunta.gal</a> o del portal de
+tu concello. Indica la fuente, la licencia, la fecha, cuántas filas y
+columnas tiene y qué significa cada columna. Pasa la función
+<code>validar</code> y comenta lo que encuentres.</p>
+<p><strong>D1.4 · Una API del tiempo</strong> 🔴: consulta <a
+href="https://open-meteo.com/">Open-Meteo</a> para tu localidad (latitud
+y longitud), convierte la respuesta JSON en un DataFrame con la
+temperatura por horas y guárdala en CSV. ¿Qué pasa si no hay conexión?
+Gestiónalo con <code>try/except</code> (<a
+href="teoria.html#1410-automatización-con-python">teoría 14.10</a>).</p>
+<p><a href="https://mp5101-ad.vercel.app/docs/unidades/01/">Ampliar en
+el módulo AD: Unidad 1 →</a></p>
+<hr />
+<h2 id="bloque-2--explorar-los-datos-eda">Bloque 2 · Explorar los datos
+(EDA)</h2>
+<p>El <strong>análisis exploratorio</strong> es la fase en la que se
+<strong>entienden</strong> los datos antes de modelarlos: cómo se
+distribuyen, qué relaciones hay, qué valores son raros. Teoría completa
+en las secciones <a
+href="teoria.html#6️⃣-conceptos-estadísticos-básicos">6</a>, <a
+href="teoria.html#8️⃣-visualización-con-matplotlib">8</a> y <a
+href="teoria.html#145-catálogo-de-gráficos-de-seaborn-para-eda">14.5–14.6</a>.</p>
+<h3 id="21-resumir-con-números">2.1 Resumir con números</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Qué quiero saber</th>
+<th>Medida</th>
+<th>Pandas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Valor típico</td>
+<td>Media, mediana, moda</td>
+<td><code>mean()</code>, <code>median()</code>, <code>mode()</code></td>
+</tr>
+<tr class="even">
+<td>Cuánto varían</td>
+<td>Rango, varianza, desviación típica, rango intercuartílico</td>
+<td><code>max() - min()</code>, <code>var()</code>, <code>std()</code>,
+<code>quantile(.75) - quantile(.25)</code></td>
+</tr>
+<tr class="odd">
+<td>Posición</td>
+<td>Percentiles y cuartiles</td>
+<td><code>quantile([.25, .5, .75])</code></td>
+</tr>
+<tr class="even">
+<td>Frecuencias</td>
+<td>Conteos y proporciones</td>
+<td><code>value_counts(normalize=True)</code></td>
+</tr>
+<tr class="odd">
+<td>Por grupos</td>
+<td>Agregados</td>
+<td><code>groupby("categoria")["total"].agg(["mean", "sum", "count"])</code></td>
+</tr>
+<tr class="even">
+<td>Relación entre numéricas</td>
+<td>Correlación de Pearson (−1 a 1)</td>
+<td><code>df.corr(numeric_only=True)</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Media frente a mediana.</strong> Si hay valores extremos (un
+pedido de 2000 €), la media se dispara y la mediana apenas cambia. Por
+eso, con datos asimétricos, como los sueldos o los precios de vivienda,
+se informa de la mediana.</p>
+</blockquote>
+<h3 id="22-elegir-el-gráfico-por-la-pregunta">2.2 Elegir el gráfico por
+la pregunta</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Pregunta</th>
+<th>Gráfico</th>
+<th>Código</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>¿Cómo evolucionan las ventas cada mes?</td>
+<td>Líneas con marcadores</td>
+<td><code>ventas_mes.plot(marker="o")</code></td>
+</tr>
+<tr class="even">
+<td>¿Cómo se distribuye la edad? ¿Hay atípicos?</td>
+<td>Histograma + boxplot</td>
+<td><code>sns.histplot(df, x="edad", kde=True)</code> ·
+<code>sns.boxplot(df, x="edad")</code></td>
+</tr>
+<tr class="odd">
+<td>¿Cambia el precio según la categoría?</td>
+<td>Boxplot por grupos</td>
+<td><code>sns.boxplot(df, x="categoria", y="precio_unitario")</code></td>
+</tr>
+<tr class="even">
+<td>¿Se relacionan cantidad y total?</td>
+<td>Dispersión (+ recta)</td>
+<td><code>sns.regplot(df, x="cantidad", y="total")</code></td>
+</tr>
+<tr class="odd">
+<td>¿Cuántos pedidos hay de cada tipo?</td>
+<td>Barras de conteo</td>
+<td><code>sns.countplot(df, y="categoria", order=df["categoria"].value_counts().index)</code></td>
+</tr>
+<tr class="even">
+<td>¿Qué variables van juntas?</td>
+<td>Mapa de calor</td>
+<td><code>sns.heatmap(df.corr(numeric_only=True), annot=True, cmap="coolwarm", center=0)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpretar siempre por escrito</strong>: debajo de cada
+gráfico, dos o tres frases con lo que se ve («las ventas bajan en
+agosto», «hay tres precios atípicos en Deporte»). Es lo que se evalúa en
+CA5.7.</p>
+<blockquote>
+<p><strong>Correlación no es causalidad.</strong> Que el helado y las
+quemaduras solares suban a la vez no significa que una cosa cause la
+otra: las dos dependen del calor.</p>
+</blockquote>
+<h3 id="ejercicios-del-bloque-2">Ejercicios del bloque 2</h3>
+<p><strong>D2.1 · Ventas mensuales</strong> 🟢 (E23): con
+<code>pedidos.csv</code>, calcula el total vendido por mes y
+represéntalo con un gráfico de líneas con marcadores, título y ejes con
+nombre. Justifica por qué es el gráfico adecuado. <em>Pista</em>:
+<code>pd.to_datetime</code>, <code>.dt.to_period("M")</code>,
+<code>groupby</code>, <code>plot(marker="o")</code>.</p>
+<p><strong>D2.2 · Distribución de la edad</strong> 🟢 (E24): histograma
+con curva de densidad y boxplot de la edad. ¿Es simétrica? ¿Hay
+atípicos? Calcula media y mediana y explica la diferencia.</p>
+<p><strong>D2.3 · Precio por categoría</strong> 🟡 (E26): boxplot de
+<code>precio_unitario</code> por <code>categoria</code>, ordenado de
+menor a mayor mediana. ¿Qué categoría tiene más dispersión?</p>
+<p><strong>D2.4 · Relaciones</strong> 🟡 (E26): dispersión de
+<code>cantidad</code> frente a <code>total</code> y de
+<code>precio_unitario</code> frente a <code>total</code> con recta de
+regresión, y mapa de calor de correlaciones. ¿Qué variable explica mejor
+el total? ¿Te sorprende alguna correlación?</p>
+<p><strong>D2.5 · Informe EDA</strong> 🔴 (CA5.7): con un dataset de
+datos abiertos (D1.3), aplica el <a
+href="teoria.html#146-checklist-de-análisis-exploratorio-de-datos-eda">checklist
+de EDA</a> y redacta un informe de <strong>5 hallazgos</strong>, cada
+uno con su gráfico y su interpretación.</p>
+<p><a href="https://mp5101-ad.vercel.app/docs/unidades/02/">Ampliar en
+el módulo AD: Unidad 2 →</a></p>
+<hr />
+<h2 id="bloque-3--limpiar-y-normalizar">Bloque 3 · Limpiar y
+normalizar</h2>
+<p>Un modelo es tan bueno como los datos con los que aprende
+(<em>garbage in, garbage out</em>). Esta fase se llama
+<strong>preprocesamiento</strong>.</p>
+<h3 id="31-análisis-preliminar-y-limpieza-básica">3.1 Análisis
+preliminar y limpieza básica</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Problema</th>
+<th>Cómo se detecta</th>
+<th>Qué se hace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Valores nulos</td>
+<td><code>df.isnull().sum()</code>,
+<code>% = isnull().mean()*100</code></td>
+<td>Eliminar la columna si falta casi todo; imputar con la mediana
+(numéricas), la moda (categóricas) o una regla (mediana por grupo)</td>
+</tr>
+<tr class="even">
+<td>Duplicados</td>
+<td><code>df.duplicated().sum()</code></td>
+<td><code>drop_duplicates()</code>, comprobando antes que de verdad son
+repetidos</td>
+</tr>
+<tr class="odd">
+<td>Tipos incorrectos</td>
+<td><code>df.dtypes</code> (una fecha como <code>object</code>, un
+número como texto)</td>
+<td><code>pd.to_datetime()</code>,
+<code>pd.to_numeric(errors="coerce")</code>,
+<code>astype("category")</code></td>
+</tr>
+<tr class="even">
+<td>Texto desordenado</td>
+<td><code>value_counts()</code> muestra «Lugo», «lugo », «LUGO»</td>
+<td><code>str.strip().str.title()</code>,
+<code>replace({...})</code></td>
+</tr>
+<tr class="odd">
+<td>Valores imposibles</td>
+<td><code>describe()</code>: edad 230, precio negativo</td>
+<td>Corregir si se sabe; si no, tratarlos como nulos</td>
+</tr>
+<tr class="even">
+<td>Memoria</td>
+<td><code>df.memory_usage(deep=True)</code></td>
+<td><code>category</code> para textos repetidos, tipos numéricos más
+pequeños</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>Error típico con fechas:</strong> que
+<code>df.dtypes</code> diga <code>object</code> en una columna de fechas
+significa que <strong>no</strong> se ha leído como fecha. Hay que
+convertirla con <code>pd.to_datetime()</code> antes de usar
+<code>.dt.month</code>.</p>
+</blockquote>
+<h3 id="32-transformar-agrupar-codificar-y-escalar">3.2 Transformar:
+agrupar, codificar y escalar</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Técnica</th>
+<th>Para qué</th>
+<th>Código</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Agrupar por intervalos</strong> (<em>binning</em>)</td>
+<td>Pasar un número a categorías</td>
+<td><code>pd.cut(edad, [0, 25, 45, 65, 120], labels=[…])</code> (cortes
+fijos) · <code>pd.qcut(total, 4)</code> (mismo número de filas por
+grupo)</td>
+</tr>
+<tr class="even">
+<td><strong>Codificación ordinal</strong></td>
+<td>Categorías <strong>con orden</strong> (bajo &lt; medio &lt;
+alto)</td>
+<td><code>map({"bajo": 0, "medio": 1, "alto": 2})</code> u
+<code>OrdinalEncoder</code></td>
+</tr>
+<tr class="odd">
+<td><strong>One-hot</strong></td>
+<td>Categorías <strong>sin orden</strong> (Libros, Música…)</td>
+<td><code>pd.get_dummies(df, columns=["categoria"])</code> u
+<code>OneHotEncoder</code></td>
+</tr>
+<tr class="even">
+<td><strong>Normalización (min-max)</strong></td>
+<td>Llevar a la escala 0–1</td>
+<td><code>MinMaxScaler()</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Estandarización (z-score)</strong></td>
+<td>Media 0 y desviación típica 1</td>
+<td><code>StandardScaler()</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>¿Por qué escalar?</strong> Muchos modelos (KNN, SVM, redes
+neuronales) comparan distancias. Si una columna va de 0 a 100 000 € y
+otra de 1 a 5 habitaciones, la primera «manda» solo por su escala. Es el
+ejercicio <strong>E27</strong>.</p>
+</blockquote>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MinMaxScaler, StandardScaler</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;pedidos.csv&quot;</span>).drop_duplicates()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;fecha&quot;</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">&quot;fecha&quot;</span>])</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;edad&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;edad&quot;</span>].fillna(df[<span class="st">&quot;edad&quot;</span>].median())</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;tramo_edad&quot;</span>] <span class="op">=</span> pd.cut(df[<span class="st">&quot;edad&quot;</span>], bins<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">25</span>, <span class="dv">45</span>, <span class="dv">65</span>, <span class="dv">120</span>],</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                          labels<span class="op">=</span>[<span class="st">&quot;joven&quot;</span>, <span class="st">&quot;adulto&quot;</span>, <span class="st">&quot;maduro&quot;</span>, <span class="st">&quot;senior&quot;</span>])</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;cuartil_total&quot;</span>] <span class="op">=</span> pd.qcut(df[<span class="st">&quot;total&quot;</span>], q<span class="op">=</span><span class="dv">4</span>, labels<span class="op">=</span>[<span class="st">&quot;Q1&quot;</span>, <span class="st">&quot;Q2&quot;</span>, <span class="st">&quot;Q3&quot;</span>, <span class="st">&quot;Q4&quot;</span>])</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.get_dummies(df, columns<span class="op">=</span>[<span class="st">&quot;categoria&quot;</span>], prefix<span class="op">=</span><span class="st">&quot;cat&quot;</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">&quot;precio_mm&quot;</span>]] <span class="op">=</span> MinMaxScaler().fit_transform(df[[<span class="st">&quot;precio_unitario&quot;</span>]])   <span class="co"># 0 … 1</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">&quot;precio_z&quot;</span>]] <span class="op">=</span> StandardScaler().fit_transform(df[[<span class="st">&quot;precio_unitario&quot;</span>]])  <span class="co"># media 0, desv. 1</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)                                 <span class="co"># (200, 14)</span></span></code></pre></div>
+<blockquote>
+<p><strong>Regla de oro del preprocesamiento:</strong> el escalado y la
+imputación se <strong>aprenden solo con los datos de
+entrenamiento</strong> y después se aplican al test. Si no, el modelo
+«ve» el examen antes de hacerlo (<em>data leakage</em>). La forma cómoda
+de hacerlo es un <code>Pipeline</code> (<a
+href="teoria.html#144-pipeline-completo-de-machine-learning-con-scikit-learn">teoría
+14.4</a>).</p>
+</blockquote>
+<h3 id="33-checklist-de-preprocesamiento">3.3 Checklist de
+preprocesamiento</h3>
+<ol type="1">
+<li>¿He documentado de dónde salen los datos y qué significa cada
+columna?</li>
+<li>¿He revisado tipos, nulos, duplicados y valores imposibles?</li>
+<li>¿He justificado cada decisión (por qué la mediana, por qué borrar
+esa columna)?</li>
+<li>¿He <strong>anonimizado</strong> los datos personales (nombres, DNI,
+correos) antes de trabajar con ellos? (CA5.2)</li>
+<li>¿He codificado bien las categorías (ordinal solo si hay orden)?</li>
+<li>¿He escalado <strong>después</strong> de dividir en entrenamiento y
+prueba?</li>
+<li>¿Se puede repetir todo ejecutando el cuaderno de arriba abajo?</li>
+</ol>
+<h3 id="ejercicios-del-bloque-3">Ejercicios del bloque 3</h3>
+<p><strong>D3.1 · Diagnóstico</strong> 🟢 (E25): para
+<code>pedidos.csv</code>, muestra filas y columnas, tipos, porcentaje de
+nulos por columna, número de duplicados y memoria usada en KB. Señala
+qué columna tiene el tipo equivocado.</p>
+<p><strong>D3.2 · Limpieza justificada</strong> 🟡 (E25): imputa la edad
+de dos formas (mediana global y mediana por categoría) y compara cómo
+cambian la media y la desviación. ¿Cuál elegirías y por qué?</p>
+<p><strong>D3.3 · Codificar y escalar</strong> 🟡 (E27): crea los tramos
+de edad, aplica one-hot a la categoría y normaliza y estandariza el
+precio. Comprueba con <code>describe()</code> que el mínimo y el máximo
+normalizados son 0 y 1, y que la media y la desviación estandarizadas
+son 0 y 1.</p>
+<p><strong>D3.4 · Anonimizar</strong> 🔴 (CA5.2): a un DataFrame con
+nombre, correo y fecha de nacimiento, sustituye el nombre por un
+identificador, elimina el correo y convierte la fecha de nacimiento en
+un tramo de edad. ¿Por qué no basta con borrar el nombre? (Pista:
+combinación de código postal, fecha de nacimiento y sexo).</p>
+<p><a href="https://mp5101-ad.vercel.app/docs/unidades/03/">Ampliar en
+el módulo AD: Unidad 3 →</a></p>
+<hr />
+<h2 id="bloque-4--modelar-y-predecir">Bloque 4 · Modelar y predecir</h2>
+<h3 id="41-el-flujo-de-scikit-learn">4.1 El flujo de scikit-learn</h3>
+<pre><code>1 IMPORTAR el modelo   from sklearn.linear_model import LinearRegression
+2 DIVIDIR los datos    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42)
+3 ENTRENAR             modelo.fit(X_tr, y_tr)
+4 PREDECIR             y_pred = modelo.predict(X_te)
+5 EVALUAR              r2_score(y_te, y_pred) · mean_absolute_error(y_te, y_pred)</code></pre>
+<h3 id="42-modelos-de-regresión">4.2 Modelos de regresión</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th>Idea</th>
+<th>Cuándo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Regresión lineal simple</strong></td>
+<td>Una recta: precio = a · m² + b</td>
+<td>Primera aproximación con una variable</td>
+</tr>
+<tr class="even">
+<td><strong>Regresión lineal múltiple</strong></td>
+<td>Una variable por cada característica</td>
+<td>Varias variables que influyen de forma aproximadamente lineal</td>
+</tr>
+<tr class="odd">
+<td><strong>Regresión polinómica</strong></td>
+<td>Añade x², x·y… para curvas</td>
+<td>Relaciones curvas; con cuidado, sobreajusta enseguida</td>
+</tr>
+<tr class="even">
+<td><strong>Árbol de decisión</strong></td>
+<td>Preguntas sí/no que dividen los datos</td>
+<td>Relaciones no lineales, fácil de explicar; sin límite de
+profundidad, <strong>memoriza</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="43-métricas-de-error">4.3 Métricas de error</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Métrica</th>
+<th>Fórmula (idea)</th>
+<th>Se lee…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>MAE</strong></td>
+<td>Media de |real − predicho|</td>
+<td>«Me equivoco de media en X €». Fácil de explicar</td>
+</tr>
+<tr class="even">
+<td><strong>MSE</strong></td>
+<td>Media de (real − predicho)²</td>
+<td>Castiga mucho los errores grandes; está en €²</td>
+</tr>
+<tr class="odd">
+<td><strong>RMSE</strong></td>
+<td>√MSE</td>
+<td>Como el MAE, en €, pero sensible a errores grandes</td>
+</tr>
+<tr class="even">
+<td><strong>R²</strong></td>
+<td>1 − error del modelo / error de predecir siempre la media</td>
+<td>1 = perfecto · 0 = como usar la media · &lt; 0 = peor que la
+media</td>
+</tr>
+</tbody>
+</table>
+<h3 id="44-ejemplo-precio-de-viviendas-y-sobreajuste">4.4 Ejemplo:
+precio de viviendas y sobreajuste</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, cross_val_score</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeRegressor</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_squared_error, r2_score</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Viviendas inventadas: el precio depende de m², habitaciones y distancia al centro, más ruido</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">300</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.DataFrame({<span class="st">&quot;m2&quot;</span>: rng.uniform(<span class="dv">40</span>, <span class="dv">160</span>, n),</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;habitaciones&quot;</span>: rng.integers(<span class="dv">1</span>, <span class="dv">6</span>, n),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;dist_centro&quot;</span>: rng.uniform(<span class="fl">0.5</span>, <span class="dv">15</span>, n)})</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">1500</span> <span class="op">*</span> X[<span class="st">&quot;m2&quot;</span>] <span class="op">+</span> <span class="dv">8000</span> <span class="op">*</span> X[<span class="st">&quot;habitaciones&quot;</span>] <span class="op">-</span> <span class="dv">4000</span> <span class="op">*</span> X[<span class="st">&quot;dist_centro&quot;</span>] <span class="op">+</span> rng.normal(<span class="dv">0</span>, <span class="dv">20000</span>, n)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>modelos <span class="op">=</span> {</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lineal simple (m2)&quot;</span>: (LinearRegression(), [<span class="st">&quot;m2&quot;</span>]),</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lineal múltiple&quot;</span>:    (LinearRegression(), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Polinómica grado 2&quot;</span>: (make_pipeline(PolynomialFeatures(<span class="dv">2</span>), LinearRegression()), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol sin límite&quot;</span>:   (DecisionTreeRegressor(random_state<span class="op">=</span><span class="dv">42</span>), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol max_depth=4&quot;</span>:  (DecisionTreeRegressor(max_depth<span class="op">=</span><span class="dv">4</span>, random_state<span class="op">=</span><span class="dv">42</span>), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nombre, (modelo, cols) <span class="kw">in</span> modelos.items():</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    modelo.fit(X_tr[cols], y_tr)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    r2_tr <span class="op">=</span> r2_score(y_tr, modelo.predict(X_tr[cols]))</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    p_te <span class="op">=</span> modelo.predict(X_te[cols])</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>nombre<span class="sc">:20s}</span><span class="ss"> R² train </span><span class="sc">{</span>r2_tr<span class="sc">:.3f}</span><span class="ss"> · R² test </span><span class="sc">{</span>r2_score(y_te, p_te)<span class="sc">:.3f}</span><span class="ss"> · &quot;</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f&quot;MAE </span><span class="sc">{</span>mean_absolute_error(y_te, p_te)<span class="sc">:,.0f}</span><span class="ss"> € · RMSE </span><span class="sc">{</span>mean_squared_error(y_te, p_te) <span class="op">**</span> <span class="fl">0.5</span><span class="sc">:,.0f}</span><span class="ss"> €&quot;</span>)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>cv <span class="op">=</span> cross_val_score(LinearRegression(), X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;r2&quot;</span>)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Validación cruzada:&quot;</span>, cv.<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">&quot;media&quot;</span>, cv.mean().<span class="bu">round</span>(<span class="dv">3</span>))</span></code></pre></div>
+<p>Resultado:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th>R² train</th>
+<th>R² test</th>
+<th>MAE test</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Lineal simple (m²)</td>
+<td>0,769</td>
+<td>0,769</td>
+<td>21 765 €</td>
+</tr>
+<tr class="even">
+<td><strong>Lineal múltiple</strong></td>
+<td>0,890</td>
+<td><strong>0,868</strong></td>
+<td><strong>15 716 €</strong></td>
+</tr>
+<tr class="odd">
+<td>Polinómica grado 2</td>
+<td>0,894</td>
+<td>0,866</td>
+<td>15 707 €</td>
+</tr>
+<tr class="even">
+<td>Árbol sin límite</td>
+<td><strong>1,000</strong></td>
+<td>0,747</td>
+<td>24 027 €</td>
+</tr>
+<tr class="odd">
+<td>Árbol <code>max_depth=4</code></td>
+<td>0,882</td>
+<td>0,796</td>
+<td>20 479 €</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cómo se lee:</strong></p>
+<ul>
+<li>Añadir variables mejora mucho: de la simple a la múltiple el MAE
+baja unos 6000 €.</li>
+<li>La polinómica no aporta nada, porque los datos son lineales: más
+complejo no es mejor.</li>
+<li>El <strong>árbol sin límite</strong> saca un R² de 1 en
+entrenamiento y empeora en test: ha <strong>memorizado</strong>
+(sobreajuste). Limitar la profundidad lo corrige en parte.</li>
+<li>La <strong>validación cruzada</strong> (5 particiones: 0,84–0,91,
+media 0,88) confirma que el resultado de la lineal no depende de una
+división afortunada.</li>
+</ul>
+<h3 id="45-sobreajuste-y-subajuste">4.5 Sobreajuste y subajuste</h3>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Train</th>
+<th>Test</th>
+<th>Qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Subajuste</strong></td>
+<td>Malo</td>
+<td>Malo</td>
+<td>Modelo más complejo, más variables</td>
+</tr>
+<tr class="even">
+<td><strong>Buen ajuste</strong></td>
+<td>Bueno</td>
+<td>Parecido</td>
+<td>Mantener; comprobar con validación cruzada</td>
+</tr>
+<tr class="odd">
+<td><strong>Sobreajuste</strong></td>
+<td>Muy bueno</td>
+<td>Bastante peor</td>
+<td>Simplificar (<code>max_depth</code>), más datos, regularización</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ejercicios-del-bloque-4">Ejercicios del bloque 4</h3>
+<p><strong>D4.1 · Calcular métricas a mano</strong> 🟢 (CA5.5): con
+valores reales [200, 150, 300] y predichos [210, 140, 330] (miles de €),
+calcula MAE, MSE, RMSE y R² en papel y compruébalo con
+<code>sklearn.metrics</code>.</p>
+<p><strong>D4.2 · ¿Sobreajusta?</strong> 🟡 (CA5.5): repite el ejemplo
+4.4 con <code>max_depth</code> de 1 a 15 y dibuja R² de train y de test
+frente a la profundidad. ¿Dónde empieza el sobreajuste? ¿Qué profundidad
+elegirías?</p>
+<p><strong>D4.3 · Predecir con datos abiertos</strong> 🔴 (CA5.6,
+CA5.7): con el dataset limpio del bloque 3 (o uno de datos abiertos),
+elige una variable numérica que predecir, entrena una regresión lineal y
+un árbol, compara las métricas en una tabla, dibuja «real frente a
+predicho» y explica cuándo se equivoca más el modelo.</p>
+<p><strong>D4.4 · Proyecto final: de la tabla a la app</strong> 🔴
+(CA5.7, proyecto): conecta los cuatro bloques con un dataset elegido por
+el grupo. Hay que adquirir, explorar, limpiar, modelar y publicar el
+modelo en una pequeña app con <strong>Streamlit</strong> (<a
+href="teoria.html#1️⃣3️⃣-crear-aplicaciones-escritorio-y-web">teoría
+13.4</a>), donde se introducen los datos y se ve la predicción. En la
+exposición hay que explicar los sesgos y errores del modelo.</p>
+<p><a href="https://mp5101-ad.vercel.app/docs/unidades/04/">Ampliar en
+el módulo AD: Unidad 4 →</a></p>
+<hr />
+<h2 id="rúbrica-de-las-prácticas-de-este-itinerario">Rúbrica de las
+prácticas de este itinerario</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Indicador</th>
+<th>Excelente</th>
+<th>Adecuado</th>
+<th>Insuficiente</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Código</strong> (3 p)</td>
+<td>Se ejecuta de arriba abajo; cada apartado marcado con un
+comentario</td>
+<td>Se ejecuta con algún error menor</td>
+<td>No se ejecuta</td>
+</tr>
+<tr class="even">
+<td><strong>Prompt y comprensión</strong> (2 p)</td>
+<td>Prompt incluido y cada bloque explicado con sus palabras</td>
+<td>Prompt incluido y explicación parcial</td>
+<td>Sin prompt o sin explicación</td>
+</tr>
+<tr class="odd">
+<td><strong>Decisiones de datos</strong> (2 p)</td>
+<td>Cada limpieza o transformación justificada</td>
+<td>Algunas justificadas</td>
+<td>Sin justificar</td>
+</tr>
+<tr class="even">
+<td><strong>Gráficos e interpretación</strong> (2 p)</td>
+<td>Gráfico adecuado a la pregunta, con título y ejes, e interpretación
+escrita</td>
+<td>Gráficos correctos sin interpretar</td>
+<td>Gráficos inadecuados</td>
+</tr>
+<tr class="odd">
+<td><strong>Ética y datos</strong> (1 p)</td>
+<td>Fuente, licencia y anonimización indicadas</td>
+<td>Fuente indicada</td>
+<td>Nada</td>
+</tr>
+</tbody>
+</table>
+<h2 id="recursos">Recursos</h2>
+<ul>
+<li>Módulo <strong>«Análisis de datos (AD)»</strong>: <a
+href="https://mp5101-ad.vercel.app/">mp5101-ad.vercel.app</a>. Cuatro
+unidades con contenidos, ejercicios resueltos y actividades. Es de nivel
+más avanzado: úsalo como ampliación.</li>
+<li>Libro de J. F. Puentes, <em>Tecnologías Inteligentes</em>, capítulos
+14–16: <a href="libro.html#parte-iv--aprendizaje-automático-ud5">resumen
+en El libro</a>.</li>
+<li>Datos abiertos: <a
+href="https://abertos.xunta.gal/">abertos.xunta.gal</a> · <a
+href="https://datos.gob.es/">datos.gob.es</a> · <a
+href="https://www.kaggle.com/datasets">Kaggle Datasets</a>.</li>
+<li>En esta web: <a href="teoria.html">Teoría UD2</a> · <a
+href="ejercicios.html">Ejercicios E1–E27</a> · <a href="ud5-ml.html">UD5
+Aprendizaje automático</a> · <a href="mapa.html">Mapa de
+librerías</a>.</li>
+</ul>
+  </article>
+</main>
+<footer class="site"><div class="in">
+  <span>IA · Apuntes · Tecnoloxías Intelixentes · 1.º Bacharelato</span>
+  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0)</span>
+</div></footer>
+<a class="up" href="#">↑ Arriba</a>
+<script>
+(function () {
+  document.querySelectorAll("article.content table").forEach(function (t) {
+    var w = document.createElement("div"); w.className = "table-wrap";
+    t.parentNode.insertBefore(w, t); w.appendChild(t);
+  });
+  var toc = document.getElementById("TOC"), btn = document.querySelector(".toc-toggle");
+  if (btn && toc) btn.addEventListener("click", function () {
+    var o = toc.classList.toggle("open"); btn.setAttribute("aria-expanded", o);
+  });
+  if (!toc || !("IntersectionObserver" in window)) return;
+  var links = {}; toc.querySelectorAll("a").forEach(function (a) { links[decodeURIComponent(a.getAttribute("href").slice(1))] = a; });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting && links[e.target.id]) {
+        toc.querySelectorAll("a.on").forEach(function (x) { x.classList.remove("on"); });
+        links[e.target.id].classList.add("on");
+      }
+    });
+  }, { rootMargin: "-70px 0px -70% 0px" });
+  document.querySelectorAll("article.content h2[id], article.content h3[id]").forEach(function (h) { io.observe(h); });
+})();
+</script>
+<script>
+/* Soluciones cifradas (AES-GCM + PBKDF2). Sin la contraseña, el contenido no se puede leer. */
+(function () {
+  var art = document.querySelector("article.content[data-salt]");
+  if (!art) return;
+  var locks = art.querySelectorAll(".sol-lock");
+  if (!locks.length) return;
+  var KEY = "ia-apuntes-sol";
+  function b64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function derive(pass) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(art.dataset.salt), iterations: +art.dataset.iter, hash: "SHA-256" },
+        k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    });
+  }
+  function unlockAll(pass) {
+    return derive(pass).then(function (key) {
+      var first = locks[0];
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(first.dataset.iv) }, key, b64(first.dataset.ct)).then(function () {
+        var dec = new TextDecoder();
+        return Promise.all(Array.prototype.map.call(locks, function (el) {
+          return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(el.dataset.iv) }, key, b64(el.dataset.ct)).then(function (buf) {
+            var tmp = document.createElement("div"); tmp.innerHTML = dec.decode(buf);
+            var d = tmp.firstElementChild; el.replaceWith(d);
+            return d;
+          });
+        }));
+      });
+    }).then(function (opened) {
+      try { sessionStorage.setItem(KEY, pass); } catch (e) {}
+      return opened;
+    });
+  }
+  locks.forEach(function (el) {
+    var label = el.dataset.label || "Solución";
+    el.innerHTML =
+      '<button type="button" class="sol-btn"><span aria-hidden="true">🔒</span> ' + label + ' <small>· con contraseña</small></button>' +
+      '<form class="sol-form" hidden><label>Contraseña del profesorado <input type="password" autocomplete="off" required></label>' +
+      '<button type="submit">Abrir</button><span class="sol-msg" role="status"></span></form>';
+    var b = el.querySelector(".sol-btn"), f = el.querySelector(".sol-form"), msg = el.querySelector(".sol-msg");
+    b.addEventListener("click", function () { f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); });
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var pass = f.querySelector("input").value;
+      msg.textContent = "Comprobando…";
+      var idx = Array.prototype.indexOf.call(locks, el);
+      unlockAll(pass).then(function (opened) {
+        var mine = opened[idx]; if (mine) { mine.open = true; mine.scrollIntoView({ block: "nearest" }); }
+      }).catch(function () { msg.textContent = "Contraseña incorrecta."; });
+    });
+  });
+  var saved = null; try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlockAll(saved).catch(function () { try { sessionStorage.removeItem(KEY); } catch (e) {} });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La asignatura · IA Apuntes</title>
+<meta name="description" content="Tecnoloxías Intelixentes, 1º de
+Bachillerato. Objetivos, unidades, criterios de evaluación, metodología
+y recursos del curso 2026-27.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="brand" href="./">IA<span>·</span>Apuntes</a>
+  <nav aria-label="Principal">
+    <a href="./">Inicio</a>
+    <a href="asignatura.html" title="Programación, criterios y evaluación" aria-current="page">Asignatura</a>
+    <a href="ud1.html" title="Conceptos clave de la IA">UD1</a>
+    <a href="teoria.html" title="Programación en Python: teoría">UD2 Teoría</a>
+    <a href="ejercicios.html" title="Ejercicios de Python E1–E27">UD2 Ejercicios</a>
+    <a href="ud3-vision.html" title="Visión artificial">UD3 Visión</a>
+    <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural">UD4 Lenguaje</a>
+    <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
+    <a href="datos.html" title="Análisis de datos: de los datos al modelo">Datos</a>
+    <a href="libro.html" title="El libro de referencia, capítulo a capítulo">Libro</a>
+    <a href="mapa.html">Mapa</a>
+  </nav>
+</div></header>
+<main class="doc">
+  <div>
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="TOC">Índice ▾</button>
+<nav id="TOC" aria-label="Índice">
+<ul>
+<li><a href="#tecnoloxías-intelixentes"
+id="toc-tecnoloxías-intelixentes">Tecnoloxías Intelixentes</a>
+<ul>
+<li><a href="#en-cifras" id="toc-en-cifras">En cifras</a></li>
+<li><a href="#objetivos-de-la-materia"
+id="toc-objetivos-de-la-materia">Objetivos de la materia</a></li>
+<li><a href="#las-cinco-unidades" id="toc-las-cinco-unidades">Las cinco
+unidades</a></li>
+<li><a href="#criterios-de-evaluación"
+id="toc-criterios-de-evaluación">Criterios de evaluación</a></li>
+<li><a href="#cómo-se-evalúa" id="toc-cómo-se-evalúa">Cómo se
+evalúa</a></li>
+<li><a href="#cómo-se-trabaja" id="toc-cómo-se-trabaja">Cómo se
+trabaja</a></li>
+<li><a href="#recursos" id="toc-recursos">Recursos</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+  <article class="content">
+<h1 id="tecnoloxías-intelixentes">Tecnoloxías Intelixentes</h1>
+<p><strong>1.º de Bachillerato · IES Chan do Monte (Marín) · Curso
+2026-2027</strong> Materia optativa del currículo gallego (Decreto
+157/2022). Programación didáctica del 08/10/2026.</p>
+<blockquote>
+<p><strong>La idea de la materia</strong>: no se trata de convertirse en
+programador o programadora, sino de <strong>entender cómo funciona la
+inteligencia artificial por dentro</strong> y saber <strong>usarla con
+criterio</strong>. El código se genera muchas veces con ayuda de una IA
+conversacional, pero <strong>lo entiendes, lo ejecutas, lo compruebas y
+lo mejoras tú</strong>.</p>
+</blockquote>
+<h2 id="en-cifras">En cifras</h2>
+<table>
+<tbody>
+<tr class="odd">
+<td>Sesiones</td>
+<td>4 por semana · <strong>140 al año</strong></td>
+</tr>
+<tr class="even">
+<td>Unidades</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>Herramientas</td>
+<td>Cuadernos Jupyter / Google Colab, Python, IA conversacional (cuentas
+anonimizadas del centro), aula virtual</td>
+</tr>
+<tr class="even">
+<td>Libro de referencia</td>
+<td>J. F. Puentes Calvo, <em>Tecnologías Inteligentes</em> (2025, CC
+BY-NC-ND 4.0) · ver <a href="libro.html">El libro</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="objetivos-de-la-materia">Objetivos de la materia</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Objetivo</th>
+<th>Qué significa</th>
+<th>Dónde se trabaja sobre todo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>OBX1</strong></td>
+<td>Analizar y valorar el <strong>impacto social y ético</strong> de la
+IA con pensamiento crítico: seguridad digital, igualdad, normativa</td>
+<td>Todas las unidades (cierre de cada una)</td>
+</tr>
+<tr class="even">
+<td><strong>OBX2</strong></td>
+<td>Entender los <strong>agentes inteligentes</strong> y sus
+aplicaciones reales</td>
+<td>UD1</td>
+</tr>
+<tr class="odd">
+<td><strong>OBX3</strong></td>
+<td>Interactuar con <strong>modelos basados en datos</strong>,
+reconociendo el papel de la persona en las decisiones</td>
+<td>Visión, Lenguaje, UD5</td>
+</tr>
+<tr class="even">
+<td><strong>OBX4</strong></td>
+<td>Desarrollar <strong>soluciones prácticas</strong> con razonamiento
+algorítmico y programación</td>
+<td>UD2 y proyectos</td>
+</tr>
+</tbody>
+</table>
+<h2 id="las-cinco-unidades">Las cinco unidades</h2>
+<table>
+<thead>
+<tr class="header">
+<th>UD</th>
+<th>Unidad</th>
+<th>Sesiones</th>
+<th>Peso</th>
+<th>Trimestre</th>
+<th>Página</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Conceptos clave de la IA</td>
+<td>10</td>
+<td>5 %</td>
+<td>1.º</td>
+<td><a href="ud1.html">UD1</a></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Programación para la IA</td>
+<td>60</td>
+<td>40 %</td>
+<td>1.º y 2.º</td>
+<td><a href="teoria.html">Teoría</a> · <a
+href="ejercicios.html">Ejercicios</a></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Visión artificial</td>
+<td>20</td>
+<td>15 %</td>
+<td>1.º</td>
+<td><a href="ud3-vision.html">Visión</a></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Procesamiento del lenguaje natural</td>
+<td>25</td>
+<td>20 %</td>
+<td>2.º</td>
+<td><a href="ud4-lenguaje.html">Lenguaje</a></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Aprendizaje automático</td>
+<td>25</td>
+<td>20 %</td>
+<td>2.º y 3.º</td>
+<td><a href="ud5-ml.html">UD5</a></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Sobre el orden de Visión y Lenguaje</strong>: esta web sigue
+la programación oficial y el libro, con Visión artificial como UD3 y
+Lenguaje natural como UD4. En el aula virtual, Lenguaje natural aparece
+antes. Los contenidos son los mismos en los dos casos.</p>
+</blockquote>
+<pre><code>UD1 Conceptos ──► UD2 Python ──┬──► Visión artificial ──┐
+   (¿qué es IA?)   (herramienta) ├──► Lenguaje natural ───┼──► UD5 Aprendizaje automático
+                                 └──────────────────────────┘     (cómo aprende un modelo)</code></pre>
+<h2 id="criterios-de-evaluación">Criterios de evaluación</h2>
+<p><strong>UD1 · Conceptos clave</strong></p>
+<ul>
+<li><strong>CA2.1</strong>: propiedades básicas de un sistema de IA y su
+relación con los algoritmos. <em>Mínimo</em>: resolver en papel juegos
+de ingenio sencillos sistematizando la solución.</li>
+<li><strong>CA2.2</strong>: fundamentos de los agentes inteligentes.
+<em>Mínimo</em>: enumerar sensores y actuadores comunes y el fenómeno
+físico en el que se basan.</li>
+<li><strong>CA2.3</strong>: aplicaciones reales de los agentes.
+<em>Mínimo</em>: adaptar el concepto de agente a problemas del día a
+día.</li>
+<li><strong>CA2.4</strong>: aspectos básicos de los agentes.
+<em>Mínimo</em>: describir los componentes necesarios para crear un
+agente para una actividad.</li>
+</ul>
+<p><strong>UD2 · Programación</strong></p>
+<ul>
+<li><strong>CA1.1</strong>: fundamentos de Python. <em>Mínimo</em>:
+identificar los elementos básicos de un script.</li>
+<li><strong>CA1.2</strong>: bibliotecas y herramientas de aprendizaje
+automático. <em>Mínimo</em>: conocer las bibliotecas por sus
+funcionalidades.</li>
+<li><strong>CA1.3</strong>: habilidades de programación para IA.
+<em>Mínimo</em>: ejecutar scripts en Jupyter, posiblemente con
+generadores automáticos de código.</li>
+</ul>
+<p><strong>Visión artificial</strong></p>
+<ul>
+<li><strong>CA3.1</strong>: la imagen como matriz numérica: píxeles y
+canales de color.</li>
+<li><strong>CA3.2</strong>: transformaciones básicas, identificación y
+segmentación de patrones con Python.</li>
+<li><strong>CA3.3</strong>: clasificación de imágenes y ejemplos de
+uso.</li>
+<li><strong>CA3.4</strong>: plan sistemático para un reto de visión (por
+ejemplo, estimar la profundidad).</li>
+<li><strong>CA3.5</strong>: exponer ante la clase una propuesta de
+proyecto.</li>
+<li><strong>CA3.6</strong>: tecnologías que pueden atentar contra los
+derechos de las personas, y soluciones.</li>
+</ul>
+<p><strong>Lenguaje natural</strong></p>
+<ul>
+<li><strong>CA4.1</strong>: el sonido como onda: características y
+codificación.</li>
+<li><strong>CA4.2</strong>: tokenización y clasificación básica de
+textos.</li>
+<li><strong>CA4.3</strong>: análisis de emociones y reconocimiento de
+voz.</li>
+<li><strong>CA4.4</strong>: consultas a LLM, contraste con otras fuentes
+y técnicas de <em>prompting</em>.</li>
+<li><strong>CA4.5</strong>: limitaciones y riesgos de los LLM.</li>
+<li><strong>CA4.6</strong>: presentar un proyecto básico de PLN.</li>
+</ul>
+<p><strong>UD5 · Aprendizaje automático</strong></p>
+<ul>
+<li><strong>CA5.1</strong>: ciclo de vida de los datos.</li>
+<li><strong>CA5.2</strong>: selección y preparación de datos, con
+anonimización.</li>
+<li><strong>CA5.3</strong>: normalización y reducción de
+dimensionalidad.</li>
+<li><strong>CA5.4</strong>: aprendizaje supervisado, no supervisado y
+por refuerzo.</li>
+<li><strong>CA5.5</strong>: evaluación, validación cruzada e
+hiperparámetros.</li>
+<li><strong>CA5.6</strong>: predicción y clasificación.</li>
+<li><strong>CA5.7</strong>: exposición gráfica de modelos, sesgos y
+errores.</li>
+<li><strong>CA5.8</strong>: análisis de un conjunto de datos sesgado y
+de los errores de un clasificador binario.</li>
+</ul>
+<h2 id="cómo-se-evalúa">Cómo se evalúa</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Elemento</th>
+<th>Peso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tareas de clase</td>
+<td><strong>30 %</strong> de cada unidad</td>
+</tr>
+<tr class="even">
+<td>Prueba práctica y/o teórica</td>
+<td><strong>70 %</strong> de cada unidad</td>
+</tr>
+<tr class="odd">
+<td>Condición</td>
+<td><strong>Hay que aprobar las dos partes</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Nota de cada trimestre</strong>: media ponderada de las
+unidades trabajadas (pesos 5 / 40 / 15 / 20 / 20). Se aprueba con un 5;
+se redondea a partir de ,5.</li>
+<li><strong>Nota final ordinaria</strong>: 1.er trimestre <strong>30
+%</strong> · 2.º trimestre <strong>30 %</strong> · 3.er trimestre
+<strong>40 %</strong>, con las notas reales sin redondear.</li>
+<li><strong>Recuperación</strong>: plan específico durante el curso.
+Plazo final en los 15 primeros días de junio, con el plan entregado a
+finales de mayo.</li>
+</ul>
+<h2 id="cómo-se-trabaja">Cómo se trabaja</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Tipo de actividad</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>«Pregúntale a tu IA favorita…»</strong></td>
+<td>Investiga un concepto con la IA y <strong>comprueba la respuesta en
+otra fuente</strong></td>
+</tr>
+<tr class="even">
+<td><strong>«Pídele que cree el código en Python para…»</strong></td>
+<td>Escribes el <em>prompt</em>, ejecutas la celda, la explicas línea a
+línea y la corriges</td>
+</tr>
+<tr class="odd">
+<td><strong>Diálogo con la IA</strong></td>
+<td>Iterar el <em>prompt</em> hasta llegar a una solución que entiendes
+(<em>prompt engineering</em>)</td>
+</tr>
+<tr class="even">
+<td><strong>Problemas en papel</strong></td>
+<td>Estados, grafos, optimización: pensar antes de programar</td>
+</tr>
+<tr class="odd">
+<td><strong>Proyectos en equipo</strong></td>
+<td>Descomponer un problema, repartirlo y exponerlo ante la clase</td>
+</tr>
+<tr class="even">
+<td><strong>Debates</strong></td>
+<td>Vigilancia, empleo, sesgos, clonación de voz, lenguas
+minoritarias…</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Regla de oro</strong>: la IA es una herramienta <strong>no
+fiable por defecto</strong>. Todo lo que diga, o el código que genere,
+se <strong>verifica</strong>.</p>
+</blockquote>
+<p><strong>Actividades complementarias</strong>: visitas a empresas del
+entorno (1.º y 2.º trimestre) y charlas con especialistas.</p>
+<h2 id="recursos">Recursos</h2>
+<ul>
+<li><strong>Aula virtual</strong> del centro: materiales, tareas y
+entregas.</li>
+<li><strong>Google Colab</strong>: Python en el navegador, sin instalar
+nada, con el asistente Gemini integrado.</li>
+<li><strong>Repositorio de notebooks del libro</strong>: <a
+href="https://github.com/FranPuentes/iTI2025">github.com/FranPuentes/iTI2025</a>.</li>
+<li><strong>En esta web</strong>: <a href="teoria.html">Teoría de la
+UD2</a> · <a href="ejercicios.html">Ejercicios E1–E27</a> · <a
+href="datos.html">Análisis de datos: de los datos al modelo</a> · <a
+href="mapa.html">Mapa visual de librerías</a> · <a href="libro.html">El
+libro, capítulo a capítulo</a>.</li>
+<li><strong>Ampliación de análisis de datos</strong>: módulo «Análisis
+de datos (AD)», <a
+href="https://mp5101-ad.vercel.app/">mp5101-ad.vercel.app</a>. Cuatro
+unidades: adquisición, EDA, limpieza y modelado. Su estructura inspira
+el <a href="datos.html">itinerario de análisis de datos</a>.</li>
+</ul>
+  </article>
+</main>
+<footer class="site"><div class="in">
+  <span>IA · Apuntes · Tecnoloxías Intelixentes · 1.º Bacharelato</span>
+  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0)</span>
+</div></footer>
+<a class="up" href="#">↑ Arriba</a>
+<script>
+(function () {
+  document.querySelectorAll("article.content table").forEach(function (t) {
+    var w = document.createElement("div"); w.className = "table-wrap";
+    t.parentNode.insertBefore(w, t); w.appendChild(t);
+  });
+  var toc = document.getElementById("TOC"), btn = document.querySelector(".toc-toggle");
+  if (btn && toc) btn.addEventListener("click", function () {
+    var o = toc.classList.toggle("open"); btn.setAttribute("aria-expanded", o);
+  });
+  if (!toc || !("IntersectionObserver" in window)) return;
+  var links = {}; toc.querySelectorAll("a").forEach(function (a) { links[decodeURIComponent(a.getAttribute("href").slice(1))] = a; });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting && links[e.target.id]) {
+        toc.querySelectorAll("a.on").forEach(function (x) { x.classList.remove("on"); });
+        links[e.target.id].classList.add("on");
+      }
+    });
+  }, { rootMargin: "-70px 0px -70% 0px" });
+  document.querySelectorAll("article.content h2[id], article.content h3[id]").forEach(function (h) { io.observe(h); });
+})();
+</script>
+<script>
+/* Soluciones cifradas (AES-GCM + PBKDF2). Sin la contraseña, el contenido no se puede leer. */
+(function () {
+  var art = document.querySelector("article.content[data-salt]");
+  if (!art) return;
+  var locks = art.querySelectorAll(".sol-lock");
+  if (!locks.length) return;
+  var KEY = "ia-apuntes-sol";
+  function b64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function derive(pass) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(art.dataset.salt), iterations: +art.dataset.iter, hash: "SHA-256" },
+        k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    });
+  }
+  function unlockAll(pass) {
+    return derive(pass).then(function (key) {
+      var first = locks[0];
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(first.dataset.iv) }, key, b64(first.dataset.ct)).then(function () {
+        var dec = new TextDecoder();
+        return Promise.all(Array.prototype.map.call(locks, function (el) {
+          return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(el.dataset.iv) }, key, b64(el.dataset.ct)).then(function (buf) {
+            var tmp = document.createElement("div"); tmp.innerHTML = dec.decode(buf);
+            var d = tmp.firstElementChild; el.replaceWith(d);
+            return d;
+          });
+        }));
+      });
+    }).then(function (opened) {
+      try { sessionStorage.setItem(KEY, pass); } catch (e) {}
+      return opened;
+    });
+  }
+  locks.forEach(function (el) {
+    var label = el.dataset.label || "Solución";
+    el.innerHTML =
+      '<button type="button" class="sol-btn"><span aria-hidden="true">🔒</span> ' + label + ' <small>· con contraseña</small></button>' +
+      '<form class="sol-form" hidden><label>Contraseña del profesorado <input type="password" autocomplete="off" required></label>' +
+      '<button type="submit">Abrir</button><span class="sol-msg" role="status"></span></form>';
+    var b = el.querySelector(".sol-btn"), f = el.querySelector(".sol-form"), msg = el.querySelector(".sol-msg");
+    b.addEventListener("click", function () { f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); });
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var pass = f.querySelector("input").value;
+      msg.textContent = "Comprobando…";
+      var idx = Array.prototype.indexOf.call(locks, el);
+      unlockAll(pass).then(function (opened) {
+        var mine = opened[idx]; if (mine) { mine.open = true; mine.scrollIntoView({ block: "nearest" }); }
+      }).catch(function () { msg.textContent = "Contraseña incorrecta."; });
+    });
+  });
+  var saved = null; try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlockAll(saved).catch(function () { try { sessionStorage.removeItem(KEY); } catch (e) {} });
+})();
+</script>
+</body>
+</html>

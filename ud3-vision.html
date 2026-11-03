@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UD3 · Visión artificial · IA Apuntes</title>
+<meta name="description" content="Desarrollo de la UD3 de Tecnoloxías
+Intelixentes: la imagen como matriz, color, histogramas, filtros y
+convolución, segmentación, clasificación con CNN, detección con YOLO,
+percepción de alto nivel e impacto social, con ejercicios resueltos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="brand" href="./">IA<span>·</span>Apuntes</a>
+  <nav aria-label="Principal">
+    <a href="./">Inicio</a>
+    <a href="ud1.html" title="Conceptos clave de la IA">UD1</a>
+    <a href="teoria.html" title="Programación en Python: teoría">UD2 Teoría</a>
+    <a href="ejercicios.html" title="Ejercicios de Python E1–E27">UD2 Ejercicios</a>
+    <a href="ud3-vision.html" title="Visión artificial" aria-current="page">UD3 Visión</a>
+    <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural">UD4 Lenguaje</a>
+    <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
+    <a href="mapa.html">Mapa</a>
+  </nav>
+</div></header>
+<main class="doc">
+  <div>
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="TOC">Índice ▾</button>
+<nav id="TOC" aria-label="Índice">
+<ul>
+<li><a href="#ud3--visión-artificial"
+id="toc-ud3--visión-artificial">UD3 · Visión artificial</a>
+<ul>
+<li><a href="#1-la-imagen-como-dato" id="toc-1-la-imagen-como-dato">1.
+La imagen como dato</a>
+<ul>
+<li><a href="#ejercicio-11--cuánto-ocupa--reto-45-del-libro"
+id="toc-ejercicio-11--cuánto-ocupa--reto-45-del-libro">Ejercicio 1.1 ·
+¿Cuánto ocupa? 🟢 (reto 4.5 del libro)</a></li>
+<li><a href="#ejercicio-12--manipular-una-imagen-con-numpy-"
+id="toc-ejercicio-12--manipular-una-imagen-con-numpy-">Ejercicio 1.2 ·
+Manipular una imagen con NumPy 🟢</a></li>
+</ul></li>
+<li><a href="#2-histogramas-y-transformaciones"
+id="toc-2-histogramas-y-transformaciones">2. Histogramas y
+transformaciones</a>
+<ul>
+<li><a href="#ejercicio-21--detector-de-movimiento-"
+id="toc-ejercicio-21--detector-de-movimiento-">Ejercicio 2.1 · Detector
+de movimiento 🟡</a></li>
+</ul></li>
+<li><a href="#3-filtros-y-convolución"
+id="toc-3-filtros-y-convolución">3. Filtros y convolución</a>
+<ul>
+<li><a href="#ejercicio-31--convolución-a-mano-"
+id="toc-ejercicio-31--convolución-a-mano-">Ejercicio 3.1 · Convolución a
+mano 🟡</a></li>
+<li><a
+href="#ejercicio-32--explícamelo-a-cuatro-niveles--reto-411-del-libro"
+id="toc-ejercicio-32--explícamelo-a-cuatro-niveles--reto-411-del-libro">Ejercicio
+3.2 · Explícamelo a cuatro niveles 🟢 (reto 4.11 del libro)</a></li>
+</ul></li>
+<li><a href="#4-máscaras-de-color-y-segmentación"
+id="toc-4-máscaras-de-color-y-segmentación">4. Máscaras de color y
+segmentación</a>
+<ul>
+<li><a
+href="#ejercicio-41--aislar-un-objeto-de-color--reto-410-del-libro"
+id="toc-ejercicio-41--aislar-un-objeto-de-color--reto-410-del-libro">Ejercicio
+4.1 · Aislar un objeto de color 🟡 (reto 4.10 del libro)</a></li>
+</ul></li>
+<li><a href="#5-clasificar-imágenes" id="toc-5-clasificar-imágenes">5.
+Clasificar imágenes</a>
+<ul>
+<li><a href="#ejercicio-51--leer-una-matriz-de-confusión-"
+id="toc-ejercicio-51--leer-una-matriz-de-confusión-">Ejercicio 5.1 ·
+Leer una matriz de confusión 🟡</a></li>
+</ul></li>
+<li><a href="#6-detectar-y-segmentar-objetos-con-yolo"
+id="toc-6-detectar-y-segmentar-objetos-con-yolo">6. Detectar y segmentar
+objetos con YOLO</a>
+<ul>
+<li><a href="#ejercicio-61--detector-en-el-aula--tarea"
+id="toc-ejercicio-61--detector-en-el-aula--tarea">Ejercicio 6.1 ·
+Detector en el aula 🟡 (tarea)</a></li>
+</ul></li>
+<li><a href="#7-percepción-de-alto-nivel"
+id="toc-7-percepción-de-alto-nivel">7. Percepción de alto nivel</a>
+<ul>
+<li><a href="#ejercicio-71--engañar-al-seguimiento--reto-612-del-libro"
+id="toc-ejercicio-71--engañar-al-seguimiento--reto-612-del-libro">Ejercicio
+7.1 · Engañar al seguimiento 🟡 (reto 6.12 del libro)</a></li>
+</ul></li>
+<li><a href="#8-impacto-social-de-la-visión-artificial"
+id="toc-8-impacto-social-de-la-visión-artificial">8. Impacto social de
+la visión artificial</a>
+<ul>
+<li><a
+href="#ejercicio-81--debate-videovigilancia-con-ia-en-la-calle--reto-79"
+id="toc-ejercicio-81--debate-videovigilancia-con-ia-en-la-calle--reto-79">Ejercicio
+8.1 · Debate: videovigilancia con IA en la calle 🟡 (reto 7.9)</a></li>
+</ul></li>
+<li><a href="#9-proyecto-quitar-el-fondo-de-una-foto-ca34-ca35"
+id="toc-9-proyecto-quitar-el-fondo-de-una-foto-ca34-ca35">9. Proyecto:
+quitar el fondo de una foto (CA3.4, CA3.5)</a></li>
+<li><a href="#tareas-evaluables" id="toc-tareas-evaluables">Tareas
+evaluables</a></li>
+<li><a href="#preguntas-tipo-de-examen"
+id="toc-preguntas-tipo-de-examen">Preguntas tipo de examen</a></li>
+<li><a href="#para-saber-más" id="toc-para-saber-más">Para saber
+más</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+  <article class="content" data-salt="Ftl4FzScJjQGuxSZlwG3Hw==" data-iter="250000">
+<h1 id="ud3--visión-artificial">UD3 · Visión artificial</h1>
+<div class="ud-head" style="--c:var(--c-visual)">
+<span class="k">UD3 · 20 sesiones · 15 % · CA3.1–CA3.6</span>
+<p>Cómo «ve» una máquina: de la imagen como matriz de números a clasificar, detectar y segmentar objetos con redes neuronales, y qué riesgos tiene para nuestros derechos.</p>
+</div>
+
+<blockquote>
+<p><strong>Libro de referencia:</strong> J. F. Puentes Calvo,
+<em>Tecnologías Inteligentes</em> (2025), capítulos 4–7. <strong>Orden
+de las unidades:</strong> sigue la programación oficial 2026/27 y el
+libro (visión antes que lenguaje). En materiales anteriores esta unidad
+aparece como UD4.</p>
+<p><strong>Requisitos:</strong> NumPy de la UD2 (secciones 7 y 8 de la
+<a href="teoria.html#71-numpy-computación-numérica">Teoría</a>). Los
+ejemplos funcionan en Colab; los que usan <code>skimage.data</code> no
+necesitan internet.</p>
+</blockquote>
+<table>
+<thead>
+<tr class="header">
+<th>Sesiones</th>
+<th>Bloque</th>
+<th>Libro</th>
+<th>Criterio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1–3</td>
+<td>La imagen como dato: píxeles, resolución, color, formatos</td>
+<td>4.1–4.4</td>
+<td>CA3.1</td>
+</tr>
+<tr class="even">
+<td>4–6</td>
+<td>Histogramas, transformaciones y operaciones entre imágenes</td>
+<td>4.5–4.7</td>
+<td>CA3.1, CA3.2</td>
+</tr>
+<tr class="odd">
+<td>7–9</td>
+<td>Filtros y convolución; bordes; máscaras de color y segmentación</td>
+<td>4.7, 5.1, 5.4</td>
+<td>CA3.2</td>
+</tr>
+<tr class="even">
+<td>10–12</td>
+<td>Clasificación: de los píxeles a la CNN</td>
+<td>5.2, 5.5.1</td>
+<td>CA3.3</td>
+</tr>
+<tr class="odd">
+<td>13–15</td>
+<td>Detección y segmentación con YOLO; <em>transfer learning</em></td>
+<td>5.3–5.5.2</td>
+<td>CA3.2, CA3.3</td>
+</tr>
+<tr class="even">
+<td>16–17</td>
+<td>Percepción de alto nivel: pose, seguimiento, profundidad, caras</td>
+<td>6</td>
+<td>CA3.4</td>
+</tr>
+<tr class="odd">
+<td>18</td>
+<td>Impacto social, vigilancia y deepfakes</td>
+<td>7</td>
+<td>CA3.6</td>
+</tr>
+<tr class="even">
+<td>19–20</td>
+<td>Proyecto «quitar el fondo» y exposición</td>
+<td>6.3</td>
+<td>CA3.4, CA3.5</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-la-imagen-como-dato">1. La imagen como dato</h2>
+<p>Una imagen digital es una <strong>cuadrícula de píxeles</strong>.
+Cada píxel guarda números:</p>
+<ul>
+<li><strong>Escala de grises:</strong> un número por píxel, de 0 (negro)
+a 255 (blanco). La imagen es una matriz <code>alto × ancho</code>.</li>
+<li><strong>Color RGB:</strong> tres números (rojo, verde, azul), cada
+uno de 0 a 255. La imagen es un array <code>alto × ancho × 3</code>. Con
+un cuarto canal <strong>alfa</strong> (transparencia) se llama
+RGBA.</li>
+<li><strong>Resolución:</strong> número de píxeles (por ejemplo, 1920 ×
+1080). Más píxeles, más detalle y más memoria.</li>
+<li><strong>Profundidad de color:</strong> bits por canal. Con 8 bits
+hay 2⁸ = 256 niveles; 3 canales dan 256³ ≈ 16,7 millones de
+colores.</li>
+<li><strong>Formatos:</strong> <strong>JPEG</strong> comprime con
+pérdida (fotos); <strong>PNG</strong> sin pérdida y con transparencia
+(gráficos, capturas); GIF admite animación con 256 colores; TIFF y BMP
+se usan sin comprimir o en ámbitos profesionales.</li>
+</ul>
+<p>Otros <strong>espacios de color</strong> separan la información de
+otra forma. <strong>HSV</strong> (tono, saturación, valor) es muy útil
+para seleccionar «todo lo rojo», porque el tono queda en un solo canal
+aunque cambie la iluminación.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> skimage <span class="im">import</span> data</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>img <span class="op">=</span> data.astronaut()             <span class="co"># imagen de ejemplo incluida en scikit-image</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(img.shape, img.dtype)        <span class="co"># (512, 512, 3) uint8</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(img[<span class="dv">0</span>, <span class="dv">0</span>])                   <span class="co"># píxel de arriba a la izquierda: [154 147 151]</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(img.nbytes)                  <span class="co"># 786 432 bytes = 512 · 512 · 3</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>gris <span class="op">=</span> (<span class="fl">0.299</span> <span class="op">*</span> img[..., <span class="dv">0</span>] <span class="op">+</span> <span class="fl">0.587</span> <span class="op">*</span> img[..., <span class="dv">1</span>] <span class="op">+</span> <span class="fl">0.114</span> <span class="op">*</span> img[..., <span class="dv">2</span>]).astype(np.uint8)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>recorte <span class="op">=</span> img[<span class="dv">50</span>:<span class="dv">150</span>, <span class="dv">180</span>:<span class="dv">300</span>]     <span class="co"># «zoom»: quedarse con unas filas y columnas</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>espejo <span class="op">=</span> img[:, ::<span class="op">-</span><span class="dv">1</span>]              <span class="co"># invertir el orden de las columnas</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>negativo <span class="op">=</span> <span class="dv">255</span> <span class="op">-</span> img</span></code></pre></div>
+<p>La conversión a grises pondera más el verde porque nuestro ojo es más
+sensible a él. Fíjate en que <strong>todas las operaciones son de
+NumPy</strong>: recortar es indexar, voltear es invertir un eje, el
+negativo es una resta.</p>
+<h3 id="ejercicio-11--cuánto-ocupa--reto-45-del-libro">Ejercicio 1.1 ·
+¿Cuánto ocupa? 🟢 (reto 4.5 del libro)</h3>
+<p>¿Cuánta memoria ocupa sin comprimir una imagen de 1024 × 768 en RGBA
+con 8 bits por canal? ¿Y un vídeo de 10 s a 30 fotogramas por segundo
+con esas imágenes?</p>
+<div class="sol-lock" data-label="Solución" data-iv="XHeNLpWvW18sFubd" data-ct="RiJN2bv9O5dfUShG0IhSverV4rOb6mCUMT9daYYn88ooo0RPZWjr8jUgQrEvbBrC49J1cN1jeZOtE/8p3132IA+hQXXkmG9ppHz9jXZHVTh4CmnbEZIdYdpHIDBGf/YH6IA6iS3H3hScUBiVFXawbZx6/oxfJfdw+eiR6LjT5KBYI/fCnW2e/pI2trIIA1d/Eaj5SgUXeeOQX0nwyU3qHsAKYXCfccUZ5EzOAcA+jC4ftNL/+gCoPYmZVJBDiyser9hP8c7A1lqpbPsqio9dwoMPPMIS8FDfrMc+3hqLa/KSJfkA7LDGHdPvDEOhi5Ij67kABpf041Tq27TC0kUr/MrMqIu9Pchrk9ULiMblUVxzURzhg4kgcdHIRAa3QuyMTvVuzHT4kpmuEnJH/dCrQuDOYtNaFi9RkMKRt+OS7sO4eC6GhbJaisY/SBKQ6Une0Y864JE7Va0IU6ERl1VDlE/5moy3rKvzUX38WwUegbj+4i9EtpAp1opMv9ezWBfpLY2tKGCYNw=="></div>
+
+<h3 id="ejercicio-12--manipular-una-imagen-con-numpy-">Ejercicio 1.2 ·
+Manipular una imagen con NumPy 🟢</h3>
+<p>Con <code>data.astronaut()</code>: a) muestra solo el canal rojo; b)
+gírala 90°; c) aclárala un 30 % sin que ningún valor pase de 255.</p>
+<div class="sol-lock" data-label="Solución" data-iv="T+AQQTT6I+AA9UTT" data-ct="oea62+j3h/9k0wS+M80Pf4CHFjNBrCk8rkcD9G2IbQz9tr75CTp/cwvL9rNlLvFgHCu/UccOpeMzoGm24aBwLQSG7n05jushJ4NXSsdCKCIxiD0LXSjnytwQZtoSTFQJ29858GiKIhTfTxedgd4Ho6zVNc9sovwKu6WxvxVRTIkTeRQwdPrh7GsIAKog0JffDCKtjj+TE6YRKY3ditTwmie2Tg+vDg2GPj79mydLb25hPRTvyiAsmwfCVTeOL6lvbWOKLp5J3nugX7/2DISOoSNUzAXZPHOifwE5MzeI0LURGdSqcJqu3Z3uYHcUdh8TXfrUq4DDA5J0G5TRjnYRlogR1sFV9WvxL6yqzuKTFSJAjPaOJlug8k3wclsMSf/noMVykAncZbXstWfl9u59ExNvy502D+53iR63Y+Hos9W0EUJsu4hScuahmRP17EBrLXtyrsd568dU+EloA9zRsdxrvIkr/jiCAlyMjT/wcNqXi7Bz/0kNZbTscChlJFjdTwqi8YiR457qQpt2Gvx1Z1QBfBVzmo9L55bqG8Tsle5WhLq9Uz8xBD5rqITbdNLvrAn5B85rBtS0Ykp557iqcsw2KKZDiMrKKil0yZ+DeQzNvHmUDCdaWCMJPOk83fgNHv6JVTGrDU5IL+ipHtfPHLPp1vgEGd4GITO8S3OYhMKFQC/ykir69kzDaB21RpK9dVlp9TzD3AZKZ2PT6PyhZbqsKcpsE18rhSH/3uvpbqMmqgPT+ApHMrOdL2yYT4HBms7jJoazwomXv3ZQv6/bXCvpT6rPFUk3vNIYVGpKGLCrxS/iYc+r/TxsXmcYRZGclrgCijk1P3eDg+aft4yGjk6ayaXRNzyc848kPe219jITHQYSWw8yXo7f4438lkfv73QnANbubSXXgH+c2LPwFgDRyJBGtrr5EePRcUupTagQZy1aYwwcxyD2VPKxLv/rjV36c5KVtOjFr/9xW6h+R/Hr9WhQq8gw8fbuq11hgQApsEAyOstFRT9dIV5c+J6p6MQdX5sy8VyxxfRP7AU2P08c7yQZTyzZFBLB05EqmQ6tQ44dsyTM0C5soXL5N2RITnuGe8ty9Fjh6lQPOobrbCslEvWoaPIS4AMegJWXYkZe02EaXzJYNANLDnhM8UmzIlheD+ofIy1MLJBwNi/VCJJuhCDKx1Afz5HsAd4wLZpZSYRKaHm9G6k45NnYAJNn4oA547B9C+WOxr03pDMMGCGusodyuRCTrglLufB1OMeVNtee0GwlXoOXEOPohoIPEd7Wn+VBwp8UA/AeVxdoJNVZiZhOvI1/U5GA+4FqVGXYn7MVaMcWCDmiMfbwTTrRvlXzjhuR0SDUpDxoXmAdr2U2Vu0G0JSFzS3JuMVNxI89y6HytsN/7uAeAaDK4WQ7bnIpFdJIF2UNwyC0KAMnQ2MVwpvsd3yZOhh3QE8UQBzffdczqUEkivydZPiKZb0jZE1KC8iNZx4UMF1FkWdrVJbVcmZYAE3AbroWOlURs2GTC/jg4m/pZ967+SgG3h0LUg60nAwap49pfcNitV/RwzD0wGCGuRPThfQMRA+08OIinQMGCJOJv3thcBjksNcerfRGklwS0RpNMcFXlr9VjGg8+qT71byTaSwedObDMyLwuFAZYS7NyKnuTjC9VuQf1m5dK7AyAaC4Jue36LZ8fSVkGw66e1gie1qUFUl/+z1/MYzRajfN6oDaZN0yK0b0k3kM4w/z/hmX0480cH04NnrHilCSEeBctUph4mwLzQEH606Ik9wmPlyN0Nz7eN33dvUkq+Ud7s+AcNJOI3A+HtBxbZOtqZDBWyV7mnuiqcUGnMaIZfPY1W/VO+3jaOkxG8kKdghH70Nk/fOc+tOQnGMPEU4H/PHPZAAWpAXI1RXvTPegVxJy3Hl/XIuNsNB+2o0kXUg9AI4kYEwiAEQYbGT83pSwSH6pVtxepY4gRM95MIO1lKkevczNIp2gDSPJ+356clsDJ/sEOR58XzpYhT4SmGYXV+y+Kl1mi+XWQSKxMbpUdxhe2xSbofE9T0qzx/knjZxL8+WSdg1pmub2Ip33lM0AOqMTiS7w4t2FpvvT2WbwcfOkYxr66aeHshbcfu2AyAXVwlb72fNrFIU9Ti1zNEp0H7sqftnlNt6duv3n1tc6G+oQ/j0XUIyS/FZjxdYkXVMTTDj+e4WmQLNnTkuUSTZaX/EH1SEFc2veBgSJqTnoCz8BLfIuDqyhDZF6574NjFD7mLcB/uHg1t3mRIFjud9cCNzyNnCL3Hz6CeyeCR8xrqdX+kRdfDOsFBQUNWD/rRn8Tsd1amw/IkXKBC5nm1UiMZ0H33NKOmrzSmRstyVcdT0GIrMstrYsWWgY9Cyf7XnM0nadrw5i4VGjYvGG/IGuOSs/BZHo0OGMtdiwcSs/klk0KIoe70Y3/cPcnTOBP2+LpXP9EwG2FcDDzD6JsZXLd0ckG2A+/fJFUg3iyfd3ifiDF8YjLHv9H9/HTItnko3yycYXYOTYHYmQTx67dhWR/4Pc44PhqOHKxYshPfpAe//va4StOvWbOrywczU7HSdeVD/Iq6PxHH848cKpEvsKWAiE6HML1oKdr0EjpT3R71SXJeuz3rPqc9nDxaUs/MAk96FC8mv4/yju/47Yi26Ae5ijn6oON4vQ+8ll91PNVUUdQZ5MUKxf9ITCAAL0JJZbs+u+dNDTn3EsM65iTyGvz+rsdjBTDIxCKIxhlMJSPHxWZkUGg0Fv7Rpw1ao81TG/x8T7rcMSfp38uySRtsxB5hEL5ejcYHX3u4K7fBRAlH0HCmXRtxTBsBkpTLSCLo2jVo/mGuC+MnVj5fWQMi0guLJp6mShdkYgb8Z7JP1AAwWu3kizRt0KE0IdQWZdZrVAh3DwaWpjK2Ul0N0zFT9gncUAcjbKDHXWqZtvcht4Frv972SX9l0vgF8pDtrJkfj/nv7UH4XaytkiMc2dMCiipfZSM4cU99QXrCE9lwE3CxBkgkGEtza0sARXNyxoHj4yslnKYQTcWI6GXOaZZ3GLSX4eJqVSZr30NVyTC8RppYjMVSfFXs2o1cSbmanzTxy9voFJ3axvVr59I1ew3SVZLH9RJkZLiWue78sHGtbymf2Aus0tVlnmLqQihXCJHKo0DWPQBlCXGH7j5shQ8QAOEIj5kk2vMv3GEatVKqkeihWz/BHfePSt92a+MT5OuNkuGHSm3Lo1chuqP16MxXfWb8b42secnfwEV5AlKl9FAnJhCUU+IR/4OsMWxawCj/LaimT5cqOiAXsORfU43+jBRmiTYU+rSWcn3+ApLFrNz/njD4QDo8klUotY8jzwAh38P1yp39oTl6zXeQxWoKHvWjFEEFF+7WC+2yHsTs18Prb3fPqrfupyYgSFi4aLCUcFq8oI/0RiZAWlQpH5X/kxfBkMcmdoj8aRFrj1c7NybBjUcPDAhirD+xx0LNYyf6FXKkvMmUzT/DTndrnCZsOHeEV/XL4Tj4ZMg34Xyx3Um3p67U9i/r8N64VVV73gMg0o21uq6MKZAntUk6ve0gb8Pr+osY4EmunJ495tElYSb9k4dp7HuuLq5YqB4Fcy5EOPgrApUS5/ZH9WFOZ3bOvbwRYWhE7A+JTu6c/d5Y5wkHRp2G873PKAP4c="></div>
+
+<hr />
+<h2 id="2-histogramas-y-transformaciones">2. Histogramas y
+transformaciones</h2>
+<p>El <strong>histograma</strong> cuenta cuántos píxeles hay de cada
+nivel. Una foto oscura acumula valores a la izquierda; una
+sobreexpuesta, a la derecha; una con poco contraste, en una franja
+estrecha. <strong>Ecualizar</strong> reparte los niveles para usar todo
+el rango.</p>
+<p>Las <strong>transformaciones geométricas</strong> mueven píxeles de
+sitio: traslación, escala, rotación y perspectiva (corregir una foto de
+una pizarra tomada de lado). Las <strong>operaciones entre
+imágenes</strong> las tratan como matrices: sumar (fundidos), restar
+(detectar qué ha cambiado entre dos fotogramas) o multiplicar por una
+<strong>máscara</strong> de ceros y unos (recortar una zona).</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> skimage <span class="im">import</span> data, exposure</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>gris <span class="op">=</span> data.camera()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>hist, _ <span class="op">=</span> np.histogram(gris, bins<span class="op">=</span><span class="dv">256</span>, <span class="bu">range</span><span class="op">=</span>(<span class="dv">0</span>, <span class="dv">256</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Nivel más frecuente:&quot;</span>, hist.argmax())          <span class="co"># 27: imagen con mucho oscuro</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ecualizada <span class="op">=</span> exposure.equalize_hist(gris)              <span class="co"># valores entre 0 y 1</span></span></code></pre></div>
+<h3 id="ejercicio-21--detector-de-movimiento-">Ejercicio 2.1 · Detector
+de movimiento 🟡</h3>
+<p>Tienes dos fotogramas en grises, <code>f1</code> y <code>f2</code>,
+de una cámara fija. Escribe una función que diga si ha habido movimiento
+y en qué zona.</p>
+<div class="sol-lock" data-label="Solución" data-iv="yZN2ZepxFcLbBQxl" data-ct="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"></div>
+
+<hr />
+<h2 id="3-filtros-y-convolución">3. Filtros y convolución</h2>
+<p>Una <strong>convolución</strong> desliza una pequeña matriz, el
+<strong>filtro</strong> o <strong>kernel</strong>, por toda la imagen.
+En cada posición multiplica el filtro por los píxeles que tiene debajo y
+suma: ese número es el nuevo píxel. Según los valores del filtro, se
+obtiene un efecto u otro:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Filtro</th>
+<th>Kernel</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Media 3×3</td>
+<td>todos 1/9</td>
+<td>Desenfoca, quita ruido</td>
+</tr>
+<tr class="even">
+<td>Mediana</td>
+<td>(no es lineal: toma el valor central ordenado)</td>
+<td>Quita ruido de «sal y pimienta» sin emborronar bordes</td>
+</tr>
+<tr class="odd">
+<td>Sobel X</td>
+<td><code>[[-1,0,1],[-2,0,2],[-1,0,1]]</code></td>
+<td>Detecta bordes verticales</td>
+</tr>
+<tr class="even">
+<td>Enfoque</td>
+<td><code>[[0,-1,0],[-1,5,-1],[0,-1,0]]</code></td>
+<td>Realza detalles</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.signal <span class="im">import</span> convolve2d</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> skimage <span class="im">import</span> data</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>gris <span class="op">=</span> data.camera().astype(<span class="bu">float</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>media <span class="op">=</span> np.ones((<span class="dv">3</span>, <span class="dv">3</span>)) <span class="op">/</span> <span class="dv">9</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>sobel_x <span class="op">=</span> np.array([[<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>], [<span class="op">-</span><span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>], [<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>]])</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>sobel_y <span class="op">=</span> sobel_x.T</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>suave <span class="op">=</span> convolve2d(gris, media, mode<span class="op">=</span><span class="st">&quot;same&quot;</span>, boundary<span class="op">=</span><span class="st">&quot;symm&quot;</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>gx <span class="op">=</span> convolve2d(gris, sobel_x, mode<span class="op">=</span><span class="st">&quot;same&quot;</span>, boundary<span class="op">=</span><span class="st">&quot;symm&quot;</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>gy <span class="op">=</span> convolve2d(gris, sobel_y, mode<span class="op">=</span><span class="st">&quot;same&quot;</span>, boundary<span class="op">=</span><span class="st">&quot;symm&quot;</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>bordes <span class="op">=</span> np.hypot(gx, gy)              <span class="co"># fuerza del borde en cada píxel</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Píxeles de borde: </span><span class="sc">{</span>(bordes <span class="op">&gt;</span> <span class="dv">100</span>)<span class="sc">.</span>mean()<span class="sc">:.1%}</span><span class="ss">&quot;</span>)     <span class="co"># ≈ 13,8 %</span></span></code></pre></div>
+<p><strong>Por qué importa:</strong> una <strong>red neuronal
+convolucional (CNN)</strong> es una pila de muchas convoluciones cuyos
+filtros <strong>no los escribimos nosotros: los aprende</strong> a
+partir de ejemplos. Las primeras capas acaban detectando bordes como
+Sobel; las siguientes, esquinas y texturas; las últimas, ojos, ruedas u
+hojas.</p>
+<h3 id="ejercicio-31--convolución-a-mano-">Ejercicio 3.1 · Convolución a
+mano 🟡</h3>
+<p>Aplica Sobel X al píxel central de esta zona de 3×3 y explica el
+resultado:</p>
+<pre><code> 10  10  200
+ 10  10  200
+ 10  10  200</code></pre>
+<div class="sol-lock" data-label="Solución" data-iv="BSdyAmRjpzJMK5Qy" data-ct="mn2xWXqkqsd8dUbTSJWU77Jrm4LjrGy7WH+rvfR09Xns0A3Ou24BdZ0GjKAMEdezYqS9WAvgxaKMs8/SUtcAffC/oolkcIXJAdiLvAP+E3E90v40Q/UqKDMd121X9QaW2L6slz7mSeTTpGiv4XpsEZUt9ygpQxyUMxFoTfDg2qmFiJ2nB4YdsgQTIrfliLutj7UGBCgTSMeScTkKTDfttgzVO4EFSIG5azRH00ljacmQQF6DQG2wk1BhpsSuyBggUFuAfMCfcA5xm8SZ0+5U74tsDX7h6AnstT5Vzev9AEShBdJax8P8sFDzsZtmskbPkK6eZsCsnMLiFINUB6m3pK/imyIUYwxBKJXF0qeBPqFKTXfBxM7ImrSCRDFlAbb80Jv2FEnpSyxCxBtwHTozxZbx732wOGWFvDvxDFxpZqky3QhFNnCcNXcrnvEIAhcFjOZbPQtj8JG/NVJ3faxGRYCJl6FwYQmkkF7BA6b9IcjIe7XjX2JpNTExri+GzDeyBaELLLRI0MyOgx+zzceacqLcoCAZ3f5ayEzRd9PUxUBg/c5NdNUqwCu8+dLYmXeFVoLZY2kvjUNDKZfRBnG+i0HgNHtLSwj1s1VCn43NILe2dRp/gKj0MSvB2aoiKyYIdfFZtIiuiGGhmVPfHIdfJ4QpW1CRjbMesNdP5A1mgXbRcuOF240K/cJlPteyd84O0EA2F50PLFEPps5gjVoXZwSNPYVUKp1A3A0B1/s5Sx6YIc/6Oz+kfc6b5MF5ePinjjjXC5wBtt6aZVrV71L7zxCH+UhcNv22zkNoJA=="></div>
+
+<h3
+id="ejercicio-32--explícamelo-a-cuatro-niveles--reto-411-del-libro">Ejercicio
+3.2 · Explícamelo a cuatro niveles 🟢 (reto 4.11 del libro)</h3>
+<p>Pide a una IA que explique qué es una convolución a un niño de 10
+años, a alguien de 16, a un universitario y a un experto. Compara las
+cuatro respuestas: ¿cuál te sirvió más? ¿Hay algún error? Comprueba un
+dato técnico en otra fuente.</p>
+<hr />
+<h2 id="4-máscaras-de-color-y-segmentación">4. Máscaras de color y
+segmentación</h2>
+<p><strong>Segmentar</strong> es dividir la imagen en regiones con
+significado (fondo, objeto, persona). Formas sencillas:</p>
+<ul>
+<li><strong>Umbral:</strong> píxeles más claros que un valor → 1; el
+resto → 0.</li>
+<li><strong>Por color en HSV:</strong> seleccionar un rango de tono,
+saturación y brillo.</li>
+<li><strong>Agrupamiento (k-means):</strong> tratar cada píxel como un
+punto (R, G, B) y agrupar los parecidos. Es aprendizaje <strong>no
+supervisado</strong>.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> skimage <span class="im">import</span> data</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> skimage.color <span class="im">import</span> rgb2hsv</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>img <span class="op">=</span> data.coffee()</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>hsv <span class="op">=</span> rgb2hsv(img)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>h, s, v <span class="op">=</span> hsv[..., <span class="dv">0</span>], hsv[..., <span class="dv">1</span>], hsv[..., <span class="dv">2</span>]</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>rojizo <span class="op">=</span> ((h <span class="op">&lt;</span> <span class="fl">0.06</span>) <span class="op">|</span> (h <span class="op">&gt;</span> <span class="fl">0.94</span>)) <span class="op">&amp;</span> (s <span class="op">&gt;</span> <span class="fl">0.5</span>) <span class="op">&amp;</span> (v <span class="op">&gt;</span> <span class="fl">0.3</span>)    <span class="co"># el rojo está en los dos extremos del tono</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>aislado <span class="op">=</span> img <span class="op">*</span> rojizo[..., <span class="va">None</span>]                              <span class="co"># lo demás, en negro</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>peq <span class="op">=</span> img[::<span class="dv">4</span>, ::<span class="dv">4</span>]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>km <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">4</span>, n_init<span class="op">=</span><span class="dv">4</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(peq.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">3</span>).astype(<span class="bu">float</span>))</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>segmentada <span class="op">=</span> km.cluster_centers_[km.labels_].reshape(peq.shape).astype(np.uint8)</span></code></pre></div>
+<h3
+id="ejercicio-41--aislar-un-objeto-de-color--reto-410-del-libro">Ejercicio
+4.1 · Aislar un objeto de color 🟡 (reto 4.10 del libro)</h3>
+<p>Busca una foto con un objeto de color llamativo (una pelota, un
+chaleco reflectante) y crea una máscara que lo aísle. Ajusta los rangos
+de H, S y V. ¿Qué falla si cambia la luz?</p>
+<div class="sol-lock" data-label="Solución orientativa" data-iv="SQ6xx8rAB/Ra/Zfz" data-ct="pTRivqT10TklCkbFT4mh0p48D7RKXSjNFM6iCDaW5eFLisBxHsC9f5a1lfH7WonyHZfxWFUZC9y+U8pc4zWULls6xreyOuxFB29NgnXreNCi4VjR9skwhHsP1JZHINKFbdtd4+A9NvPfF2UJJQZpPoyKTU6GlZFRLZ4VwZ9miTIMc7w8eGwNX4mkCVDTkD1c2TrE0oF/gDn0G0b0d3OEKctpCjlp52vhw1eXeHizRZn6JfVTzYOcAYyA7KcZtozjmrGRSSqEhMwgMpbNWAvG83iyKy1ulyt1ag5HP3UDXNmhGDvgDTcsYWv44aa8zUy0lhJZcf2NEQL3CTB/rhS+tnOheI0JvY5tYdgWvh0ipI/Tw2RvrXMinMvGAN3erzjoBJ3ALPwmk7n+GW0QT5NA8zjbiE9CI+0gm/pno6cyNIUKKNMT9kVGWf1hRL85IslfV5g6jxl8/ULdm1qybqAw8wBXBtf9dCVndzFYsapI6nrf5X5md6OSHzJpHw81ia4Y+UMh+Ob1YysTlcYn2soGnOQW6p0616FzH/XF05VGHQkQbQ4mB8tvaahNrjNK1Nddi+fEz+oC8eJEObH46Hh9cRVhxalgXM5i8tSUqSvtpy42AHiX0Dzalrw/aXU1/byaHBemOwPbSYT9/DOy4EPD3wp/7aCuCfV8StmfnOI8yorw/O1J39iwC/vuSHeqSmA5enkLwYJRrWFOm1bFn9izzHqFeoeD6Ba0juY4MJw9Pn79EnCGdLqNMsVNirQk7NGJHZcDVYE7BVc77S+1VyBC+j/3Ht1aIXM2TTpra0AgZooNi05yhRSXFcrw0VUaKYgKJtwwf7oT3yQd3SyLow=="></div>
+
+<hr />
+<h2 id="5-clasificar-imágenes">5. Clasificar imágenes</h2>
+<p><strong>Clasificar</strong> es responder a «¿qué hay en esta imagen?»
+con una etiqueta. Es aprendizaje supervisado: el modelo ve miles de
+imágenes con su etiqueta.</p>
+<ul>
+<li>Con <strong>modelos clásicos</strong> (random forest, XGBoost, SVM)
+se aplana la imagen en un vector de píxeles. Funciona con imágenes
+pequeñas y centradas como los dígitos, pero no entiende que un gato
+desplazado sigue siendo un gato.</li>
+<li>Con una <strong>CNN</strong>, las capas convolucionales aprenden
+filtros, las de <strong>pooling</strong> reducen el tamaño quedándose
+con lo importante y las capas finales (densas) deciden la clase.
+Reconoce patrones estén donde estén.</li>
+</ul>
+<p>El libro compara ambas con <strong>MNIST</strong> (70 000 dígitos
+manuscritos de 28×28): XGBoost llega a ≈ 0,975 de exactitud tras unos 42
+minutos con validación cruzada; una CNN sencilla lo supera en menos
+tiempo.</p>
+<p>Versión ligera que funciona en cualquier equipo, con el dataset de
+dígitos 8×8 de scikit-learn:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_digits</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score, confusion_matrix</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_digits(return_X_y<span class="op">=</span><span class="va">True</span>)          <span class="co"># 1797 imágenes de 8×8 → vectores de 64</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">0</span>, stratify<span class="op">=</span>y)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">200</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(X_tr, y_tr)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> modelo.predict(X_te)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Exactitud: </span><span class="sc">{</span>accuracy_score(y_te, pred)<span class="sc">:.3f}</span><span class="ss">&quot;</span>)     <span class="co"># ≈ 0,978</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(confusion_matrix(y_te, pred))</span></code></pre></div>
+<p>Y la CNN para MNIST con Keras (en Colab, con GPU):</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>(x_tr, y_tr), (x_te, y_te) <span class="op">=</span> keras.datasets.mnist.load_data()</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>x_tr, x_te <span class="op">=</span> x_tr[..., <span class="va">None</span>] <span class="op">/</span> <span class="fl">255.0</span>, x_te[..., <span class="va">None</span>] <span class="op">/</span> <span class="fl">255.0</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> keras.Sequential([</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    keras.Input(shape<span class="op">=</span>(<span class="dv">28</span>, <span class="dv">28</span>, <span class="dv">1</span>)),</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    keras.layers.Conv2D(<span class="dv">32</span>, <span class="dv">3</span>, activation<span class="op">=</span><span class="st">&quot;relu&quot;</span>),    <span class="co"># 32 filtros aprendidos</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    keras.layers.MaxPooling2D(),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    keras.layers.Conv2D(<span class="dv">64</span>, <span class="dv">3</span>, activation<span class="op">=</span><span class="st">&quot;relu&quot;</span>),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    keras.layers.MaxPooling2D(),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    keras.layers.Flatten(),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    keras.layers.Dense(<span class="dv">10</span>, activation<span class="op">=</span><span class="st">&quot;softmax&quot;</span>),     <span class="co"># una probabilidad por dígito</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>modelo.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">&quot;adam&quot;</span>, loss<span class="op">=</span><span class="st">&quot;sparse_categorical_crossentropy&quot;</span>, metrics<span class="op">=</span>[<span class="st">&quot;accuracy&quot;</span>])</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>historia <span class="op">=</span> modelo.fit(x_tr, y_tr, epochs<span class="op">=</span><span class="dv">5</span>, validation_split<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(modelo.evaluate(x_te, y_te))                     <span class="co"># exactitud ≈ 0,99</span></span></code></pre></div>
+<h3 id="ejercicio-51--leer-una-matriz-de-confusión-">Ejercicio 5.1 ·
+Leer una matriz de confusión 🟡</h3>
+<p>En la matriz de confusión del clasificador de dígitos, ¿qué
+representan la diagonal y los valores fuera de ella? ¿Qué dígitos crees
+que se confunden más y por qué?</p>
+<div class="sol-lock" data-label="Solución" data-iv="VIZo6zaL0U9nGYgj" data-ct="egJS2pgivFLQoedhvyGjP2tfuyxDIFL0xjI9ze4wtHog84EM35tGQSR+002WP79QB5HZ6bwkTsq+dDbkNuGdjKRDReggdRtU2KBqg6rAk9HXetNrcG0wCTJ9C9UMq1WF11MdmosGXLFzr7XVGjPHxCuy1uz1ztKrJSrvK6qFOcLnDpZGTett2yTZ6S8AEiz+DPj37Ws6ib9BrNXcn8oPaPEpSUuRBlOtlElMHs8XHvdj5NxPBYAyA0CjT9R1tP8RUs0D/F8EkVYeW8TFVa78mTVh7xKfaJfck1FhRI0a2X2fTzYw9A2XK49a/C7kgln3A/xw08D3djn0C5MT272xHfgBhy8k/zYSk/fzWeDEs1PhlxuqJNEK/EaBy0l3qW1NevMqkfuMFNybtoem9coQZZBwIGrOQSHsqDz9i/jbJBEz7ZodDx2YvhBAc25zZqrc99FXkHWxCo5X5i/+RMywDlQ745YUHKLLwWx1K9Q5tPkeyG71CQ4xaZlM88AwuQb+bPZbZgnpQwU0WpBRPvK4NnN/z0cq3R6PATDTU3thdy2Cmgx5oF/58MppoWKoA2z2KTPr89uEcavALK5h4NtnEryXgql1MXdvuHIxmnSGUXlIkXiPcP4maLGZ2kIYBrtz/Z8j3G0sL5wC5O1leIMSCd5sG2rjpFWYvIEbkmfbprCMVb/KwHXeOb6MKnz0IpQ2tJ7Jg96ISWNigQxaD4AMQHNkF6ftQY6WH3zlSLyU10pKudo="></div>
+
+<hr />
+<h2 id="6-detectar-y-segmentar-objetos-con-yolo">6. Detectar y segmentar
+objetos con YOLO</h2>
+<ul>
+<li><strong>Clasificar:</strong> una etiqueta para toda la imagen.</li>
+<li><strong>Detectar:</strong> localizar cada objeto con una
+<strong>caja</strong>, su clase y una <strong>puntuación</strong> de
+confianza.</li>
+<li><strong>Segmentar:</strong> marcar exactamente qué píxeles
+pertenecen a cada objeto.</li>
+</ul>
+<p><strong>YOLO</strong> (<em>You Only Look Once</em>) detecta todos los
+objetos en una sola pasada de la red, lo bastante rápido para vídeo en
+tiempo real. Viene preentrenado con <strong>COCO</strong> (80 clases:
+persona, coche, perro, taza…). El libro usa YOLOv8 de Ultralytics; la
+librería admite también versiones más recientes con el mismo código.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install ultralytics   (en Colab)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ultralytics <span class="im">import</span> YOLO</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> YOLO(<span class="st">&quot;yolov8n.pt&quot;</span>)                 <span class="co"># «n» = nano, el más ligero</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> modelo(<span class="st">&quot;https://ultralytics.com/images/bus.jpg&quot;</span>)[<span class="dv">0</span>]</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> caja <span class="kw">in</span> res.boxes:</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    clase <span class="op">=</span> res.names[<span class="bu">int</span>(caja.cls)]</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>clase<span class="sc">:&lt;10}</span><span class="ss"> confianza </span><span class="sc">{</span><span class="bu">float</span>(caja.conf)<span class="sc">:.2f}</span><span class="ss">  caja </span><span class="sc">{</span>caja<span class="sc">.</span>xyxy[<span class="dv">0</span>]<span class="sc">.</span><span class="bu">int</span>()<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>res.show()                                   <span class="co"># imagen con las cajas dibujadas</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>seg <span class="op">=</span> YOLO(<span class="st">&quot;yolov8n-seg.pt&quot;</span>)(<span class="st">&quot;https://ultralytics.com/images/bus.jpg&quot;</span>)[<span class="dv">0</span>]   <span class="co"># segmentación</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>seg.show()</span></code></pre></div>
+<p><strong>Truco del libro:</strong> los objetos pequeños se detectan
+peor. Si se recorta y amplía una zona de la imagen (<em>zoom</em>) y se
+vuelve a predecir, aparecen detecciones nuevas.</p>
+<p><strong>Transfer learning:</strong> para detectar algo que COCO no
+conoce (las piezas de un juego, tipos de mejillón…), no se entrena desde
+cero una red de millones de parámetros: se parte de la red preentrenada
+y se <strong>reentrena con pocos cientos de imágenes propias</strong>
+etiquetadas. El libro lo hace con un dataset de figuras geométricas
+(<code>gshapes.zip</code>).</p>
+<h3 id="ejercicio-61--detector-en-el-aula--tarea">Ejercicio 6.1 ·
+Detector en el aula 🟡 (tarea)</h3>
+<p>Pasa YOLO por 5 fotos tuyas (sin caras identificables o con
+consentimiento). Haz una tabla con aciertos, fallos y <strong>falsos
+positivos</strong>, y explica por qué falla. Prueba el truco del
+<em>zoom</em> en una foto con objetos pequeños.</p>
+<div class="sol-lock" data-label="Solución orientativa" data-iv="b5CCBrlLey3jMGJG" data-ct="2QizXB+eUI4KGH1CEDp0ozm/WHkUBi+e3ThwGPDixA5DMb5NLR8nB1VvnPYw9WKBe+F6rb5HRpXkbFqPQS87MxV3NrFtCCSZJxoY4M4b0sKHqDdAqkmfbZlCwCGFnCw6GQ6ZLAjy3Ys12rev3cOl4109/eu7h1vtLbUgp1onBS3Yi/cXTyVUmKMxougr5V3/xIiFAw1l6HD9GQeZLiRNeRBRR2Te8u+Z8G+eWUmZMCBnnKeJT1p6ObZVEgGQe1U1I+wr+BoYX/C3ASnRbNP1//JDxsRhy3HY6vmeSxuq2FiFz1WB3JkWaV+rPUgCisNKz+e17vBTpYvqlAiouFHHwtSXu+K4JujsAgzpA3OfaJELzHGJ6AUoh/0IbfYUn5Gh7aucIYLnsYrEpZU2YMYCTpKf5u9ka3YVLGYI+wunBEeoA+NDugsWws/IHG8pLPU61VXa9mQZumeqDC2LPNIxUZM++pjw46/0f3JO5bodC2XC2KWa6E3j87CcVQYG/B5FYvqdOcJ9iJpdBpecUjYDfNMwyQzaLS3dx/3Z3LvQbO3f9qy+ph5dPKqeWsGafc4B4XBChtIF/PW1JLJFxi9WLme2GdpCdpwkv8efVqJcAWXRKwyHonz7eLgIFe4A8acblpm9E7CBxWklb+bLIhkqYDF6ZeGzFdK/qGVVVN9nDyPkj2AGXKJc+VhxrE8ZPgHMyCEgT9W/5AKKtln+EoFnFA67Wc8N29ci8+H16VVnRZy2ny3Uv9o1iUYT+kKEAgNcU1WD++3nyxAQA3KKcIu5QKBOM0N7HUXGAAPivWsa7FgYaAVU+f2N7sIqeBNfH5oopHhqInFE2VkEejmUpS5tL9jNTr5jeeRiPeao6w=="></div>
+
+<hr />
+<h2 id="7-percepción-de-alto-nivel">7. Percepción de alto nivel</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Tarea</th>
+<th>Qué hace</th>
+<th>Cómo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Estimación de pose</strong></td>
+<td>Localiza puntos clave del cuerpo (hombros, codos, rodillas)</td>
+<td><code>yolov8n-pose.pt</code>, MediaPipe</td>
+</tr>
+<tr class="even">
+<td><strong>Seguimiento</strong> (<em>tracking</em>)</td>
+<td>Mantiene la identidad de cada objeto entre fotogramas</td>
+<td><code>modelo.track(video)</code> en Ultralytics</td>
+</tr>
+<tr class="odd">
+<td><strong>Profundidad</strong></td>
+<td>Estima la distancia de cada píxel con una sola cámara</td>
+<td>Modelos monoculares (Depth Anything, MiDaS)</td>
+</tr>
+<tr class="even">
+<td><strong>Vectores de características</strong></td>
+<td>Resume una cara o un objeto en un vector de números</td>
+<td>Redes de <em>embedding</em>; se comparan con la similitud del
+coseno</td>
+</tr>
+<tr class="odd">
+<td><strong>Reconocimiento facial</strong></td>
+<td>Detectar → alinear → normalizar → representar → comparar</td>
+<td>El vector de una cara se compara con los guardados</td>
+</tr>
+<tr class="even">
+<td><strong>Gestos y expresiones</strong></td>
+<td>Clasifica puntos clave de la mano o la cara</td>
+<td>Landmarks + clasificador (random forest, k-means)</td>
+</tr>
+</tbody>
+</table>
+<p>La idea que une casi todo: <strong>convertir la imagen en un
+vector</strong> y comparar vectores. Dos fotos de la misma persona dan
+vectores que apuntan en direcciones parecidas:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> coseno(a, b):</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">@</span> b <span class="op">/</span> (np.linalg.norm(a) <span class="op">*</span> np.linalg.norm(b))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>ana_1 <span class="op">=</span> np.array([<span class="fl">0.9</span>, <span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.7</span>])      <span class="co"># vectores inventados (los reales tienen 128-512 valores)</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>ana_2 <span class="op">=</span> np.array([<span class="fl">0.8</span>, <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>])</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>brais <span class="op">=</span> np.array([<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.7</span>, <span class="fl">0.2</span>])</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>coseno(ana_1, ana_2)<span class="sc">:.3f}</span><span class="ss">  </span><span class="sc">{</span>coseno(ana_1, brais)<span class="sc">:.3f}</span><span class="ss">&quot;</span>)    <span class="co"># 0.988  0.426</span></span></code></pre></div>
+<h3
+id="ejercicio-71--engañar-al-seguimiento--reto-612-del-libro">Ejercicio
+7.1 · Engañar al seguimiento 🟡 (reto 6.12 del libro)</h3>
+<p>Graba un vídeo corto del aula (con consentimiento) y aplica
+<code>YOLO("yolov8n.pt").track(...)</code>. Repite intentando que falle:
+cruzarse con otra persona, taparse, salir y volver a entrar. ¿Qué pasa
+con los identificadores?</p>
+<div class="sol-lock" data-label="Solución orientativa" data-iv="pLV28kOwP2cSeSb+" data-ct="nLQXGoPFSYusSToriF5x8kFajVsTFP3o9RFK5CKy47zV0idhmz93HSTQ3XuJ7+fK23Bx9Dmef2YpPSisP27VMwdEhBqLAIDmqtfEJu5TepjlcIgmMvEriITPFJ4yn4NFRtPta7wbDJxO+xSTD6YpioVbyTj8+EZ55/abSptEJ6Hbww4O7FiFBCBpy3VL6+0yUd1U3Ex/EguVcP0hGmzEyJMuMA9qA0jFxeMa2WU6j/jR97TdlvX32PNz0H/sIHzIUw/dP80l5DIqE7r1/pb9sQ/BQqioy+zyGYL3KhcOJWMbD91S6HqBApjVOE0BDGjoBArDqFibFTEk1qZgQRUPuvchVhkCp7brdM7v/Dd0W/QqycTgaoVlPRqoSEkhhx25VpXzdZdF+norvKaCFfF04sLPXuk9o/MLSgA2/kwlGEjGT7OqKel10rfuMuzFlzwKq5b8x+wAbkxR5HbF5ttdOE+D1Jektn/LOPKXWoFA5nD6oKO9WCZFLbZnR5EgRi/Lr0BkOlawSU9S3GeXzll8pA7pLJAJqnyuTpCvHxhEQrANyaER2MlfPBv2PPGm2dCBHU+UOvByOwMPCRrUHEMfgpSuyGSPHkrzdIchm9j+nSruJFGScvSAzzgi0EZQdMHeOq5FYf/yCN8pLrKzRhliDXiAr3igW9QZpOkZmGfDHluECpG1ahgu5qb1iBUz2LmmymX0N0M="></div>
+
+<hr />
+<h2 id="8-impacto-social-de-la-visión-artificial">8. Impacto social de
+la visión artificial</h2>
+<p><strong>Beneficios:</strong> diagnóstico por imagen, accesibilidad
+(describir escenas a personas ciegas), seguridad vial, agricultura de
+precisión, control de calidad industrial.</p>
+<p><strong>Riesgos:</strong> vigilancia masiva y pérdida de anonimato en
+la calle; <strong>sesgos</strong> (sistemas de reconocimiento facial que
+fallan más con mujeres y personas de piel oscura porque se entrenaron
+con datos desequilibrados); <strong>deepfakes</strong> para suplantar o
+difamar; uso de imágenes sin consentimiento.</p>
+<p><strong>Marco legal:</strong> en España, la protección de datos (RGPD
+y LO 3/2018, LOPDGDD) considera la imagen de una persona un dato
+personal, y los datos biométricos, especialmente protegidos. El
+<strong>Reglamento europeo de IA</strong> prohíbe, con excepciones muy
+limitadas, la identificación biométrica remota en tiempo real en
+espacios públicos con fines policiales. <em>Comprueba la situación
+actual: la normativa se aplica por fases.</em></p>
+<h3
+id="ejercicio-81--debate-videovigilancia-con-ia-en-la-calle--reto-79">Ejercicio
+8.1 · Debate: videovigilancia con IA en la calle 🟡 (reto 7.9)</h3>
+<p>Preparad argumentos a favor y en contra, con al menos una fuente
+verificada cada uno.</p>
+<div class="sol-lock" data-label="Argumentos de partida" data-iv="W3QK53Ww+0G+kJ3Z" data-ct="bqhYPsdXumP835zPVpzCDeVGJgqAcWwzE5Rv2bHXNqtz6MKZYyeZYg+bbRWN/aYymxzf2YcyLARdLCaxOz2+3qMDp28+fbr6zR9x8VrEOWD/EXOfYOlerQW9g9+xEm/R7ckDt9Z7JCfCccuoSpIsJ2dhgPLnWvKSDFeLcshIupVYEPpaJvE+AhQQWxzYqAh1QKzxfDSvWeIv7x/H5zDonM6Fi3RlckOGa8QXj6cOYTZF/2iPH6UvMbANR1hF1nPk8iPofnCNOEgiQ1Ar+LV3hQ8NcEk55f30BiznRliJlyWZbjKCodMqnVHV+2f/h9o4dKiZa1aPXug5rCOmijFVz3mpoYHDWktIMYnIE69rAXTNfaSuPUKPddw2l2OvsEqrN7uLYlNgYohMtYi7KQFq8qyjrZdju44UgRGQoVWOgB3MDqNvz/NHkk6k9F1/HardQhO1Ei85HYHRT5sJUQgMlD73hNZma5sqIxnBIQyYfCjkOlb7QZ0TwzWhVeW48Fokxl04Gzg6w7Tm85lJfmHtNqE4FimoWbQzDtDYbiJtdPt28mPENLAoR7RA515mDvB8e4duEa1ssfW2gfmBZODCiyYb+OK+3YZpxU/QLFcWp9UP66duCowZuFEs2n5+xWkqmYNDuUlwTHMrgDfPRdGFnKVfFpRSXPCdSsbVwuy3aTlGIPnJ0sprdJJCTpn7xW5TwRlv4Skl4rnNLhF+yMUediASdlp3Pf1Kt0eo++R840k7GlhQnw/pGmpTaYCM/s6wrQhRam586tIflMja24ZfEXBsVIfvXgW5+wBlacx4ghFrdkmYpg=="></div>
+
+<hr />
+<h2 id="9-proyecto-quitar-el-fondo-de-una-foto-ca34-ca35">9. Proyecto:
+quitar el fondo de una foto (CA3.4, CA3.5)</h2>
+<p>Por grupos, diseñad un <strong>plan sistemático</strong> y
+ejecutadlo:</p>
+<ol type="1">
+<li>Estimar la <strong>profundidad</strong> de cada píxel con un modelo
+monocular.</li>
+<li>Dibujar el <strong>histograma</strong> del mapa de profundidad:
+suelen aparecer dos «montañas», cerca y lejos.</li>
+<li>Elegir un <strong>umbral</strong> entre ellas (o agrupar con k-means
+en 2 grupos).</li>
+<li>Crear la <strong>máscara</strong> y poner el fondo en blanco o en
+otra imagen.</li>
+<li>Evaluar: ¿dónde falla (pelo, bordes, objetos a la misma distancia)?
+¿Cómo lo mejorarías?</li>
+<li>Exponer el plan y los resultados en 5 minutos.</li>
+</ol>
+<div class="sol-lock" data-label="Esquema de solución" data-iv="U4kfnVR12+uM7cur" data-ct="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"></div>
+
+<hr />
+<h2 id="tareas-evaluables">Tareas evaluables</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Tarea</th>
+<th>Criterios</th>
+<th>Entrega</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Laboratorio de la imagen</td>
+<td>CA3.1, CA3.2</td>
+<td>Notebook con histograma, grises y HSV, una transformación y una
+máscara de color, explicando cada celda</td>
+</tr>
+<tr class="even">
+<td>Detector en el aula</td>
+<td>CA3.2, CA3.3</td>
+<td>Tabla de aciertos, fallos y falsos positivos de YOLO en 5 fotos
+propias</td>
+</tr>
+<tr class="odd">
+<td>Proyecto «quitar el fondo»</td>
+<td>CA3.4, CA3.5</td>
+<td>Plan, notebook y exposición en grupo</td>
+</tr>
+<tr class="even">
+<td>Debate de vigilancia</td>
+<td>CA3.6</td>
+<td>Argumentos, contraargumentos y fuentes verificadas</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Privacidad:</strong> en las prácticas con caras o vídeo del
+aula hace falta consentimiento y no se sube nada a servicios externos.
+Los notebooks con webcam no funcionan en Colab.</p>
+</blockquote>
+<h2 id="preguntas-tipo-de-examen">Preguntas tipo de examen</h2>
+<ol type="1">
+<li>¿Qué forma tiene el array de una imagen RGB de 640 × 480? ¿Cuántos
+bytes ocupa?</li>
+<li>Explica qué hace una convolución y para qué sirve el filtro de
+Sobel.</li>
+<li>Diferencia entre clasificar, detectar y segmentar, con un ejemplo de
+cada una.</li>
+<li>¿Por qué una CNN generaliza mejor que un modelo que recibe los
+píxeles aplanados?</li>
+<li>¿Qué es el <em>transfer learning</em> y por qué ahorra datos y
+tiempo?</li>
+<li>Cita un riesgo de la visión artificial para los derechos de las
+personas y una medida que lo limite.</li>
+</ol>
+<div class="sol-lock" data-label="Respuestas modelo" data-iv="8/teZU2rv2Qcbps4" data-ct="VMrU95vp2wDBFpLIdYdLeMR4ZN5Rph6+BjX3K6mV7Sm4wVeg9TDqb4lvMTmW/R1/OOs6kyY4ip4lvybljJmDjpKKRKrf98Yj7BTW54JDClRA2xq+I5yCVJPpoxIhTwWNOtblAtPtK6bigHIBJxxYFgpqQf5/6+SE2RzQ+EoVNjob+VL6zlSY/fkiQ1H7tq+RSgDmFJ4M1HaijBFayjyjwrrdI6FcLp3bIpjUW+8uCprUQLAWjhJdj8/OUYAr4OIEztAmyDuKh5ONueyd+agAJ2Gpv8UYisbgfvc/cQg83Pe0euPrxQbH8g9ltDR5rAVyS9jOyVHgXtgXaQHnNupG123cgbm96QuFMTbQoEne6o1u/DXwZbubxgK3vbF1/tUqq21XdAhTR0VPPMgOKpAoVCLCjUf2dBUwvtB/1OlblFvxT8QwGu2xgWuek/FMMM1mmv8ns8TzbsPof3+jFQ0euFUsbRCPJ87c1tdM0fnowvq+2k/z2yNctxsZLDsg5/Ef1/RLP0/aAtm+WAplCDvPJtQ6g9iOjOqfI6oqJwBmHMBVtwAZgU2wG6+E8PBbYcygh4eKNuUceLXg1nPgA4kzMr/ugHzkjmNWZRp6hgJz1I1CK6BePC0XZ1IF4AW2UJmfryoEh92lgZzCffgV0wDZNwi7ja6oec97pI4ofFjBU2ckSwm0UBylNp7q8Xp1z/IYl+jFDnY3zihZ4zm4zAfCoQruxscxXEQgqBTLZiNumqOec2mBoDLreQs8gLRihHbpIE2+pztp1OVoEY9LTogTvfr+HMSG+6qTyzTPr0ihJdszvtePMWPxj8A/ALCH7lpb3UEmwYPXmdWUvycf4yxZx7syAUIUQXl2Sg0nfMMRQV+jZ+FnyZhq/ac98bmyTlKk93UNf+HKdj099Mnka+V7itpGpPdpbzBiT785XWYau0IbePmPx9DiZu1OJFU5UWHs/jMjqlq1tfSIBmdQcmbMCQIlF1ET9Q93HVUpn4hBWG+wThxIJqmrGq6zfnks3P3B1irjWVTg1Ba68Bc57jVKjDndWTO4RTQZy+LhzGeBoLN5jtn05a5QxELKM1MCUzFCvkvqKBNZhEcJvHbnCIlJsrgPOmPe2aQSBNDjT3NmBmAih+eurLWqkCB8141/5oqMF1cR0amSrSlhfYZAzMyVLaNwbNU7rmh1WlbnjRdiFc19OtiRLqf/IDG1zZY4ZkmcNJ5iKhLWp75HdKhlK8mHWZx0P/xSIPNxSHsCj2cXV0xd8CwYZqCi5j1Q31GrJbzxTapYg7oNyV8X6K2vfe/0HBXwfOVN4pcKjQXqHKQJeQdHkmiFJ7BMvcgWOmlNimTqXBvMUoc2SbcQEFeSrVqhwA9xmPY4DhH4TebmP9ANovUckumR9BlZm14="></div>
+
+<h2 id="para-saber-más">Para saber más</h2>
+<ul>
+<li>Libro: Puentes Calvo (2025), caps. 4–7 y sus retos. Notebooks
+<code>04 Operaciones básicas con imágenes</code>,
+<code>05 clasificación de imágenes</code>,
+<code>05 identificación de objetos</code>, <code>05 segmentación</code>,
+<code>06 estimación de pose</code>, <code>07 Object tracking</code> en
+<a
+href="https://github.com/FranPuentes/iTI2025">github.com/FranPuentes/iTI2025</a>.</li>
+<li>Documentación de <a
+href="https://scikit-image.org/docs/stable/">scikit-image</a> y de <a
+href="https://docs.ultralytics.com/">Ultralytics</a>.</li>
+<li>Redes convolucionales en la <a
+href="teoria.html#147-redes-neuronales-desde-cero">Teoría, sección
+14.7</a>.</li>
+</ul>
+  </article>
+</main>
+<footer class="site"><div class="in">
+  <span>IA · Apuntes · Tecnoloxías Intelixentes · 1.º Bacharelato</span>
+  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0)</span>
+</div></footer>
+<a class="up" href="#">↑ Arriba</a>
+<script>
+(function () {
+  document.querySelectorAll("article.content table").forEach(function (t) {
+    var w = document.createElement("div"); w.className = "table-wrap";
+    t.parentNode.insertBefore(w, t); w.appendChild(t);
+  });
+  var toc = document.getElementById("TOC"), btn = document.querySelector(".toc-toggle");
+  if (btn && toc) btn.addEventListener("click", function () {
+    var o = toc.classList.toggle("open"); btn.setAttribute("aria-expanded", o);
+  });
+  if (!toc || !("IntersectionObserver" in window)) return;
+  var links = {}; toc.querySelectorAll("a").forEach(function (a) { links[decodeURIComponent(a.getAttribute("href").slice(1))] = a; });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting && links[e.target.id]) {
+        toc.querySelectorAll("a.on").forEach(function (x) { x.classList.remove("on"); });
+        links[e.target.id].classList.add("on");
+      }
+    });
+  }, { rootMargin: "-70px 0px -70% 0px" });
+  document.querySelectorAll("article.content h2[id], article.content h3[id]").forEach(function (h) { io.observe(h); });
+})();
+</script>
+<script>
+/* Soluciones cifradas (AES-GCM + PBKDF2). Sin la contraseña, el contenido no se puede leer. */
+(function () {
+  var art = document.querySelector("article.content[data-salt]");
+  if (!art) return;
+  var locks = art.querySelectorAll(".sol-lock");
+  if (!locks.length) return;
+  var KEY = "ia-apuntes-sol";
+  function b64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function derive(pass) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(art.dataset.salt), iterations: +art.dataset.iter, hash: "SHA-256" },
+        k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    });
+  }
+  function unlockAll(pass) {
+    return derive(pass).then(function (key) {
+      var first = locks[0];
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(first.dataset.iv) }, key, b64(first.dataset.ct)).then(function () {
+        var dec = new TextDecoder();
+        return Promise.all(Array.prototype.map.call(locks, function (el) {
+          return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(el.dataset.iv) }, key, b64(el.dataset.ct)).then(function (buf) {
+            var tmp = document.createElement("div"); tmp.innerHTML = dec.decode(buf);
+            var d = tmp.firstElementChild; el.replaceWith(d);
+            return d;
+          });
+        }));
+      });
+    }).then(function (opened) {
+      try { sessionStorage.setItem(KEY, pass); } catch (e) {}
+      return opened;
+    });
+  }
+  locks.forEach(function (el) {
+    var label = el.dataset.label || "Solución";
+    el.innerHTML =
+      '<button type="button" class="sol-btn"><span aria-hidden="true">🔒</span> ' + label + ' <small>· con contraseña</small></button>' +
+      '<form class="sol-form" hidden><label>Contraseña del profesorado <input type="password" autocomplete="off" required></label>' +
+      '<button type="submit">Abrir</button><span class="sol-msg" role="status"></span></form>';
+    var b = el.querySelector(".sol-btn"), f = el.querySelector(".sol-form"), msg = el.querySelector(".sol-msg");
+    b.addEventListener("click", function () { f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); });
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var pass = f.querySelector("input").value;
+      msg.textContent = "Comprobando…";
+      var idx = Array.prototype.indexOf.call(locks, el);
+      unlockAll(pass).then(function (opened) {
+        var mine = opened[idx]; if (mine) { mine.open = true; mine.scrollIntoView({ block: "nearest" }); }
+      }).catch(function () { msg.textContent = "Contraseña incorrecta."; });
+    });
+  });
+  var saved = null; try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlockAll(saved).catch(function () { try { sessionStorage.removeItem(KEY); } catch (e) {} });
+})();
+</script>
+</body>
+</html>

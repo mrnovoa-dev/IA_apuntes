@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>$title$ · IA Apuntes</title>
+<meta name="description" content="$description$">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="brand" href="./">IA<span>·</span>Apuntes</a>
+  <nav aria-label="Principal">
+    <a href="./">Inicio</a>
+    <a href="ud1.html" title="Conceptos clave de la IA"$if(cur-ud1)$ aria-current="page"$endif$>UD1</a>
+    <a href="teoria.html" title="Programación en Python: teoría"$if(cur-teoria)$ aria-current="page"$endif$>UD2 Teoría</a>
+    <a href="ejercicios.html" title="Ejercicios de Python E1–E27"$if(cur-ejercicios)$ aria-current="page"$endif$>UD2 Ejercicios</a>
+    <a href="ud3-vision.html" title="Visión artificial"$if(cur-ud3-vision)$ aria-current="page"$endif$>UD3 Visión</a>
+    <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural"$if(cur-ud4-lenguaje)$ aria-current="page"$endif$>UD4 Lenguaje</a>
+    <a href="ud5-ml.html" title="Aprendizaje automático"$if(cur-ud5-ml)$ aria-current="page"$endif$>UD5 ML</a>
+    <a href="mapa.html">Mapa</a>
+  </nav>
+</div></header>
+<main class="doc">
+  <div>
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="TOC">Índice ▾</button>
+<nav id="TOC" aria-label="Índice">
+$toc$
+</nav>
+  </div>
+  <article class="content">
+$body$
+  </article>
+</main>
+<footer class="site"><div class="in">
+  <span>IA · Apuntes · Tecnoloxías Intelixentes · 1.º Bacharelato</span>
+  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0)</span>
+</div></footer>
+<a class="up" href="#">↑ Arriba</a>
+<script>
+(function () {
+  document.querySelectorAll("article.content table").forEach(function (t) {
+    var w = document.createElement("div"); w.className = "table-wrap";
+    t.parentNode.insertBefore(w, t); w.appendChild(t);
+  });
+  var toc = document.getElementById("TOC"), btn = document.querySelector(".toc-toggle");
+  if (btn && toc) btn.addEventListener("click", function () {
+    var o = toc.classList.toggle("open"); btn.setAttribute("aria-expanded", o);
+  });
+  if (!toc || !("IntersectionObserver" in window)) return;
+  var links = {}; toc.querySelectorAll("a").forEach(function (a) { links[decodeURIComponent(a.getAttribute("href").slice(1))] = a; });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting && links[e.target.id]) {
+        toc.querySelectorAll("a.on").forEach(function (x) { x.classList.remove("on"); });
+        links[e.target.id].classList.add("on");
+      }
+    });
+  }, { rootMargin: "-70px 0px -70% 0px" });
+  document.querySelectorAll("article.content h2[id], article.content h3[id]").forEach(function (h) { io.observe(h); });
+})();
+</script>
+<script>
+/* Soluciones cifradas (AES-GCM + PBKDF2). Sin la contraseña, el contenido no se puede leer. */
+(function () {
+  var art = document.querySelector("article.content[data-salt]");
+  if (!art) return;
+  var locks = art.querySelectorAll(".sol-lock");
+  if (!locks.length) return;
+  var KEY = "ia-apuntes-sol";
+  function b64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function derive(pass) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(art.dataset.salt), iterations: +art.dataset.iter, hash: "SHA-256" },
+        k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    });
+  }
+  function unlockAll(pass) {
+    return derive(pass).then(function (key) {
+      var first = locks[0];
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(first.dataset.iv) }, key, b64(first.dataset.ct)).then(function () {
+        var dec = new TextDecoder();
+        return Promise.all(Array.prototype.map.call(locks, function (el) {
+          return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(el.dataset.iv) }, key, b64(el.dataset.ct)).then(function (buf) {
+            var tmp = document.createElement("div"); tmp.innerHTML = dec.decode(buf);
+            var d = tmp.firstElementChild; el.replaceWith(d);
+            return d;
+          });
+        }));
+      });
+    }).then(function (opened) {
+      try { sessionStorage.setItem(KEY, pass); } catch (e) {}
+      return opened;
+    });
+  }
+  locks.forEach(function (el) {
+    var label = el.dataset.label || "Solución";
+    el.innerHTML =
+      '<button type="button" class="sol-btn"><span aria-hidden="true">🔒</span> ' + label + ' <small>· con contraseña</small></button>' +
+      '<form class="sol-form" hidden><label>Contraseña del profesorado <input type="password" autocomplete="off" required></label>' +
+      '<button type="submit">Abrir</button><span class="sol-msg" role="status"></span></form>';
+    var b = el.querySelector(".sol-btn"), f = el.querySelector(".sol-form"), msg = el.querySelector(".sol-msg");
+    b.addEventListener("click", function () { f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); });
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var pass = f.querySelector("input").value;
+      msg.textContent = "Comprobando…";
+      var idx = Array.prototype.indexOf.call(locks, el);
+      unlockAll(pass).then(function (opened) {
+        var mine = opened[idx]; if (mine) { mine.open = true; mine.scrollIntoView({ block: "nearest" }); }
+      }).catch(function () { msg.textContent = "Contraseña incorrecta."; });
+    });
+  });
+  var saved = null; try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlockAll(saved).catch(function () { try { sessionStorage.removeItem(KEY); } catch (e) {} });
+})();
+</script>
+</body>
+</html>

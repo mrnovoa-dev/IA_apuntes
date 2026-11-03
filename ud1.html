@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UD1 · Conceptos clave de la IA · IA Apuntes</title>
+<meta name="description" content="Desarrollo de la UD1 de Tecnoloxías
+Intelixentes: inteligencia, datos y sensores, historia, qué es y qué no
+es IA, aprendizaje, búsqueda, optimización y agentes, con ejercicios
+resueltos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="brand" href="./">IA<span>·</span>Apuntes</a>
+  <nav aria-label="Principal">
+    <a href="./">Inicio</a>
+    <a href="ud1.html" title="Conceptos clave de la IA" aria-current="page">UD1</a>
+    <a href="teoria.html" title="Programación en Python: teoría">UD2 Teoría</a>
+    <a href="ejercicios.html" title="Ejercicios de Python E1–E27">UD2 Ejercicios</a>
+    <a href="ud3-vision.html" title="Visión artificial">UD3 Visión</a>
+    <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural">UD4 Lenguaje</a>
+    <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
+    <a href="mapa.html">Mapa</a>
+  </nav>
+</div></header>
+<main class="doc">
+  <div>
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="TOC">Índice ▾</button>
+<nav id="TOC" aria-label="Índice">
+<ul>
+<li><a href="#ud1--conceptos-clave-de-la-ia"
+id="toc-ud1--conceptos-clave-de-la-ia">UD1 · Conceptos clave de la
+IA</a>
+<ul>
+<li><a href="#1-qué-es-la-inteligencia"
+id="toc-1-qué-es-la-inteligencia">1. ¿Qué es la inteligencia?</a>
+<ul>
+<li><a href="#ejercicio-11--mapa-de-inteligencias-"
+id="toc-ejercicio-11--mapa-de-inteligencias-">Ejercicio 1.1 · Mapa de
+inteligencias 🟢</a></li>
+</ul></li>
+<li><a href="#2-datos-información-y-conocimiento-sentidos-y-sensores"
+id="toc-2-datos-información-y-conocimiento-sentidos-y-sensores">2.
+Datos, información y conocimiento. Sentidos y sensores</a>
+<ul>
+<li><a href="#ejercicio-21--dato-información-o-conocimiento-"
+id="toc-ejercicio-21--dato-información-o-conocimiento-">Ejercicio 2.1 ·
+¿Dato, información o conocimiento? 🟢</a></li>
+<li><a href="#ejercicio-22--sensores-del-móvil-"
+id="toc-ejercicio-22--sensores-del-móvil-">Ejercicio 2.2 · Sensores del
+móvil 🟡</a></li>
+</ul></li>
+<li><a href="#3-historia-veranos-e-inviernos"
+id="toc-3-historia-veranos-e-inviernos">3. Historia: veranos e
+inviernos</a>
+<ul>
+<li><a href="#ejercicio-31--pioneros-y-pioneras-"
+id="toc-ejercicio-31--pioneros-y-pioneras-">Ejercicio 3.1 · Pioneros y
+pioneras 🟢</a></li>
+</ul></li>
+<li><a href="#4-qué-es-ia-y-qué-no-lo-es"
+id="toc-4-qué-es-ia-y-qué-no-lo-es">4. ¿Qué es IA y qué no lo es?</a>
+<ul>
+<li><a href="#ejercicio-41--ia-o-no-ia-"
+id="toc-ejercicio-41--ia-o-no-ia-">Ejercicio 4.1 · ¿IA o no IA?
+🟡</a></li>
+</ul></li>
+<li><a href="#5-tipos-de-ia-y-cómo-aprende-una-máquina"
+id="toc-5-tipos-de-ia-y-cómo-aprende-una-máquina">5. Tipos de IA y cómo
+aprende una máquina</a>
+<ul>
+<li><a href="#ejercicio-51--supervisado-no-supervisado-o-refuerzo-"
+id="toc-ejercicio-51--supervisado-no-supervisado-o-refuerzo-">Ejercicio
+5.1 · Supervisado, no supervisado o refuerzo 🟢</a></li>
+<li><a href="#ejercicio-52--por-qué-separar-entrenamiento-y-prueba-"
+id="toc-ejercicio-52--por-qué-separar-entrenamiento-y-prueba-">Ejercicio
+5.2 · ¿Por qué separar entrenamiento y prueba? 🟡</a></li>
+</ul></li>
+<li><a href="#6-resolver-problemas-buscando-el-espacio-de-estados"
+id="toc-6-resolver-problemas-buscando-el-espacio-de-estados">6. Resolver
+problemas buscando: el espacio de estados</a>
+<ul>
+<li><a href="#ejercicio-61--las-3-y-las-4-reinas-"
+id="toc-ejercicio-61--las-3-y-las-4-reinas-">Ejercicio 6.1 · Las 3 y las
+4 reinas 🟡</a></li>
+<li><a
+href="#ejercicio-62--el-pastor-el-lobo-el-cordero-y-el-heno--tarea-t2"
+id="toc-ejercicio-62--el-pastor-el-lobo-el-cordero-y-el-heno--tarea-t2">Ejercicio
+6.2 · El pastor, el lobo, el cordero y el heno 🟡 (tarea T2)</a></li>
+<li><a href="#ejercicio-63--torres-de-hanoi-"
+id="toc-ejercicio-63--torres-de-hanoi-">Ejercicio 6.3 · Torres de Hanoi
+🟡</a></li>
+</ul></li>
+<li><a href="#7-resolver-problemas-optimizando"
+id="toc-7-resolver-problemas-optimizando">7. Resolver problemas
+optimizando</a>
+<ul>
+<li><a href="#ejercicio-71--la-fábrica-"
+id="toc-ejercicio-71--la-fábrica-">Ejercicio 7.1 · La fábrica
+🟡</a></li>
+<li><a href="#ejercicio-72--el-gradiente-en-python-"
+id="toc-ejercicio-72--el-gradiente-en-python-">Ejercicio 7.2 · El
+gradiente en Python 🔴</a></li>
+</ul></li>
+<li><a href="#8-agentes-inteligentes" id="toc-8-agentes-inteligentes">8.
+Agentes inteligentes</a>
+<ul>
+<li><a href="#ejercicio-81--ficha-de-agente-coche-autónomo--tarea-t3"
+id="toc-ejercicio-81--ficha-de-agente-coche-autónomo--tarea-t3">Ejercicio
+8.1 · Ficha de agente: coche autónomo 🟡 (tarea T3)</a></li>
+<li><a href="#ejercicio-82--es-una-persona-un-agente-inteligente-"
+id="toc-ejercicio-82--es-una-persona-un-agente-inteligente-">Ejercicio
+8.2 · ¿Es una persona un agente inteligente? 🟢</a></li>
+</ul></li>
+<li><a href="#9-la-ia-en-el-mundo-real"
+id="toc-9-la-ia-en-el-mundo-real">9. La IA en el mundo real</a>
+<ul>
+<li><a href="#ejercicio-91--mapa-de-la-ia-en-galicia-"
+id="toc-ejercicio-91--mapa-de-la-ia-en-galicia-">Ejercicio 9.1 · Mapa de
+la IA en Galicia 🟡</a></li>
+</ul></li>
+<li><a href="#tareas-evaluables-de-la-unidad"
+id="toc-tareas-evaluables-de-la-unidad">Tareas evaluables de la
+unidad</a></li>
+<li><a href="#preguntas-tipo-de-examen"
+id="toc-preguntas-tipo-de-examen">Preguntas tipo de examen</a></li>
+<li><a href="#para-saber-más" id="toc-para-saber-más">Para saber
+más</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+  <article class="content" data-salt="LMEPMF9ynf7upLdI/mRxQg==" data-iter="250000">
+<h1 id="ud1--conceptos-clave-de-la-ia">UD1 · Conceptos clave de la
+IA</h1>
+<div class="ud-head" style="--c:var(--c-datos)">
+<span class="k">UD1 · 10 sesiones · 5 % · CA2.1–CA2.4</span>
+<p>Qué es (y qué no es) la inteligencia artificial, cómo resuelve problemas una máquina y qué es un agente inteligente. Unidad con poco código y mucho razonamiento: problemas en papel, debate y diálogo con una IA, siempre verificando lo que responde.</p>
+</div>
+
+<blockquote>
+<p><strong>Libro de referencia:</strong> J. F. Puentes Calvo,
+<em>Tecnologías Inteligentes</em> (2025), capítulos 1–3. <strong>Teoría
+ampliada</strong> de cada apartado en la <a
+href="teoria.html#0️⃣-punto-de-partida-conceptos-fundamentales-de-ia-ud1">sección
+0 de la Teoría</a>. Esta página desarrolla las sesiones con ejemplos
+resueltos y ejercicios.</p>
+</blockquote>
+<table>
+<thead>
+<tr class="header">
+<th>Ses.</th>
+<th>Tema</th>
+<th>Libro</th>
+<th>Actividad</th>
+<th>Producto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>¿Qué es la inteligencia?</td>
+<td>1.1–1.2</td>
+<td>Mapa de inteligencias</td>
+<td>Mapa humano/máquina</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Datos, información y conocimiento</td>
+<td>1.3</td>
+<td>Sentidos frente a sensores</td>
+<td>Inicio de T1</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Historia de la IA</td>
+<td>1.4</td>
+<td>Galería de pioneros</td>
+<td>Línea del tiempo</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>¿Qué no es IA?</td>
+<td>1.5</td>
+<td>Juego «¿IA o no IA?»</td>
+<td>T4</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Tipos de IA y aprendizaje</td>
+<td>2.1–2.2</td>
+<td>Fichas de películas</td>
+<td>Ficha</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Espacio de estados I</td>
+<td>2.3.1</td>
+<td>3 y 4 reinas</td>
+<td>Árbol de búsqueda</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Espacio de estados II</td>
+<td>2.3.1</td>
+<td>Pastor y río, Hanoi; demo Dijkstra y minimax</td>
+<td>T2</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Optimización</td>
+<td>2.3.2</td>
+<td>La fábrica A/B; gradiente a ciegas</td>
+<td>Problema resuelto</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>Agentes inteligentes</td>
+<td>2.4</td>
+<td>Coche autónomo o aspirador</td>
+<td>T3</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>La IA en el mundo real</td>
+<td>3</td>
+<td>Mapa de la IA en Galicia</td>
+<td>Exposición</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-qué-es-la-inteligencia">1. ¿Qué es la inteligencia?</h2>
+<p>No existe una definición única: la inteligencia es un
+<strong>constructo social</strong> que cambia con la cultura y la época.
+En la China de la dinastía Han, inteligente era quien dominaba los
+clásicos de Confucio; hoy se confunde a menudo con memoria o con buenas
+notas. Howard Gardner propuso las <strong>inteligencias
+múltiples</strong> (lingüística, lógico-matemática, espacial, musical,
+corporal, interpersonal, intrapersonal, naturalista…), lo que ya indica
+que no es una sola capacidad.</p>
+<p>El libro recoge una <strong>definición de consenso</strong>:
+capacidad general para razonar, planificar, resolver problemas, pensar
+de forma abstracta, comprender ideas complejas, aprender rápido y,
+<strong>sobre todo, aprender de la experiencia</strong>. Esta última
+parte es la que usaremos para decidir si una máquina es inteligente.</p>
+<p><strong>Inteligencia artificial</strong> es la disciplina que
+construye sistemas capaces de realizar tareas que, hechas por una
+persona, consideraríamos inteligentes: reconocer, predecir, decidir,
+generar.</p>
+<h3 id="ejercicio-11--mapa-de-inteligencias-">Ejercicio 1.1 · Mapa de
+inteligencias 🟢</h3>
+<p>Para cada inteligencia de Gardner, decide si una máquina actual
+<strong>la tiene</strong>, <strong>la imita</strong> o <strong>no la
+tiene</strong>, con un ejemplo.</p>
+<div class="sol-lock" data-label="Solución orientativa" data-iv="SqPBR4FpZJrYwS1b" data-ct="xSDp1goi7kR2Mv9D2Gkpxmpxr3qliW5Il/7OaMW25pYTXtSk/mw0dR20QHmRZl/0odc2/IeoBCebBxnRPoC9bHRKfANwy3zAONPs1u6BdmLysDlgTwWfIaJQVDP7xHa585IX+nu9eTTRCF264WcPm0o3Sb5wX8o36CL3btsqBhyuAtwprZswAKXcqjQJJXCA3NwQU/d1aXzgKQ3DUfYHjFIe+Q1BOVmyanf5r4jK37yjGzu7TSOQRfVl6u6vCkCSV49M0d6M0gzbx5qxdwKC9Yz0dlUCe8YjBZ5NFEBtcuyQrVKrCbQVMUgx35unJMWRCm+Asoxd8XRbVzK/hCwfZOxqK929ys++fqp+mq0EMttKg9eLSADZMtjUZHVVSKswa2m4VqpZ1RtofSdXRspI7P2C6bzvAZwKs00ixtwTx76rmvrjvgqtv3RPauEP5TH36f6CYhBB92Cns+dJoiNbOqiXWO1Qzf8msP4aK7GDEjqxaCN8xMm7NuYt8MrgsYtZ0sy3dIXGbXpXjkxzicMgrDtUbsX5sW6Jb/3oLLZIJn4ob/0OgcdeRjr1Xkm2qNRn/jhsJk5n0BO2fGLnPH/TYp3P1kvk3QT779sjCTH+NR2EEDJnlSqBfMQf97cW+peObbEW048ngtUZIQkuwcTV2zIYqb3E1SmYA89VLOxH4nNtoQ4dpmN444zxC1fOQhhHPn8N0OMV7u2P7wJD2UA/ORW08PJAcMSHUnnTxCAZBLKb2oSeM2Rit76SPWD85N1UrwATvc2BKKVZYhlgm+8QPQfXluFIyXcIDaVuG9OaWL4ee438UkYxtZTTJvsLDb0hbCJQvuPztC9RxiIRahAc913ZyM9U3TQm9IUB3tvw6FRuccFoVeDl4H8hPRksJbm9GWRI1EYGA4NSwNVKU9Ivo6qaVBi/VqhA4kDcADKZQGSwCC84NzmBDpcfhBeJRtqF/bDnryZsBP5iRnHzCuKb8jgM2BPJx/WFLs7LWYJbl21GwEzg/VvQ8DoNvr4X4NSauZPcowIYR/doptDBLB5sVrbGMeEgZnqc/9WlBUgK6zpuxHJXor91wT8ypsCOi9EM5mkIcL5p1xIlc+QpL1GhM9kZMNlLZ+WCTXCQnxGGOameYvuQCcarhuDm5jLPZCeVKbgV1mD5541it3tg43zBCucHSlO3vGFCfY2SSHTpGQexdDlrEhbBpb99iaGJjRjjSRcYZ/r1fVLefucUFkhFLqc/6X3+HwERGqea53+4+SkxkvzrzAgCnryExMJy1XUEiymJWZoC4kdDwMH6KTsCGgQIG0/WENFl0O8l/fi38GuhvYJnrRMoD9lWa1RKbYvt6Zv+7PX2uu527IWhkTqKv6X7D+sT8uCad4OaFjA6zLCM0ha6PiZubakT4YvQ/bb7wO/+ZeLXjrQvP9XxeWdrQ02SGyw7s4xeBYnckOP5eXbtWA7fNm1EuySfRVBvqaaYgQwAzq8v9ssBv0BH6u50uoJzxuoiCfec+eS1Ac2vWrJcyM0alAPnYxVygCvcoo7jAV035YFHp/hCq7aIJjSgpDMtd2zMH8FtQE0Cv+fNHiOm5bC9mHeaW7K5a2ScwVs+5LXlhwD28GQWMbNqSV9IGkSotgWaBzMp420Uocw80vZ47031YvH0wXsJDuNeppPCQ3FdKLxgkYyeDRkWIL8jGoXavYIWvK4PHQ/Fyrb5Bre+jswIZWhAIA4mVpjnO557Z6w84dWI0d0ZfJs+xFhI9mla4W0MwGQtTrYqOec5mAepEeY+rkED+zb17tIOLPC9Uh1CQvo="></div>
+
+<hr />
+<h2 id="2-datos-información-y-conocimiento-sentidos-y-sensores">2.
+Datos, información y conocimiento. Sentidos y sensores</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Nivel</th>
+<th>Qué es</th>
+<th>Ejemplo del semáforo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Dato</strong></td>
+<td>Un valor sin contexto</td>
+<td>«rojo»</td>
+</tr>
+<tr class="even">
+<td><strong>Información</strong></td>
+<td>Dato con contexto, que responde a una pregunta</td>
+<td>«el semáforo de la esquina está en rojo»</td>
+</tr>
+<tr class="odd">
+<td><strong>Conocimiento</strong></td>
+<td>Información que sirve para actuar</td>
+<td>«si está en rojo, me paro»</td>
+</tr>
+</tbody>
+</table>
+<p>Percibimos el mundo por los sentidos, y los sistemas de IA por
+<strong>sensores</strong>: dispositivos que convierten un fenómeno
+físico en una señal eléctrica medible. Muchos amplían lo que nosotros
+percibimos, y otros imitan sentidos animales que no tenemos
+(ecolocalización, magnetorrecepción, visión infrarroja).</p>
+<table>
+<thead>
+<tr class="header">
+<th>Sentido</th>
+<th>Sensor</th>
+<th>Fenómeno físico</th>
+<th>Dónde aparece</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Vista</td>
+<td>Sensor de imagen CMOS</td>
+<td>Efecto fotoeléctrico: la luz genera carga</td>
+<td>Cámara del móvil</td>
+</tr>
+<tr class="even">
+<td>Oído</td>
+<td>Micrófono MEMS</td>
+<td>La presión del aire deforma una membrana y varía su capacidad</td>
+<td>Asistentes de voz</td>
+</tr>
+<tr class="odd">
+<td>Tacto</td>
+<td>Pantalla capacitiva</td>
+<td>El dedo cambia la capacidad eléctrica</td>
+<td>Móvil, tableta</td>
+</tr>
+<tr class="even">
+<td>Equilibrio</td>
+<td>Acelerómetro, giroscopio</td>
+<td>Inercia de una masa microscópica</td>
+<td>Girar la pantalla, pulsera de actividad</td>
+</tr>
+<tr class="odd">
+<td>Ecolocalización (murciélago)</td>
+<td>Ultrasonidos</td>
+<td>Tiempo de ida y vuelta del eco</td>
+<td>Sensor de aparcamiento</td>
+</tr>
+<tr class="even">
+<td>Magnetorrecepción (aves)</td>
+<td>Magnetómetro de efecto Hall</td>
+<td>El campo magnético desvía cargas en movimiento</td>
+<td>Brújula del móvil</td>
+</tr>
+<tr class="odd">
+<td>Infrarrojos (serpientes)</td>
+<td>Sensor PIR, cámara térmica</td>
+<td>Radiación infrarroja de los cuerpos calientes</td>
+<td>Luces con detector de presencia</td>
+</tr>
+</tbody>
+</table>
+<p>El otro lado son los <strong>actuadores</strong>, que convierten una
+señal en acción: motores, altavoces, pantallas, servos, relés, LED.</p>
+<p><strong>La realidad como patrones.</strong> Una fuente que siempre
+emite el mismo símbolo no aporta información (ya sabemos lo que vendrá);
+una completamente aleatoria tampoco permite predecir nada. Lo
+interesante está en medio: <strong>aprender es encontrar
+patrones</strong> en los datos.</p>
+<h3 id="ejercicio-21--dato-información-o-conocimiento-">Ejercicio 2.1 ·
+¿Dato, información o conocimiento? 🟢</h3>
+<p>Clasifica: a) «37,8»; b) «La temperatura de Uxía es de 37,8 °C»; c)
+«Con más de 37,5 °C, Uxía no debe ir al instituto»; d) «A Coruña, 14 °C,
+85 % de humedad, 3 de noviembre a las 9:00».</p>
+<div class="sol-lock" data-label="Solución" data-iv="1jNNdS3HvsvW18uk" data-ct="95ZIHR+l5V7Ns/PIH/WhlMyuIjWygSSWo3YORbWcWUh1dlWKY2I+RqNo8jZnSmm9+OXGw6Fj9mWmXAwXpcG/fexYMl0xsrSVu+UgWy9ALaJRFFhg8IGO/QmGCRsI0JIsedXCLlo9LoTSLdIQUc1wRZ9Jpidsqym3jFjfcCEHyUz7I2LpMkP8F/RdrdUkdQRmJVQLUX3rCkAskYUVAzDavufyu1lI+vR7SF5HOZwr5TIVRiXBQ228sKPR6wIYICdXo0QxBcHVpr0gb7ZKMHd4hklXal1k3SoMY3hs1yTxKzg6/xZkWn8c/aRyL9YKMh6nd4Y6krymTJXpdlBBvwV5ujir3kYJURBjcZxRZZBLt8hpAUs8dtlWYGyynKDB6dqjbgMAZJbezPUAdZK4Nz5JG23r0eFneqrcAHU6w33nUZASyK0kxPr8GUEl0VfUq9UDOHe8fDw/UoR7HgeAONk0STJ5QuQbVJcAErU7AuOAYUvfkmFLnDFmUEHTWk3M5WUfHhlJJMajWPIb8hBwbt7ja/yTQsQ4583yUvEDDE5KGAr0a8Ahp9n57GHSeGFbpbZ8lLagAT4MDpaQUDMTASc0edIcXO/+oYFdSdMxJjeCJgHv3L3jutFAG/MayDn2lAQwzxFW8Io="></div>
+
+<h3 id="ejercicio-22--sensores-del-móvil-">Ejercicio 2.2 · Sensores del
+móvil 🟡</h3>
+<p>Nombra cuatro sensores de tu móvil, el fenómeno físico en el que se
+basan y una función de IA que los use.</p>
+<div class="sol-lock" data-label="Solución" data-iv="IUUcSEhm7bGwhRGN" data-ct="ujGoF11obOIyO4rzJHhdfe2S7c1XyPSw8HwNJJK/1XWB42QgdS3zDD/anovVl7jJzG7ycaEq09ZxODzOSRond9OltZrWVWYJ7+1ykTttNrvkVPMGdkgR8GjHtLHzyD8SFjzNQqr+7I9a34CkgvTskSKv21DWJ+jOcdlIgavUXILXke6amEbVoKH+YeNrNUDAJma8VHof6CGnmnfBdnzHutKKi92tX2MCI9oV/3FGJabRDi2j81lK7UC4VgsnAGQHF1VOezmMbIwjglUPngDWMhU0q5b9E/sg1KxOZe+HM+SLjwupWB9l9wOoal7Dyq+fzD0bvt/A/yvGrX/cw8hGUWmjXKnx7EsFl1AygenTAY/YpYDdrvW3SW5rG735apQZvvmV1z/b5O6aY9pI9BXbzP4THP/ZjXLLb9WOHc+eQpskiP/+oxe++sobDUqTVTpmKl7MJu/prd8vjNf0LrU8LA5DRCzk8A9qAqSYlf7B2RhEzbh1lCwhg5Mwz0UC+hwb2nUFlegv1yFHjWvc6iwTi1cdIeWSGRb/+XVx9x0905sItW3QgEpfu+xOS9qai2eN/ByGUI4xX6dS54sCGTzwQyRxxbF3gIFGDoWWlInUkvZv2pSkgC7eLWoF2NEMTYd4J98Dli54waYs+cCPi94GoSqYtlbgxfc8sVBsXqSd1UwCRil1Du2apJdsW6fYAxAuby3pm4ijtA/AjNtFHbWxDWRrRHPzMLYrsEO1fyFLwOykdr3ZEOsp3YInRqa+YP2K5Y5S7+zCKFqlNSESLc/iAv9wcWxi2KibtWWrOosZWvtJ6jZaxEBojpy19B3WtsIw8YzpsRu1odtXukov4TLXh7QEYxJ5QTa+iE9XBkWsNHK7EcyY1fiuX9950tU3/XmknamplEudD+e14ZbcRcnDtya41FwaQdOZkFTY3QXoi3dfYbeowGA9qr0zP7OyK5mEQiSln6WmbA1xZ43CrM7aebe6c7BWOrRvNn1TS8tc9/jNv/g5+XkVmrMu/frljs/MEaApjTOfEaleVUAr/e4FDPTOsoN0P05eEbH3DetzdyGzMR1web8oNZ2Lzr4dgms/ER1IHN6zWoPqjXEGEixQmPl61O4VQDI5Ayb5K/5yGeh9bzpP1Ic1GOj9y5nAl9eXduLpPd8+3vdbGxDp"></div>
+
+<hr />
+<h2 id="3-historia-veranos-e-inviernos">3. Historia: veranos e
+inviernos</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Época</th>
+<th>Hito</th>
+<th>Idea clave</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Siglo XIX</td>
+<td>Babbage y <strong>Ada Lovelace</strong></td>
+<td>Lovelace escribe el primer algoritmo para una máquina</td>
+</tr>
+<tr class="even">
+<td>1936–1950</td>
+<td><strong>Alan Turing</strong></td>
+<td>La máquina universal y el test de Turing: ¿puede pensar una
+máquina?</td>
+</tr>
+<tr class="odd">
+<td>1943</td>
+<td>McCulloch y <strong>Pitts</strong></td>
+<td>Primer modelo matemático de neurona</td>
+</tr>
+<tr class="even">
+<td>1956</td>
+<td>Conferencia de <strong>Dartmouth</strong></td>
+<td>Nace el nombre «inteligencia artificial» (McCarthy, Minsky…)</td>
+</tr>
+<tr class="odd">
+<td>1958</td>
+<td>Perceptrón (Rosenblatt)</td>
+<td>La primera red que aprende</td>
+</tr>
+<tr class="even">
+<td>1970s y finales de los 80</td>
+<td><strong>Inviernos</strong> de la IA</td>
+<td>Promesas incumplidas, poca capacidad de cálculo: se corta la
+financiación</td>
+</tr>
+<tr class="odd">
+<td>1980s</td>
+<td>Sistemas expertos</td>
+<td>Reglas escritas por especialistas</td>
+</tr>
+<tr class="even">
+<td>1997</td>
+<td>Deep Blue gana a Kasparov</td>
+<td>Búsqueda y fuerza bruta</td>
+</tr>
+<tr class="odd">
+<td>2000s</td>
+<td><strong>Big Data</strong></td>
+<td>Internet genera datos masivos para entrenar</td>
+</tr>
+<tr class="even">
+<td>2012</td>
+<td>AlexNet</td>
+<td>El <em>deep learning</em> arrasa en visión artificial</td>
+</tr>
+<tr class="odd">
+<td>2017</td>
+<td>Transformers</td>
+<td>La arquitectura de los modelos de lenguaje actuales</td>
+</tr>
+<tr class="even">
+<td>2022–</td>
+<td>IA generativa</td>
+<td>ChatGPT y generadores de imagen, música y vídeo: el «mejor
+verano»</td>
+</tr>
+</tbody>
+</table>
+<p>Patrón general: las <strong>expectativas</strong> suben más rápido
+que la tecnología; cuando no se cumplen, llega un invierno. Lo que
+desencadenó el verano actual fue la combinación de <strong>datos masivos
++ capacidad de cálculo (GPU) + algoritmos</strong> (redes
+profundas).</p>
+<h3 id="ejercicio-31--pioneros-y-pioneras-">Ejercicio 3.1 · Pioneros y
+pioneras 🟢</h3>
+<p>Elige una persona: Ada Lovelace, Grace Hopper, Walter Pitts, Karen
+Spärck Jones, Fei-Fei Li, Kate Crawford, Geoffrey Hinton o Cynthia
+Breazeal. Prepara una tarjeta con su fecha, su aportación en una frase y
+un concepto que tuviste que preguntar para entenderla. Anota la cadena
+de preguntas que hiciste a la IA y comprueba cada dato en una fuente
+web.</p>
+<div class="sol-lock" data-label="Ejemplo de tarjeta" data-iv="yxSqVI0TbVzmHXf/" data-ct="7u2eHyJE4tkxu5+hgQEOvpZgFZsr/rNCXZe0aQRyO9rydz1ICOwhkTL/Ef25+9M1VAR7mIkySKkqZYGaFY+b7MDFR/L7df+Fc8aJIzFqzVNE0UyMqAVc/x1lg1WzDwokWz/yYd356uDTqjtaihw1hH+Ui9fBWB/GQvlzD8MEplT/4eo+XR4N7C+vu5R8q47MgMcwc6UWPd8ONXjIxizSN0uBOrQRAujl1yx3qlphXp28sZA7lPu5VEkV8T8wmJwHUTZqrDFXh0NWIPVkULcndNtoka/v6TZedQCXTJwFyS0ud9inwg6XycIegqLm2tax9l020bNHc9JwBs637KtJMqFbxZu0vjM72bRbytjijtL0ywE2lq0lJhH1mFeqQMy4h/7jkT/v+QHyMMMpPiXkkAm2m8yiZJ920FRdNwmsIqy3qH7YX+WbyCe8fEpzGUTE3pejmzASRfuXXzaN0qASyOT1VO3ytlSv/pJreK0ApynJ4xcQV7tM17m3Y5uiszMM9LvQRBe39WyKWWv6+wM+NMvikbCDS7R5hSx2fKKEgzn9AcN2CqH6q/3L5v3hqMEmoyLezFvUuNXYjX0pLL/tMBxZqP7DzaLLGjP8nSzPYf+reoJWRLkZlyowDNZGN5QrIJt6rN1ytn7HGxTiFY+3qGPM20WQxXBk1ie2ehq/tKBISMBAo49MyhEDK6QiaYSvv9GUrCcsYI0HweFWqcP5jBzPG4N15r85g6YH89QngNmcUcA4"></div>
+
+<hr />
+<h2 id="4-qué-es-ia-y-qué-no-lo-es">4. ¿Qué es IA y qué no lo es?</h2>
+<p>Según el libro, <strong>no son IA por sí mismos</strong>: los
+algoritmos deterministas (ordenar, buscar), la programación con reglas
+fijas, la automatización, la estadística, los sensores y el IoT, los
+simuladores, las bases de datos y las redes. Pero un sistema de IA suele
+<strong>contener</strong> piezas de todos ellos.</p>
+<p><strong>Criterio de clase</strong> (sale de la definición de
+inteligencia): ¿<strong>aprende</strong> de la experiencia?, ¿se
+<strong>adapta</strong> a situaciones nuevas?, ¿<strong>decide</strong>
+según el contexto?</p>
+<h3 id="ejercicio-41--ia-o-no-ia-">Ejercicio 4.1 · ¿IA o no IA? 🟡</h3>
+<p>Clasifica (IA, no IA o depende) y justifica: termostato clásico;
+termostato que aprende tus horarios; filtro antispam; hoja de cálculo;
+robot aspirador que mapea la casa; semáforo con temporizador;
+recomendaciones de Spotify; calculadora; puerta automática; desbloqueo
+facial; detector de humo; teclado predictivo; GPS calculando una ruta;
+corrector ortográfico.</p>
+<div class="sol-lock" data-label="Solución" data-iv="m9GJxf07fcOEVPw7" data-ct="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"></div>
+
+<hr />
+<h2 id="5-tipos-de-ia-y-cómo-aprende-una-máquina">5. Tipos de IA y cómo
+aprende una máquina</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Clasificación</th>
+<th>Tipos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Según la tarea</td>
+<td><strong>Débil o estrecha</strong>: hace una tarea concreta (todas
+las actuales). <strong>Fuerte o general</strong>: igualaría a una
+persona en cualquier tarea (no existe)</td>
+</tr>
+<tr class="even">
+<td>Según la escuela</td>
+<td><strong>Simbólica</strong>: reglas y lógica escritas por personas
+(sistemas expertos). <strong>Conexionista</strong>: redes neuronales que
+aprenden de datos</td>
+</tr>
+<tr class="odd">
+<td>Según cómo aprende</td>
+<td><strong>Supervisado</strong>: ejemplos con la respuesta (regresión,
+clasificación). <strong>No supervisado</strong>: sin respuestas, busca
+estructura (agrupamiento). <strong>Por refuerzo</strong>: prueba, recibe
+premios o castigos y mejora</td>
+</tr>
+</tbody>
+</table>
+<p><strong>El entrenamiento en 5 pasos</strong> (ejemplo: distinguir
+perros y gatos):</p>
+<ol type="1">
+<li><strong>Recoger y revisar</strong> los datos: miles de fotos
+etiquetadas.</li>
+<li><strong>Dividir</strong>: entrenamiento (≈ 80 %) y prueba (≈ 20
+%).</li>
+<li><strong>Entrenar</strong>: el modelo ajusta sus parámetros para
+equivocarse menos. Cada pasada completa por los datos es una
+<strong>época</strong>.</li>
+<li><strong>Evaluar</strong> con las fotos de prueba, que nunca
+vio.</li>
+<li><strong>Desplegar y vigilar</strong>; si empeora, volver al paso
+1.</li>
+</ol>
+<p>Entrenar es, en el fondo, un <strong>problema de
+optimización</strong>: buscar los parámetros que hacen mínimo el error
+(apartado 7).</p>
+<h3 id="ejercicio-51--supervisado-no-supervisado-o-refuerzo-">Ejercicio
+5.1 · Supervisado, no supervisado o refuerzo 🟢</h3>
+<p>a) Predecir el precio de un piso a partir de sus metros. b) Agrupar
+clientes de una tienda por sus compras sin categorías previas. c) Un
+robot que aprende a andar cayéndose. d) Detectar si un correo es spam
+con miles de correos marcados. e) AlphaGo jugando contra sí mismo.</p>
+<div class="sol-lock" data-label="Solución" data-iv="WNZUJlMEjjpp/bcj" data-ct="4EUeboGM+4sYkGqICSAsCsfmbSTE5rPoVDLrys0+T3rpIv7ImkKTyfyMRNyeSFBVIuIFxxq8PqWEzwBMdw5oQeaijfYksyXrKKl3KOr8uuaOucpOUqUmrQkSyjg2y8ihcrTK8XMue5she1jIjJ9dfnBQLpB3S/d/jKarNZYhbVjHsGVvTfSz0octEHIODln+MCbSVRvVnHzq1y3Kn6P4JkEcg9jH49J84IazTJk6JO47e04Zam0xi3GZErYVbSw17aJTCCGzQDkrpaQx3eyUBJ4gtj6oYuhdceIemlnZS00jNUao0TM4FrnmJxvCsnQXylkoS0li5Uu3uSp3gfS/al6f+5NZQEvsQO6YJshGe0sjzQclzoPs9nrhUcbTXIn64UTEnUQQtDg15zSi2KrxzwvLQev/nVgzEhlLmfeznQyfTIWxU1k="></div>
+
+<h3 id="ejercicio-52--por-qué-separar-entrenamiento-y-prueba-">Ejercicio
+5.2 · ¿Por qué separar entrenamiento y prueba? 🟡</h3>
+<div class="sol-lock" data-label="Solución" data-iv="BX4u5Tp4HGrlP5Cu" data-ct="0LuGD3MQmptMUzgO+5SCtHbY0PJQsiwV5rzZg0Qky0SJOK2XFEURXAdXdL8SNmkj58AsysZjdmNLnLOSjsHw7qd81WCb2u13tdGGqpI0LkvY6SranCevmVnHFfa1PEZar6Wv7G26ds79Qo8H/0Ffs0EaKPIyAFlgGB8WHMduuD+Iu4slZIR1DxlZxjEykj0UdQ3GU4iBUr+p5lj9/S2ndXU6/DZ+10BD+mWO9l8r1Qoc3/+Qeanz4D0P2oxDczpKssYyeTcjQ277tLlsmGeut6d5CpwP9/5hOEY1YkHLR6H7bOnNG+sPw6wuNe0QJv2yBhPf2lvAz+9RArQz2oyUs0R7xnkrVhAEEQ2fgHsXM1xyQf8KevsRIgYeDCG0Mhof/GFLB5scerBEzDKimu9bkMCI51vOHb1tdCzdRVHpW0pjPyFRekDLfb7tEFjtx/jLa8rKtkG5ojFxHaBb4CWKfRdGZt2RFufEqr57aBdUEELFyAA8xjCcZCOeQwvHjH9gikQES7VjR6hBsFcDqw+PtBjWJLWzKiA369EGSSFSdDf2DnIpSTwk9rcFXRus+alUQtYiU5fIIVu6DfLAlT/NpSGZt1o1e3GfmHHw5JYwi3DL8d4xV9OkPD8kJIH8APCMAwZrQg=="></div>
+
+<hr />
+<h2 id="6-resolver-problemas-buscando-el-espacio-de-estados">6. Resolver
+problemas buscando: el espacio de estados</h2>
+<p>Muchos problemas se pueden describir como un <strong>grafo</strong>:
+cada <strong>estado</strong> es una situación posible y cada
+<strong>transición</strong>, una acción que lleva de un estado a otro.
+Resolver es encontrar un camino desde el <strong>estado inicial</strong>
+hasta un <strong>estado final</strong>.</p>
+<ul>
+<li><strong>Explosión combinatoria:</strong> el número de estados crece
+tan deprisa que no se pueden explorar todos. Con 3 reinas en 3×3 hay 84
+colocaciones; con 4 reinas, 1820; con 10 reinas en 10×10, casi 10¹⁴: a
+un millón por segundo, más de tres años.</li>
+<li><strong>Poda:</strong> si una situación parcial ya incumple las
+reglas, se descartan todas las que empiezan así. La inteligencia está en
+<strong>no explorar</strong> lo que no lleva a nada.</li>
+<li><strong>Minimax</strong> (ajedrez y juegos): yo elijo la jugada que
+maximiza mi ventaja suponiendo que el rival elegirá la que la minimiza.
+Como no se puede llegar al final, se mira unas jugadas hacia delante y
+se valora la posición sumando el valor de las piezas. La <strong>poda
+alfa-beta</strong> recorta ramas que no pueden mejorar el
+resultado.</li>
+<li><strong>Dijkstra</strong>: encuentra el camino más corto en un grafo
+con distancias, como hace un GPS.</li>
+</ul>
+<h3 id="ejercicio-61--las-3-y-las-4-reinas-">Ejercicio 6.1 · Las 3 y las
+4 reinas 🟡</h3>
+<p>a) Coloca 3 reinas en un tablero de 3×3 sin que se ataquen. Si no
+puedes, demuestra que es imposible. b) Haz lo mismo con 4 reinas en 4×4,
+colocando una por fila y dibujando el árbol de búsqueda con poda.</p>
+<div class="sol-lock" data-label="Solución" data-iv="sLzIKHwvnbzeXFwQ" data-ct="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"></div>
+
+<h3
+id="ejercicio-62--el-pastor-el-lobo-el-cordero-y-el-heno--tarea-t2">Ejercicio
+6.2 · El pastor, el lobo, el cordero y el heno 🟡 (tarea T2)</h3>
+<p>Un pastor tiene que cruzar un río con un lobo, un cordero y un fardo
+de heno. La barca solo lleva al pastor y a uno más. Si se quedan solos,
+el lobo se come al cordero y el cordero se come el heno. Indica cómo
+representas los estados, cuáles están prohibidos, el grafo y una
+solución.</p>
+<div class="sol-lock" data-label="Solución" data-iv="OhaDQIdbFBO+xI9J" data-ct="NPv5+D4HoMrC6naIaLB+/gS8JhJsQl3oLOGvgYoKrCXJkafXfIZVlRXZyhdxZor56qq0OEL0jG5F31TjbhXANXbPbrwWLllhfAdg7P8Tji+XfMMaoRVlwVgQ88rjqJFdBRKLD7hRb3NlqsFj1VeO+PuYCDbINWgnrvvbLkewO5KtGq5+inHUQTZDiUuf+Xp9eHfHS50+Q60RndFV9R+XQHidFgevDyUFS1bwawXA/7bOuE8y5vNMzOx4499Pvt5APMCaTyikH0ivsi6J3WHSWjMF+1k9EwBcbp4whAWbm3W7k6xYjb8we67Msc3TBKr7sAHjMv/rbCiqFu215UWjdAO1ApVOucuief1L6Suq0SjmuEoQpGNwgL6W6tIr+vHll/3tBE/8AmQuJ8Wj/5qwO/rdiWb4owYjDUcnshyyq8XUllqtfyjcdUd1Wn+C5Mm6vrejIBcAjkOzdhuYy9TicA+iXqI7K76+pgjBQh1X4kLeYWZhb5Mqi8xkHJbEIs4mGQSMuPXOS8cv29hXX+QGUHyhrs+T9AcYE/i9divwJXM4EVNEqKE9k2vw3MIScHeYqszo3nvViOFybu8PO2LoOH+8BVQrKJAWgaXVvIo4WVUrx3m15RDWLEgGFoQ2zoJpx2KyLZEOddklUm5e2+Mgm8mCPCE952B708QJeas4JVZr1RDHHw7jSLt4Aq5OBZuXJ/3ZfCWo9toK88IiL8VHEZ6MktoFrvvBBPId1r4cHihX4EANf29EmJeSLF66NGR7w4kieyVAqKBxflx0AeN11/wXQpr07ZdPbAcyJuWlqr+ZQvBPljr6iC/Mni8uqZHG6o1lOBUDWzbgamRaS2aWUNhKAkQpluaf1OfPJjVBIKRtB54gnlbsQY4l5oeAwzsH81s3nAlsFXkguLxzlrkVBzh7U+KENUYbz0L5cUgffm6wGiwgnTZOjUD1JKdhu8XbGNM601LasMQ9C6DqKMvUJz/FLeMAjAIGJS7Su0qLLjC3dBwqm3IxL/m1B3+9e+Vush7l+lG6EeIh7NhUgY58JrlpRgAJVotB7G8ABIo6Ehob9PP80GHnFX40Rfch6NNlY/XqU7zOms8slYbqrHK+FyNom3pJebSwvrQid5UkNaDrmnPwvPT19ysmweBKgszNuK+eCRsezgWQ37Llqvlns3Z0al8FQi183B7NqM37runXVSzYdcNPkxyFDLFd6K7T+LcE7JM1LJ3hwn9iLzEnMtNh85D8SJ8yF82yVeTkgh+2/gDnBfJYlg577cG7lER2LC/nZDgTmpV8KkHYeG+XoHWJjyHa/4hyg1VgUC/nxW78AoDHRkQ+O88lUDXNLOZCHh4ERm0jzD/VJeAXDvyYVQxz4gx0s44PeHhuMKtvQvkamnKca7AdZny+GyojiIi+7kZnvOiXMGQTFtzHEGeMgdS3SwMRuVl2IuP75M7VLXNikXg+mkbUkOrwPzlMQmoelcAh0aaa1MaSR5WD3bWOIYRcww8KlF2z/3laTpb8HmnB0qaOojlHg9T/jxecvBm7YdCnJcqEDAUkhDydij/G/lq2lw1dXsQOV+JX+XvOtZQnygUTol3uLt81jIJEJhH54WjjhtgIcgsqU39AS6ntb+KLV4hZtkAVuEJuTOfPEc9kV2s3jKzjuW4isQAATYSCmIAMMjNOG37Sr6E="></div>
+
+<h3 id="ejercicio-63--torres-de-hanoi-">Ejercicio 6.3 · Torres de Hanoi
+🟡</h3>
+<p>¿Cuántos movimientos mínimos hacen falta con 3 discos? ¿Y con
+<em>n</em>? ¿Cuánto se tardaría con 64 discos a un movimiento por
+segundo?</p>
+<div class="sol-lock" data-label="Solución" data-iv="AVnrwj3M3Exs46SA" data-ct="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"></div>
+
+<hr />
+<h2 id="7-resolver-problemas-optimizando">7. Resolver problemas
+optimizando</h2>
+<p>Optimizar es buscar el <strong>mejor valor</strong> de una
+<strong>función objetivo</strong> (beneficio, error, tiempo) respetando
+unas <strong>restricciones</strong>. Cuando no se puede calcular la
+solución exacta en un tiempo razonable, se aceptan soluciones
+<strong>suficientemente buenas</strong> con métodos inspirados en la
+naturaleza: <strong>algoritmos genéticos</strong> (cruzar y mutar las
+mejores soluciones) o <strong>enjambre de partículas</strong> (muchas
+soluciones que se mueven imitando a las mejores).</p>
+<p><strong>Descenso del gradiente.</strong> La metáfora del libro: bajar
+una montaña con los ojos vendados, notando solo la pendiente bajo los
+pies y dando pasos hacia abajo. Así se entrenan las redes neuronales: la
+«montaña» es el error del modelo y cada paso ajusta los parámetros.
+Peligro: quedarse en un <strong>mínimo local</strong> (un valle que no
+es el más profundo).</p>
+<h3 id="ejercicio-71--la-fábrica-">Ejercicio 7.1 · La fábrica 🟡</h3>
+<p>Una fábrica produce A y B, con 3 € y 4 € de beneficio por unidad. A
+necesita 2 h de montaje y 1 h de embalaje; B, 1 h de montaje y 2 h de
+embalaje. Hay 100 h de montaje y 80 h de embalaje. ¿Cuántas unidades de
+cada uno maximizan el beneficio? Resuélvelo gráficamente.</p>
+<div class="sol-lock" data-label="Solución" data-iv="8hQ3c9fH5++97/jG" data-ct="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"></div>
+
+<h3 id="ejercicio-72--el-gradiente-en-python-">Ejercicio 7.2 · El
+gradiente en Python 🔴</h3>
+<p>Encuentra el mínimo de f(x) = (x − 3)² + 1 empezando en x = 10 con
+pasos <code>x = x − 0,1 · f'(x)</code>. ¿Qué pasa con un paso de
+1,1?</p>
+<div class="sol-lock" data-label="Solución" data-iv="iO6ovGqKjpQLIcnS" data-ct="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"></div>
+
+<hr />
+<h2 id="8-agentes-inteligentes">8. Agentes inteligentes</h2>
+<p>Un <strong>agente inteligente</strong> es una entidad autónoma que
+<strong>percibe</strong> su entorno con sensores y
+<strong>actúa</strong> sobre él con actuadores para maximizar una medida
+de rendimiento, aprendiendo de la experiencia. Tiene cinco
+componentes:</p>
+<ol type="1">
+<li><strong>Percepción</strong>: sensores.</li>
+<li><strong>Actuación</strong>: actuadores.</li>
+<li><strong>Procesamiento</strong>: convertir lo percibido en
+decisiones.</li>
+<li><strong>Representación del conocimiento</strong>: mapa, reglas,
+modelo del mundo.</li>
+<li><strong>Aprendizaje</strong>: mejorar con la experiencia.</li>
+</ol>
+<p>Ejemplo del libro: un robot aspirador limpia el suelo, pero si algún
+día «sube a las camas», su entorno será otro y tendrá que adaptarse. Un
+agente de ajedrez, en cambio, tiene un entorno perfectamente definido
+(el tablero).</p>
+<h3
+id="ejercicio-81--ficha-de-agente-coche-autónomo--tarea-t3">Ejercicio
+8.1 · Ficha de agente: coche autónomo 🟡 (tarea T3)</h3>
+<p>Describe entorno, sensores (con fenómeno físico), actuadores,
+procesamiento, conocimiento, aprendizaje, medida de rendimiento y grado
+de autonomía.</p>
+<div class="sol-lock" data-label="Solución" data-iv="ZpBoKeY5Bm/dYQx+" data-ct="LJLi1SEsYYh1TuHteLxa5eT1YsEVBzDnqwh8nvNsq0oxYGH5IOEW3Pdg+r8TLtkZFuu/bwI0ZHTuUJrA/FQNBgwcgrqkX9dRD7xJWfzMZ89FnM8sV4bBVs0q1khFYsjXEgQ2mleIJ7kETxhSqs+bCz7RcYaGPoIE3qmaptpBmlKRfZ6bwQRM/bGEiAhBHLY0jIm1+By4XvaaD4gJgYwWy771mTedWjSiKEa1tetmF2NCzquXtHEOTOqt+KIYeT1Sqs+TebwzV1jLthNFcpkD/CzRUWSb07nG0ALM9AddxPLS1/ggcB21bekbjuVKQSOcmKoO91wcFVD+DCTaJE4Q2Wj6wLUFnd0QpcgApqJd3qSa4Qvwiqs5iQr4ngYvuFO1x67h/VtT+HEq9PygKNto9qzugV5QE8ljeNJJ2t3FlbD6XneHGIKB53Ieo9tCBCKjo0CIrvnVM+ywDNECFrdJDdwFBqsPBRBBOJ3GANIhLInch4MUkEf9ro2HEXYEazFeSXKgYaKl4d0e8BUHMbkC85W+1c8kL5ANP5tXoDcxb0sCEUpdsTkvbMPUmC4FKfwVvJ7daz0xLPZS3OfrVm2XxDjGbI2HZmkx+VxYfJQ12/HOJX5oqaFxkCLeVV3JGjWYGvTIVxggKefShxXzsRtfkpv6JnQutKzAOT0xc0KMtSIqnsFtqzbHztX4ZA/dW7fNeqav931GVpL9E3u2QL3CAyjWLRD8PQTCyb1iP+bJqRxLFgsQJYaHVb4Y+o0wxYfwaYbzq2MmfHWj67KYb64NsI07vvxZNVmkrKp9HEQdqGIsxwXmxM6edlRlrpAVMttx0UaESu5/IwlzMVHnF5M2J8zt328R8DLUIrx9hh8sV7VRzu+WW7/P/EWiQZg51JhRABTU5Vdbax+k9Rr0HCOuOfCvwq6/6aznSmcjnBGy5muUwxr+JsjJI1fbg9HGVyufGEirJalQEtf08dpqea+eIX5IQvE+aPYLyUhGVey81laUMRjYbN8XLgC4JGHxmpvF3+pl2z15l1q7njoHybfKRv1RQUSHdLKSGwAyLaLWKBR+07U49U1iPpKzLTqEAxIiY50DkVLLLY6bdRQI/azaxSuS7IkJWp7tVUfaJIgFxmPHgXtePVlE7433qSmDCmSBhmrgGZpfoLTL2TpfSfZ5+R0JsFmXc0lSm6+7YSNFt6YCjzeKP/yJlZw2UiGoW2mxqZ14hpit4HDe5mUl9srvoD/d7YGvN5JoH7sKYEX8LoRRVJh+E6pANwn7jSSBnxvLDBgxWbxgn2Q8OKLY7c4l8FRpyUTFI5setR3EQoX2jl4Oyhb30/VD8IO3LBiWaB2A7jAFk5OUm7frSG2gLJNfJRqAitwnx9SQYs3vakxoAWg6vFx/nBnImsFIzyhgcXyJytjXNL5VuVyTmlXztkskXf45MGJw+YIDyPVFWe/oJt0xHkHqKrfqOxjZo6H6ccoO7CZBi6j1MOQNohVk0HXt3F2ZSvQqOa0wlr3yO+y+3R288iCoU/4r0PTOir2+S0r6NpL+h4JzIntidYoC/PT8rJN9aDKSRjirI4WG0PTSV87zvqo6E4OIzCllaSntuRY9L2HgueYIC1U3jiKfW3E9k+Bp3/Buo+1k72wMFTbHpUvw+DN3lgH2e++pWYUpHgk1D4fGLPQ9PnhxXa2+Gq2JgaD6+pTZU7aNons2OM4ik3A/U9aXFHw5SHu9I4VXT4PODSTrhUGdESoPFxNKlXCmBRoAAZiNSGo1GGKRiYuHX6+mj2OEGj6gfAinpUfo0hyrWf0="></div>
+
+<h3 id="ejercicio-82--es-una-persona-un-agente-inteligente-">Ejercicio
+8.2 · ¿Es una persona un agente inteligente? 🟢</h3>
+<div class="sol-lock" data-label="Solución orientativa" data-iv="r5rJfQn1f7RhKwN0" data-ct="nCumE6DsP6pBWcaHTmVdimhZ4PxD555tu8X7LViAP80nQJ9OA2Ymtxs/Vc1ujFAxuX5qRdWXrFS9EutxLo6AYOQK9kgERz60RQZInfOxMhcnnHzOO8mjt2rvsGOW6bB12deAAb95X0hgnKmU0n9Y/r+eUsYVAYVzmoFrMFaDEXVxr1jYPI3M6KVrJB4khm+iTz1Jbpd7IZSOpyQw2JSD56HNqs6X4grHPWbfyIEOtws6CUvoAe2ABVRmXyjD3q/Kr0NWI7oSDmNbQJCwT5NaGl3J4zd/26RAwt3Ug6HPHZeR/SCFuM6zhYBLjbq6+2+bW/Cpua5BMztOcZaJO4MNdM0qAKWiuF+FL4MlKshkO9MBKcNF+sOBNUedRy+vl2EMbBS7B4Fnz8j0O5/rS+HKrL+6w0PsrlJtdCvQehIb7knd71tjcpzGJ23yl1z0dtKgDgqp1R+C7kd8AXzVOl9yuDg6LHjVfzYjIUv80pyDjWKjr8vWSzP9CpN29poCYtZ5XAkWkN1majzlyvyFWRsnfWKPgTwK1rXhwGeve+bGAIymDaPd50slVgZCEZfxAKPBCcxugk48lpyldwJIatK/pZ626Pa3lw+5kCK/sF+HI0dWC6OJ9O0svq5RJFpO8VEkobtfzhBaYqA7UNA="></div>
+
+<hr />
+<h2 id="9-la-ia-en-el-mundo-real">9. La IA en el mundo real</h2>
+<p>Ámbitos del capítulo 3: automatización industrial, análisis de datos,
+robótica, medicina (diagnóstico por imagen), transporte,
+entretenimiento, finanzas (detección de fraude), recursos humanos,
+educación, medios, agricultura (riego de precisión, detección de
+plagas), energía y medio ambiente, y derecho. Curiosidad: el autor
+declara que <strong>este capítulo lo escribió una IA</strong>. ¿Se nota?
+¿Qué echas en falta (ejemplos concretos, fuentes, opinión)?</p>
+<h3 id="ejercicio-91--mapa-de-la-ia-en-galicia-">Ejercicio 9.1 · Mapa de
+la IA en Galicia 🟡</h3>
+<p>Por parejas, elegid un ámbito y buscad: un uso real de la IA, una
+empresa o centro cercano que trabaje en él y un riesgo de su uso
+intensivo. Comprobad cada dato de la IA en otra fuente.</p>
+<div class="sol-lock" data-label="Ejemplo resuelto" data-iv="90DEY4vup+MBPKAx" data-ct="IjbFSlNLaPHmKwGzetsumZMaA/89nuZoywlKuKkOEFbHw97VOx2JFhFtIH12Qr6UaYnCYoCN0m7zd37j4EVBfl1rYHlxlmIQ6NPPvwheZne7xOCiIx0K+D6w258jkytJSLAoNekcrIQnKQfVaD3JypTs40UEdM3PQM1JIGMPfZImgCdpM0wqFsuOq5RGpSc1kd0kct8qwgyo/8hK2m6wPZtakN3FrIXdiBbangnXprBLWVmQ30qsuqRiADP95Gonsuz9o2jdyPQYbkqxkA26x3Uri5cBs91MomqRGDiaPAVaouXrRKIyUpfi4jawb7la1F5FLeHKw0n2uHwNuflzMvjLLKB3Ff0q/Z2FSJA1au3uIJpB87gtxpNNGXXnEygqKlJ4wRWxwjy2ZuMiXW9A4iU6ribvglSNaYAaj1PHQC6/HW3CnMiarT86Ahxn29wRBRqgjBAUIp7Ek3z+zakxAdXQDCcy4B1wcmiUkql3/3Q6C2jr3NNc1uxhAaTxC4AckR7llYAMrE6cPFNXQKCre4A2LCGaqJTORhgZ5klMQeQ47a0FuHV9+SM50clnyQgpSNBbQycA9yh2/Im/u5zUwQWaXw9s9T6N/n4ummsIWbVNvJx57L5rlzTO6dArlE9TmjUdEV83m2rf7aH8bBXSBULk5zF2e+X/Qk1m86jTA1qImNZpvzsXaEGm/iFQp1lwwrh+2YEQU8nLmKbigOaMOYQ/WFDOxb/war4Q0PlUxeL1X5erCOiTT9iJAgKtIvH2ACjqgbe3cAnUfu+jgzQKXYweJcLv+902Xjg7BUrdxcaBmJ/0HERoMzqq2AQLnVN11aCmoc37Y58vkZQqCE3oij69/A=="></div>
+
+<hr />
+<h2 id="tareas-evaluables-de-la-unidad">Tareas evaluables de la
+unidad</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Tarea</th>
+<th>Criterio</th>
+<th>Peso</th>
+<th>Qué se entrega</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>T1 · Tabla de sensores y actuadores</td>
+<td>CA2.2</td>
+<td>25 %</td>
+<td>8 sensores (luz, sonido, distancia, movimiento, temperatura,
+posición) y 4 actuadores, con fenómeno físico, magnitud, aparato y una
+fuente que lo confirme</td>
+</tr>
+<tr class="even">
+<td>T2 · Problema resuelto en papel</td>
+<td>CA2.1</td>
+<td>30 %</td>
+<td>Pastor o Hanoi: estados, prohibidos, grafo y solución justificada
+(+1 con Hanoi para <em>n</em> discos)</td>
+</tr>
+<tr class="odd">
+<td>T3 · Ficha de agente</td>
+<td>CA2.4, CA2.3</td>
+<td>30 %</td>
+<td>Coche, aspirador, robot o un agente propio, con los cinco
+componentes y una conclusión crítica</td>
+</tr>
+<tr class="even">
+<td>T4 · ¿IA o no IA?</td>
+<td>CA2.1, CA2.3</td>
+<td>15 %</td>
+<td>5 sistemas nuevos clasificados y justificados con el criterio de la
+sección 4</td>
+</tr>
+</tbody>
+</table>
+<p>Las tareas son el 30 % de la nota de la unidad y la prueba el 70 %;
+hay que aprobar las dos partes.</p>
+<h2 id="preguntas-tipo-de-examen">Preguntas tipo de examen</h2>
+<ol type="1">
+<li>Define dato, información y conocimiento con un ejemplo distinto del
+semáforo.</li>
+<li>¿Por qué un algoritmo de ordenación no es IA y un filtro antispam
+sí?</li>
+<li>Nombra los cinco componentes de un agente y aplícalos a un robot
+aspirador.</li>
+<li>IA débil y fuerte: diferencia. ¿Existe hoy alguna IA fuerte?</li>
+<li>Un ejemplo de aprendizaje supervisado, otro de no supervisado y otro
+por refuerzo.</li>
+<li>¿Por qué no se puede resolver el ajedrez explorando todos los
+estados? ¿Qué hace minimax?</li>
+<li>Explica el descenso del gradiente con la metáfora de la montaña.
+¿Qué es un mínimo local?</li>
+</ol>
+<div class="sol-lock" data-label="Respuestas modelo" data-iv="XVhwzaGH6+nItaQc" data-ct="/BujC/GptiHC6EpW+jNGNEcED2Ji54X1W8rVJkUYwveEUT0hGtG8aQJMdXzKWwEsQb/z20jG2dDxR1sEDzwypYutc2sT1rHhrKZTpTVTOathJ1TiZvcALoiZPvsmShxZLHtmxn2JE4tXc6o0brco7hWGybMPC+LR/sCrE03WZjCbjcB/O/ZFK6q9hT4QqAT/zhn4rkhCHprVqW3l8+U6kQHsnppXiEcHPN91oK+JKrT4lVoix0CsOCXmklVX1We3DYc3os37XC7DRH4VisO2n25ybUrjer7KYSYVTxdJj5+z33mMiAnUMeR+flDjNzYNFd/qRWVy19PU6GOabC4dzK4Q4AzYjUax6+vfGjBp/sr0Krp63GUrz+SyQVRmBINM2m85pnoDUNc9XxxT7Zr8BZZ27qLNkRrisfJOkvp+rEjGtNpT6eLuk1WDkJFQKOEl2R5YOwOR9GFHkfwGNvyJ9rS0+JYG5mZe2lvvCShIsbxRxVi22behx+i2Qzwu+ep3ioD8PnVH+phXF0qmR+1Q33aWCYowPhDeSExD//anoZoKtHQhi5e41m+SI+uPQDS/VubcptCxZ3vMQe33G9lncihlFYXPfZZcG6vp/pZhm+Nv/lSMLHqQoYt2qH/hQErG5KtTa/4+3Id5xM5coKlHYlRQVGOZlY90e58+7yD+JICIQ/O+CZwTHrZoJ7hopv4k8h3GMqTxw5BkAy9YfDgOCjO+wW39I20Q1FPRyifDU7DKyqDZcVNVO7TkeS4F008lTvjbe6svz1lrFhoLVWR60iG05fX33/3dFBlRM/pP9aGSdfBp0TybHaB9jrXbzX7Ng5Tj04Y23GzWv8MVcpGXDKSxQcoepXkzGGIP18bY6Rt4belJ92ynwHTVwGf3nSo1iu7kpJxQr5NS2IUoeCTRJBuAJ+cxalXsE9K3LXmkjp6tUMMlrFZRGnzGOLatPF1vihrvCg3AmmyEoSQFAxVPYAqtlQUsWUsvD2dO+1zmjsymmIQEoN7kzgoTnfKm32XqntGyKbw8eY8mWW1+zsuIlC19Aq+DdaSFLdK+FK+4Q2tOMUq+RszEwLPBnsO8lxsQtkCYkyG7rxr1GJ9bWtNWF0n1fGETQCGluzMQpfClZVH9R4DWFAeLNEhaD21NditO5gBUlhnnL9F30CwwQJw0yNC44WGWqULVFG3wy9t4zr/2EqCOFv1UAq3ytC+cKYSEwPvP/sMk5D3By6JhPeV1jd3lbZV4BmCxCPjey7Ftgj07xoIbC1F0ulJEKuxMGYUpAI8Z0t/6xqW6y8F4G/4WtTEjV/4W2fPBBV4WFy6Xd8MTWSy135E4DdW8k5aRNF72mZrPmTULdwvys0ueXqagPbCUM4dhIQjh4nWyhjJL5D8WV1nCo+0b6UnQcGoku47Qh7Y6mxdedcenvS9E98ZNKE7G8I5GPJgoTkx4geqmNJFNzi8oZLFGkvPsiIwaE4y1eR6WJQ5qNnCzBx3k8DVZuX1iE3gBTKz3tTZICU//yDT4UAXNDRwBlNbOlC40R2nOWs7RaB/xg6o4CsbOnxr0dvEKJXUF2m5ijGkLyTfNq613ix/hqYtXxX3LB8O0C8qEyWQG71V/ILDirHbN5TLUIB4bLcNr73x+8iaFrXrkSYAgpCiz4Mzk5ZwYemQoaWHYiE3HJ+HRVI0xmVynric0x026chVxd09T30HqKSfMcrA0/soREtoUCOVZRO4YnSAsrBXGfIx2bewq6lLO0Axy6zmAb8UVJSo48Zwl0tnjnCCxm74EYOwhp85ti6AR9ozYXEV+hJemlLM="></div>
+
+<h2 id="para-saber-más">Para saber más</h2>
+<ul>
+<li>Libro: J. F. Puentes Calvo, <em>Tecnologías Inteligentes</em>
+(2025), caps. 1–3 y sus retos. Licencia CC BY-NC-ND 4.0.</li>
+<li>Notebooks de demostración: <code>01 Dijkstra – ciudades</code> y
+<code>01 ¿Jugamos al ajedrez?</code> en <a
+href="https://github.com/FranPuentes/iTI2025">github.com/FranPuentes/iTI2025</a>.</li>
+<li>Teoría ampliada: <a
+href="teoria.html#0️⃣-punto-de-partida-conceptos-fundamentales-de-ia-ud1">sección
+0 de la Teoría UD2</a>.</li>
+</ul>
+  </article>
+</main>
+<footer class="site"><div class="in">
+  <span>IA · Apuntes · Tecnoloxías Intelixentes · 1.º Bacharelato</span>
+  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0)</span>
+</div></footer>
+<a class="up" href="#">↑ Arriba</a>
+<script>
+(function () {
+  document.querySelectorAll("article.content table").forEach(function (t) {
+    var w = document.createElement("div"); w.className = "table-wrap";
+    t.parentNode.insertBefore(w, t); w.appendChild(t);
+  });
+  var toc = document.getElementById("TOC"), btn = document.querySelector(".toc-toggle");
+  if (btn && toc) btn.addEventListener("click", function () {
+    var o = toc.classList.toggle("open"); btn.setAttribute("aria-expanded", o);
+  });
+  if (!toc || !("IntersectionObserver" in window)) return;
+  var links = {}; toc.querySelectorAll("a").forEach(function (a) { links[decodeURIComponent(a.getAttribute("href").slice(1))] = a; });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting && links[e.target.id]) {
+        toc.querySelectorAll("a.on").forEach(function (x) { x.classList.remove("on"); });
+        links[e.target.id].classList.add("on");
+      }
+    });
+  }, { rootMargin: "-70px 0px -70% 0px" });
+  document.querySelectorAll("article.content h2[id], article.content h3[id]").forEach(function (h) { io.observe(h); });
+})();
+</script>
+<script>
+/* Soluciones cifradas (AES-GCM + PBKDF2). Sin la contraseña, el contenido no se puede leer. */
+(function () {
+  var art = document.querySelector("article.content[data-salt]");
+  if (!art) return;
+  var locks = art.querySelectorAll(".sol-lock");
+  if (!locks.length) return;
+  var KEY = "ia-apuntes-sol";
+  function b64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function derive(pass) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(art.dataset.salt), iterations: +art.dataset.iter, hash: "SHA-256" },
+        k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    });
+  }
+  function unlockAll(pass) {
+    return derive(pass).then(function (key) {
+      var first = locks[0];
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(first.dataset.iv) }, key, b64(first.dataset.ct)).then(function () {
+        var dec = new TextDecoder();
+        return Promise.all(Array.prototype.map.call(locks, function (el) {
+          return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(el.dataset.iv) }, key, b64(el.dataset.ct)).then(function (buf) {
+            var tmp = document.createElement("div"); tmp.innerHTML = dec.decode(buf);
+            var d = tmp.firstElementChild; el.replaceWith(d);
+            return d;
+          });
+        }));
+      });
+    }).then(function (opened) {
+      try { sessionStorage.setItem(KEY, pass); } catch (e) {}
+      return opened;
+    });
+  }
+  locks.forEach(function (el) {
+    var label = el.dataset.label || "Solución";
+    el.innerHTML =
+      '<button type="button" class="sol-btn"><span aria-hidden="true">🔒</span> ' + label + ' <small>· con contraseña</small></button>' +
+      '<form class="sol-form" hidden><label>Contraseña del profesorado <input type="password" autocomplete="off" required></label>' +
+      '<button type="submit">Abrir</button><span class="sol-msg" role="status"></span></form>';
+    var b = el.querySelector(".sol-btn"), f = el.querySelector(".sol-form"), msg = el.querySelector(".sol-msg");
+    b.addEventListener("click", function () { f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); });
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var pass = f.querySelector("input").value;
+      msg.textContent = "Comprobando…";
+      var idx = Array.prototype.indexOf.call(locks, el);
+      unlockAll(pass).then(function (opened) {
+        var mine = opened[idx]; if (mine) { mine.open = true; mine.scrollIntoView({ block: "nearest" }); }
+      }).catch(function () { msg.textContent = "Contraseña incorrecta."; });
+    });
+  });
+  var saved = null; try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlockAll(saved).catch(function () { try { sessionStorage.removeItem(KEY); } catch (e) {} });
+})();
+</script>
+</body>
+</html>

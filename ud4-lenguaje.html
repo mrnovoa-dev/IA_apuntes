@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UD4 · Lenguaje natural · IA Apuntes</title>
+<meta name="description" content="Desarrollo de la UD4 de Tecnoloxías
+Intelixentes: el texto y el sonido como datos, tokenización, bolsa de
+palabras y TF-IDF, similitud, sentimientos, clasificación de textos, voz
+y modelos de lenguaje, con ejercicios resueltos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="brand" href="./">IA<span>·</span>Apuntes</a>
+  <nav aria-label="Principal">
+    <a href="./">Inicio</a>
+    <a href="ud1.html" title="Conceptos clave de la IA">UD1</a>
+    <a href="teoria.html" title="Programación en Python: teoría">UD2 Teoría</a>
+    <a href="ejercicios.html" title="Ejercicios de Python E1–E27">UD2 Ejercicios</a>
+    <a href="ud3-vision.html" title="Visión artificial">UD3 Visión</a>
+    <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural" aria-current="page">UD4 Lenguaje</a>
+    <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
+    <a href="mapa.html">Mapa</a>
+  </nav>
+</div></header>
+<main class="doc">
+  <div>
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="TOC">Índice ▾</button>
+<nav id="TOC" aria-label="Índice">
+<ul>
+<li><a href="#ud4--procesamiento-del-lenguaje-natural"
+id="toc-ud4--procesamiento-del-lenguaje-natural">UD4 · Procesamiento del
+lenguaje natural</a>
+<ul>
+<li><a href="#1-qué-es-el-procesamiento-del-lenguaje-natural"
+id="toc-1-qué-es-el-procesamiento-del-lenguaje-natural">1. ¿Qué es el
+procesamiento del lenguaje natural?</a>
+<ul>
+<li><a
+href="#ejercicio-11--hablar-10-minutos-sin-decir-nada--reto-121-del-libro"
+id="toc-ejercicio-11--hablar-10-minutos-sin-decir-nada--reto-121-del-libro">Ejercicio
+1.1 · Hablar 10 minutos sin decir nada 🟢 (reto 12.1 del libro)</a></li>
+</ul></li>
+<li><a href="#2-codificar-datos-números-texto-y-sonido"
+id="toc-2-codificar-datos-números-texto-y-sonido">2. Codificar datos:
+números, texto y sonido</a>
+<ul>
+<li><a href="#ejercicio-21--cuánto-ocupa-un-minuto-de-audio--ca41"
+id="toc-ejercicio-21--cuánto-ocupa-un-minuto-de-audio--ca41">Ejercicio
+2.1 · ¿Cuánto ocupa un minuto de audio? 🟢 (CA4.1)</a></li>
+<li><a href="#ejercicio-22--una-onda-en-python-"
+id="toc-ejercicio-22--una-onda-en-python-">Ejercicio 2.2 · Una onda en
+Python 🟡</a></li>
+</ul></li>
+<li><a href="#3-tokenización-y-preprocesado"
+id="toc-3-tokenización-y-preprocesado">3. Tokenización y
+preprocesado</a>
+<ul>
+<li><a href="#ejercicio-31--limpiar-un-mensaje-"
+id="toc-ejercicio-31--limpiar-un-mensaje-">Ejercicio 3.1 · Limpiar un
+mensaje 🟡</a></li>
+</ul></li>
+<li><a href="#4-del-texto-al-vector" id="toc-4-del-texto-al-vector">4.
+Del texto al vector</a>
+<ul>
+<li><a href="#ejercicio-41--tf-idf-a-mano-"
+id="toc-ejercicio-41--tf-idf-a-mano-">Ejercicio 4.1 · TF-IDF a mano
+🔴</a></li>
+</ul></li>
+<li><a href="#5-similitud-entre-textos"
+id="toc-5-similitud-entre-textos">5. Similitud entre textos</a>
+<ul>
+<li><a href="#ejercicio-51--jaccard-a-mano--reto-102-tarea"
+id="toc-ejercicio-51--jaccard-a-mano--reto-102-tarea">Ejercicio 5.1 ·
+Jaccard a mano 🟡 (reto 10.2, tarea)</a></li>
+</ul></li>
+<li><a href="#6-clasificar-textos-y-analizar-sentimientos"
+id="toc-6-clasificar-textos-y-analizar-sentimientos">6. Clasificar
+textos y analizar sentimientos</a>
+<ul>
+<li><a href="#ejercicio-61--engañar-al-analizador--retos-112113-tarea"
+id="toc-ejercicio-61--engañar-al-analizador--retos-112113-tarea">Ejercicio
+6.1 · Engañar al analizador 🟡 (retos 11.2–11.3, tarea)</a></li>
+<li><a href="#ejercicio-62--detective-de-idiomas--reto-89-tarea"
+id="toc-ejercicio-62--detective-de-idiomas--reto-89-tarea">Ejercicio 6.2
+· Detective de idiomas 🔴 (reto 8.9, tarea)</a></li>
+</ul></li>
+<li><a href="#7-voz-de-audio-a-texto-y-de-texto-a-audio"
+id="toc-7-voz-de-audio-a-texto-y-de-texto-a-audio">7. Voz: de audio a
+texto y de texto a audio</a>
+<ul>
+<li><a
+href="#ejercicio-71--transcripción-con-ruido--retos-93-y-96-tarea"
+id="toc-ejercicio-71--transcripción-con-ruido--retos-93-y-96-tarea">Ejercicio
+7.1 · Transcripción con ruido 🟡 (retos 9.3 y 9.6, tarea)</a></li>
+</ul></li>
+<li><a href="#8-modelos-de-lenguaje" id="toc-8-modelos-de-lenguaje">8.
+Modelos de lenguaje</a>
+<ul>
+<li><a href="#ejercicio-81--un-generador-de-texto-con-bigramas-"
+id="toc-ejercicio-81--un-generador-de-texto-con-bigramas-">Ejercicio 8.1
+· Un generador de texto con bigramas 🟡</a></li>
+<li><a href="#ejercicio-82--cuaderno-de-verificación--ca44-ca45-tarea"
+id="toc-ejercicio-82--cuaderno-de-verificación--ca44-ca45-tarea">Ejercicio
+8.2 · Cuaderno de verificación 🟡 (CA4.4, CA4.5, tarea)</a></li>
+<li><a
+href="#ejercicio-83--el-chat-barato-del-instituto--práctica-125-del-libro"
+id="toc-ejercicio-83--el-chat-barato-del-instituto--práctica-125-del-libro">Ejercicio
+8.3 · El «chat barato» del instituto 🔴 (práctica 12.5 del
+libro)</a></li>
+</ul></li>
+<li><a href="#9-impacto-social-del-pln"
+id="toc-9-impacto-social-del-pln">9. Impacto social del PLN</a>
+<ul>
+<li><a href="#ejercicio-91--debate-a-dos-bandos--cap-13"
+id="toc-ejercicio-91--debate-a-dos-bandos--cap-13">Ejercicio 9.1 ·
+Debate a dos bandos 🟡 (cap. 13)</a></li>
+</ul></li>
+<li><a href="#proyecto-de-la-unidad-ca46"
+id="toc-proyecto-de-la-unidad-ca46">Proyecto de la unidad
+(CA4.6)</a></li>
+<li><a href="#preguntas-tipo-de-examen"
+id="toc-preguntas-tipo-de-examen">Preguntas tipo de examen</a></li>
+<li><a href="#para-saber-más" id="toc-para-saber-más">Para saber
+más</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+  <article class="content" data-salt="dLzbF9Oauk4tPWAjP6d8FQ==" data-iter="250000">
+<h1 id="ud4--procesamiento-del-lenguaje-natural">UD4 · Procesamiento del
+lenguaje natural</h1>
+<div class="ud-head" style="--c:var(--c-texto)">
+<span class="k">UD4 · 25 sesiones · 20 % · CA4.1–CA4.6</span>
+<p>Cómo una máquina lee, escucha, compara y genera lenguaje humano: del texto convertido en números a los grandes modelos de lenguaje, sus límites y su impacto en lenguas como el gallego.</p>
+</div>
+
+<blockquote>
+<p><strong>Libro de referencia:</strong> J. F. Puentes Calvo,
+<em>Tecnologías Inteligentes</em> (2025), capítulos 8–13. <strong>Orden
+de las unidades:</strong> sigue la programación oficial 2026/27 y el
+libro (lenguaje después de visión). En materiales anteriores esta unidad
+aparece como UD3.</p>
+<p><strong>Requisitos:</strong> cadenas, listas y diccionarios de la UD2
+(E8, E10, E16). Casi todo el código funciona sin instalar nada más que
+scikit-learn; los modelos de Hugging Face necesitan Colab e
+internet.</p>
+</blockquote>
+<table>
+<thead>
+<tr class="header">
+<th>Sesiones</th>
+<th>Bloque</th>
+<th>Libro</th>
+<th>Criterio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1–2</td>
+<td>¿Qué es el PLN? Ambigüedad y apertura «hablar sin decir nada»</td>
+<td>12.1, 13</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>3–5</td>
+<td>Codificar datos: números, texto (ASCII, Unicode), sonido</td>
+<td>8.1–8.4</td>
+<td>CA4.1</td>
+</tr>
+<tr class="odd">
+<td>6–8</td>
+<td>Tokenización, normalización, <em>stop words</em>, <em>stemming</em>
+y lematización</td>
+<td>8.5, 11.2</td>
+<td>CA4.2</td>
+</tr>
+<tr class="even">
+<td>9–11</td>
+<td>Del texto al vector: bolsa de palabras, TF-IDF,
+<em>embeddings</em></td>
+<td>8.6, 10.1</td>
+<td>CA4.2</td>
+</tr>
+<tr class="odd">
+<td>12–13</td>
+<td>Similitud entre textos: Jaccard, Dice, coseno; plagio</td>
+<td>10</td>
+<td>CA4.2</td>
+</tr>
+<tr class="even">
+<td>14–16</td>
+<td>Clasificación de textos y análisis de sentimientos</td>
+<td>11</td>
+<td>CA4.2, CA4.3</td>
+</tr>
+<tr class="odd">
+<td>17–18</td>
+<td>Voz: reconocimiento, síntesis y transcripción</td>
+<td>9</td>
+<td>CA4.1, CA4.3</td>
+</tr>
+<tr class="even">
+<td>19–21</td>
+<td>Modelos de lenguaje: cómo funcionan, prompting y verificación</td>
+<td>12</td>
+<td>CA4.4, CA4.5</td>
+</tr>
+<tr class="odd">
+<td>22</td>
+<td>Impacto social y lenguas minoritarias</td>
+<td>13</td>
+<td>CA4.5</td>
+</tr>
+<tr class="even">
+<td>23–25</td>
+<td>Proyecto de PLN y exposición</td>
+<td>—</td>
+<td>CA4.6</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-qué-es-el-procesamiento-del-lenguaje-natural">1. ¿Qué es el
+procesamiento del lenguaje natural?</h2>
+<p>El <strong>PLN</strong> (<em>NLP</em> en inglés) es la rama de la IA
+que permite a las máquinas entender, interpretar y generar lenguaje
+humano, escrito o hablado. Lo usas a diario: el teclado predictivo, el
+filtro antispam, los traductores, los asistentes de voz, los subtítulos
+automáticos, los chatbots.</p>
+<p><strong>Por qué es difícil:</strong></p>
+<ul>
+<li><strong>Ambigüedad:</strong> «Vi a Marta con el telescopio» (¿quién
+tiene el telescopio?), «banco» (asiento o entidad financiera).</li>
+<li><strong>Contexto:</strong> «está fresco» puede ser el pescado, el
+tiempo o una persona descarada.</li>
+<li><strong>Ironía y sarcasmo:</strong> «¡Genial, otra vez
+lloviendo!».</li>
+<li><strong>Variación:</strong> faltas de ortografía, abreviaturas («q»,
+«xq»), emojis, mezcla de idiomas (gallego y castellano en la misma
+frase).</li>
+</ul>
+<p><strong>Tres enfoques en la historia:</strong> reglas escritas a mano
+→ modelos estadísticos (contar palabras y n-gramas) → redes neuronales y
+<strong>Transformers</strong>, la base de los modelos de lenguaje
+actuales.</p>
+<h3
+id="ejercicio-11--hablar-10-minutos-sin-decir-nada--reto-121-del-libro">Ejercicio
+1.1 · Hablar 10 minutos sin decir nada 🟢 (reto 12.1 del libro)</h3>
+<p>Por parejas, uno habla un minuto sobre un tema cualquiera sin aportar
+ninguna información real, solo con frases bien construidas. ¿Es fácil?
+¿Qué demuestra?</p>
+<div class="sol-lock" data-label="Conclusión" data-iv="TbTuWzbKwfsNsMpI" data-ct="RZJzJ78rPHE7x/dxmfl/hspBfHEKge9S5GbfvaQSMdWs9EP19eIhjisZ5zKjslfBsK+N2OPqN8KocxY0qsH9jZhdRLJ/MY/fe2wvubMsl9+h+KQrm1kSVMOhB56Cwcff0oZPaQe6l4A4X//W/Lo3WH4YkKygXJOvWPvMF0vWkkQOT5UXoLMzh3/zn9l45IoFzR2tPsCmw9mAqjbQMspJYd/cEhSKnWRe8gtOQtXMuRmi3jTIxKF98KlItSvUpQ/tsmfy3YWaNrz8UF+WmSsfMHelt86E4JanojtbSErY/rfxL01mNzc9dkI2c4iXjm9eeCf6q4mueDcaWViZ4UIu8ROXz7Utw+5N0rwsn+dIIbrXah+Rk+MrxcAcBbet6UJ/0ZwrrjfFOJJ4IZeBJ6gY24LIX7BXUnmSYAB0a0xmjWUWZeaQ0zog0iJCo8/9EXGrYvS1lI/Icb3soZv/sqMwISTNE/CJ7MfDzNGKd/r9RoBqAUGFsaGLVlewiRggT+IOpDq7w/8H4bwtWSRPcf/v+WEg6/rDHiZfK1Ci6oYobpap1c/GyTOysYV/66oy9kkkcSuqPQ0IMEpW6slc"></div>
+
+<hr />
+<h2 id="2-codificar-datos-números-texto-y-sonido">2. Codificar datos:
+números, texto y sonido</h2>
+<p>Un ordenador solo guarda <strong>bits</strong>. Todo lo demás es una
+convención para interpretarlos:</p>
+<ul>
+<li><strong>Números enteros:</strong> en binario; los negativos, con
+<strong>complemento a dos</strong>. <strong>Decimales:</strong> coma
+flotante IEEE 754 (por eso <code>0.1 + 0.2</code> da
+<code>0.30000000000000004</code>).</li>
+<li><strong>Escalares, vectores, matrices y tensores:</strong> un
+número, una lista, una tabla, una «tabla de tablas». Una frase
+codificada es un vector; un lote de frases, una matriz; un lote de
+imágenes en color, un tensor de 4 dimensiones.</li>
+<li><strong>Texto:</strong> cada carácter tiene un número.
+<strong>ASCII</strong> (7 bits) solo cubre el inglés;
+<strong>Unicode</strong> asigna un número a cada carácter de todas las
+lenguas y emojis, y <strong>UTF-8</strong> lo guarda en 1 a 4
+bytes.</li>
+<li><strong>Sonido:</strong> una <strong>onda</strong> de presión con
+<strong>frecuencia</strong> (tono, en Hz) y <strong>amplitud</strong>
+(volumen). Para digitalizarla se <strong>muestrea</strong>: se mide su
+valor muchas veces por segundo (44 100 en un CD) y cada medida se guarda
+con un número de bits (16 en un CD).</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>texto <span class="op">=</span> <span class="st">&quot;Hola mundo, ¡olá mundo!&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([<span class="bu">ord</span>(c) <span class="cf">for</span> c <span class="kw">in</span> texto])           <span class="co"># 72 111 108 97 ... 225 (á)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">list</span>(texto.encode(<span class="st">&quot;utf-8&quot;</span>)))      <span class="co"># la á ocupa dos bytes: 195 161</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="fl">0.1</span> <span class="op">+</span> <span class="fl">0.2</span>)                        <span class="co"># 0.30000000000000004</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">bin</span>(<span class="dv">13</span>), <span class="bu">int</span>(<span class="st">&quot;1101&quot;</span>, <span class="dv">2</span>))          <span class="co"># &#39;0b1101&#39; 13</span></span></code></pre></div>
+<h3 id="ejercicio-21--cuánto-ocupa-un-minuto-de-audio--ca41">Ejercicio
+2.1 · ¿Cuánto ocupa un minuto de audio? 🟢 (CA4.1)</h3>
+<p>Calcula el tamaño de 1 minuto de audio estéreo con calidad de CD (44
+100 muestras/s, 16 bits). ¿Por qué un MP3 de 1 minuto ocupa unos 1
+MB?</p>
+<div class="sol-lock" data-label="Solución" data-iv="GPe+ZrdzLtn7ar52" data-ct="af+OE0OEOU6jbIZn1qnpcGGs0RPVxGdMzXo+3nqG0bruvy9KFHZGWkZFG6SGPxtu174ZV3R0cm4eD0PuNJUdPTbgGZ0lxOr+VXtJFim0Nqr5xlhStYsa0SOnChvEZD0L2u6ySc9RKqgMjcxLAmJMgnX7mXIY7xzdbm5T9HdHXtg5O7B7tH//CbvsemNH69CBn5N/CJmsp0dv87665iqShAuHvk9SJYXw1cVu5ohvfQyCUoIhU3IRsRlMzDhuizmc2q/VfarF2nAnIm/Xaghq6mqC4LIRo0xc8iE8ifYozO/dbEChcTjlk33qhTZ8cHioK41N2m7Cs7KUdULm3ZptEa0uFUi0YVJ0BQvO4jOZHUKJIBAuFdYD+SE9uqVsDyysvWMqQ+aTEwV0fVmqwyJI06ZVUmLYLtOvAaeFcZKNg2nuxMQzYx4WwMoTwy4Dq+VJ0sHKuOK/zBEYNVzfKXhVH08kGYrA+ivGF9z6Kcn9SeN8fKAaMoo/R5X1peIPSqU="></div>
+
+<h3 id="ejercicio-22--una-onda-en-python-">Ejercicio 2.2 · Una onda en
+Python 🟡</h3>
+<p>Genera un segundo de un La (440 Hz) muestreado a 8000 Hz, dibuja los
+primeros 10 ms y explica qué pasaría con una frecuencia de muestreo de
+600 Hz.</p>
+<div class="sol-lock" data-label="Solución" data-iv="WB6E/zqFILtqMkdM" data-ct="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"></div>
+
+<hr />
+<h2 id="3-tokenización-y-preprocesado">3. Tokenización y
+preprocesado</h2>
+<p><strong>Tokenizar</strong> es dividir un texto en unidades
+(<strong>tokens</strong>). Estrategias:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Estrategia</th>
+<th>Ejemplo con «desordenadamente»</th>
+<th>Ventajas e inconvenientes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Por palabras</td>
+<td><code>desordenadamente</code></td>
+<td>Intuitiva; vocabulario enorme, no sabe qué hacer con palabras
+nuevas</td>
+</tr>
+<tr class="even">
+<td>Por caracteres</td>
+<td><code>d e s o r d e n…</code></td>
+<td>Vocabulario mínimo; secuencias muy largas y sin significado</td>
+</tr>
+<tr class="odd">
+<td>Por <strong>subpalabras</strong></td>
+<td><code>des · orden · ada · mente</code></td>
+<td>El término medio que usan los LLM (BPE, WordPiece)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Preprocesado habitual:</strong> pasar a minúsculas; quitar
+signos; quitar <strong>palabras vacías</strong> (<em>stop words</em>:
+el, la, de, que…), que son muy frecuentes y aportan poco; y reducir
+variantes de una palabra:</p>
+<ul>
+<li><strong>Stemming:</strong> cortar la terminación con reglas.
+«corriendo», «corrió» → «corr». Rápido pero tosco.</li>
+<li><strong>Lematización:</strong> llevar a la forma de diccionario.
+«corriendo», «corrió» → «correr». Más preciso, necesita un diccionario o
+un modelo (spaCy).</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>texto <span class="op">=</span> <span class="st">&quot;El Dr. Pérez llegó a las 9.30 a A Coruña. ¡Qué día! ¿Vienes mañana?&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(texto.split())                          <span class="co"># [&#39;El&#39;, &#39;Dr.&#39;, ..., &#39;Coruña.&#39;, &#39;¡Qué&#39;, &#39;día!&#39;, ...]</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(re.findall(<span class="vs">r&quot;\w+&quot;</span>, texto.lower()))      <span class="co"># [&#39;el&#39;, &#39;dr&#39;, &#39;pérez&#39;, &#39;llegó&#39;, ..., &#39;9&#39;, &#39;30&#39;, ...]</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(re.split(<span class="vs">r&quot;(?&lt;=[.!?])\s+&quot;</span>, texto))      <span class="co"># [&#39;El Dr.&#39;, &#39;Pérez llegó ...&#39;, &#39;¡Qué día!&#39;, &#39;¿Vienes mañana?&#39;]</span></span></code></pre></div>
+<p>La última línea intenta separar frases cortando tras cada punto, y
+falla con «Dr.» (reto 8.6 del libro). Las librerías de PLN (spaCy, NLTK)
+tienen listas de abreviaturas y modelos para resolverlo.</p>
+<p>Con spaCy (en Colab: <code>pip install spacy</code> y
+<code>python -m spacy download es_core_news_sm</code>):</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> spacy</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>nlp <span class="op">=</span> spacy.load(<span class="st">&quot;es_core_news_sm&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>doc <span class="op">=</span> nlp(<span class="st">&quot;Los alumnos estaban corriendo hacia las aulas nuevas&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> t <span class="kw">in</span> doc:</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>t<span class="sc">.</span>text<span class="sc">:&lt;10}</span><span class="ss"> lema=</span><span class="sc">{</span>t<span class="sc">.</span>lemma_<span class="sc">:&lt;8}</span><span class="ss"> tipo=</span><span class="sc">{</span>t<span class="sc">.</span>pos_<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<h3 id="ejercicio-31--limpiar-un-mensaje-">Ejercicio 3.1 · Limpiar un
+mensaje 🟡</h3>
+<p>Escribe <code>limpiar(texto)</code> que pase a minúsculas, quite
+enlaces, menciones (<code>@usuario</code>) y signos, y elimine palabras
+vacías. Pruébala con «@ana Mañana NO hay clase!!! 😃 mira <a
+href="https://edu.xunta.gal»">https://edu.xunta.gal»</a>.</p>
+<div class="sol-lock" data-label="Solución" data-iv="wUIX9Kyzik4PTCpR" data-ct="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"></div>
+
+<hr />
+<h2 id="4-del-texto-al-vector">4. Del texto al vector</h2>
+<p>Los modelos solo trabajan con números. Si numeramos las palabras
+(casa = 1, perro = 2, gato = 3), introducimos un <strong>orden
+falso</strong>: parecería que gato está «más cerca» de perro que de casa
+por el número. Soluciones:</p>
+<ul>
+<li><strong>One-hot:</strong> un vector con tantas posiciones como
+palabras del vocabulario, todo ceros salvo un 1 en la de la palabra. Sin
+orden falso, pero enorme y sin noción de significado.</li>
+<li><strong>Bolsa de palabras (BoW):</strong> un vector por documento
+que <strong>cuenta</strong> cuántas veces aparece cada palabra. Pierde
+el orden («el perro muerde al hombre» = «el hombre muerde al
+perro»).</li>
+<li><strong>TF-IDF:</strong> como BoW, pero cada palabra pesa más si es
+<strong>frecuente en ese documento</strong> (TF) y <strong>rara en el
+conjunto</strong> (IDF, idea de Karen Spärck Jones). Las palabras que
+salen en todas partes casi no cuentan.</li>
+<li><strong>Embeddings:</strong> vectores densos (de cientos de números)
+aprendidos por una red, donde las palabras o frases de
+<strong>significado parecido quedan cerca</strong>. Con word2vec se
+puede hacer «rey − hombre + mujer ≈ reina».</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer, TfidfVectorizer</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> cosine_similarity</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>docs <span class="op">=</span> [<span class="st">&quot;El Titanic se hundió en 1912 tras chocar con un iceberg en el Atlántico.&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;En 1912 el Titanic chocó con un iceberg y se hundió en el océano Atlántico.&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Subir al Aneto requiere crampones, piolet y buena forma física.&quot;</span>]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>bow <span class="op">=</span> CountVectorizer().fit(docs)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(bow.get_feature_names_out()), <span class="st">&quot;palabras de vocabulario&quot;</span>)     <span class="co"># 23</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> TfidfVectorizer().fit_transform(docs)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cosine_similarity(T).<span class="bu">round</span>(<span class="dv">2</span>))</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># [[1.   0.82 0.  ]</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  [0.82 1.   0.  ]</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  [0.   0.   1.  ]]</span></span></code></pre></div>
+<p>Los dos textos del Titanic se parecen (0,82); el de montaña no
+comparte nada con ellos (0). Es la práctica del capítulo 10 del
+libro.</p>
+<h3 id="ejercicio-41--tf-idf-a-mano-">Ejercicio 4.1 · TF-IDF a mano
+🔴</h3>
+<p>Tres documentos: d1 = «gato negro», d2 = «gato blanco», d3 = «perro
+negro». Calcula el TF-IDF de «gato» y de «blanco» en d2 con TF =
+apariciones / palabras del documento e IDF = log(N / documentos que
+contienen la palabra).</p>
+<div class="sol-lock" data-label="Solución" data-iv="QVzgWUyfuKjtCviz" data-ct="qqGeMPyN/PcmVcK3vX21sB3/kjo8If2/a1fHrT9sJa1Nhw1UbsFUlDjG/5gMOidFLmG37QfglUa6wjRWKnKxhQ7ioz4KVuvqwCDHaFwfO93DO3s+9mTOLs4RQaU7oVW+ag+KrS2PRgCzIpyGDOkrfR6g4feVHDEuzzoLoGbl4DL2c1XYA/3h3rqzbXElJReaypiixqmv2pQgo0aTOrPsCrEsEe6VcvXYVsIe5rqJfUO26Di38BbjPK19CsGobWZyJwI8qCxcKOB6cxxScwPjbsfs27cnpamNlXbqr9KV4iGZD9EAN7CepHTlIf6hSaaJBAqkOARYx7Rxd1ZH9q9wYKFWpPcyx0sSE00mMBWcjISay1yCdnacjs9WRK/pJKHYhJCuuZaaIz25trX2HkLD1HwHAGF5/Wc5Dcq2GKFeyWR/EfgbMNUY7NlRYU+FuSh+GI9msoDC6wJHrIGRnqmnMetaRiMjTjSxAHcUB5Vq7ZLO2kgBbYbz0Hci0eP7hBnys92ztHHvj5XTUEJGekaNlQyi4Li1z5WHRCS07UVNR+11LJH8gdDmhU3zTyO+cnyx4sdJk8b1pWWZrsW4ToGnR1/SzXEZi2prvJ7iJVu7Rmw/JkHecRNq9rJdtj5YaneB6rmxwjNH22VG/RbPBzuieqw+exHVEstFVfJGCKmoanM5tiy2C2igToZRef+q0bFFY1IU0nWK8Out7mxXLsrqEiqAkYXX5rsyQoQ3"></div>
+
+<hr />
+<h2 id="5-similitud-entre-textos">5. Similitud entre textos</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Medida</th>
+<th>Fórmula</th>
+<th>Rango</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Jaccard</strong></td>
+<td>|A ∩ B| / |A ∪ B|</td>
+<td>0–1</td>
+<td>Palabras compartidas entre todas las palabras distintas</td>
+</tr>
+<tr class="even">
+<td><strong>Dice</strong></td>
+<td>2 · |A ∩ B| / (|A| + |B|)</td>
+<td>0–1</td>
+<td>Parecido a Jaccard, premia más las coincidencias</td>
+</tr>
+<tr class="odd">
+<td><strong>Coseno</strong></td>
+<td>a · b / (|a| · |b|)</td>
+<td>0–1 con conteos</td>
+<td>Ángulo entre los vectores (BoW, TF-IDF o embeddings)</td>
+</tr>
+<tr class="even">
+<td>Euclídea</td>
+<td>√Σ(aᵢ − bᵢ)²</td>
+<td>0–∞</td>
+<td>Distancia «en línea recta»; depende de la longitud del texto</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>VACIAS <span class="op">=</span> {<span class="st">&quot;el&quot;</span>, <span class="st">&quot;la&quot;</span>, <span class="st">&quot;los&quot;</span>, <span class="st">&quot;las&quot;</span>, <span class="st">&quot;de&quot;</span>, <span class="st">&quot;del&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;en&quot;</span>, <span class="st">&quot;que&quot;</span>, <span class="st">&quot;un&quot;</span>, <span class="st">&quot;una&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;se&quot;</span>, <span class="st">&quot;con&quot;</span>, <span class="st">&quot;por&quot;</span>, <span class="st">&quot;su&quot;</span>, <span class="st">&quot;al&quot;</span>, <span class="st">&quot;es&quot;</span>, <span class="st">&quot;fue&quot;</span>, <span class="st">&quot;o&quot;</span>, <span class="st">&quot;lo&quot;</span>}</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tokens(t):</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [p <span class="cf">for</span> p <span class="kw">in</span> re.findall(<span class="vs">r&quot;\w+&quot;</span>, t.lower()) <span class="cf">if</span> p <span class="kw">not</span> <span class="kw">in</span> VACIAS]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> jaccard(a, b):</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    A, B <span class="op">=</span> <span class="bu">set</span>(tokens(a)), <span class="bu">set</span>(tokens(b))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">len</span>(A <span class="op">&amp;</span> B) <span class="op">/</span> <span class="bu">len</span>(A <span class="op">|</span> B)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dice(a, b):</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    A, B <span class="op">=</span> <span class="bu">set</span>(tokens(a)), <span class="bu">set</span>(tokens(b))</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span> <span class="op">*</span> <span class="bu">len</span>(A <span class="op">&amp;</span> B) <span class="op">/</span> (<span class="bu">len</span>(A) <span class="op">+</span> <span class="bu">len</span>(B))</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>t1 <span class="op">=</span> <span class="st">&quot;El Titanic se hundió en 1912 tras chocar con un iceberg en el Atlántico.&quot;</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>t2 <span class="op">=</span> <span class="st">&quot;En 1912 el Titanic chocó con un iceberg y se hundió en el océano Atlántico.&quot;</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">sorted</span>(<span class="bu">set</span>(tokens(t1)) <span class="op">&amp;</span> <span class="bu">set</span>(tokens(t2))))   <span class="co"># [&#39;1912&#39;, &#39;atlántico&#39;, &#39;hundió&#39;, &#39;iceberg&#39;, &#39;titanic&#39;]</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>jaccard(t1, t2)<span class="sc">:.2f}</span><span class="ss"> </span><span class="sc">{</span>dice(t1, t2)<span class="sc">:.2f}</span><span class="ss">&quot;</span>) <span class="co"># 0.56 0.71</span></span></code></pre></div>
+<p>«chocar» y «chocó» cuentan como palabras distintas: con lematización
+la similitud subiría. Y dos frases con el <strong>mismo significado y
+palabras distintas</strong> («el barco se fue a pique») darían 0: para
+eso están los embeddings.</p>
+<h3 id="ejercicio-51--jaccard-a-mano--reto-102-tarea">Ejercicio 5.1 ·
+Jaccard a mano 🟡 (reto 10.2, tarea)</h3>
+<p>Calcula a mano, sin palabras vacías, la similitud de Jaccard entre «A
+IA aprende con datos de calidade» y «Os datos de calidade melloran a
+IA». Comprueba después con el código.</p>
+<div class="sol-lock" data-label="Solución" data-iv="RWhNTs5DfqAZvT7c" data-ct="UnGctVmvS6ndGycIkEx5WSAg7Q9wijtmkKJp7GWu6UiJbKUNNSL7lhBnodqBIcjIMgAtSm0s0CYR4QSpivmcD8t74aRLkK0MN61ljQ3HqzIdRpM6LzxJEDxQZoZUGQNaiwnRBuUPro/y7+qYbtXjq1bdHOr7k8RjPEscPoaHz9n/sFrcP1rG5q98oaxiIHTb9xkXOo31yR1C+4X9hq6540pwJ9EeXJA4XSOuO09tRSiLM+h+ZsvZHFtVLXRrDRJvO6nbDfGCEG0e/RBhWDetv2KPaCk1A83li18R13zWuFem8GaUGjPPf1Ny3Q5WoArHHq3lT65OURIKR7Q24wfUQxMDXQ2y3XocGBiulliqRbPQagz/tUeybK6Aqqk7QPuG3dF5GgIXYSlUgSYSJ28MMZBDJGHnRP21Igz0xOylahpi8GD5sND/tFBPmoOPK+1uoMm6/mnhNYfMbTN0UPGW+swAyOTqyY1CnIb5uM3UqsdsL0A1YHrQvAWZXftav/LUXjgIa9yv3XxuZEg3JztPg8N0OWJZ4RFTkJEeigtksv6aT9btOxVUpEMQ5pqdf7WGpkSQqpPFAz0Fbb3WCk59Lsc6YWOX8BwzEA=="></div>
+
+<hr />
+<h2 id="6-clasificar-textos-y-analizar-sentimientos">6. Clasificar
+textos y analizar sentimientos</h2>
+<p><strong>Clasificar textos</strong> es asignar una categoría: spam o
+no spam, tema de una noticia, idioma, sentimiento. El pipeline siempre
+es el mismo: <strong>preprocesar → vectorizar (TF-IDF) → clasificador →
+evaluar</strong>.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> TfidfVectorizer</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.naive_bayes <span class="im">import</span> MultinomialNB</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>textos <span class="op">=</span> [</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;gana un iphone gratis haz clic ya&quot;</span>, <span class="st">&quot;oferta exclusiva premio en metálico pulsa aquí&quot;</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;has sido seleccionado para un premio&quot;</span>, <span class="st">&quot;descuento del 90 por ciento solo hoy compra ya&quot;</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;tu cuenta ha sido bloqueada verifica tus datos&quot;</span>, <span class="st">&quot;consigue dinero fácil desde casa&quot;</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;mañana hay examen de tecnología&quot;</span>, <span class="st">&quot;te paso los apuntes de la ud2&quot;</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;quedamos a las cinco en la biblioteca&quot;</span>, <span class="st">&quot;la reunión de padres es el jueves&quot;</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;¿has hecho los ejercicios de pandas?&quot;</span>, <span class="st">&quot;recuerda traer el portátil a clase&quot;</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>etiquetas <span class="op">=</span> [<span class="st">&quot;spam&quot;</span>] <span class="op">*</span> <span class="dv">6</span> <span class="op">+</span> [<span class="st">&quot;ham&quot;</span>] <span class="op">*</span> <span class="dv">6</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> make_pipeline(TfidfVectorizer(), MultinomialNB()).fit(textos, etiquetas)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(modelo.predict([<span class="st">&quot;premio gratis pulsa aquí&quot;</span>, <span class="st">&quot;mañana traigo los apuntes&quot;</span>, <span class="st">&quot;verifica tu cuenta hoy&quot;</span>]))</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># [&#39;spam&#39; &#39;ham&#39; &#39;spam&#39;]</span></span></code></pre></div>
+<p><strong>Naive Bayes</strong> calcula la probabilidad de cada clase
+multiplicando las probabilidades de sus palabras («gratis» es mucho más
+probable en spam). Es «ingenuo» porque supone que las palabras son
+independientes, pero funciona muy bien con texto. Con 12 ejemplos el
+modelo es de juguete: los reales se entrenan con miles (por ejemplo, el
+<em>SMS Spam Collection</em> de UCI).</p>
+<p><strong>Análisis de sentimientos:</strong> clasificar en positivo,
+negativo o neutro. Dos enfoques:</p>
+<ul>
+<li><strong>Por reglas (léxico):</strong> una lista de palabras con +1 o
+−1 y reglas para las negaciones. Transparente, pero frágil.</li>
+<li><strong>Por aprendizaje:</strong> un modelo entrenado con frases
+etiquetadas; hoy, Transformers ya entrenados.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>POSITIVAS <span class="op">=</span> {<span class="st">&quot;bueno&quot;</span>, <span class="st">&quot;buena&quot;</span>, <span class="st">&quot;genial&quot;</span>, <span class="st">&quot;excelente&quot;</span>, <span class="st">&quot;encanta&quot;</span>, <span class="st">&quot;increíble&quot;</span>, <span class="st">&quot;divertida&quot;</span>, <span class="st">&quot;recomiendo&quot;</span>}</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>NEGATIVAS <span class="op">=</span> {<span class="st">&quot;malo&quot;</span>, <span class="st">&quot;mala&quot;</span>, <span class="st">&quot;aburrida&quot;</span>, <span class="st">&quot;horrible&quot;</span>, <span class="st">&quot;odio&quot;</span>, <span class="st">&quot;lenta&quot;</span>, <span class="st">&quot;peor&quot;</span>, <span class="st">&quot;decepción&quot;</span>}</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>NEGADORES <span class="op">=</span> {<span class="st">&quot;no&quot;</span>, <span class="st">&quot;nunca&quot;</span>, <span class="st">&quot;nada&quot;</span>, <span class="st">&quot;ni&quot;</span>}</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sentimiento(texto):</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    palabras <span class="op">=</span> re.findall(<span class="vs">r&quot;\w+&quot;</span>, texto.lower())</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    puntos <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, p <span class="kw">in</span> <span class="bu">enumerate</span>(palabras):</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        valor <span class="op">=</span> (p <span class="kw">in</span> POSITIVAS) <span class="op">-</span> (p <span class="kw">in</span> NEGATIVAS)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> NEGADORES <span class="op">&amp;</span> <span class="bu">set</span>(palabras[<span class="bu">max</span>(<span class="dv">0</span>, i <span class="op">-</span> <span class="dv">2</span>):i]):     <span class="co"># «no es buena»</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>            valor <span class="op">=</span> <span class="op">-</span>valor</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        puntos <span class="op">+=</span> valor</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&quot;POS&quot;</span> <span class="cf">if</span> puntos <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="st">&quot;NEG&quot;</span> <span class="cf">if</span> puntos <span class="op">&lt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="st">&quot;NEU&quot;</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> [<span class="st">&quot;Una película genial, la recomiendo&quot;</span>, <span class="st">&quot;Lenta y aburrida&quot;</span>, <span class="st">&quot;No es buena&quot;</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;Genial, otra vez dos horas de anuncios 🙃&quot;</span>]:</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(sentimiento(f), f)        <span class="co"># POS · NEG · NEG · POS (¡la ironía lo engaña!)</span></span></code></pre></div>
+<p>Con un modelo preentrenado (Colab):</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>analizador <span class="op">=</span> pipeline(<span class="st">&quot;sentiment-analysis&quot;</span>, model<span class="op">=</span><span class="st">&quot;pysentimiento/robertuito-sentiment-analysis&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(analizador([<span class="st">&quot;Me encantó la peli&quot;</span>, <span class="st">&quot;Vaya rollo de clase&quot;</span>, <span class="st">&quot;Mañana es martes&quot;</span>]))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># etiquetas POS / NEG / NEU con su puntuación</span></span></code></pre></div>
+<h3
+id="ejercicio-61--engañar-al-analizador--retos-112113-tarea">Ejercicio
+6.1 · Engañar al analizador 🟡 (retos 11.2–11.3, tarea)</h3>
+<p>Escribe 6 frases: positiva, negativa, neutra, con negación, con
+ironía y solo con emojis. Pásalas por el analizador por reglas y por el
+de Transformers. Haz una tabla con lo esperado, lo predicho y una
+explicación de cada fallo.</p>
+<div class="sol-lock" data-label="Solución orientativa" data-iv="mMFTB2oZQg4vvnah" data-ct="tiBemIIke8tt2t/oQhsnJMLL2FFIV7F3SNlL7ApfBmSNLIjp02y7mcMVHXGwpNJB0vd1JgJZTu0F+L7Wx0yj+u7mRFYfzL7RsZ/HrLLSGz/PQDqw2txQvSM92omocWOMPtNpeFtT9S0YKBC0ZFDI+lMrXxBt4LErevlIs8hmNs46+skXO4jKAyw4pTA9Gvhr/gXjBz17Ihick87XsbzSX7YjE/E4I3AjyrUDfZv8BUoRb37Gk/07Wg5Pt5lzhlynd+E6dFfycGgYbIGVWLAXeyFz0gyIkGthDGAtT69UWDg3oPdgpa9eAjpTk0Qw3DuzqCin3UL3dDXC6uMDj72BRdn0MbhMgSPjWap4UkXkozvjmJW+LqPDJMGH6tWAfCCdhTLYska7ZFzHQtY2Rl7JePL4zcu4Y+gOP7hgnBPPRBRbv+kigcGMkCKYQWZwUxm6aC0dujdP7Z04OG5A2sRaVxgVuYStv3LeqDz3m/uKc+VRLWrRcWf+rcSOmFgpVFJgHk02aHKC+HaUFtuPdfFg6eUMYVzpEmxs5vzS7KBK3l85+YEHE1tfyU0KBv6/Q8G4CKG72VrIiS2PanNUFYDEgK/h7K2eUcE1aka2cYgL9yMnzLcCQYmNfcDduSbvwjIDRWt+li6yBQ7Lxcn5VRl5b/vwQVS3L321ya1P/x06oIAEhkDuAA91FNvc17kreQplk7lu2ehv+TJ9tGjN0FQcvgCpPer3jH2OyYGdPyBA8GovwqeWva/bsyZt/AmzX9zCcjt8jGzpy9ps22f1mb5RpEfpJ4oe6CqOcISBrtV58+Z4LtzTYgy3QkmTp7a0w18PBdufAU8pWZDlkNnb4IWh5n2SKaDtL4aecXxiWz3uwe++Kc1RE3FJ59XRbSZj9ZkIme5/P/iCKXvqA+XhpN3/1+mRsRXUJ3iTDgkJ/oXQ6eFKomyh4xVJSwK9KzRDsT6rXWe3oGrptPh95Hnz00v5Xw=="></div>
+
+<h3 id="ejercicio-62--detective-de-idiomas--reto-89-tarea">Ejercicio 6.2
+· Detective de idiomas 🔴 (reto 8.9, tarea)</h3>
+<p>¿Se puede adivinar el idioma de un texto solo por la frecuencia de
+sus <strong>bigramas</strong> (pares de letras)? Construye un perfil de
+gallego, castellano, portugués e inglés con un párrafo de cada uno y
+prueba con frases nuevas.</p>
+<div class="sol-lock" data-label="Solución" data-iv="yZbz5ZAuR8k+3YRR" data-ct="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"></div>
+
+<hr />
+<h2 id="7-voz-de-audio-a-texto-y-de-texto-a-audio">7. Voz: de audio a
+texto y de texto a audio</h2>
+<ul>
+<li><strong>Reconocimiento de voz (ASR):</strong> el audio se convierte
+en un espectrograma (cómo se reparte la energía entre frecuencias a lo
+largo del tiempo) y una red lo transcribe. Modelos actuales como
+<strong>Whisper</strong> son multilingües y funcionan también en
+gallego.</li>
+<li><strong>Síntesis de voz (TTS):</strong> históricamente por
+<strong>concatenación</strong> de trozos grabados o por
+<strong>formantes</strong> (simulando el tracto vocal); hoy con redes
+neuronales que suenan casi humanas. Para gallego existen voces
+sintéticas desarrolladas por el proyecto <strong>Nós</strong>.</li>
+</ul>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Colab: transcribir un audio con Whisper</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>asr <span class="op">=</span> pipeline(<span class="st">&quot;automatic-speech-recognition&quot;</span>, model<span class="op">=</span><span class="st">&quot;openai/whisper-small&quot;</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(asr(<span class="st">&quot;mi_audio.mp3&quot;</span>, generate_kwargs<span class="op">=</span>{<span class="st">&quot;language&quot;</span>: <span class="st">&quot;galician&quot;</span>})[<span class="st">&quot;text&quot;</span>])</span></code></pre></div>
+<h3
+id="ejercicio-71--transcripción-con-ruido--retos-93-y-96-tarea">Ejercicio
+7.1 · Transcripción con ruido 🟡 (retos 9.3 y 9.6, tarea)</h3>
+<p>Graba la misma frase en silencio, con música, en el patio y hablando
+muy rápido. Inclúyela en gallego y con palabras difíciles (topónimos,
+<em>gheada</em>). Haz una tabla con los errores en cada caso.</p>
+<div class="sol-lock" data-label="Solución orientativa" data-iv="+hIQKvMzvaNODmpV" data-ct="ToLfcJPfiqcb6jH8osU0ml1OLihu4UOyK8rC5+hYTOa9v62A0h/GA4Ynn3DKSo51xOKCheAFkuAj9+C4ES/xOR0iLz4j0swpWzJyz8YV+xfOJxAKPIDzJ9FKWnwspmKeUOViMc/YUc0dTTlCU1LbcMpdFeAnrP+DY6rW1noIlW3jtPVwYFEbDBVH1d22RaAnkC63kS4QynA+0c3P5ffZK8LojiszS/Duv3o6Sj0uGLZ+EQP0YmfxJpFer9FuNhrbB8oiolfTPaamrhM3mkSXWD30u4uYg3iuLQRmvYAJh+lVZ77C4A46CZXxBRxxvhgz3DTqhCsTg9ca4rtQKbHI/OnSNcxDhmwOE5myYLUnLVcdihfcgc4R9RpR9udacCdyOB9FLfj1W4BsDxCAjyU/w7yWmX5yvE/sRffNIWuT1FKBRe4mvpq9Gi7TxTCDpqffyygh0jx/L7MGTYCovvPh1jICRgAOlvyBDbD9ggVdwSU+VwiMyhcyQwEY7ae6MM3cWkmOAqAGNK0C6ow34TrnLIa6zcYhxRwqByVlfBmLURu4iRHkoYqM/22v0MkuxeqcxfD/N7Njc5S+JlmFzgG+f6rW6dGWUKMhvmjRF8VjaYmkzT0Uf/CXPZCY66tMFNX9y85uQMhuztSl8V7nnM//WKBOzkF178jWqIuGmY0kpuFhvwK5s4oFireDGOwVJabGKfLI"></div>
+
+<hr />
+<h2 id="8-modelos-de-lenguaje">8. Modelos de lenguaje</h2>
+<p>Un <strong>modelo de lenguaje</strong> asigna probabilidades a la
+siguiente palabra (token) dado el texto anterior. Evolución: reglas →
+<strong>n-gramas</strong> (contar qué palabra sigue a cada par de
+palabras) → redes recurrentes → <strong>Transformers</strong> (2017),
+que con el mecanismo de <strong>atención</strong> relacionan cada
+palabra con todas las demás del contexto.</p>
+<ul>
+<li><strong>LLM</strong> (<em>Large Language Model</em>): Transformers
+con miles de millones de parámetros entrenados con corpus gigantescos. A
+partir de cierto tamaño aparecen <strong>propiedades
+emergentes</strong>: resumir, traducir o razonar sin haber sido
+entrenados específicamente para ello.</li>
+<li><strong>Encoder</strong> (BERT): entiende textos, útil para
+clasificar y para embeddings. <strong>Decoder</strong> (GPT): genera
+texto. <strong>Encoder-decoder</strong> (T5): traducir o resumir.</li>
+<li><strong>Cómo funciona un chat:</strong> al pulsar Enter, el modelo
+recibe un <strong>contexto inicial</strong> oculto (instrucciones y
+personaje), <strong>todo el historial</strong> de la conversación y la
+pregunta nueva, y genera la continuación token a token.</li>
+<li><strong>Decodificación:</strong> elegir siempre el token más
+probable (<em>greedy</em>) da textos repetitivos;
+<strong>muestrear</strong> con una <strong>temperatura</strong> da
+variedad (baja = predecible, alta = creativa e incoherente).</li>
+<li><strong>Limitaciones:</strong> <strong>alucinaciones</strong>
+(inventa datos con total seguridad), sesgos del corpus, fecha de corte
+del conocimiento, no cita fuentes de forma fiable. <strong>Siempre hay
+que verificar.</strong></li>
+</ul>
+<p><strong>Técnicas de prompting:</strong> dar <strong>rol y
+contexto</strong>, indicar el <strong>formato</strong> de salida, poner
+<strong>ejemplos</strong> (<em>few-shot</em>), pedir que razone
+<strong>paso a paso</strong>, pedir que diga «no lo sé» si no está
+seguro, y pedir <strong>fuentes</strong> que luego compruebas.</p>
+<h3 id="ejercicio-81--un-generador-de-texto-con-bigramas-">Ejercicio 8.1
+· Un generador de texto con bigramas 🟡</h3>
+<p>Programa un «mini modelo de lenguaje»: cuenta qué palabra sigue a
+cada palabra en un texto y genera frases eligiendo la siguiente al azar
+según esas frecuencias.</p>
+<div class="sol-lock" data-label="Solución" data-iv="1MwDwNC0HvEtcczh" data-ct="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"></div>
+
+<h3
+id="ejercicio-82--cuaderno-de-verificación--ca44-ca45-tarea">Ejercicio
+8.2 · Cuaderno de verificación 🟡 (CA4.4, CA4.5, tarea)</h3>
+<p>Haz 5 preguntas a una IA (una de historia local, una de ciencias, una
+de actualidad, una con trampa y un cálculo). Contrasta cada respuesta
+con dos fuentes y clasifícala como correcta, imprecisa o inventada.
+Repite la peor con una técnica de prompting que la mejore.</p>
+<div class="sol-lock" data-label="Qué se espera" data-iv="cu6+pf813LzA5FU4" data-ct="sZsIcJFeYmSUkSiSCg7vacsWMs1GLcugngpX2x9LLS7TaGZYx8fzoQ4SQAJwSYxgH/I5wmBhfen1kMOoNn2V7soVewTUTXY8PYH2m7kFdhLQbtFSu4VAkFLqrdUlru7HVMiEm1X02SheOuG+8mUDr2Yaka3O/XcjBWX1lCWOhdyPNEXvfPYKmToo9mpuNUDN+8CLWx1TL3mEs5TTRA+/Wemy36AOvuXZclUEnmG3KHRvu4k68d1mCnsS1fgK3Rw/IPI2AZl80HUOXCB/hTFiQZU9zsOHshdFmv+psaMz7IttR1f/966KDDVRUh+Gf6ctAoVFP4ptw5vVcFDAjA/HzqM/GZLL9qGrn6aS/eQXFhOczGZZj95qf1CsyOEGUMD9aQ9ByhAiqZ97Sj2xjGDmfrY8zBmQDEgLMUu37eFUNu/6OQyDB/7vWY9JUdkZTyea01MwK7Q3exgg8zKuIFGzz9sjdInLtb9EBPWCQg3o0yXPVrCjf4PLs84qPzAlVCuCxcEI38tfl6dPagwlFtnTmUgRF1KBSSAU972TWwttGG+3nR0vs4IrEsKJq4RJnXV8+jX3YMSP5M1VMh90e/Ki9B1qHC/s6BKJA3YRrAJPPi+Pw8O4XxzHi+Ew92L9MhSEk1DfCTRVIRfMuTJPUzojvr5zlOKTbmB8dFQPTiklVLD4puZKsGsOIMpf0C3hOJxIn/wVB7jnYj4J0kZIm4GRQu6Y64FxgCrn/FYJBJAlJHkkBUp8gz/Fsfd748Jkg8zZYi3TqjF2KWpP6L2PDSRgXA30q83Hyyxo4dn+jCh+xKfRVWdySsYiU08QHyN90E9262VMc/hWyApc7G71Om5zv+Yvl+XPKBbTlX/KImJZHqAIDfEL3l7gIQa0M0y6BgXOZWonZN4dkhol/+OVUw=="></div>
+
+<h3
+id="ejercicio-83--el-chat-barato-del-instituto--práctica-125-del-libro">Ejercicio
+8.3 · El «chat barato» del instituto 🔴 (práctica 12.5 del libro)</h3>
+<p>Un asistente que no genera texto: busca entre preguntas frecuentes la
+más parecida a la consulta y devuelve su respuesta.</p>
+<div class="sol-lock" data-label="Solución con TF-IDF" data-iv="TjxaAXFMfMHZsWBE" data-ct="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"></div>
+
+<hr />
+<h2 id="9-impacto-social-del-pln">9. Impacto social del PLN</h2>
+<ul>
+<li><strong>Lenguas con menos recursos:</strong> los modelos aprenden de
+lo que hay en internet, y hay mucho más inglés que gallego. Resultado:
+peor calidad, errores de normativa y castellanismos, y riesgo de que la
+tecnología <strong>arrincone</strong> a las lenguas minorizadas.
+Iniciativas como el <strong>Proxecto Nós</strong> (CiTIUS, Universidade
+de Santiago) crean corpus, traductores, voces y modelos para el
+gallego.</li>
+<li><strong>Desinformación</strong> y textos generados a escala;
+<strong>suplantación</strong> con clonación de voz.</li>
+<li><strong>Detección de texto generado por IA:</strong> los detectores
+fallan mucho y castigan injustamente a quien escribe en una lengua que
+no es la suya. No son prueba suficiente de nada.</li>
+<li><strong>Empleo:</strong> traducción, atención al cliente,
+redacción.</li>
+<li><strong>Privacidad:</strong> lo que escribes en un chatbot puede
+usarse para entrenar.</li>
+</ul>
+<h3 id="ejercicio-91--debate-a-dos-bandos--cap-13">Ejercicio 9.1 ·
+Debate a dos bandos 🟡 (cap. 13)</h3>
+<p>«Los LLM salvarán al gallego» frente a «los LLM acelerarán su
+retroceso». Cada bando, tres argumentos con fuentes.</p>
+<div class="sol-lock" data-label="Argumentos de partida" data-iv="JtWD4XWxdmdc5Ugi" data-ct="OJUooaE+/O5i1Cr1N/+hIAkhCfvwpTihVOPiua4dGZPFEEjmwMPMi8Vu1GIPBc/quvjLUcgc8ugjPTDgLuw8wc4zklPvz489k+/tMVo+MC4MsIz62us/1aBpFgVJHtL8g1QFup4Q/EMxG0T8D82h4k300bBqaZowA23oDXaZCNFR3otU5VotpoLIo8erXubcaftfCA8tvnl6tNt1mT4hczkl+aoRpXfIxGK/bh6cvb8437lWbv3q4dXj9LsbJwC6lavKZMmkjZOC9NOg9vImhTLCUasuHZk+/ODRnuIjM3Q2dCqy45hre+sRDaSZW+KXMAIk8GMHviRA//zLczVNwmP7ZZ2NhT4dsmxzUCNzZql5OjkdxCviNhDenMTMxdbb2ITsaoCLi9ASgmbgkN/Zof7Sx0zLRTXJNKOrwGebSde4pFYnjHa+3eP8kQApS9YU6dDsxgWJc1l8eJGfd5rKa1JMXbyLgZS+cKv2x6hNb6KofFdqtXOqROINI5eijU1WjDAD5yDH6qZaaYGjyGHrRnZfCa5NprGOLY7r48ApT1UmuT58PjOncqQMO5yC3+8Suo5dxYi1eqSlxVW5XlcSw786gRAzjDpGAZkybihYAh1mkafMCrdNSzV0Ta7G/BWCmDv70T4Jvp71H9XRTMOtKxQ0GkBgZTpxp4po65lEV5AlAqCS50Q2mkO8b7gVuYM5yOZLXUlFQbQRDIZ+fxQzSEGEG0lM2KmK5DN4ShNqvk/O3DVZ8ILy3fJpLYFOyyT0pM5FCOZdyfrwUnIoTd/Ndt2OAKRstJw="></div>
+
+<hr />
+<h2 id="proyecto-de-la-unidad-ca46">Proyecto de la unidad (CA4.6)</h2>
+<p>Elige uno y preséntalo en 5–10 minutos:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Opción</th>
+<th>Qué hace</th>
+<th>Requisitos mínimos</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>A · Chat barato</strong></td>
+<td>Asistente de preguntas frecuentes del instituto (secretaría,
+biblioteca, horarios)</td>
+<td>15 preguntas, umbral de «no lo sé», prueba con 10 consultas reales y
+tabla de aciertos</td>
+</tr>
+<tr class="even">
+<td><strong>B · Clasificador de textos</strong></td>
+<td>Spam, tema de noticias o reseñas positivas y negativas</td>
+<td>Dataset público o propio de 200+ textos, TF-IDF + 2 clasificadores,
+matriz de confusión</td>
+</tr>
+<tr class="odd">
+<td><strong>C · Radioteatro</strong></td>
+<td>Guion breve convertido en audio con síntesis de voz (reto 9.14)</td>
+<td>3 personajes con voces distintas, reflexión sobre clonación de
+voz</td>
+</tr>
+<tr class="even">
+<td><strong>D · Analizador de opiniones</strong></td>
+<td>Sentimiento de comentarios sobre un tema</td>
+<td>50+ comentarios anonimizados, comparación léxico frente a
+Transformer, gráfico de resultados</td>
+</tr>
+</tbody>
+</table>
+<h2 id="preguntas-tipo-de-examen">Preguntas tipo de examen</h2>
+<ol type="1">
+<li>Diferencia entre <em>stemming</em> y lematización, con un
+ejemplo.</li>
+<li>¿Por qué no se pueden representar las palabras simplemente
+numerándolas?</li>
+<li>Calcula la similitud de Jaccard entre dos frases dadas.</li>
+<li>¿Qué mide TF-IDF y por qué es mejor que contar palabras?</li>
+<li>Cita tres limitaciones de los LLM y una técnica de prompting para
+cada una.</li>
+<li>¿Por qué los sistemas de PLN funcionan peor en gallego que en
+inglés?</li>
+</ol>
+<div class="sol-lock" data-label="Respuestas modelo" data-iv="ycYnFH/+W2WrI+VI" data-ct="/f+kNJFuKgXThmq3W1/5nFg/BuxwHuu85qMQqb4HYoEPqLgNLGjNqrDfwSpMFXB7WFMvrEcWpSt7tI579qfZpchDMIucigSSdnwqjw/Wvgm/lkRG3mSifIDcW7ts/jSnsAQShwJXEtas2na62TFSXNzneqQBjMO0DNLz7HVOesx9GqJvH5f+hNv/VrhoU8NNxH9N34qW1Q2iUmVTJSqB6/cwxNTbFYcVuXlHLMj9FAdZokGxXwLpdaqf0M/eSma8iLPzKykwlIWcJEtpl9II1XSrqXYS4TYlpIz5B0MJ1Rm0wscg6pByzsdyZ+ipRBn50gY2ZjwZ73xBsruvgBoFQHo5vfnUFSO9PIaUy1DAUJP458VuqIY/2xB9hNs7bjVHKgk9wIUyInqST/SFKJOqxOBPiiTMTy8i/3MXXDaBX2SN2Zpy+hX6MYUQcA1QjgokuNlDqUedstfwDOTohgQ7Qfe6zTsWtUSmYqRjQfaFBe878Z2F3LMMB1copSRfLOV3BvdbhKMuVgdIBevVzDvbfOlmqM2Zp/LVx6pDe0kZFlaQB477ZD37xt5zGne4YeKi+yGOnx3IeiAK4XGBJ/eijHunC7YmL2j4YvqP3Pw/VtgzUo7BzJ0M6hDX/QkBbxV3Jc82aE7A0zl2PDAXrucvPBERAzcY0tTU9dvVIocnBxl/jMDxC9h25iLaz7JgieQ+odq0u0cU1SAk6Ak+y6jFwt6houyURR2mUjEwtgwzAFzBvWMWAuyYhuHDsffA1lwhIFb4NmA6gN1JJUzdKtS+qy9/eait0hxIENnR7Rnyv6yjy3+OxPB9XaxVJ1L4TyuwP3tSwOyZPhDcBnex8z4ukobi8GKYTBwvXJER9I8LIRdq6DFpQyUEdu/pYfgK0wzHSJzLAYM3KzWvfKGQ8/8Kyy8kHmthOUnLmGUMavKhkZXcL4xlKyTjY7q+y/T8hwGuW+mQctNxJ5NR+IptRkv5FCuB6HrbngOGaBOcRFkrlZ8HTj1YcrpW24RGmoxY1WrUvAXCu2N1nrlTq7BUQ9e3y8yVKyAwTR4LGxYlJXIpqGAQ2WpblJCFsw0g3LFhkJbkU7pcQFyFnnWvM9nTqamovVME0+f/NPGj128yJ+D5JFKE483VmKSW6oDuc+xSF/6/ztYMBOV8O75eUISn/Huzxb91DNsO5yCA5TCt/ZgOun/mNlxQZICwMxVr3vBXzuAYLw/9KooTnaDzlxQ820nIzvG5SxGsGKPZPZxO69rCbvHzHRI8Gh4FqW4Z9wJNxX2W59qIghoBIjFjB/DREDdJ0+2Bxwjy+U3UHIm5JtCKhA=="></div>
+
+<h2 id="para-saber-más">Para saber más</h2>
+<ul>
+<li>Libro: Puentes Calvo (2025), caps. 8–13 y sus retos. Notebooks
+<code>Tokenización</code>, <code>10 Comparando textos</code>,
+<code>11 Análisis de sentimientos en textos</code>,
+<code>12 modelos de lenguaje</code> en <a
+href="https://github.com/FranPuentes/iTI2025">github.com/FranPuentes/iTI2025</a>.</li>
+<li>Tokens, embeddings, prompting y RAG en la <a
+href="teoria.html#148-ia-generativa-y-modelos-de-lenguaje-llm">Teoría,
+sección 14.8</a>.</li>
+<li>Recursos para el gallego: <a href="https://nos.gal/">Proxecto
+Nós</a>.</li>
+</ul>
+  </article>
+</main>
+<footer class="site"><div class="in">
+  <span>IA · Apuntes · Tecnoloxías Intelixentes · 1.º Bacharelato</span>
+  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0)</span>
+</div></footer>
+<a class="up" href="#">↑ Arriba</a>
+<script>
+(function () {
+  document.querySelectorAll("article.content table").forEach(function (t) {
+    var w = document.createElement("div"); w.className = "table-wrap";
+    t.parentNode.insertBefore(w, t); w.appendChild(t);
+  });
+  var toc = document.getElementById("TOC"), btn = document.querySelector(".toc-toggle");
+  if (btn && toc) btn.addEventListener("click", function () {
+    var o = toc.classList.toggle("open"); btn.setAttribute("aria-expanded", o);
+  });
+  if (!toc || !("IntersectionObserver" in window)) return;
+  var links = {}; toc.querySelectorAll("a").forEach(function (a) { links[decodeURIComponent(a.getAttribute("href").slice(1))] = a; });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting && links[e.target.id]) {
+        toc.querySelectorAll("a.on").forEach(function (x) { x.classList.remove("on"); });
+        links[e.target.id].classList.add("on");
+      }
+    });
+  }, { rootMargin: "-70px 0px -70% 0px" });
+  document.querySelectorAll("article.content h2[id], article.content h3[id]").forEach(function (h) { io.observe(h); });
+})();
+</script>
+<script>
+/* Soluciones cifradas (AES-GCM + PBKDF2). Sin la contraseña, el contenido no se puede leer. */
+(function () {
+  var art = document.querySelector("article.content[data-salt]");
+  if (!art) return;
+  var locks = art.querySelectorAll(".sol-lock");
+  if (!locks.length) return;
+  var KEY = "ia-apuntes-sol";
+  function b64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function derive(pass) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(art.dataset.salt), iterations: +art.dataset.iter, hash: "SHA-256" },
+        k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    });
+  }
+  function unlockAll(pass) {
+    return derive(pass).then(function (key) {
+      var first = locks[0];
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(first.dataset.iv) }, key, b64(first.dataset.ct)).then(function () {
+        var dec = new TextDecoder();
+        return Promise.all(Array.prototype.map.call(locks, function (el) {
+          return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(el.dataset.iv) }, key, b64(el.dataset.ct)).then(function (buf) {
+            var tmp = document.createElement("div"); tmp.innerHTML = dec.decode(buf);
+            var d = tmp.firstElementChild; el.replaceWith(d);
+            return d;
+          });
+        }));
+      });
+    }).then(function (opened) {
+      try { sessionStorage.setItem(KEY, pass); } catch (e) {}
+      return opened;
+    });
+  }
+  locks.forEach(function (el) {
+    var label = el.dataset.label || "Solución";
+    el.innerHTML =
+      '<button type="button" class="sol-btn"><span aria-hidden="true">🔒</span> ' + label + ' <small>· con contraseña</small></button>' +
+      '<form class="sol-form" hidden><label>Contraseña del profesorado <input type="password" autocomplete="off" required></label>' +
+      '<button type="submit">Abrir</button><span class="sol-msg" role="status"></span></form>';
+    var b = el.querySelector(".sol-btn"), f = el.querySelector(".sol-form"), msg = el.querySelector(".sol-msg");
+    b.addEventListener("click", function () { f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); });
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var pass = f.querySelector("input").value;
+      msg.textContent = "Comprobando…";
+      var idx = Array.prototype.indexOf.call(locks, el);
+      unlockAll(pass).then(function (opened) {
+        var mine = opened[idx]; if (mine) { mine.open = true; mine.scrollIntoView({ block: "nearest" }); }
+      }).catch(function () { msg.textContent = "Contraseña incorrecta."; });
+    });
+  });
+  var saved = null; try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlockAll(saved).catch(function () { try { sessionStorage.removeItem(KEY); } catch (e) {} });
+})();
+</script>
+</body>
+</html>

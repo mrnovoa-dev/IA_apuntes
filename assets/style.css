@@ -122,3 +122,25 @@ code span.im { color: var(--c-dl); }
   .toc-toggle { display: inline-block; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font: 700 .9rem var(--font-body); color: var(--ink); cursor: pointer; }
   body { font-size: 16px; }
 }
+
+/* Páginas de unidad y ejercicios */
+.ud-head { border-left: 5px solid var(--c); background: var(--surface); border-radius: 0 var(--r) var(--r) 0; padding: 12px 18px; margin: 0 0 18px; }
+.ud-head .k { font-family: var(--font-mono); font-size: .76rem; letter-spacing: .06em; text-transform: uppercase; color: var(--c); font-weight: 600; }
+.ud-head p { margin: 4px 0 0; color: var(--muted); }
+article.content details { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; margin: .8em 0; padding: 0 14px; max-width: 100%; }
+article.content details > summary { cursor: pointer; font-weight: 700; padding: 9px 0; color: var(--ink); list-style-position: inside; }
+article.content details[open] { padding-bottom: 6px; }
+article.content details[open] > summary { border-bottom: 1px dashed var(--line); margin-bottom: 8px; }
+article.content details.sol { border-left: 4px solid var(--c-visual); }
+article.content details.sol > summary::after { content: " 🔓"; font-weight: 400; }
+.sol-lock { margin: .8em 0; }
+.sol-btn { display: inline-flex; gap: 6px; align-items: center; background: var(--sunk); border: 1px dashed var(--line); border-radius: 8px; padding: 9px 14px; font: 700 .95rem var(--font-body); color: var(--ink); cursor: pointer; }
+.sol-btn small { font-weight: 400; color: var(--muted); }
+.sol-btn:hover { border-color: var(--c-visual); }
+.sol-form { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; font-size: .92rem; }
+.sol-form[hidden] { display: none; }
+.sol-form label { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); }
+.sol-form input { font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--ink); min-width: 0; width: 13em; }
+.sol-form button { font: 700 .9rem var(--font-body); padding: 7px 14px; border-radius: 6px; border: 0; background: var(--ink); color: var(--paper); cursor: pointer; }
+.sol-msg { color: var(--c-dl); font-weight: 700; }
+.block .nota { color: var(--muted); max-width: 78ch; margin: 0 0 14px; }

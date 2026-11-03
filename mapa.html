@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Mapa visual de Python para IA: librerías, conceptos y autoevaluación (UD2, Tecnoloxías Intelixentes).">
+<title>Mapa de Python para IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: guía de estudio en una columna ancha; el flujo de 4 etapas (datos → explorar → modelar → publicar) es el hilo que recorre toda la página y da color a cada familia de librerías */
+:root {
+  --paper: #F2F6F7;
+  --surface: #FFFFFF;
+  --sunk: #E7EEF1;
+  --ink: #13212C;
+  --muted: #566672;
+  --line: #D3DDE2;
+  --accent: #E3A008;
+  --accent-ink: #8A5D00;
+  --c-base: #5B6B78;
+  --c-datos: #2563C9;
+  --c-visual: #0B8577;
+  --c-ml: #7340B8;
+  --c-dl: #C7365F;
+  --c-texto: #C2620F;
+  --c-imagen: #3D8A22;
+  --c-escritorio: #44568C;
+  --c-web: #0379A0;
+  --c-bigdata: #85592F;
+  --c-auto: #A1367F;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E171E; --surface: #15212A; --sunk: #1B2A35; --ink: #E6EEF2; --muted: #9AABB6; --line: #2A3B47;
+    --accent: #F2B636; --accent-ink: #F5C55C;
+    --c-base: #A2B1BC; --c-datos: #6E9CF0; --c-visual: #3CC2AF; --c-ml: #AE88EC; --c-dl: #F07397;
+    --c-texto: #F29A4E; --c-imagen: #7DC85A; --c-escritorio: #8FA2DA; --c-web: #4FBCE0; --c-bigdata: #C99766; --c-auto: #E487C6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0E171E; --surface: #15212A; --sunk: #1B2A35; --ink: #E6EEF2; --muted: #9AABB6; --line: #2A3B47;
+  --accent: #F2B636; --accent-ink: #F5C55C;
+  --c-base: #A2B1BC; --c-datos: #6E9CF0; --c-visual: #3CC2AF; --c-ml: #AE88EC; --c-dl: #F07397;
+  --c-texto: #F29A4E; --c-imagen: #7DC85A; --c-escritorio: #8FA2DA; --c-web: #4FBCE0; --c-bigdata: #C99766; --c-auto: #E487C6;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(64px + env(safe-area-inset-top, 0px)); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.wrap {
+  max-width: 1120px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.12; }
+h2 { font-size: clamp(1.6rem, 3.2vw, 2.2rem); font-weight: 800; letter-spacing: -0.01em; }
+h3 { font-size: 1.15rem; font-weight: 700; }
+p { margin: 0; }
+code, .mono { font-family: var(--font-mono); font-size: 0.86em; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+/* Navegación */
+.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+}
+.nav .wrap { display: flex; gap: 6px; overflow-x: auto; padding-block: 10px; scrollbar-width: none; }
+.nav .wrap::-webkit-scrollbar { display: none; }
+.nav a {
+  flex: none; text-decoration: none; font-size: 0.86rem; font-weight: 700;
+  padding: 6px 12px; border-radius: 999px; color: var(--muted);
+}
+.nav a:hover { background: var(--sunk); color: var(--ink); }
+.nav .brand { color: var(--ink); font-family: var(--font-display); font-weight: 800; padding-left: 0; }
+
+section { padding-block: 56px; border-bottom: 1px solid var(--line); }
+.eyebrow {
+  font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent-ink); font-weight: 600; margin-bottom: 10px;
+}
+.lead { color: var(--muted); max-width: 64ch; margin-top: 12px; font-size: 1.05rem; }
+.sec-head { margin-bottom: 28px; }
+
+/* Hero */
+.hero { padding-block: 48px 40px; }
+.hero h1 { font-size: clamp(2.3rem, 6vw, 4rem); font-weight: 800; letter-spacing: -0.02em; max-width: 16ch; }
+.hero h1 em { font-style: normal; color: var(--accent-ink); }
+.hero .lead { font-size: 1.12rem; }
+.meta-row { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 18px; color: var(--muted); font-size: 0.9rem; }
+.meta-row b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* Flujo de 4 etapas */
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 36px; counter-reset: etapa; }
+.stage {
+  position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 18px 16px 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0;
+}
+.stage::after {
+  content: "→"; position: absolute; right: -14px; top: 22px; width: 14px; text-align: center;
+  color: var(--muted); font-weight: 700;
+}
+.stage:last-child::after { content: none; }
+.stage .num { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+.stage h3 { font-size: 1.3rem; }
+.stage p { color: var(--muted); font-size: 0.92rem; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill {
+  font-family: var(--font-mono); font-size: 0.76rem; font-weight: 600; padding: 3px 8px; border-radius: 6px;
+  color: var(--fam); background: color-mix(in srgb, var(--fam) 13%, transparent);
+  border: 1px solid color-mix(in srgb, var(--fam) 30%, transparent);
+}
+.stage .ud { font-size: 0.8rem; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 8px; margin-top: auto; }
+
+/* Ruta del curso */
+.bar { display: flex; height: 46px; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+.bar div {
+  display: flex; align-items: center; justify-content: center; min-width: 0; overflow: hidden;
+  font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; color: var(--surface); white-space: nowrap;
+}
+.bar-scale { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
+.uds { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
+.ud-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ud-card .tag { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--font-mono); font-size: 0.76rem; color: var(--muted); }
+.ud-card .tag b { color: var(--udc); font-size: 0.9rem; }
+.ud-card h3 { font-size: 1.05rem; }
+.ud-card ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 0.88rem; display: grid; gap: 3px; }
+.note { margin-top: 18px; font-size: 0.85rem; color: var(--muted); max-width: 80ch; }
+
+/* Conceptos */
+.concepts { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 20px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; min-width: 0; }
+.panel h3 { margin-bottom: 12px; }
+.panel > p { color: var(--muted); font-size: 0.92rem; }
+.venn { width: 100%; max-width: 460px; height: auto; display: block; margin: 4px auto 0; }
+.types { display: grid; gap: 10px; margin-top: 4px; }
+.type { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; align-items: start; }
+.type .ic { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; background: var(--sunk); font-family: var(--font-mono); font-weight: 600; color: var(--c-ml); font-size: 0.8rem; }
+.type b { display: block; }
+.type span { color: var(--muted); font-size: 0.88rem; }
+.etl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.etl div { background: var(--sunk); border-radius: 8px; padding: 12px; min-width: 0; }
+.etl b { font-family: var(--font-display); font-size: 1.05rem; display: block; color: var(--c-datos); }
+.etl span { font-size: 0.85rem; color: var(--muted); }
+.etl code { display: block; margin-top: 6px; font-size: 0.74rem; color: var(--ink); overflow-wrap: anywhere; }
+.five { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.five div { text-align: center; background: var(--sunk); border-radius: 8px; padding: 10px 4px; min-width: 0; }
+.five b { display: block; font-family: var(--font-display); font-size: 1.6rem; color: var(--c-bigdata); line-height: 1; }
+.five span { font-size: 0.76rem; color: var(--muted); }
+.span-2 { grid-column: 1 / -1; }
+.ud1 { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.ud1 div { background: var(--sunk); border-radius: 8px; padding: 10px 12px; min-width: 0; }
+.ud1 b { display: block; font-size: 0.93rem; color: var(--c-base); }
+.ud1 span { font-size: 0.84rem; color: var(--muted); }
+.cycle { list-style: none; counter-reset: c; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.cycle li { counter-increment: c; background: var(--sunk); border-radius: 8px; padding: 10px 12px; min-width: 0; }
+.cycle li b::before { content: counter(c) " · "; color: var(--c-dl); }
+.cycle b, .tokflow b, .acts b { display: block; font-size: 0.92rem; }
+.cycle span, .tokflow span, .acts span { font-size: 0.83rem; color: var(--muted); overflow-wrap: anywhere; }
+.acts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.acts div { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-width: 0; }
+.acts b { color: var(--c-dl); font-family: var(--font-mono); }
+.tokflow { display: grid; gap: 8px; margin-top: 4px; }
+.tokflow div { background: var(--sunk); border-radius: 8px; padding: 10px 12px; border-left: 4px solid var(--c-texto); min-width: 0; }
+.tokflow b { color: var(--c-texto); }
+.more { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.pipe { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.pipe span { background: var(--sunk); border-radius: 999px; padding: 4px 10px; font-size: 0.8rem; font-family: var(--font-mono); }
+.pipe span:not(:last-child)::after { content: " →"; color: var(--muted); }
+.big-o { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px 12px; align-items: center; margin-top: 6px; font-size: 0.86rem; }
+.big-o code { font-weight: 600; }
+.big-o .bar { height: 10px; border-radius: 99px; background: var(--c-auto); }
+.big-o em { font-style: normal; color: var(--muted); font-family: var(--font-mono); font-size: 0.76rem; text-align: right; }
+.src { columns: 2 240px; column-gap: 24px; margin: 0; padding-left: 18px; color: var(--muted); font-size: 0.86rem; }
+.src li { break-inside: avoid; margin-bottom: 6px; }
+.src b { color: var(--ink); }
+
+/* Biblioteca de librerías */
+.filters { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips .lbl { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); align-self: center; margin-right: 4px; min-width: 64px; }
+.chip {
+  font: inherit; font-size: 0.84rem; font-weight: 700; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  padding: 5px 12px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px;
+}
+.chip .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--fam, var(--muted)); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.search { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.search input {
+  font: inherit; font-size: 0.95rem; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); width: min(320px, 100%);
+}
+.count { font-size: 0.88rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.libs { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.lib {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0;
+}
+.lib-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.lib h3 { font-size: 1.08rem; }
+.lib .fam { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fam); font-weight: 600; white-space: nowrap; }
+.lib p { font-size: 0.9rem; color: var(--muted); }
+.lib pre {
+  margin: 0; background: var(--sunk); border-radius: 6px; padding: 7px 9px; overflow-x: auto;
+  font-family: var(--font-mono); font-size: 0.76rem; color: var(--ink);
+}
+.lib-foot { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: auto; }
+.udtag { font-family: var(--font-mono); font-size: 0.7rem; padding: 2px 7px; border-radius: 5px; background: var(--sunk); color: var(--ink); font-weight: 600; }
+.lvl { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-left: auto; }
+.lvl.conocer { color: var(--muted); border: 1px solid var(--line); }
+.lvl.usar { color: var(--paper); background: var(--ink); }
+.lvl.ampliar { color: var(--accent-ink); border: 1px solid var(--accent); }
+.empty { padding: 30px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: var(--r); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; font-size: 0.82rem; color: var(--muted); }
+.legend span { display: inline-flex; gap: 6px; align-items: center; }
+
+/* Comparativas */
+.vs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.vs { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.vs-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.vs-head .x { font-family: var(--font-mono); color: var(--muted); font-size: 0.8rem; }
+.vs-head b { font-family: var(--font-display); font-size: 1.2rem; }
+.vs-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.vs-cols.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.vs-col { border-top: 3px solid var(--fam); padding-top: 8px; min-width: 0; }
+.vs-col b { display: block; font-size: 0.95rem; }
+.vs-col ul { margin: 6px 0 0; padding-left: 16px; font-size: 0.85rem; color: var(--muted); display: grid; gap: 3px; }
+.verdict { background: var(--sunk); border-radius: 8px; padding: 10px 12px; font-size: 0.9rem; }
+.verdict b { color: var(--accent-ink); }
+
+/* Decisión */
+.decide { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-top: 22px; }
+.q { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; min-width: 0; }
+.q .a { margin-left: auto; text-align: right; flex: none; }
+.q .a .pill { display: inline-block; }
+.q p { font-size: 0.9rem; min-width: 0; }
+
+/* Ejercicios */
+.ex-strip { display: grid; grid-template-columns: repeat(27, minmax(0, 1fr)); gap: 3px; }
+.ex { aspect-ratio: 1 / 1.5; border-radius: 4px; background: var(--fam); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 3px; font-family: var(--font-mono); font-size: 0.6rem; color: var(--surface); font-weight: 600; min-width: 0; overflow: hidden; }
+.phases { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 18px; }
+.phase { border-left: 4px solid var(--fam); padding: 4px 0 4px 12px; min-width: 0; }
+.phase b { display: block; font-size: 0.95rem; }
+.phase .r { font-family: var(--font-mono); font-size: 0.74rem; color: var(--fam); font-weight: 600; }
+.phase span { font-size: 0.85rem; color: var(--muted); display: block; }
+.next { margin-top: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--muted); }
+.next .arrow { font-family: var(--font-mono); }
+
+/* Herramientas */
+.tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.trow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.trow:last-child { border-bottom: 0; }
+.trow b { font-size: 0.98rem; }
+.trow span { color: var(--muted); font-size: 0.86rem; grid-column: 1; }
+.trow .when { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-family: var(--font-mono); font-size: 0.72rem; text-align: right; color: var(--accent-ink); font-weight: 600; }
+
+/* Checklist */
+.check-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.progress { min-width: min(260px, 100%); }
+.progress .track { height: 10px; border-radius: 999px; background: var(--sunk); overflow: hidden; border: 1px solid var(--line); }
+.progress .fill { height: 100%; width: 0; background: var(--accent); transition: width .25s ease; }
+.progress .txt { font-size: 0.85rem; color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; text-align: right; }
+.checks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.checks fieldset { border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); padding: 14px 16px; margin: 0; min-width: 0; }
+.checks legend { font-family: var(--font-display); font-weight: 700; padding: 0 6px; }
+.checks label { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; font-size: 0.92rem; cursor: pointer; }
+.checks input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+.reset { font: inherit; font-size: 0.85rem; background: none; border: 1px solid var(--line); color: var(--muted); padding: 5px 12px; border-radius: 999px; cursor: pointer; margin-top: 14px; }
+
+footer { padding-block: 32px 48px; color: var(--muted); font-size: 0.86rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+
+@media (max-width: 960px) {
+  .uds { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .checks { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 820px) {
+  .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stage::after { content: none; }
+  .concepts, .vs-grid, .tools, .more { grid-template-columns: minmax(0, 1fr); }
+  .ex-strip { grid-template-columns: repeat(9, minmax(0, 1fr)); }
+  .ex { aspect-ratio: auto; height: 30px; font-size: 0.68rem; align-items: center; padding: 0; }
+}
+@media (max-width: 520px) {
+  section { padding-block: 40px; }
+  .flow, .uds { grid-template-columns: minmax(0, 1fr); }
+  .etl { grid-template-columns: minmax(0, 1fr); }
+  .five b { font-size: 1.25rem; }
+  .vs-cols.three { grid-template-columns: minmax(0, 1fr); }
+  .q { flex-wrap: wrap; }
+  .q .a { margin-left: 0; text-align: left; }
+}
+</style>
+</head>
+<body>
+<a class="back-home" href="./" style="position:fixed;right:12px;bottom:12px;z-index:50;background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:999px;font:600 .85rem var(--font-body);text-decoration:none">← IA · Apuntes</a>
+<nav class="nav" aria-label="Secciones">
+  <div class="wrap">
+    <a class="brand" href="#inicio">Mapa Python IA</a>
+    <a href="#ruta">Ruta del curso</a>
+    <a href="#conceptos">Conceptos</a>
+    <a href="#librerias">Librerías</a>
+    <a href="#comparar">¿Cuál elijo?</a>
+    <a href="#ejercicios">Ejercicios</a>
+    <a href="#ampliacion">Ampliación</a>
+    <a href="#herramientas">Herramientas</a>
+    <a href="#repaso">Autoevaluación</a>
+  </div>
+</nav>
+
+<header class="hero" id="inicio">
+  <div class="wrap">
+    <div class="eyebrow">Tecnoloxías Intelixentes · 1º Bachillerato · Guía visual de estudio</div>
+    <h1>De los datos a una <em>app</em> que cualquiera puede usar</h1>
+    <p class="lead">Todo proyecto de IA del curso sigue el mismo camino en cuatro etapas. Cada librería de Python ocupa un lugar en ese camino. Si sabes en qué etapa estás, sabes qué librería usar.</p>
+    <div class="meta-row">
+      <span><b>140</b> sesiones</span>
+      <span><b>5</b> unidades</span>
+      <span><b>27</b> ejercicios Python (UD2)</span>
+      <span><b id="libCount">32</b> librerías y herramientas</span>
+    </div>
+
+    <div class="flow" aria-label="Flujo de un proyecto de IA">
+      <article class="stage">
+        <span class="num">Etapa 1</span>
+        <h3>Datos</h3>
+        <p>Cargar, limpiar y organizar. El proceso ETL: extraer, transformar, cargar.</p>
+        <div class="pills">
+          <span class="pill" style="--fam:var(--c-base)">Python</span>
+          <span class="pill" style="--fam:var(--c-datos)">NumPy</span>
+          <span class="pill" style="--fam:var(--c-datos)">Pandas</span>
+          <span class="pill" style="--fam:var(--c-bigdata)">PySpark</span>
+        </div>
+        <span class="ud">UD2 · E1–E22, E25</span>
+      </article>
+      <article class="stage">
+        <span class="num">Etapa 2</span>
+        <h3>Explorar</h3>
+        <p>Mirar los datos antes de decidir: gráficos, estadísticas y correlaciones (EDA).</p>
+        <div class="pills">
+          <span class="pill" style="--fam:var(--c-visual)">Matplotlib</span>
+          <span class="pill" style="--fam:var(--c-visual)">Seaborn</span>
+          <span class="pill" style="--fam:var(--c-visual)">Plotly</span>
+        </div>
+        <span class="ud">UD2 · E23, E24, E26</span>
+      </article>
+      <article class="stage">
+        <span class="num">Etapa 3</span>
+        <h3>Modelar</h3>
+        <p>Entrenar un modelo que aprende de los datos y medir cómo de bien predice.</p>
+        <div class="pills">
+          <span class="pill" style="--fam:var(--c-ml)">scikit-learn</span>
+          <span class="pill" style="--fam:var(--c-dl)">Keras</span>
+          <span class="pill" style="--fam:var(--c-dl)">PyTorch</span>
+          <span class="pill" style="--fam:var(--c-texto)">spaCy</span>
+          <span class="pill" style="--fam:var(--c-imagen)">OpenCV</span>
+        </div>
+        <span class="ud">UD2 lab. 3 · UD3 · UD4 · UD5</span>
+      </article>
+      <article class="stage">
+        <span class="num">Etapa 4</span>
+        <h3>Publicar</h3>
+        <p>Convertir el análisis o el modelo en una aplicación de escritorio o web.</p>
+        <div class="pills">
+          <span class="pill" style="--fam:var(--c-escritorio)">tkinter</span>
+          <span class="pill" style="--fam:var(--c-web)">Streamlit</span>
+          <span class="pill" style="--fam:var(--c-web)">Gradio</span>
+          <span class="pill" style="--fam:var(--c-web)">Flask</span>
+        </div>
+        <span class="ud">UD2 lab. 1 y capstone · proyectos UD3–UD5</span>
+      </article>
+    </div>
+  </div>
+</header>
+
+<section id="ruta">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Ruta del curso</div>
+      <h2>Cinco unidades, 140 sesiones</h2>
+      <p class="lead">La barra está a escala: UD2 ocupa la mitad del curso porque es la caja de herramientas que se usa hasta junio.</p>
+    </div>
+    <div class="bar" role="img" aria-label="Reparto de sesiones: UD1 10, UD2 70, UD3 15, UD4 20, UD5 25">
+      <div style="flex:10;background:var(--c-base)">UD1</div>
+      <div style="flex:70;background:var(--c-datos)">UD2 · Python · 70 sesiones</div>
+      <div style="flex:15;background:var(--c-texto)">UD3</div>
+      <div style="flex:20;background:var(--c-imagen)">UD4</div>
+      <div style="flex:25;background:var(--c-ml)">UD5</div>
+    </div>
+    <div class="bar-scale" aria-hidden="true"><span>0</span><span>35</span><span>70</span><span>105</span><span>140</span></div>
+
+    <div class="uds">
+      <article class="ud-card" style="--udc:var(--c-base)">
+        <div class="tag"><b>UD1</b><span>10 ses. · sept.</span></div>
+        <h3>Conceptos clave de IA</h3>
+        <ul><li>IA, ML y Deep Learning</li><li>Sensores, procesamiento, actuadores</li><li>Ética e impacto</li></ul>
+        <div class="pills"><span class="pill" style="--fam:var(--c-base)">TF Playground</span></div>
+      </article>
+      <article class="ud-card" style="--udc:var(--c-datos)">
+        <div class="tag"><b>UD2</b><span>70 ses. · oct.–feb.</span></div>
+        <h3>Programación en Python</h3>
+        <ul><li>Fundamentos y estructuras (1–28)</li><li>NumPy, Pandas, Matplotlib (29–46)</li><li>3 laboratorios + capstone (47–70)</li></ul>
+        <div class="pills"><span class="pill" style="--fam:var(--c-datos)">NumPy</span><span class="pill" style="--fam:var(--c-datos)">Pandas</span><span class="pill" style="--fam:var(--c-escritorio)">tkinter</span><span class="pill" style="--fam:var(--c-web)">Streamlit</span></div>
+      </article>
+      <article class="ud-card" style="--udc:var(--c-texto)">
+        <div class="tag"><b>UD3</b><span>15 ses. · feb.–mar.</span></div>
+        <h3>Lenguaje natural</h3>
+        <ul><li>Tokenizar y limpiar texto</li><li>Bag of Words, TF-IDF</li><li>Sentimientos y clasificación</li></ul>
+        <div class="pills"><span class="pill" style="--fam:var(--c-texto)">NLTK</span><span class="pill" style="--fam:var(--c-texto)">spaCy</span><span class="pill" style="--fam:var(--c-web)">Gradio</span></div>
+      </article>
+      <article class="ud-card" style="--udc:var(--c-imagen)">
+        <div class="tag"><b>UD4</b><span>20 ses. · mar.–abr.</span></div>
+        <h3>Visión artificial</h3>
+        <ul><li>La imagen como matriz</li><li>Filtros, bordes, contornos</li><li>CNN y transfer learning</li></ul>
+        <div class="pills"><span class="pill" style="--fam:var(--c-imagen)">OpenCV</span><span class="pill" style="--fam:var(--c-dl)">Keras</span><span class="pill" style="--fam:var(--c-dl)">PyTorch</span></div>
+      </article>
+      <article class="ud-card" style="--udc:var(--c-ml)">
+        <div class="tag"><b>UD5</b><span>25 ses. · abr.–jun.</span></div>
+        <h3>Machine Learning</h3>
+        <ul><li>Comparar algoritmos</li><li>Validación y métricas</li><li>Sesgos e interpretabilidad</li></ul>
+        <div class="pills"><span class="pill" style="--fam:var(--c-ml)">scikit-learn</span><span class="pill" style="--fam:var(--c-ml)">SHAP</span><span class="pill" style="--fam:var(--c-web)">FastAPI</span></div>
+      </article>
+    </div>
+    <p class="note">Numeración según los materiales del curso (UD3 Lenguaje natural, UD4 Visión artificial). La programación LOMLOE oficial usa el orden inverso para estas dos unidades.</p>
+  </div>
+</section>
+
+<section id="conceptos">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Conceptos</div>
+      <h2>IA, Machine Learning y análisis de datos</h2>
+      <p class="lead">Las ideas que dan sentido a las librerías. Cada una se presenta en UD2 y se trabaja a fondo en la unidad indicada.</p>
+    </div>
+    <div class="concepts">
+      <article class="panel span-2">
+        <h3>Punto de partida: lo que vimos en la UD1</h3>
+        <div class="ud1">
+          <div><b>Inteligencia</b><span>Razonar, planificar, resolver problemas y, sobre todo, <em>aprender de la experiencia</em></span></div>
+          <div><b>Ciclo de un sistema de IA</b><span>Percepción (sensores) → procesamiento → actuación (actuadores). Sensorizar no es percibir</span></div>
+          <div><b>IA clásica · ML · DL</b><span>Reglas escritas → patrones aprendidos → características descubiertas. Más datos, menos explicable</span></div>
+          <div><b>Dato → información → conocimiento</b><span>"rojo" → «el semáforo está en rojo» → «si está en rojo, me paro»</span></div>
+          <div><b>¿Es IA?</b><span>¿Aprende? ¿Se adapta? ¿Decide según el contexto? Un termostato fijo no; un filtro antispam sí</span></div>
+          <div><b>Débil vs fuerte</b><span>Simbólica (reglas) vs conexionista (redes). Todas las IA reales son débiles</span></div>
+          <div><b>Buscar</b><span>Espacio de estados, grafo, poda: N reinas, pastor y río, Hanói, Dijkstra, minimax</span></div>
+          <div><b>Optimizar</b><span>Función objetivo + restricciones. Descenso del gradiente: bajar la montaña a ciegas</span></div>
+          <div><b>Agente</b><span>Sensores → procesamiento y conocimiento → actuadores, con aprendizaje. Coche autónomo, aspirador</span></div>
+          <div><b>Ética</b><span>Sesgo algorítmico (Amazon 2018), privacidad: «si es gratis, el producto eres tú»</span></div>
+          <div><b>En UD2 se programa</b><span>Recursión y BFS para buscar, NumPy para optimizar, clases para agentes. Sección 0 de la teoría</span></div>
+        </div>
+      </article>
+      <article class="panel">
+        <h3>Uno dentro de otro</h3>
+        <svg class="venn" viewBox="0 0 460 300" role="img" aria-label="La IA contiene al Machine Learning, que contiene al Deep Learning, que contiene a la IA generativa">
+          <ellipse cx="230" cy="150" rx="220" ry="140" fill="color-mix(in srgb, var(--c-base) 12%, transparent)" stroke="var(--c-base)" stroke-width="2"/>
+          <ellipse cx="262" cy="168" rx="160" ry="104" fill="color-mix(in srgb, var(--c-ml) 14%, transparent)" stroke="var(--c-ml)" stroke-width="2"/>
+          <ellipse cx="292" cy="186" rx="94" ry="64" fill="color-mix(in srgb, var(--c-dl) 18%, transparent)" stroke="var(--c-dl)" stroke-width="2"/>
+          <text x="120" y="40" fill="var(--c-base)" font-family="Bricolage Grotesque, system-ui, sans-serif" font-weight="800" font-size="22">IA</text>
+          <text x="152" y="40" fill="var(--muted)" font-family="Atkinson Hyperlegible, system-ui, sans-serif" font-size="13">Actuar con inteligencia · UD1</text>
+          <text x="150" y="98" fill="var(--c-ml)" font-family="Bricolage Grotesque, system-ui, sans-serif" font-weight="800" font-size="19">Machine Learning</text>
+          <text x="150" y="116" fill="var(--muted)" font-family="Atkinson Hyperlegible, system-ui, sans-serif" font-size="13">Aprender de datos · UD5</text>
+          <ellipse cx="300" cy="224" rx="62" ry="22" fill="color-mix(in srgb, var(--c-texto) 22%, transparent)" stroke="var(--c-texto)" stroke-width="2"/>
+          <text x="226" y="157" fill="var(--c-dl)" font-family="Bricolage Grotesque, system-ui, sans-serif" font-weight="800" font-size="17">Deep Learning</text>
+          <text x="226" y="173" fill="var(--muted)" font-family="Atkinson Hyperlegible, system-ui, sans-serif" font-size="12.5">Redes neuronales</text>
+          <text x="226" y="188" fill="var(--muted)" font-family="Atkinson Hyperlegible, system-ui, sans-serif" font-size="12.5">UD4 · UD5</text>
+          <text x="300" y="222" text-anchor="middle" fill="var(--c-texto)" font-family="Bricolage Grotesque, system-ui, sans-serif" font-weight="800" font-size="14">IA generativa</text>
+          <text x="300" y="237" text-anchor="middle" fill="var(--muted)" font-family="Atkinson Hyperlegible, system-ui, sans-serif" font-size="11.5">UD3</text>
+        </svg>
+        <p style="margin-top:8px"><b>Fórmula fácil:</b> IA → inteligencia · ML → aprendizaje · DL → redes profundas · GenAI → generación. Están relacionados, pero <b>no son sinónimos</b>.</p>
+      </article>
+      <article class="panel">
+        <h3>Tres formas de aprender</h3>
+        <div class="types">
+          <div class="type"><div class="ic">S</div><div><b>Supervisado</b><span>Datos con la respuesta correcta. El modelo aprende a predecirla. Clasificar spam, estimar el precio de una casa. UD3, UD4, UD5.</span></div></div>
+          <div class="type"><div class="ic">NS</div><div><b>No supervisado</b><span>Datos sin respuesta. El modelo busca grupos y patrones por sí mismo. Agrupar clientes parecidos. UD5.</span></div></div>
+          <div class="type"><div class="ic">R</div><div><b>Por refuerzo</b><span>Aprende probando: recibe premios o castigos. Juegos y robots. Se presenta en UD1.</span></div></div>
+        </div>
+        <p style="margin-top:14px">Antes de entrenar: dividir en entrenamiento y prueba (<code>train_test_split</code>) y escalar los datos (E27).</p>
+      </article>
+      <article class="panel">
+        <h3>ETL: preparar los datos</h3>
+        <p>Se repite en todos los proyectos. Es el 80 % del trabajo real con datos.</p>
+        <div class="etl">
+          <div><b>Extract</b><span>Leer CSV, JSON, APIs</span><code>pd.read_csv()</code></div>
+          <div><b>Transform</b><span>Limpiar, validar, crear columnas</span><code>dropna() · fillna()</code></div>
+          <div><b>Load</b><span>Guardar el resultado</span><code>to_csv()</code></div>
+        </div>
+        <p style="margin-top:12px">Después llega el <b>EDA</b> (análisis exploratorio): <code>describe()</code>, <code>isnull()</code>, histogramas, <code>corr()</code>. Ejercicios E25 y E26.</p>
+      </article>
+      <article class="panel">
+        <h3>Big Data: las 5 V</h3>
+        <p>Cuando los datos no caben en un ordenador, Pandas se queda corto y entran PySpark o Dask.</p>
+        <div class="five">
+          <div><b>V</b><span>Volumen</span></div>
+          <div><b>V</b><span>Velocidad</span></div>
+          <div><b>V</b><span>Variedad</span></div>
+          <div><b>V</b><span>Veracidad</span></div>
+          <div><b>V</b><span>Valor</span></div>
+        </div>
+        <p style="margin-top:12px">Millones de textos (UD3), de imágenes (UD4) o de filas para entrenar (UD5).</p>
+      </article>
+      <article class="panel">
+        <h3>Cómo aprende una red neuronal</h3>
+        <p>Cada neurona hace <code>z = w·x + b</code> y aplica una activación. La red repite este ciclo miles de veces:</p>
+        <ol class="cycle">
+          <li><b>Forward</b><span>Los datos atraviesan la red y sale una predicción</span></li>
+          <li><b>Pérdida</b><span>Se mide el error: MSE (números) o entropía cruzada (clases)</span></li>
+          <li><b>Backpropagation</b><span>Regla de la cadena: cuánto culpa tiene cada peso</span></li>
+          <li><b>Actualizar</b><span><code>w = w − tasa × gradiente</code></span></li>
+        </ol>
+        <div class="acts">
+          <div><b>ReLU</b><span>max(0, z) · capas ocultas</span></div>
+          <div><b>Sigmoide</b><span>0 a 1 · sí / no</span></div>
+          <div><b>Softmax</b><span>probabilidades · varias clases</span></div>
+        </div>
+        <p style="margin-top:12px">Contra el <b>sobreajuste</b>: más datos, dropout, early stopping, aumento de datos. CNN para imágenes (UD4), RNN/LSTM y Transformers para texto (UD3).</p>
+      </article>
+      <article class="panel">
+        <h3>IA generativa: texto token a token</h3>
+        <div class="tokflow">
+          <div><b>1 · Tokenizar</b><span>"Me gusta Python" → ["Me", " gusta", " Py", "thon"]</span></div>
+          <div><b>2 · Embeddings</b><span>Cada token → un vector. Significados parecidos, vectores cercanos</span></div>
+          <div><b>3 · Transformer</b><span>La atención relaciona cada token con todos los demás</span></div>
+          <div><b>4 · Siguiente token</b><span>" es" 41 % · " mucho" 22 % · "." 9 % → elige y repite</span></div>
+        </div>
+        <p style="margin-top:12px"><b>Temperatura</b> baja = preciso; alta = creativo. <b>Ventana de contexto</b> = cuánto recuerda. <b>RAG</b> = buscar documentos antes de responder. Un buen <b>prompt</b> da contexto, rol, formato y ejemplos. Las <b>alucinaciones</b> existen: verifica siempre. UD3.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="librerias">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Librerías</div>
+      <h2>Qué hace cada una y cuándo aparece</h2>
+      <p class="lead">Filtra por familia o por unidad. El nivel indica qué se espera: <b>Conocer</b> (saber para qué sirve), <b>Usar</b> (programar con ella en clase) o <b>Ampliación</b> (para quien quiera ir más allá).</p>
+    </div>
+    <div class="filters">
+      <div class="chips" id="famChips" role="group" aria-label="Filtrar por familia"><span class="lbl">Familia</span></div>
+      <div class="chips" id="udChips" role="group" aria-label="Filtrar por unidad"><span class="lbl">Unidad</span></div>
+      <div class="search">
+        <input id="q" type="search" placeholder="Buscar: gráficos, imágenes, web..." aria-label="Buscar librería">
+        <span class="count" id="countTxt" aria-live="polite"></span>
+      </div>
+    </div>
+    <div class="libs" id="libs"></div>
+  </div>
+</section>
+
+<section id="comparar">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">¿Cuál elijo?</div>
+      <h2>Comparativas que suelen confundir</h2>
+      <p class="lead">Algunas librerías parecen rivales y en realidad se complementan. Otras sí compiten y conviene elegir una.</p>
+    </div>
+    <div class="vs-grid">
+      <article class="vs">
+        <div class="vs-head"><b>Seaborn</b><span class="x">y</span><b>scikit-learn</b></div>
+        <div class="vs-cols">
+          <div class="vs-col" style="--fam:var(--c-visual)"><b>Seaborn · ver</b><ul><li>Produce gráficos</li><li>Fase de exploración y resultados</li><li>Una línea = un gráfico</li></ul></div>
+          <div class="vs-col" style="--fam:var(--c-ml)"><b>scikit-learn · aprender</b><ul><li>Produce modelos y predicciones</li><li>Fase de modelado</li><li><code>fit()</code> y <code>predict()</code></li></ul></div>
+        </div>
+        <p class="verdict"><b>No compiten.</b> Seaborn antes del modelo para entender los datos, y después para enseñar la matriz de confusión.</p>
+      </article>
+      <article class="vs">
+        <div class="vs-head"><b>Matplotlib</b><span class="x">frente a</span><b>Seaborn</b></div>
+        <div class="vs-cols">
+          <div class="vs-col" style="--fam:var(--c-visual)"><b>Matplotlib</b><ul><li>Control total de cada detalle</li><li>Más líneas de código</li><li>Base de todo lo demás</li></ul></div>
+          <div class="vs-col" style="--fam:var(--c-visual)"><b>Seaborn</b><ul><li>Construido encima de Matplotlib</li><li>Trabaja directo con DataFrames</li><li>Boxplot, pairplot, heatmap al instante</li></ul></div>
+        </div>
+        <p class="verdict"><b>Primero Matplotlib</b> (E23) para entender cómo se hace un gráfico. Luego Seaborn (E26) para ir rápido.</p>
+      </article>
+      <article class="vs">
+        <div class="vs-head"><b>scikit-learn</b><span class="x">frente a</span><b>PyTorch / Keras</b></div>
+        <div class="vs-cols">
+          <div class="vs-col" style="--fam:var(--c-ml)"><b>scikit-learn</b><ul><li>ML clásico: árboles, KNN, regresión</li><li>Datos en tabla (CSV)</li><li>Sin GPU</li></ul></div>
+          <div class="vs-col" style="--fam:var(--c-dl)"><b>PyTorch / Keras</b><ul><li>Redes neuronales profundas</li><li>Imágenes, texto, audio</li><li>GPU recomendable</li></ul></div>
+        </div>
+        <p class="verdict"><b>Datos en tabla:</b> empieza siempre por scikit-learn. Imágenes o texto: red neuronal. Keras es más fácil para empezar en UD4; PyTorch es la ampliación.</p>
+      </article>
+      <article class="vs">
+        <div class="vs-head"><b>tkinter</b><span class="x">·</span><b>Streamlit</b><span class="x">·</span><b>Gradio</b></div>
+        <div class="vs-cols three">
+          <div class="vs-col" style="--fam:var(--c-escritorio)"><b>tkinter</b><ul><li>Ventana en el ordenador</li><li>Viene con Python</li><li>Enseña eventos</li></ul></div>
+          <div class="vs-col" style="--fam:var(--c-web)"><b>Streamlit</b><ul><li>Página web de datos</li><li>Script → web</li><li>Paneles y gráficos</li></ul></div>
+          <div class="vs-col" style="--fam:var(--c-web)"><b>Gradio</b><ul><li>Página web de demo</li><li>Entrada → modelo → salida</li><li>Texto, imagen, audio</li></ul></div>
+        </div>
+        <p class="verdict"><b>Escritorio y aprender eventos:</b> tkinter. <b>Enseñar un análisis:</b> Streamlit. <b>Que prueben tu modelo:</b> Gradio.</p>
+      </article>
+    </div>
+
+    <div class="decide" aria-label="Guía rápida de elección">
+      <div class="q"><p>Necesito operar con muchos números a la vez</p><div class="a"><span class="pill" style="--fam:var(--c-datos)">NumPy</span></div></div>
+      <div class="q"><p>Tengo una tabla que limpiar y filtrar</p><div class="a"><span class="pill" style="--fam:var(--c-datos)">Pandas</span></div></div>
+      <div class="q"><p>Quiero un gráfico estadístico rápido</p><div class="a"><span class="pill" style="--fam:var(--c-visual)">Seaborn</span></div></div>
+      <div class="q"><p>Quiero predecir a partir de una tabla</p><div class="a"><span class="pill" style="--fam:var(--c-ml)">scikit-learn</span></div></div>
+      <div class="q"><p>Quiero clasificar imágenes</p><div class="a"><span class="pill" style="--fam:var(--c-dl)">Keras</span></div></div>
+      <div class="q"><p>Quiero preparar un texto para analizarlo</p><div class="a"><span class="pill" style="--fam:var(--c-texto)">spaCy</span></div></div>
+      <div class="q"><p>Quiero una app con ventanas</p><div class="a"><span class="pill" style="--fam:var(--c-escritorio)">tkinter</span></div></div>
+      <div class="q"><p>Quiero publicar mi análisis en la web</p><div class="a"><span class="pill" style="--fam:var(--c-web)">Streamlit</span></div></div>
+      <div class="q"><p>Quiero automatizar una tarea repetitiva</p><div class="a"><span class="pill" style="--fam:var(--c-auto)">pathlib · requests</span></div></div>
+      <div class="q"><p>Quiero comprobar que mi función funciona</p><div class="a"><span class="pill" style="--fam:var(--c-auto)">pytest</span></div></div>
+      <div class="q"><p>Quiero guardar datos en una base de datos</p><div class="a"><span class="pill" style="--fam:var(--c-auto)">sqlite3</span></div></div>
+      <div class="q"><p>Quiero usar un modelo de lenguaje desde Python</p><div class="a"><span class="pill" style="--fam:var(--c-texto)">SDK de LLM</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="ejercicios">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Ejercicios UD2</div>
+      <h2>27 ejercicios, de <code>print()</code> a preparar datos para ML</h2>
+      <p class="lead">Cada bloque es un ejercicio, coloreado según la librería que trabaja. La progresión va de Python puro a las librerías de datos.</p>
+    </div>
+    <div class="ex-strip" id="exStrip" role="img" aria-label="Ejercicios E1 a E27 por librería"></div>
+    <div class="phases">
+      <div class="phase" style="--fam:var(--c-base)"><span class="r">E1–E12</span><b>Fundamentos</b><span>Variables, condicionales, bucles, funciones, ficheros</span></div>
+      <div class="phase" style="--fam:var(--c-base)"><span class="r">E13–E17</span><b>Datos con Python puro</b><span>Diccionarios, validación, estadística y CSV a mano</span></div>
+      <div class="phase" style="--fam:var(--c-datos)"><span class="r">E18–E22</span><b>NumPy y Pandas</b><span>Arrays, matrices, DataFrames, limpieza, groupby</span></div>
+      <div class="phase" style="--fam:var(--c-visual)"><span class="r">E23–E24</span><b>Visualización</b><span>Matplotlib y gráficos desde Pandas</span></div>
+      <div class="phase" style="--fam:var(--c-ml)"><span class="r">E25–E27</span><b>Proyecto de datos</b><span>Pipeline ETL, EDA y normalización para ML</span></div>
+    </div>
+    <div class="next"><span>Después:</span><span class="pill" style="--fam:var(--c-escritorio)">tkinter en el laboratorio 1</span><span class="arrow">→</span><span class="pill" style="--fam:var(--c-ml)">scikit-learn en el laboratorio 3</span><span class="arrow">→</span><span class="pill" style="--fam:var(--c-web)">Streamlit en el capstone</span></div>
+  </div>
+</section>
+
+<section id="ampliacion">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Ampliación</div>
+      <h2>Chuletas de los materiales complementarios</h2>
+      <p class="lead">Resumen visual de la sección 14 del documento de teoría: EDA, pipeline de ML, gráficos, hashing, automatización y algoritmia.</p>
+    </div>
+    <div class="more">
+      <article class="panel">
+        <h3>Checklist de EDA</h3>
+        <div class="pipe"><span>Entender</span><span>Calidad</span><span>Nulos</span><span>Tipos</span><span>Outliers</span><span>Univariante</span><span>Bivariante</span><span>Multivariante</span><span>Nuevas variables</span><span>Codificar</span><span>Conclusiones</span></div>
+        <div class="trow"><b>Nulos</b><span>Numéricas → mediana · categóricas → moda · por grupo: <code>groupby().transform("median")</code></span><span class="when">fillna</span></div>
+        <div class="trow"><b>Outliers</b><span>Detectar con boxplot o IQR; eliminar, recortar con <code>clip</code> o transformar con <code>log1p</code></span><span class="when">IQR</span></div>
+        <div class="trow"><b>Automático</b><span>ydata-profiling, sweetviz: para ampliar, nunca para sustituir tu análisis</span><span class="when">Extra</span></div>
+      </article>
+      <article class="panel">
+        <h3>Pipeline de Machine Learning</h3>
+        <div class="pipe"><span>Cargar</span><span>Explorar</span><span>Limpiar</span><span>Codificar</span><span>Escalar</span><span>Dividir</span><span>Entrenar</span><span>Evaluar</span><span>Ajustar</span><span>Guardar</span></div>
+        <div class="trow"><b>Codificar</b><span><code>OneHotEncoder</code> sin orden · <code>OrdinalEncoder</code> con orden</span><span class="when">texto → nº</span></div>
+        <div class="trow"><b>Escalar</b><span><code>StandardScaler</code> · <code>MinMaxScaler</code> · <code>RobustScaler</code></span><span class="when">E27</span></div>
+        <div class="trow"><b>Evaluar</b><span>Accuracy, precision, recall, F1 · MAE, R² · <code>cross_val_score</code></span><span class="when">métricas</span></div>
+        <div class="trow"><b>Pipeline</b><span><code>Pipeline</code> + <code>ColumnTransformer</code>: el escalado se aprende solo con train (sin fuga de datos)</span><span class="when">UD5</span></div>
+      </article>
+      <article class="panel">
+        <h3>¿Qué gráfico de Seaborn?</h3>
+        <div class="trow"><b>Distribución</b><span><code>histplot(kde=True)</code> · <code>boxplot</code> · <code>violinplot</code></span><span class="when">1 variable</span></div>
+        <div class="trow"><b>Categorías</b><span><code>countplot</code> (cuántos) · <code>barplot</code> (media)</span><span class="when">grupos</span></div>
+        <div class="trow"><b>Relación</b><span><code>scatterplot</code> · <code>regplot</code> · <code>lineplot</code> (tiempo)</span><span class="when">2 variables</span></div>
+        <div class="trow"><b>Muchas a la vez</b><span><code>heatmap(corr)</code> · <code>pairplot</code> · <code>catplot(col=…)</code></span><span class="when">EDA</span></div>
+        <p style="margin-top:10px">Parámetros comunes: <code>hue</code>, <code>style</code>, <code>size</code>, <code>palette</code>, <code>col</code>. Correlación no es causalidad.</p>
+      </article>
+      <article class="panel">
+        <h3>Hashing: por qué un dict vuela</h3>
+        <p>Una función hash convierte la clave en una posición de la tabla: se accede directamente, sin recorrer nada. Por eso las claves deben ser inmutables.</p>
+        <div class="big-o" role="img" aria-label="Pasos para 1000 datos según la complejidad">
+          <code>O(1)</code><div class="bar" style="width:2%"></div><em>dict, set · 1</em>
+          <code>O(log n)</code><div class="bar" style="width:8%"></div><em>búsqueda binaria · 10</em>
+          <code>O(n)</code><div class="bar" style="width:30%"></div><em>buscar en list · 1 000</em>
+          <code>O(n log n)</code><div class="bar" style="width:55%"></div><em>sorted() · 10 000</em>
+          <code>O(n²)</code><div class="bar" style="width:100%"></div><em>2 bucles · 1 000 000</em>
+        </div>
+      </article>
+      <article class="panel">
+        <h3>Automatizar con Python</h3>
+        <div class="trow"><b>Archivos</b><span><code>pathlib</code>, <code>shutil</code>: ordenar una carpeta por extensión</span><span class="when">os</span></div>
+        <div class="trow"><b>Web y APIs</b><span><code>requests</code>, BeautifulSoup, Playwright · respeta el robots.txt</span><span class="when">Extract</span></div>
+        <div class="trow"><b>Programar</b><span><code>schedule</code> + <code>logging</code>: tareas cada día y registro de errores</span><span class="when">cron</span></div>
+        <div class="trow"><b>Seguridad</b><span>Entorno virtual (<code>venv</code>) por proyecto; claves en <code>.env</code>, nunca en el código</span><span class="when">dotenv</span></div>
+        <div class="trow"><b>Calidad</b><span><code>pytest</code> para tests · <code>sqlite3</code> para guardar datos en un archivo</span><span class="when">Lab 1</span></div>
+      </article>
+      <article class="panel">
+        <h3>Pensar antes de programar</h3>
+        <div class="pipe"><span>Analizar</span><span>Pseudocódigo</span><span>Codificar</span><span>Probar</span><span>Mejorar</span></div>
+        <div class="trow"><b>Recursión</b><span>Caso base + caso más pequeño: factorial, Hanói</span><span class="when">def f(n)</span></div>
+        <div class="trow"><b>Divide y vencerás</b><span>Búsqueda binaria, quicksort, mergesort</span><span class="when">O(log n)</span></div>
+        <div class="trow"><b>Programación dinámica</b><span>Memorizar resultados: <code>@lru_cache</code> en Fibonacci</span><span class="when">memo</span></div>
+        <div class="trow"><b>Espacios de estados</b><span>Laberintos, sudoku, 8 reinas: la IA clásica de UD1</span><span class="when">búsqueda</span></div>
+      </article>
+      <article class="panel span-2">
+        <h3>Ruta para empezar en IA y materiales de referencia</h3>
+        <div class="pipe" style="margin-bottom:14px"><span>Python</span><span>Estructuras de datos</span><span>Resolver problemas</span><span>NumPy</span><span>Pandas</span><span>Matemáticas</span><span>Evaluar modelos</span><span>Proyecto real</span><span>Seguir construyendo</span></div>
+        <ul class="src">
+          <li><b>Conceptos:</b> AI vs ML vs DL vs GenAI · AI Roadmap 2026 · GenAI: Zero to Hero</li>
+          <li><b>Datos:</b> 100 Pandas Functions · 45 líneas de Pandas · Exploratory Data Analysis</li>
+          <li><b>Gráficos:</b> Complete Seaborn for Data Science · 36 líneas Matplotlib/Seaborn</li>
+          <li><b>Modelos:</b> 200 Machine Learning Commands · Neural Networks Beginner Notes · Deep Learning</li>
+          <li><b>Programación:</b> Python Automation Complete Notes · DSA Hashing · 1000 Python Examples (G. Szabó)</li>
+          <li><b>Algoritmia:</b> Algoritmos resueltos con Python (Condor, De la Cruz) · Ejercicios de programación con Python (J. A. Alonso)</li>
+          <li><b>Ejercicios:</b> 30 Ejercicios de Python · Ejercicios con soluciones · Más de 400 ejercicios (Marzal, Gracia) · Program in Python</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="herramientas">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Herramientas</div>
+      <h2>Dónde programar y con qué datos</h2>
+    </div>
+    <div class="tools">
+      <article class="panel">
+        <h3>Entornos</h3>
+        <div class="trow"><b>Google Colab</b><span>Notebooks en la nube, sin instalar nada. Trae casi todas las librerías.</span><span class="when">Análisis · DL</span></div>
+        <div class="trow"><b>Jupyter Notebook</b><span>Código, resultados y explicaciones en celdas.</span><span class="when">E23–E27</span></div>
+        <div class="trow"><b>VS Code</b><span>Editor ligero con la extensión de Python.</span><span class="when">E1–E12 · apps</span></div>
+        <div class="trow"><b>PyCharm Community</b><span>IDE completo, depurador visual excelente.</span><span class="when">E13–E22</span></div>
+        <div class="trow"><b>Thonny / Replit</b><span>Opciones sencillas para los primeros pasos.</span><span class="when">Inicio</span></div>
+      </article>
+      <article class="panel">
+        <h3>Datasets recomendados</h3>
+        <div class="trow"><b>Iris</b><span>150 flores, 4 medidas, sin datos faltantes. Viene en scikit-learn.</span><span class="when">Empezar</span></div>
+        <div class="trow"><b>Titanic</b><span>891 pasajeros con huecos en los datos. Ideal para limpiar.</span><span class="when">ETL · EDA</span></div>
+        <div class="trow"><b>World Happiness Report</b><span>Felicidad y economía por país y año.</span><span class="when">GroupBy</span></div>
+        <div class="trow"><b>House Prices</b><span>1460 casas, 79 variables. Predicción de precios.</span><span class="when">Avanzado</span></div>
+        <div class="trow"><b>MNIST · CIFAR-10</b><span>Dígitos escritos a mano y objetos pequeños.</span><span class="when">UD4</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="repaso">
+  <div class="wrap">
+    <div class="check-head">
+      <div>
+        <div class="eyebrow">Autoevaluación</div>
+        <h2>¿Lo tengo claro?</h2>
+        <p class="lead">Marca lo que ya sabes hacer. Las marcas se guardan solo en este navegador.</p>
+      </div>
+      <div class="progress" aria-live="polite">
+        <div class="track"><div class="fill" id="fill"></div></div>
+        <div class="txt" id="progTxt">0 de 0</div>
+      </div>
+    </div>
+    <div class="checks" id="checks"></div>
+    <button class="reset" id="reset" type="button">Borrar mis marcas</button>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Guía visual de UD2 · Tecnoloxías Intelixentes · Curso 2026-27</span>
+    <span>Complementa el documento «Teoría fundamental y referencias externas» (secciones 1–15)</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var FAM = {
+    base:       { n: "Python base",      c: "var(--c-base)" },
+    datos:      { n: "Datos",            c: "var(--c-datos)" },
+    visual:     { n: "Visualización",    c: "var(--c-visual)" },
+    ml:         { n: "ML clásico",       c: "var(--c-ml)" },
+    dl:         { n: "Deep Learning",    c: "var(--c-dl)" },
+    texto:      { n: "Texto",            c: "var(--c-texto)" },
+    imagen:     { n: "Imagen",           c: "var(--c-imagen)" },
+    escritorio: { n: "App escritorio",   c: "var(--c-escritorio)" },
+    web:        { n: "App web",          c: "var(--c-web)" },
+    bigdata:    { n: "Big Data",         c: "var(--c-bigdata)" },
+    auto:       { n: "Automatizar y probar", c: "var(--c-auto)" }
+  };
+  var LIBS = [
+    ["Python estándar", "base", "math, random, statistics, collections, csv, json: lo que viene incluido.", "from collections import Counter", ["UD2"], "usar"],
+    ["Jupyter / Colab", "base", "Cuadernos para ejecutar código por celdas y ver el resultado al momento.", "!pip install seaborn  # en Colab", ["UD2","UD3","UD4","UD5"], "usar"],
+    ["NumPy", "datos", "Arrays y matrices. Operaciones sobre miles de números sin bucles.", "import numpy as np", ["UD2","UD4","UD5"], "usar"],
+    ["Pandas", "datos", "Tablas (DataFrames): cargar CSV, limpiar, filtrar y agrupar.", "import pandas as pd", ["UD2","UD3","UD5"], "usar"],
+    ["Matplotlib", "visual", "La base de los gráficos en Python: líneas, barras, dispersión.", "import matplotlib.pyplot as plt", ["UD2","UD4","UD5"], "usar"],
+    ["Seaborn", "visual", "Gráficos estadísticos en una línea a partir de un DataFrame.", "import seaborn as sns", ["UD2","UD5"], "usar"],
+    ["Plotly", "visual", "Gráficos interactivos con zoom y datos al pasar el ratón.", "import plotly.express as px", ["UD2","UD5"], "ampliar"],
+    ["scikit-learn", "ml", "ML clásico: dividir datos, escalar, entrenar y evaluar modelos.", "from sklearn.neighbors import KNeighborsClassifier", ["UD2","UD3","UD5"], "usar"],
+    ["SHAP", "ml", "Explica qué variables pesan más en la decisión de un modelo.", "import shap", ["UD5"], "conocer"],
+    ["TensorFlow / Keras", "dl", "Redes neuronales con una interfaz sencilla: model.fit().", "from tensorflow import keras", ["UD4","UD5"], "usar"],
+    ["PyTorch", "dl", "Redes neuronales con tensores. Muy usado en investigación.", "import torch", ["UD2","UD4","UD5"], "ampliar"],
+    ["Hugging Face Transformers", "dl", "Modelos de lenguaje y visión ya entrenados, listos para usar.", "from transformers import pipeline", ["UD3"], "conocer"],
+    ["NLTK", "texto", "Herramientas clásicas para texto: tokenizar, stopwords, stemming.", "import nltk", ["UD3"], "usar"],
+    ["spaCy", "texto", "Procesado de texto moderno: lematizar y detectar entidades.", "import spacy", ["UD3"], "usar"],
+    ["TextBlob", "texto", "Análisis de sentimientos sencillo en pocas líneas.", "from textblob import TextBlob", ["UD3"], "usar"],
+    ["OpenCV", "imagen", "Leer imágenes y vídeo, filtros, bordes, contornos, cámara.", "import cv2", ["UD4"], "usar"],
+    ["Pillow", "imagen", "Abrir, recortar y redimensionar imágenes de forma sencilla.", "from PIL import Image", ["UD4"], "conocer"],
+    ["Ultralytics YOLO", "imagen", "Detección de objetos en tiempo real con modelos preentrenados.", "from ultralytics import YOLO", ["UD4"], "ampliar"],
+    ["tkinter", "escritorio", "Ventanas, botones y casillas. Viene con Python, no hay que instalar.", "import tkinter as tk", ["UD2"], "usar"],
+    ["CustomTkinter", "escritorio", "tkinter con aspecto moderno y modo oscuro. Se programa casi igual.", "import customtkinter as ctk", ["UD2"], "ampliar"],
+    ["PySide6 / PyQt6", "escritorio", "Apps profesionales con Qt y diseñador visual de ventanas.", "from PySide6.QtWidgets import QApplication", ["UD2"], "ampliar"],
+    ["Kivy", "escritorio", "Interfaces táctiles que funcionan también en Android e iOS.", "from kivy.app import App", ["UD2"], "ampliar"],
+    ["Flet", "escritorio", "Un mismo código para app de escritorio, web y móvil.", "import flet as ft", ["UD2"], "ampliar"],
+    ["PyInstaller", "escritorio", "Convierte un script en un ejecutable (.exe) para repartir la app.", "pyinstaller --onefile app.py", ["UD2"], "conocer"],
+    ["Streamlit", "web", "Convierte un script de análisis en una página web interactiva.", "import streamlit as st", ["UD2","UD5"], "usar"],
+    ["Gradio", "web", "Demo web de un modelo: entrada, función y salida.", "import gradio as gr", ["UD3","UD4"], "usar"],
+    ["Flask", "web", "Microframework web: rutas y páginas. Enseña cómo funciona la web.", "from flask import Flask", ["UD5"], "ampliar"],
+    ["FastAPI", "web", "Crea una API que devuelve predicciones en formato JSON.", "from fastapi import FastAPI", ["UD5"], "ampliar"],
+    ["Dash", "web", "Paneles de datos interactivos con gráficos Plotly.", "from dash import Dash, dcc, html", ["UD2"], "ampliar"],
+    ["Django", "web", "Framework web completo: usuarios, base de datos, administración.", "django-admin startproject web", ["UD5"], "conocer"],
+    ["PySpark", "bigdata", "Pandas a gran escala: datos repartidos entre muchos ordenadores.", "from pyspark.sql import SparkSession", ["UD2"], "conocer"],
+    ["Dask", "bigdata", "Pandas en paralelo para ficheros que no caben en memoria.", "import dask.dataframe as dd", ["UD2"], "conocer"],
+    ["ydata-profiling", "datos", "Informe de EDA automático en HTML a partir de un DataFrame.", "from ydata_profiling import ProfileReport", ["UD2"], "ampliar"],
+    ["SDK de LLM (openai, anthropic)", "texto", "Llamar a un modelo de lenguaje desde Python: resumir, clasificar, generar.", "from anthropic import Anthropic", ["UD3"], "ampliar"],
+    ["pathlib / shutil", "auto", "Recorrer, crear, mover y copiar archivos y carpetas.", "from pathlib import Path", ["UD2"], "usar"],
+    ["requests", "auto", "Pedir datos a una web o API (JSON). Primer paso del ETL.", "import requests", ["UD2","UD3"], "usar"],
+    ["BeautifulSoup", "auto", "Extraer información del HTML de una página (scraping).", "from bs4 import BeautifulSoup", ["UD2","UD3"], "ampliar"],
+    ["Playwright", "auto", "Controlar un navegador: rellenar formularios y probar webs.", "from playwright.sync_api import sync_playwright", ["UD2"], "ampliar"],
+    ["schedule", "auto", "Ejecutar una función cada cierto tiempo o a una hora fija.", "import schedule", ["UD2"], "ampliar"],
+    ["openpyxl", "auto", "Leer y escribir hojas de Excel, con formatos y fórmulas.", "import openpyxl", ["UD2"], "conocer"],
+    ["sqlite3", "auto", "Base de datos en un solo archivo. Viene con Python.", "import sqlite3", ["UD2"], "usar"],
+    ["pytest", "auto", "Tests automáticos: comprobar que tus funciones hacen lo que deben.", "def test_media(): assert media([5, 7]) == 6", ["UD2"], "usar"],
+    ["hashlib", "base", "Huellas hash (SHA-256) para contraseñas e integridad de archivos.", "import hashlib", ["UD2"], "conocer"]
+  ];
+  var LVL = { conocer: "Conocer", usar: "Usar", ampliar: "Ampliación" };
+  var UDS = ["UD2", "UD3", "UD4", "UD5"];
+
+  document.getElementById("libCount").textContent = LIBS.length;
+
+  var state = { fam: "all", ud: "all", q: "" };
+  var famChips = document.getElementById("famChips");
+  var udChips = document.getElementById("udChips");
+
+  function chip(label, value, group, color) {
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "chip";
+    b.setAttribute("aria-pressed", state[group] === value ? "true" : "false");
+    b.dataset.v = value;
+    if (color) { b.style.setProperty("--fam", color); var d = document.createElement("span"); d.className = "dot"; b.appendChild(d); }
+    b.appendChild(document.createTextNode(label));
+    b.addEventListener("click", function () {
+      state[group] = value;
+      var box = group === "fam" ? famChips : udChips;
+      box.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", c.dataset.v === value ? "true" : "false"); });
+      render();
+    });
+    return b;
+  }
+  famChips.appendChild(chip("Todas", "all", "fam"));
+  Object.keys(FAM).forEach(function (k) { famChips.appendChild(chip(FAM[k].n, k, "fam", FAM[k].c)); });
+  udChips.appendChild(chip("Todas", "all", "ud"));
+  UDS.forEach(function (u) { udChips.appendChild(chip(u, u, "ud")); });
+
+  var grid = document.getElementById("libs");
+  var countTxt = document.getElementById("countTxt");
+  function norm(s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+
+  function render() {
+    var q = norm(state.q.trim());
+    var list = LIBS.filter(function (l) {
+      if (state.fam !== "all" && l[1] !== state.fam) return false;
+      if (state.ud !== "all" && l[4].indexOf(state.ud) === -1) return false;
+      if (q && norm(l[0] + " " + l[2] + " " + FAM[l[1]].n).indexOf(q) === -1) return false;
+      return true;
+    });
+    grid.textContent = "";
+    if (!list.length) {
+      var e = document.createElement("div"); e.className = "empty";
+      e.textContent = "Ninguna librería coincide con estos filtros. Prueba con «Todas» o con otra palabra.";
+      e.style.gridColumn = "1 / -1"; grid.appendChild(e);
+    }
+    list.forEach(function (l) {
+      var f = FAM[l[1]];
+      var a = document.createElement("article"); a.className = "lib"; a.style.setProperty("--fam", f.c);
+      var top = document.createElement("div"); top.className = "lib-top";
+      var h = document.createElement("h3"); h.textContent = l[0];
+      var fm = document.createElement("span"); fm.className = "fam"; fm.textContent = f.n;
+      top.appendChild(h); top.appendChild(fm);
+      var p = document.createElement("p"); p.textContent = l[2];
+      var pre = document.createElement("pre"); pre.textContent = l[3];
+      var foot = document.createElement("div"); foot.className = "lib-foot";
+      l[4].forEach(function (u) { var t = document.createElement("span"); t.className = "udtag"; t.textContent = u; foot.appendChild(t); });
+      var lv = document.createElement("span"); lv.className = "lvl " + l[5]; lv.textContent = LVL[l[5]]; foot.appendChild(lv);
+      a.appendChild(top); a.appendChild(p); a.appendChild(pre); a.appendChild(foot);
+      grid.appendChild(a);
+    });
+    countTxt.textContent = list.length === LIBS.length ? LIBS.length + " librerías" : list.length + " de " + LIBS.length + " librerías";
+  }
+  document.getElementById("q").addEventListener("input", function (e) { state.q = e.target.value; render(); });
+  render();
+
+  // Tira de ejercicios
+  var exFam = [];
+  for (var i = 1; i <= 27; i++) {
+    var k = i <= 17 ? "base" : i <= 22 ? "datos" : i <= 24 ? "visual" : "ml";
+    if (i === 25 || i === 26) k = "datos";
+    exFam.push(k);
+  }
+  exFam[25] = "visual"; // E26 EDA: gráficos y estadísticas
+  exFam[26] = "ml";     // E27 normalización con scikit-learn
+  var strip = document.getElementById("exStrip");
+  exFam.forEach(function (k, idx) {
+    var d = document.createElement("div"); d.className = "ex"; d.style.setProperty("--fam", FAM[k].c);
+    d.textContent = "E" + (idx + 1); d.title = "E" + (idx + 1) + " · " + FAM[k].n;
+    strip.appendChild(d);
+  });
+
+  // Autoevaluación
+  var CHECKS = [
+    ["Conceptos de IA (UD1)", [
+      "Distingo dato, información y conocimiento",
+      "Decido si un sistema es IA con el criterio aprende / se adapta / decide",
+      "Represento un problema como estados y transiciones (grafo)",
+      "Explico la poda, minimax y el descenso del gradiente",
+      "Describo un agente: sensores, actuadores, conocimiento y aprendizaje",
+      "Explico cómo nace un sesgo algorítmico y cómo detectarlo"
+    ]],
+    ["Python y datos", [
+      "Uso listas, diccionarios y funciones sin mirar apuntes",
+      "Cargo un CSV con Pandas y lo exploro con describe()",
+      "Limpio datos: valores faltantes y duplicados",
+      "Agrupo y resumo con groupby()",
+      "Explico las tres fases de ETL con un ejemplo"
+    ]],
+    ["Gráficos e IA", [
+      "Hago un gráfico de líneas y de barras con Matplotlib",
+      "Uso Seaborn para un boxplot o un mapa de correlaciones",
+      "Distingo IA, Machine Learning y Deep Learning",
+      "Explico la diferencia entre supervisado y no supervisado",
+      "Sé para qué sirven scikit-learn y PyTorch y cuándo usar cada una"
+    ]],
+    ["Redes neuronales y GenAI", [
+      "Distingo IA, ML, Deep Learning e IA generativa",
+      "Explico qué hace una neurona: pesos, sesgo y activación",
+      "Describo el ciclo forward, pérdida, backpropagation y actualizar",
+      "Sé qué son tokens y embeddings y cómo genera texto un LLM",
+      "Escribo un prompt con contexto, formato y ejemplos, y verifico la respuesta"
+    ]],
+    ["Herramientas extra", [
+      "Sigo el checklist de EDA de principio a fin con un dataset",
+      "Monto un Pipeline de scikit-learn sin fuga de datos",
+      "Sé por qué buscar en un dict es más rápido que en una lista",
+      "Automatizo una tarea sencilla: ordenar archivos o consultar una API",
+      "Escribo un test con assert o pytest y guardo datos en SQLite"
+    ]],
+    ["Aplicaciones", [
+      "Explico qué es un evento y por qué cada botón llama a una función",
+      "Creo una ventana con tkinter con Label, Entry y Button",
+      "Distingo app de escritorio y app web",
+      "Sé cuándo usar Streamlit y cuándo Gradio",
+      "Podría publicar mi análisis del capstone como app"
+    ]]
+  ];
+  var KEY = "mapa-python-ia-checks-v3";
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { saved = {}; }
+  var box = document.getElementById("checks");
+  var total = 0;
+  CHECKS.forEach(function (g, gi) {
+    var fs = document.createElement("fieldset");
+    var lg = document.createElement("legend"); lg.textContent = g[0]; fs.appendChild(lg);
+    g[1].forEach(function (t, ti) {
+      total++;
+      var id = "chk-" + gi + "-" + ti;
+      var lab = document.createElement("label"); lab.setAttribute("for", id);
+      var inp = document.createElement("input"); inp.type = "checkbox"; inp.id = id; inp.checked = !!saved[id];
+      inp.addEventListener("change", function () { saved[id] = inp.checked; persist(); update(); });
+      lab.appendChild(inp); lab.appendChild(document.createTextNode(t));
+      fs.appendChild(lab);
+    });
+    box.appendChild(fs);
+  });
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} }
+  function update() {
+    var n = box.querySelectorAll("input:checked").length;
+    document.getElementById("fill").style.width = (n / total * 100) + "%";
+    document.getElementById("progTxt").textContent = n + " de " + total + " conseguidos";
+  }
+  document.getElementById("reset").addEventListener("click", function () {
+    saved = {}; persist();
+    box.querySelectorAll("input").forEach(function (i) { i.checked = false; });
+    update();
+  });
+  update();
+})();
+</script>
+</body>
+</html>

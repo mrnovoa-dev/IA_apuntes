@@ -102,6 +102,12 @@ id="toc-45-sobreajuste-y-subajuste">4.5 Sobreajuste y subajuste</a></li>
 <li><a href="#ejercicios-del-bloque-4"
 id="toc-ejercicios-del-bloque-4">Ejercicios del bloque 4</a></li>
 </ul></li>
+<li><a href="#bloque-5--publicar-el-modelo"
+id="toc-bloque-5--publicar-el-modelo">Bloque 5 · Publicar el modelo</a>
+<ul>
+<li><a href="#ejercicio-del-bloque-5"
+id="toc-ejercicio-del-bloque-5">Ejercicio del bloque 5</a></li>
+</ul></li>
 <li><a href="#rúbrica-de-las-prácticas-de-este-itinerario"
 id="toc-rúbrica-de-las-prácticas-de-este-itinerario">Rúbrica de las
 prácticas de este itinerario</a></li>
@@ -115,7 +121,7 @@ prácticas de este itinerario</a></li>
 datos con Python: de los datos al modelo</h1>
 <div class="ud-head" style="--c:var(--c-datos)">
 <span class="k">Itinerario transversal · UD2 → UD5 · CA1.2, CA1.3, CA5.1–CA5.3, CA5.5–CA5.7</span>
-<p>Cuatro bloques que recorren el <b>ciclo de vida de los datos</b>: conseguirlos, entenderlos, prepararlos y usarlos para predecir. Es el puente entre la programación de la UD2 (E18–E27) y el aprendizaje automático de la UD5.</p>
+<p>Cinco bloques que recorren el <b>ciclo de vida de los datos</b>: conseguirlos, entenderlos, prepararlos, usarlos para predecir y publicarlos. Es el puente entre la programación de la UD2 (E18–E27) y el aprendizaje automático de la UD5.</p>
 </div>
 
 <blockquote>
@@ -187,6 +193,15 @@ href="teoria.html#144-pipeline-completo-de-machine-learning-con-scikit-learn">14
 · <a
 href="teoria.html#144-pipeline-completo-de-machine-learning-con-scikit-learn">14.4</a></td>
 <td>14, 16</td>
+</tr>
+<tr class="odd">
+<td>5 · Publicar</td>
+<td>¿Cómo lo usa otra persona?</td>
+<td>CA5.7</td>
+<td>Proyecto</td>
+<td><a
+href="teoria.html#137-del-notebook-a-la-app-desplegar-un-modelo">13.7</a></td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
@@ -868,14 +883,79 @@ elige una variable numérica que predecir, entrena una regresión lineal y
 un árbol, compara las métricas en una tabla, dibuja «real frente a
 predicho» y explica cuándo se equivoca más el modelo.</p>
 <p><strong>D4.4 · Proyecto final: de la tabla a la app</strong> 🔴
-(CA5.7, proyecto): conecta los cuatro bloques con un dataset elegido por
+(CA5.7, proyecto): conecta los cinco bloques con un dataset elegido por
 el grupo. Hay que adquirir, explorar, limpiar, modelar y publicar el
-modelo en una pequeña app con <strong>Streamlit</strong> (<a
-href="teoria.html#1️⃣3️⃣-crear-aplicaciones-escritorio-y-web">teoría
-13.4</a>), donde se introducen los datos y se ve la predicción. En la
-exposición hay que explicar los sesgos y errores del modelo.</p>
+modelo en una pequeña app con <strong>Streamlit</strong> (bloque 5),
+donde se introducen los datos y se ve la predicción. En la exposición
+hay que explicar los sesgos y errores del modelo.</p>
 <p><a href="https://mp5101-ad.vercel.app/docs/unidades/04/">Ampliar en
 el módulo AD: Unidad 4 →</a></p>
+<hr />
+<h2 id="bloque-5--publicar-el-modelo">Bloque 5 · Publicar el modelo</h2>
+<p>Un modelo solo sirve si alguien lo puede usar. Para
+<strong>desplegarlo</strong> hay que seguir cinco pasos, explicados con
+código comprobado en la <a
+href="teoria.html#137-del-notebook-a-la-app-desplegar-un-modelo">teoría
+13.7</a>:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Paso</th>
+<th>Qué se hace</th>
+<th>Herramienta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 · Guardar</td>
+<td>Serializar el <strong>pipeline completo</strong> (escalado + modelo)
+y sus metadatos (versión, métrica, columnas)</td>
+<td><code>joblib.dump</code> + un <code>.json</code></td>
+</tr>
+<tr class="even">
+<td>2 · Cargar y predecir</td>
+<td>Cargar <strong>una sola vez</strong> y validar la entrada antes de
+predecir</td>
+<td><code>joblib.load</code>, función <code>predecir()</code></td>
+</tr>
+<tr class="odd">
+<td>3 · Interfaz</td>
+<td>Una app para personas, con la precisión y los límites del modelo a
+la vista</td>
+<td>Streamlit o Gradio</td>
+</tr>
+<tr class="even">
+<td>4 · API (ampliación)</td>
+<td>Un servicio para otros programas: <code>/health</code> y
+<code>/predict</code> en JSON</td>
+<td>FastAPI</td>
+</tr>
+<tr class="odd">
+<td>5 · Tests</td>
+<td>Comprobar que la predicción es válida y que una entrada incompleta
+da error</td>
+<td><code>pytest</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>Seguridad:</strong> nunca cargues un <code>.joblib</code>
+o <code>.pkl</code> descargado de una fuente desconocida. Al abrirlo se
+puede ejecutar código oculto.</p>
+</blockquote>
+<p>En la industria, a esto se le suma Docker, la nube, la integración
+continua (CI/CD), la vigilancia de la <strong>deriva</strong> del modelo
+y el reentrenamiento: es lo que se llama <strong>MLOps</strong>.</p>
+<h3 id="ejercicio-del-bloque-5">Ejercicio del bloque 5</h3>
+<p><strong>D5.1 · Del cuaderno a la app</strong> 🔴 (CA5.7): toma el
+mejor modelo del bloque 4. Guárdalo con sus metadatos, escribe
+<code>predecir()</code> con validación y dos tests, y crea una app de
+Streamlit que muestre la predicción, la versión y la métrica del modelo.
+Termina rellenando el <em>checklist</em> de la teoría 13.7.</p>
+<p><a
+href="teoria.html#137-del-notebook-a-la-app-desplegar-un-modelo">Ampliar:
+guía <em>ML Model Deployment Handbook</em> (de nivel profesional) →
+resumida en la teoría 13.7</a></p>
 <hr />
 <h2 id="rúbrica-de-las-prácticas-de-este-itinerario">Rúbrica de las
 prácticas de este itinerario</h2>

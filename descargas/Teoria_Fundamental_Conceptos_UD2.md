@@ -17,8 +17,8 @@
 10. Introducción a Machine Learning
 11. Introducción a Big Data
 12. Ecosistema de Librerías: PyTorch, scikit-learn y Seaborn
-13. Crear Aplicaciones: Escritorio y Web (tkinter, Streamlit, Gradio...)
-14. Ampliación con materiales complementarios (IA vs ML vs DL vs GenAI, Pandas, pipeline ML, Seaborn, EDA, redes neuronales, IA generativa, hashing, automatización, testing y SQLite, algoritmia, banco de ejercicios)
+13. Crear Aplicaciones: Escritorio y Web (tkinter, Streamlit, Gradio...) y desplegar un modelo
+14. Ampliación con materiales complementarios (IA vs ML vs DL vs GenAI, Pandas, pipeline ML, Seaborn, EDA, redes neuronales, IA generativa, hashing, automatización, testing y SQLite, algoritmia, banco de ejercicios, buenas prácticas y Python avanzado)
 15. Referencias Externas (incluye IDEs locales y datasets recomendados)
 
 ---
@@ -2025,9 +2025,9 @@ if __name__ == "__main__":
 | **UD2 · Bloque A** (funciones) | tkinter | Mini-apps: conversor de unidades, calculadora de medias (E3, E11 con ventana) |
 | **UD2 · Laboratorio 1** (sesiones 47-52, sistema de gestión) | tkinter / CustomTkinter | Interfaz gráfica para el sistema de gestión: alta de registros, búsqueda, gráfico Matplotlib integrado |
 | **UD2 · Capstone** (sesiones 65-70) | Streamlit | Presentar el análisis del dataset de Kaggle como panel web interactivo |
-| **UD3 · Lenguaje Natural** (proyecto: chatbot / sentimientos) | Gradio | Demo web del analizador de sentimientos o del chatbot |
-| **UD4 · Visión Artificial** (proyecto final) | Gradio / Streamlit | Subir una foto y ver la clase que predice la CNN |
-| **UD5 · Machine Learning** | Streamlit / FastAPI | App que recibe datos (p. ej., características de una casa) y devuelve la predicción |
+| **UD3 · Visión artificial** (proyecto final) | Gradio / Streamlit | Subir una foto y ver la clase que predice la CNN |
+| **UD4 · Lenguaje natural** (proyecto: chatbot / sentimientos) | Gradio | Demo web del analizador de sentimientos o del chatbot |
+| **UD5 · Machine Learning** | Streamlit / FastAPI | App que recibe datos (p. ej., características de una casa) y devuelve la predicción (ver 13.7) |
 | **Ampliación** | Flask, PySide6, Kivy, Flet | Proyectos personales del alumnado avanzado |
 
 **Instalación** (tkinter no necesita instalación):
@@ -2035,11 +2035,186 @@ if __name__ == "__main__":
 pip install customtkinter streamlit gradio flask
 ```
 
+### 13.7 Del notebook a la app: desplegar un modelo
+
+Un modelo que solo existe dentro de un cuaderno no lo puede usar nadie más. **Desplegar** (*deploy*) es ponerlo en un sitio donde reciba datos nuevos y devuelva predicciones a personas o a otros programas.
+
+> **Analogía:** entrenar es inventar una receta en la cocina de pruebas. Desplegar es abrir el restaurante: llegan clientes, la cocina repite la receta igual cada vez y alguien vigila que la comida siga saliendo bien.
+
+**El ciclo de vida completo de un modelo** (enlaza con el ciclo de vida de los datos de la UD5, CA5.1):
+
+```
+ Recoger → Preparar → Entrenar → Evaluar → Guardar y versionar → Desplegar → Vigilar → Reentrenar
+ (secc. 9)  (secc. 9)  (secc. 10, 14.4)      (este apartado)     (app/API)   (deriva)   (vuelta)
+```
+
+**Formas de desplegar**:
+
+| Tipo | Cómo funciona | Ejemplo | Herramientas |
+|------|---------------|---------|--------------|
+| **App interactiva** | Una interfaz para que una persona pruebe el modelo | Demo para la clase | **Streamlit, Gradio** (sección 13.4) |
+| **API en tiempo real** | Otro programa envía datos y recibe la predicción en milisegundos | Comprobar si un pago es fraude | FastAPI, Flask |
+| **Por lotes** (*batch*) | Se predice para muchas filas a una hora fija | Puntuar cada noche a todos los clientes | Script programado (14.10) |
+| **En el dispositivo** (*edge*) | El modelo va dentro del móvil o del robot | Filtros de la cámara | TFLite, ONNX |
+
+#### Paso 1 · Guardar el modelo entrenado (serialización)
+
+Entrenar puede tardar mucho; **guardar el modelo** permite entrenarlo una vez y usarlo muchas. Con scikit-learn se usa `joblib`, que viene con la librería.
+
+```python
+# entrenar.py: se ejecuta UNA vez; entrena y guarda el pipeline completo
+import json, joblib, sklearn
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+
+X, y = load_iris(return_X_y=True, as_frame=True)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+
+modelo = make_pipeline(StandardScaler(), KNeighborsClassifier(n_neighbors=5))
+modelo.fit(X_tr, y_tr)
+precision = modelo.score(X_te, y_te)                 # 0.933
+
+joblib.dump(modelo, "modelo_iris_v1.joblib")        # el modelo, con su escalado incluido
+with open("modelo_iris_v1.json", "w") as f:          # metadatos: versión y calidad
+    json.dump({"version": "1.0", "accuracy_test": round(precision, 3),
+               "sklearn": sklearn.__version__, "columnas": list(X.columns),
+               "clases": ["setosa", "versicolor", "virginica"]}, f, indent=2)
+```
+
+**Tres reglas para guardar modelos**:
+1. **Guarda el pipeline completo** (escalado + modelo), no solo el modelo. Si no, tendrás que repetir a mano el preprocesamiento y te equivocarás.
+2. **Apunta la versión de las librerías** (como en el `.json`). Un modelo guardado con una versión de scikit-learn puede fallar con otra.
+3. **Nunca cargues un archivo `.joblib` o `.pkl` de una fuente desconocida**: al cargarlo se puede ejecutar código oculto. Trátalo como si fuera un programa.
+
+#### Paso 2 · Cargar una vez y predecir
+
+Error típico: cargar el modelo **dentro** de la función que predice, de modo que cada predicción lo vuelve a leer del disco. Se carga **una sola vez** al arrancar.
+
+```python
+# predecir.py
+import json, joblib
+import pandas as pd
+
+MODELO = joblib.load("modelo_iris_v1.joblib")      # se carga UNA vez
+META = json.load(open("modelo_iris_v1.json"))
+
+def predecir(medidas: dict) -> dict:
+    faltan = set(META["columnas"]) - set(medidas)
+    if faltan:                                       # validar la entrada antes de predecir
+        raise ValueError(f"Faltan columnas: {sorted(faltan)}")
+    fila = pd.DataFrame([medidas])[META["columnas"]]
+    probs = MODELO.predict_proba(fila)[0]
+    i = probs.argmax()
+    return {"especie": META["clases"][i], "confianza": round(float(probs[i]), 2),
+            "version_modelo": META["version"]}
+
+print(predecir({"sepal length (cm)": 5.1, "sepal width (cm)": 3.5,
+                "petal length (cm)": 1.4, "petal width (cm)": 0.2}))
+# {'especie': 'setosa', 'confianza': 1.0, 'version_modelo': '1.0'}
+```
+
+#### Paso 3 · Ponerle una cara: app con Streamlit
+
+```python
+# app.py  →  streamlit run app.py
+import streamlit as st
+from predecir import predecir, META
+
+st.title("🌸 ¿Qué especie de iris es?")
+st.caption(f"Modelo v{META['version']} · accuracy en test {META['accuracy_test']:.0%}")
+
+medidas = {col: st.slider(col, 0.0, 8.0, 3.0, 0.1) for col in META["columnas"]}
+if st.button("Predecir"):
+    r = predecir(medidas)
+    st.success(f"Especie: **{r['especie']}** (confianza {r['confianza']:.0%})")
+```
+
+Se puede publicar gratis en Streamlit Community Cloud conectándolo a un repositorio de GitHub. El archivo `requirements.txt` debe indicar las librerías y sus versiones (14.14).
+
+#### Paso 4 (ampliación) · Una API para otros programas
+
+Una **API** permite que una app móvil o una web pida predicciones enviando datos en **JSON** por HTTP. Con **FastAPI**:
+
+```python
+# api.py  →  uvicorn api:app --reload   ·   documentación automática en /docs
+from fastapi import FastAPI, HTTPException
+from predecir import predecir
+
+app = FastAPI(title="API Iris")
+
+@app.get("/health")                 # ¿está viva la API?
+def health():
+    return {"estado": "ok"}
+
+@app.post("/predict")               # recibe las medidas en JSON y devuelve la especie
+def predict(medidas: dict):
+    try:
+        return predecir(medidas)
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))   # 422 = datos de entrada no válidos
+```
+
+| Concepto | Significado |
+|----------|-------------|
+| **Endpoint** | Una dirección de la API (`/predict`, `/health`) |
+| **GET / POST** | Pedir información / enviar datos para que se procesen |
+| **JSON** | Formato de texto para intercambiar datos (sección 2, 14.10) |
+| **Código de estado** | 200 = bien · 404 = no existe · 422 = datos mal formados · 500 = error del servidor |
+
+#### Paso 5 · Comprobar que funciona: tests
+
+```python
+# test_predecir.py  →  pytest
+import pytest
+from predecir import predecir
+
+FLOR = {"sepal length (cm)": 6.7, "sepal width (cm)": 3.0,
+        "petal length (cm)": 5.2, "petal width (cm)": 2.3}
+
+def test_devuelve_una_especie_valida():
+    r = predecir(FLOR)
+    assert r["especie"] in ["setosa", "versicolor", "virginica"]
+    assert 0 <= r["confianza"] <= 1
+
+def test_rechaza_entrada_incompleta():
+    with pytest.raises(ValueError):
+        predecir({"sepal length (cm)": 5.0})
+```
+
+#### Más allá del aula: qué hacen los profesionales
+
+Estos conceptos no se programan en el curso, pero conviene conocerlos para entender cómo funcionan los servicios de IA reales:
+
+| Concepto | Idea en una frase |
+|----------|-------------------|
+| **Docker** | Empaquetar la app con su Python y sus librerías en un «contenedor» que funciona igual en cualquier ordenador |
+| **Nube** (Cloud Run, Azure, AWS) | Ejecutar ese contenedor en servidores que crecen según el número de usuarios |
+| **CI/CD** (GitHub Actions) | Cada vez que se sube código, se ejecutan los tests y, si pasan, se publica automáticamente |
+| **Monitorización y deriva** (*drift*) | Los datos del mundo cambian (nuevos clientes, nuevas costumbres) y el modelo empeora sin avisar: hay que vigilar sus predicciones y reentrenarlo |
+| **Versionado** (MLflow, DVC) | Guardar qué datos, qué código y qué parámetros produjeron cada versión del modelo |
+| **Seguridad** | Claves de acceso, límite de peticiones, no guardar contraseñas en el código y validar siempre la entrada |
+| **MLOps** | Todo lo anterior junto: DevOps aplicado al aprendizaje automático |
+
+> **Conexión con la ética** (UD1, UD5): un modelo desplegado toma decisiones sobre personas reales. La **deriva** puede volverlo injusto con el tiempo aunque al principio funcionase bien. Por eso se vigila y se documenta.
+
+**Checklist antes de publicar un modelo del curso**:
+- [ ] Se ha evaluado con datos que no vio al entrenar (y se indica la métrica en la app).
+- [ ] Se ha guardado el pipeline completo y la versión de las librerías.
+- [ ] La entrada se valida (faltan campos, valores imposibles).
+- [ ] Hay al menos dos tests que pasan.
+- [ ] `requirements.txt` con versiones; sin contraseñas ni datos personales en el repositorio.
+- [ ] La app explica qué hace el modelo, su precisión y sus límites.
+
+> Ejemplos de 13.7 comprobados (entrenar, guardar, cargar, predecir y los dos tests). Streamlit y FastAPI no se pudieron ejecutar en el entorno de prueba: ejecútalos en local o en Colab tras `pip install streamlit fastapi uvicorn`.
+
 ---
 
 ## 1️⃣4️⃣ AMPLIACIÓN: MATERIALES COMPLEMENTARIOS
 
-Esta sección recoge y ordena el contenido de los materiales complementarios del curso: guías de Pandas, Seaborn, EDA, Machine Learning, redes neuronales, IA generativa, hashing, automatización, y colecciones de ejercicios y algoritmos. Las fuentes están al final, en el apartado 14.14. Cada bloque indica con qué ejercicio (E1–E27) o con qué unidad conecta.
+Esta sección recoge y ordena el contenido de los materiales complementarios del curso: guías de Pandas, Seaborn, EDA, Machine Learning, redes neuronales, IA generativa, hashing, automatización, y colecciones de ejercicios y algoritmos. Las fuentes están al final, en el apartado 14.15. Cada bloque indica con qué ejercicio (E1–E27) o con qué unidad conecta.
 
 ---
 
@@ -2804,7 +2979,132 @@ Ejercicios inspirados en las colecciones adjuntas, ordenados según los ejercici
 
 ---
 
-### 14.14 Materiales complementarios utilizados
+### 14.14 Buenas prácticas de Python y conceptos avanzados
+
+Síntesis de *Python Complete Notes: Beginner to Advanced* (Achal Singh, TheAutomationEngineer). Las 18 fichas del material repasan lo que ya está en las secciones 1–5 (variables, operadores, condicionales, bucles, funciones, cadenas y colecciones) y añaden lo siguiente.
+
+#### Estilo y organización de un proyecto
+
+| Práctica | Cómo |
+|----------|------|
+| **PEP 8** (guía de estilo oficial) | 4 espacios de sangría, líneas de 79–99 caracteres, espacios alrededor de los operadores. Herramientas: `black`, `flake8`, `pylint` |
+| **Nombres** | `variable_y_funcion` (snake_case) · `NombreDeClase` (PascalCase) · `CONSTANTE` (MAYÚSCULAS) · `modulo.py` |
+| **Estructura** | `src/` para el código, `tests/` para las pruebas, `README.md`, `requirements.txt`, `.gitignore` |
+| **Entorno virtual** | `python -m venv .venv`; no se sube a GitHub (va en `.gitignore`) |
+| **Dependencias** | `pip freeze > requirements.txt` y `pip install -r requirements.txt` |
+| **Módulos y paquetes** | Un archivo `.py` es un **módulo**; una carpeta de módulos es un **paquete** (con `__init__.py`). `import modulo` o `from modulo import funcion` |
+| **Funciones pequeñas** | Una función hace una sola cosa, con un *docstring* (`"""…"""`) que explica qué hace. Principio **DRY**: no repetir código |
+
+#### Errores frecuentes que conviene evitar
+
+```python
+# ❌ Argumento por defecto mutable: la lista se comparte entre llamadas
+def añadir(x, lista=[]):
+    lista.append(x)
+    return lista
+print(añadir(1), añadir(2))      # [1, 2] [1, 2]  ← ¡sorpresa!
+
+# ✅ Correcto
+def añadir(x, lista=None):
+    lista = [] if lista is None else lista
+    lista.append(x)
+    return lista
+print(añadir(1), añadir(2))      # [1] [2]
+```
+
+| Error | Por qué es malo | Alternativa |
+|-------|-----------------|-------------|
+| `except: pass` | Esconde los errores | Capturar la excepción concreta (`except ValueError:`) y avisar |
+| `API_KEY = "12345"` en el código | Se publica al subirlo a GitHub | Variables de entorno o archivo `.env` (14.10) |
+| `f = open(...)` sin cerrar | Se quedan archivos abiertos | `with open(...) as f:` |
+| Variables globales | Código difícil de seguir | Pasar datos como parámetros y devolver resultados |
+| Copiar y pegar código | Los errores se multiplican | Crear una función |
+| `==` frente a `is` | `==` compara valores; `is` comprueba si son **el mismo objeto** | `a == b` para comparar; `x is None` para None |
+
+> **Una corrección al material:** la ficha 2 afirma que Python no hace conversiones automáticas de tipo. Las hace en casos seguros: `3 + 2.5` da `5.5` (int → float) y `True + 1` da `2`. Lo que **no** hace es mezclar tipos incompatibles: `"3" + 2` da `TypeError`, y entonces hay que convertir a mano con `int("3")`.
+
+#### Excepciones completas: `try / except / else / finally` y `raise`
+
+```python
+class EdadNoValida(Exception):              # excepción propia
+    pass
+
+def leer_edad(texto):
+    try:
+        edad = int(texto)                    # puede lanzar ValueError
+    except ValueError:
+        print("Escribe un número entero")
+        return None
+    else:                                    # solo si no hubo error
+        if edad < 0:
+            raise EdadNoValida("La edad no puede ser negativa")
+        return edad
+    finally:                                 # se ejecuta SIEMPRE
+        print("Lectura terminada")
+
+print(leer_edad("17"))                       # Lectura terminada · 17
+print(leer_edad("hola"))                     # Escribe un número entero · Lectura terminada · None
+```
+
+**Leer un *traceback***: se lee **de abajo arriba**. La última línea dice el tipo de error (`ZeroDivisionError`) y la anterior, el archivo y la línea donde ocurrió.
+
+#### Programación orientada a objetos: los cuatro pilares
+
+| Pilar | Idea | Ejemplo |
+|-------|------|---------|
+| **Encapsulación** | Juntar datos y métodos y proteger el estado interno | `self.__saldo` solo se cambia con `ingresar()` |
+| **Herencia** | Una clase hija reutiliza la de la madre | `class Perro(Animal)` |
+| **Polimorfismo** | El mismo método hace cosas distintas según el objeto | `animal.hablar()` → «Guau» o «Miau» |
+| **Abstracción** | Mostrar qué hace y esconder cómo | `from abc import ABC, abstractmethod` |
+
+Las librerías de IA usan estos pilares constantemente. Todos los modelos de scikit-learn heredan de una clase base y comparten `fit()` y `predict()`: es **polimorfismo**. Por eso se puede cambiar un modelo por otro sin cambiar el resto del código (14.4). El agente aspirador de 0.9 es otro ejemplo de clase.
+
+#### Conceptos avanzados
+
+```python
+# Generador: produce valores de uno en uno (no guarda toda la lista en memoria)
+def pares(n):
+    for i in range(0, n, 2):
+        yield i
+print(list(pares(10)))                       # [0, 2, 4, 6, 8]
+
+# Decorador: añade comportamiento a una función sin modificarla
+import time
+def cronometrar(func):
+    def envoltura(*args, **kwargs):
+        inicio = time.perf_counter()
+        resultado = func(*args, **kwargs)
+        print(f"{func.__name__} tardó {time.perf_counter() - inicio:.4f} s")
+        return resultado
+    return envoltura
+
+@cronometrar
+def suma_cuadrados(n):
+    return sum(i * i for i in range(n))      # generador dentro de sum()
+suma_cuadrados(1_000_000)
+
+# *args y **kwargs: número variable de argumentos
+def resumen(*notas, **datos):
+    return f"{datos.get('nombre', '?')}: media {sum(notas) / len(notas):.1f}"
+print(resumen(7, 8, 9, nombre="Uxía"))       # Uxía: media 8.0
+
+# Funciones integradas muy útiles
+nombres, notas = ["Ana", "Brais"], [8.5, 6.0]
+for i, (n, x) in enumerate(zip(nombres, notas), start=1):
+    print(i, n, x)                           # 1 Ana 8.5 · 2 Brais 6.0
+print(any(x < 5 for x in notas), all(x >= 5 for x in notas))   # False True
+```
+
+| Concepto | Para qué | Dónde aparece en IA |
+|----------|----------|---------------------|
+| **Iterador / generador** (`yield`) | Recorrer datos enormes sin cargarlos todos en memoria | Cargar imágenes por lotes para entrenar una red (`DataLoader`) |
+| **Decorador** (`@`) | Añadir registro, tiempo, permisos… | `@app.post("/predict")` en FastAPI (13.7), `@st.cache_data` en Streamlit, `@lru_cache` (14.12) |
+| **Gestor de contexto** (`with`) | Abrir y cerrar recursos de forma segura | Archivos, conexiones a bases de datos, `torch.no_grad()` |
+| `*args`, `**kwargs` | Funciones flexibles | Pasar hiperparámetros a un modelo: `Modelo(**params)` |
+
+**Rendimiento**: las comprensiones suelen ser más rápidas que los bucles con `append`. Se debe preferir las funciones integradas y usar `set` para comprobar si un elemento está en una colección (O(1), 14.9). Para medir tiempos, `timeit`.
+
+### 14.15 Materiales complementarios utilizados
 
 | Material | Tema | Secciones |
 |----------|------|-----------|
@@ -2821,6 +3121,8 @@ Ejercicios inspirados en las colecciones adjuntas, ordenados según los ejercici
 | 1000 Python Examples (G. Szabó) | Testing, SQLite, GUI, web | 14.11, 13 |
 | Algoritmos resueltos con Python (Condor, De la Cruz) · Ejercicios de programación con Python (J. A. Alonso) | Algoritmia | 14.12 |
 | 30 Ejercicios de Python · Ejercicios Python con soluciones · Más de 400 ejercicios (Marzal, Gracia) · Program in Python (Keshwam) | Ejercicios | 14.13 |
+| Python Complete Notes: Beginner to Advanced (Achal Singh, TheAutomationEngineer) | Repaso de Python, buenas prácticas, POO, Python avanzado | 1–5, 14.14 |
+| ML Model Deployment Handbook: From Notebook to Production | Guardar, servir, probar y desplegar modelos; MLOps | 13.7 |
 
 ---
 
@@ -3526,6 +3828,8 @@ Ejercicio 25-27 (ETL, EDA: completo)
 - ☐ Sé elegir entre scikit-learn (datos en tabla) y PyTorch/Keras (imágenes, texto, audio)
 
 **Aplicaciones de escritorio y web**:
+- ☐ Sé guardar un modelo con joblib y cargarlo una sola vez para predecir
+- ☐ Sé qué es una API, un endpoint y para qué sirve /predict
 - ☐ Entiendo la programación orientada a eventos (botón → función)
 - ☐ Sé crear una ventana con tkinter (Label, Entry, Button)
 - ☐ Distingo app de escritorio y app web

@@ -53,6 +53,9 @@ distintos formatos</a></li>
 <li><a href="#13-validar-lo-que-se-ha-leído"
 id="toc-13-validar-lo-que-se-ha-leído">1.3 Validar lo que se ha
 leído</a></li>
+<li><a href="#14-recoger-datos-de-la-web-vigilar-páginas-y-scraping"
+id="toc-14-recoger-datos-de-la-web-vigilar-páginas-y-scraping">1.4
+Recoger datos de la web: vigilar páginas y <em>scraping</em></a></li>
 <li><a href="#ejercicios-del-bloque-1"
 id="toc-ejercicios-del-bloque-1">Ejercicios del bloque 1</a></li>
 </ul></li>
@@ -116,7 +119,7 @@ prácticas de este itinerario</a></li>
 </ul>
 </nav>
   </div>
-  <article class="content">
+  <article class="content" data-salt="c2RY+rMiUFBpsqqoH01oFQ==" data-iter="250000">
 <h1 id="análisis-de-datos-con-python-de-los-datos-al-modelo">Análisis de
 datos con Python: de los datos al modelo</h1>
 <div class="ud-head" style="--c:var(--c-datos)">
@@ -332,6 +335,123 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a hr
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(validar(pd.read_csv(<span class="st">&quot;pedidos.csv&quot;</span>)))</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># {&#39;filas&#39;: 203, &#39;nulos_%&#39;: {&#39;edad&#39;: 5.9}, &#39;duplicados&#39;: 3, &#39;precios_negativos&#39;: 0}</span></span></code></pre></div>
+<h3 id="14-recoger-datos-de-la-web-vigilar-páginas-y-scraping">1.4
+Recoger datos de la web: vigilar páginas y <em>scraping</em></h3>
+<p>Muchos datos útiles no están en un CSV ni en una API: están en
+páginas web pensadas para personas. Hay dos formas de recogerlos
+automáticamente:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Vigilar cambios</strong></th>
+<th><em><strong>Scraping</strong></em> (extraer datos)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Qué hace</td>
+<td>Mira una página cada cierto tiempo y avisa si algo cambia</td>
+<td>Recorre páginas y extrae datos concretos a una tabla</td>
+</tr>
+<tr class="even">
+<td>Ejemplo</td>
+<td>Saber cuándo baja un precio o aparece un aviso nuevo</td>
+<td>Lista de horarios de todos los museos de Galicia</td>
+</tr>
+<tr class="odd">
+<td>Herramienta abierta</td>
+<td><a
+href="https://github.com/dgtlmoon/changedetection.io">changedetection.io</a>
+(licencia Apache 2.0): avisa por correo, Telegram o
+<em>webhook</em></td>
+<td><a href="https://github.com/D4Vinci/Scrapling">Scrapling</a>
+(licencia BSD-3): sigue encontrando los datos aunque la web cambie su
+diseño</td>
+</tr>
+<tr class="even">
+<td>En Python</td>
+<td><code>requests</code> + comparar una huella (<em>hash</em>) del
+contenido</td>
+<td><code>requests</code> + <code>BeautifulSoup</code>, o Scrapling</td>
+</tr>
+</tbody>
+</table>
+<p><strong>La idea de un vigilante de cambios</strong>, en pocas líneas.
+Se guarda una <strong>huella</strong> del texto visible de la página (un
+<em>hash</em>: si cambia una sola letra, la huella cambia por completo)
+y se compara con la anterior:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib, difflib, re</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bloques(html):</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Lista de textos visibles de la página, uno por etiqueta.&quot;&quot;&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [t.strip() <span class="cf">for</span> t <span class="kw">in</span> re.findall(<span class="vs">r&quot;&gt;([^&lt;]+)&lt;&quot;</span>, html) <span class="cf">if</span> t.strip()]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> huella(html):</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> hashlib.sha256(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>.join(bloques(html)).encode()).hexdigest()[:<span class="dv">12</span>]</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>ayer <span class="op">=</span> <span class="st">&quot;&lt;h1&gt;Avisos&lt;/h1&gt;&lt;p&gt;Lunes: excursión a Vigo&lt;/p&gt;&lt;p&gt;Precio del libro: 24 €&lt;/p&gt;&quot;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>hoy  <span class="op">=</span> <span class="st">&quot;&lt;h1&gt;Avisos&lt;/h1&gt;&lt;p&gt;Lunes: excursión a Vigo&lt;/p&gt;&lt;p&gt;Precio del libro: 21 €&lt;/p&gt;&lt;p&gt;Martes: no hay clase&lt;/p&gt;&quot;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> huella(ayer) <span class="op">!=</span> huella(hoy):</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;La página ha cambiado:&quot;</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> linea <span class="kw">in</span> difflib.ndiff(bloques(ayer), bloques(hoy)):</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> linea[<span class="dv">0</span>] <span class="kw">in</span> <span class="st">&quot;+-&quot;</span>:</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">&quot; &quot;</span>, linea)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># La página ha cambiado:</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   - Precio del libro: 24 €</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   + Precio del libro: 21 €</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   + Martes: no hay clase</span></span></code></pre></div>
+<p>En la práctica, <code>ayer</code> y <code>hoy</code> serían
+<code>requests.get(url).text</code> guardados en días distintos.
+changedetection.io hace exactamente esto, pero con una interfaz web,
+filtros para vigilar solo una parte de la página y avisos
+automáticos.</p>
+<blockquote>
+<p>⚖️ <strong>Ética y legalidad del <em>scraping</em></strong>. Que una
+página se pueda leer no significa que se pueda recoger en masa:</p>
+<ol type="1">
+<li><strong>Mira primero si hay una API o datos abiertos.</strong> Es la
+vía prevista y la más estable.</li>
+<li><strong>Lee los términos de uso</strong> de la web: muchos prohíben
+la extracción automática.</li>
+<li><strong>Respeta <code>robots.txt</code></strong>: es el archivo en
+el que la web indica qué partes no quiere que lean los programas.</li>
+<li><strong>No la satures</strong>: espera unos segundos entre
+peticiones e identifícate.</li>
+<li><strong>Datos personales, no</strong>: nombres, teléfonos o correos
+de personas están protegidos por el RGPD aunque estén publicados.
+Recogerlos para otro fin necesita una base legal.</li>
+<li><strong>No esquives protecciones.</strong> Algunas librerías
+(Scrapling, entre ellas) incluyen funciones para burlar los sistemas
+antibots. Si una web se protege, es que no quiere que la recojan
+así.</li>
+</ol>
+</blockquote>
+<p>Python trae un lector de <code>robots.txt</code> que dice si una
+dirección está permitida:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib <span class="im">import</span> robotparser</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>reglas <span class="op">=</span> <span class="st">&quot;&quot;&quot;User-agent: *</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">Disallow: /privado/</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">Disallow: /buscar</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">Crawl-delay: 10</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">User-agent: GPTBot</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">Disallow: /</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>rp <span class="op">=</span> robotparser.RobotFileParser()</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>rp.parse(reglas.splitlines())          <span class="co"># con una web real: rp.set_url(&quot;.../robots.txt&quot;); rp.read()</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rp.can_fetch(<span class="st">&quot;MiBotDeClase&quot;</span>, <span class="st">&quot;https://ejemplo.org/noticias/1&quot;</span>))      <span class="co"># True</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rp.can_fetch(<span class="st">&quot;MiBotDeClase&quot;</span>, <span class="st">&quot;https://ejemplo.org/privado/notas&quot;</span>))   <span class="co"># False</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rp.can_fetch(<span class="st">&quot;GPTBot&quot;</span>, <span class="st">&quot;https://ejemplo.org/noticias/1&quot;</span>))            <span class="co"># False: este robot lo tiene todo prohibido</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(rp.crawl_delay(<span class="st">&quot;MiBotDeClase&quot;</span>))                                      <span class="co"># 10 segundos entre peticiones</span></span></code></pre></div>
+<p>Fíjate en la última regla: cada vez más webs bloquean a los robots
+que recogen texto para entrenar modelos de IA. Es una de las discusiones
+abiertas sobre de dónde salen los datos de los LLM (UD4).</p>
 <h3 id="ejercicios-del-bloque-1">Ejercicios del bloque 1</h3>
 <p><strong>D1.1 · Arrays con NumPy</strong> 🟢 (E18): crea un vector del
 1 al 10, una matriz 3×3 de ceros, otra 2×4 de unos, los pares del 2 al
@@ -361,6 +481,26 @@ y longitud), convierte la respuesta JSON en un DataFrame con la
 temperatura por horas y guárdala en CSV. ¿Qué pasa si no hay conexión?
 Gestiónalo con <code>try/except</code> (<a
 href="teoria.html#1410-automatización-con-python">teoría 14.10</a>).</p>
+<p><strong>D1.5 · Mi vigilante de cambios</strong> 🟡: adapta el código
+de 1.4 para que lea una página real <strong>que puedas vigilar</strong>
+(la de avisos de tu concello o la web del instituto), guarde la huella
+en un archivo y, al ejecutarlo otra vez, diga qué ha cambiado. Antes de
+empezar, comprueba con <code>robotparser</code> que esa página está
+permitida y anótalo. <em>Pista</em>:
+<code>requests.get(url, timeout=10).text</code>, guardar con
+<code>open("huella.txt", "w")</code>, y <code>time.sleep()</code> si
+haces varias peticiones.</p>
+<p><strong>D1.6 · ¿Se puede recoger?</strong> 🟡 (CA5.2, debate): para
+cada caso, decide si es legítimo recogerlo de forma automática y
+justifícalo con los seis puntos del cuadro de ética: a) los precios de
+un supermercado en línea para comparar la cesta de la compra; b) los
+nombres y teléfonos de todos los fontaneros de un directorio para
+venderles un servicio; c) la temperatura diaria de MeteoGalicia para un
+proyecto de clase; d) las reseñas de un restaurante para analizar su
+sentimiento (UD4); e) todos los textos de una red social para entrenar
+un modelo de lenguaje.</p>
+<div class="sol-lock" data-label="Solución orientativa" data-iv="z1kx4ElQEP9ZT7PS" data-ct="FLTpXVzQKaxrFVfcoU2y95HtBaPLPoNubGip0xiWDiof3n7UjmBmDRbeBEL+4H1xZevV97NMNrnmCyG1RAdrf7Ed/SXa/gG09kb8f0bWjapzmM3jky6JsLDUTXDx/XzVnRe0azW0Oc3qnA/al2gBc8Ki177az3ZyZVr4Aj13bhNTacIJGDU2emVadLf7nojXGZUIEvCZHMOyw9UYWk20NTMk8sTKQeZm/0ThjS9MngZ0ce03dOToZ/6S7qhk6W/JRfHn6k+uAJphqUhS5Aw9XdqGvS6dGUONIcs8Zubwzn6BXvq5GsjGykQ5v5dDPougdPq8/P4tCOgQJbQoHK6xB+hBV030VSrCFF/M/H/fhsc/Ndt6Zy9I+TGxLu8wYPqWLdw8S7iqkyJl2xnod6R3fFFC/gQj3osBLk5ZsYqY/hF3e3GJu1s9Bt0iS8wxWTvL2Yb4Zj2oC1xnTUaudYOVMG+OPSWlwgJC2x3CcUJArDxk2fObj0E3WR9YykjKB8uqzt2vV/NyHhU2txHSVhsXgjBYBXOJFc34RKsyG7O/40IGi9XL3OJMqac99dOEWEJLHZ0IyuB66cS7F6Uk4GflSaFoyiM/kTGMdGZtobrFbmFaxNergYjfSrG3i74oNCgxRkKOT+p591LYvINCwFBGTcXIrmDZAYTptpuze6LVkm0EYHRBuNmyma0bI6Kp/iP3WCtMYIKag1rdkRgso6XEXiTNokR54IGHQzclHwecpp8uGTNRZi2cweit4yTHQc3SUlkM6kDLSBNH9FIHk3s3GvqjsIYZSLm3CrsYzU2bef3J2Xaa2gMxWkuygLPNpFfwYAFC/bmEYj55z0YpZzj7vYGYeeER6a1jPeqpy7IrIQdoTMZocgrlYZRRxMearnRoYbaZI9uoN/g0K05YW286aZyp045gcMXLoKexuvB/ORDdLXd+cRsPmpF5ACMh5QIxGmIIObRgjBJKuc08AFrODauXQC0WnSRV2iHz2OhdVFBp/6Zri1qGN73QzWOYITf4ibYjL7tlZsioyBuvDbxicc6bZuvlZhJkO0y2n1oRAHNIYHuy+kITv3PLF5+mDgsh9RKmfHoOsLCDpoEXTru0J60skZS/eJ6XxMPXDMNuiYPBqWiYHx5Vtl0fn/SptycZz0/P2xm47kbm0JCpSHZqy8sxMVLnK37+pCMDF4AOX/rvWfSTtkY9m2A4/OzEZXW+mh7J275GDzWwOGVWF5IgD7f7WkVM49NTDx91ztNOxKYHlm2505G6g4JDJewefzVhTC0lXRRCE6Cgj6vyKVJaQ5wRe2xqyg3bZ4SoyXFWLT1jbSE2BrvGS64IHNOjIvvgerBFvvuE+j7Et1vD1u4tkRLitNVfKUtcfxvtKrngHm5vZXGpaagKYExAmjE/T8ybV7qJE+LZV5xTukS3Y2d69HKyNjL5d8pck5d6Rgi+y5fEoMg11ggr5v+pSo749ZHx2ezzoJmihu+vP2/+gUkEKljJt0qjweg5RjgLT8vinzIhUriQ3kfTuBeMlMQasmOcknaWAhNo4WPKNGqZqMTD/MqHVoB6x+4tyZFWLTlnkkqzf183HQkhw1Mo1T9ct8JSURdNWePW7Tu+bfNeuFYxaTXFIVwofq4yrkdauszAqfRVU2uUTthWYDBgTwvTvygj01XhkBI="></div>
+
 <p><a href="https://mp5101-ad.vercel.app/docs/unidades/01/">Ampliar en
 el módulo AD: Unidad 1 →</a></p>
 <hr />
@@ -613,20 +753,20 @@ neuronales) comparan distancias. Si una columna va de 0 a 100 000 € y
 otra de 1 a 5 habitaciones, la primera «manda» solo por su escala. Es el
 ejercicio <strong>E27</strong>.</p>
 </blockquote>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MinMaxScaler, StandardScaler</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;pedidos.csv&quot;</span>).drop_duplicates()</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;fecha&quot;</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">&quot;fecha&quot;</span>])</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;edad&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;edad&quot;</span>].fillna(df[<span class="st">&quot;edad&quot;</span>].median())</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;tramo_edad&quot;</span>] <span class="op">=</span> pd.cut(df[<span class="st">&quot;edad&quot;</span>], bins<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">25</span>, <span class="dv">45</span>, <span class="dv">65</span>, <span class="dv">120</span>],</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                          labels<span class="op">=</span>[<span class="st">&quot;joven&quot;</span>, <span class="st">&quot;adulto&quot;</span>, <span class="st">&quot;maduro&quot;</span>, <span class="st">&quot;senior&quot;</span>])</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;cuartil_total&quot;</span>] <span class="op">=</span> pd.qcut(df[<span class="st">&quot;total&quot;</span>], q<span class="op">=</span><span class="dv">4</span>, labels<span class="op">=</span>[<span class="st">&quot;Q1&quot;</span>, <span class="st">&quot;Q2&quot;</span>, <span class="st">&quot;Q3&quot;</span>, <span class="st">&quot;Q4&quot;</span>])</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.get_dummies(df, columns<span class="op">=</span>[<span class="st">&quot;categoria&quot;</span>], prefix<span class="op">=</span><span class="st">&quot;cat&quot;</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">&quot;precio_mm&quot;</span>]] <span class="op">=</span> MinMaxScaler().fit_transform(df[[<span class="st">&quot;precio_unitario&quot;</span>]])   <span class="co"># 0 … 1</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">&quot;precio_z&quot;</span>]] <span class="op">=</span> StandardScaler().fit_transform(df[[<span class="st">&quot;precio_unitario&quot;</span>]])  <span class="co"># media 0, desv. 1</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)                                 <span class="co"># (200, 14)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MinMaxScaler, StandardScaler</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;pedidos.csv&quot;</span>).drop_duplicates()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;fecha&quot;</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">&quot;fecha&quot;</span>])</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;edad&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;edad&quot;</span>].fillna(df[<span class="st">&quot;edad&quot;</span>].median())</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;tramo_edad&quot;</span>] <span class="op">=</span> pd.cut(df[<span class="st">&quot;edad&quot;</span>], bins<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">25</span>, <span class="dv">45</span>, <span class="dv">65</span>, <span class="dv">120</span>],</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                          labels<span class="op">=</span>[<span class="st">&quot;joven&quot;</span>, <span class="st">&quot;adulto&quot;</span>, <span class="st">&quot;maduro&quot;</span>, <span class="st">&quot;senior&quot;</span>])</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;cuartil_total&quot;</span>] <span class="op">=</span> pd.qcut(df[<span class="st">&quot;total&quot;</span>], q<span class="op">=</span><span class="dv">4</span>, labels<span class="op">=</span>[<span class="st">&quot;Q1&quot;</span>, <span class="st">&quot;Q2&quot;</span>, <span class="st">&quot;Q3&quot;</span>, <span class="st">&quot;Q4&quot;</span>])</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.get_dummies(df, columns<span class="op">=</span>[<span class="st">&quot;categoria&quot;</span>], prefix<span class="op">=</span><span class="st">&quot;cat&quot;</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">&quot;precio_mm&quot;</span>]] <span class="op">=</span> MinMaxScaler().fit_transform(df[[<span class="st">&quot;precio_unitario&quot;</span>]])   <span class="co"># 0 … 1</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">&quot;precio_z&quot;</span>]] <span class="op">=</span> StandardScaler().fit_transform(df[[<span class="st">&quot;precio_unitario&quot;</span>]])  <span class="co"># media 0, desv. 1</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)                                 <span class="co"># (200, 14)</span></span></code></pre></div>
 <blockquote>
 <p><strong>Regla de oro del preprocesamiento:</strong> el escalado y la
 imputación se <strong>aprenden solo con los datos de
@@ -747,40 +887,40 @@ media</td>
 </table>
 <h3 id="44-ejemplo-precio-de-viviendas-y-sobreajuste">4.4 Ejemplo:
 precio de viviendas y sobreajuste</h3>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, cross_val_score</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeRegressor</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_squared_error, r2_score</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Viviendas inventadas: el precio depende de m², habitaciones y distancia al centro, más ruido</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">300</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.DataFrame({<span class="st">&quot;m2&quot;</span>: rng.uniform(<span class="dv">40</span>, <span class="dv">160</span>, n),</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;habitaciones&quot;</span>: rng.integers(<span class="dv">1</span>, <span class="dv">6</span>, n),</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;dist_centro&quot;</span>: rng.uniform(<span class="fl">0.5</span>, <span class="dv">15</span>, n)})</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">1500</span> <span class="op">*</span> X[<span class="st">&quot;m2&quot;</span>] <span class="op">+</span> <span class="dv">8000</span> <span class="op">*</span> X[<span class="st">&quot;habitaciones&quot;</span>] <span class="op">-</span> <span class="dv">4000</span> <span class="op">*</span> X[<span class="st">&quot;dist_centro&quot;</span>] <span class="op">+</span> rng.normal(<span class="dv">0</span>, <span class="dv">20000</span>, n)</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>modelos <span class="op">=</span> {</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lineal simple (m2)&quot;</span>: (LinearRegression(), [<span class="st">&quot;m2&quot;</span>]),</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lineal múltiple&quot;</span>:    (LinearRegression(), <span class="bu">list</span>(X.columns)),</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Polinómica grado 2&quot;</span>: (make_pipeline(PolynomialFeatures(<span class="dv">2</span>), LinearRegression()), <span class="bu">list</span>(X.columns)),</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol sin límite&quot;</span>:   (DecisionTreeRegressor(random_state<span class="op">=</span><span class="dv">42</span>), <span class="bu">list</span>(X.columns)),</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol max_depth=4&quot;</span>:  (DecisionTreeRegressor(max_depth<span class="op">=</span><span class="dv">4</span>, random_state<span class="op">=</span><span class="dv">42</span>), <span class="bu">list</span>(X.columns)),</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nombre, (modelo, cols) <span class="kw">in</span> modelos.items():</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    modelo.fit(X_tr[cols], y_tr)</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    r2_tr <span class="op">=</span> r2_score(y_tr, modelo.predict(X_tr[cols]))</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    p_te <span class="op">=</span> modelo.predict(X_te[cols])</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>nombre<span class="sc">:20s}</span><span class="ss"> R² train </span><span class="sc">{</span>r2_tr<span class="sc">:.3f}</span><span class="ss"> · R² test </span><span class="sc">{</span>r2_score(y_te, p_te)<span class="sc">:.3f}</span><span class="ss"> · &quot;</span></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f&quot;MAE </span><span class="sc">{</span>mean_absolute_error(y_te, p_te)<span class="sc">:,.0f}</span><span class="ss"> € · RMSE </span><span class="sc">{</span>mean_squared_error(y_te, p_te) <span class="op">**</span> <span class="fl">0.5</span><span class="sc">:,.0f}</span><span class="ss"> €&quot;</span>)</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>cv <span class="op">=</span> cross_val_score(LinearRegression(), X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;r2&quot;</span>)</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Validación cruzada:&quot;</span>, cv.<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">&quot;media&quot;</span>, cv.mean().<span class="bu">round</span>(<span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, cross_val_score</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeRegressor</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_squared_error, r2_score</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Viviendas inventadas: el precio depende de m², habitaciones y distancia al centro, más ruido</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">300</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.DataFrame({<span class="st">&quot;m2&quot;</span>: rng.uniform(<span class="dv">40</span>, <span class="dv">160</span>, n),</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;habitaciones&quot;</span>: rng.integers(<span class="dv">1</span>, <span class="dv">6</span>, n),</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;dist_centro&quot;</span>: rng.uniform(<span class="fl">0.5</span>, <span class="dv">15</span>, n)})</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">1500</span> <span class="op">*</span> X[<span class="st">&quot;m2&quot;</span>] <span class="op">+</span> <span class="dv">8000</span> <span class="op">*</span> X[<span class="st">&quot;habitaciones&quot;</span>] <span class="op">-</span> <span class="dv">4000</span> <span class="op">*</span> X[<span class="st">&quot;dist_centro&quot;</span>] <span class="op">+</span> rng.normal(<span class="dv">0</span>, <span class="dv">20000</span>, n)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>modelos <span class="op">=</span> {</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lineal simple (m2)&quot;</span>: (LinearRegression(), [<span class="st">&quot;m2&quot;</span>]),</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lineal múltiple&quot;</span>:    (LinearRegression(), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Polinómica grado 2&quot;</span>: (make_pipeline(PolynomialFeatures(<span class="dv">2</span>), LinearRegression()), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol sin límite&quot;</span>:   (DecisionTreeRegressor(random_state<span class="op">=</span><span class="dv">42</span>), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol max_depth=4&quot;</span>:  (DecisionTreeRegressor(max_depth<span class="op">=</span><span class="dv">4</span>, random_state<span class="op">=</span><span class="dv">42</span>), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nombre, (modelo, cols) <span class="kw">in</span> modelos.items():</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    modelo.fit(X_tr[cols], y_tr)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    r2_tr <span class="op">=</span> r2_score(y_tr, modelo.predict(X_tr[cols]))</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    p_te <span class="op">=</span> modelo.predict(X_te[cols])</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>nombre<span class="sc">:20s}</span><span class="ss"> R² train </span><span class="sc">{</span>r2_tr<span class="sc">:.3f}</span><span class="ss"> · R² test </span><span class="sc">{</span>r2_score(y_te, p_te)<span class="sc">:.3f}</span><span class="ss"> · &quot;</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f&quot;MAE </span><span class="sc">{</span>mean_absolute_error(y_te, p_te)<span class="sc">:,.0f}</span><span class="ss"> € · RMSE </span><span class="sc">{</span>mean_squared_error(y_te, p_te) <span class="op">**</span> <span class="fl">0.5</span><span class="sc">:,.0f}</span><span class="ss"> €&quot;</span>)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>cv <span class="op">=</span> cross_val_score(LinearRegression(), X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;r2&quot;</span>)</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Validación cruzada:&quot;</span>, cv.<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">&quot;media&quot;</span>, cv.mean().<span class="bu">round</span>(<span class="dv">3</span>))</span></code></pre></div>
 <p>Resultado:</p>
 <table>
 <thead>

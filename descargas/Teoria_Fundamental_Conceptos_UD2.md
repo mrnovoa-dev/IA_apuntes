@@ -2164,6 +2164,24 @@ def predict(medidas: dict):
 | **JSON** | Formato de texto para intercambiar datos (sección 2, 14.10) |
 | **Código de estado** | 200 = bien · 404 = no existe · 422 = datos mal formados · 500 = error del servidor |
 
+**Mejor con Pydantic.** FastAPI valida los datos de entrada con la librería **Pydantic** (ver [Análisis de datos 1.5](datos.html#15-validar-con-reglas-pydantic)). En lugar de recibir un `dict` cualquiera, se describe cómo deben ser las medidas y FastAPI rechaza solo, con un error 422 y un mensaje por campo, lo que no cumpla las reglas: un texto donde va un número, un valor negativo o una medida que falta. Además, la ficha aparece en la documentación automática de `/docs`.
+
+```python
+from pydantic import BaseModel, Field
+
+class Medidas(BaseModel):          # alias: el nombre de la columna en el modelo entrenado
+    sepalo_largo: float = Field(gt=0, lt=30, alias="sepal length (cm)")
+    sepalo_ancho: float = Field(gt=0, lt=30, alias="sepal width (cm)")
+    petalo_largo: float = Field(gt=0, lt=30, alias="petal length (cm)")
+    petalo_ancho: float = Field(gt=0, lt=30, alias="petal width (cm)")
+
+@app.post("/predict")
+def predict(medidas: Medidas):     # FastAPI valida antes de entrar en la función
+    return predecir(medidas.model_dump(by_alias=True))
+```
+
+Si llega `{"sepal length (cm)": "cinco", "petal length (cm)": -1}`, la API responde 422 con cuatro errores: «cinco» no es un número, la longitud del pétalo debe ser mayor que 0, y faltan las dos anchuras. La función `predecir` ya no tiene que comprobarlo.
+
 #### Paso 5 · Comprobar que funciona: tests
 
 ```python

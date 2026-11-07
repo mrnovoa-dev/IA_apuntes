@@ -56,6 +56,9 @@ leído</a></li>
 <li><a href="#14-recoger-datos-de-la-web-vigilar-páginas-y-scraping"
 id="toc-14-recoger-datos-de-la-web-vigilar-páginas-y-scraping">1.4
 Recoger datos de la web: vigilar páginas y <em>scraping</em></a></li>
+<li><a href="#15-validar-con-reglas-pydantic"
+id="toc-15-validar-con-reglas-pydantic">1.5 Validar con reglas:
+Pydantic</a></li>
 <li><a href="#ejercicios-del-bloque-1"
 id="toc-ejercicios-del-bloque-1">Ejercicios del bloque 1</a></li>
 </ul></li>
@@ -119,7 +122,7 @@ prácticas de este itinerario</a></li>
 </ul>
 </nav>
   </div>
-  <article class="content" data-salt="c2RY+rMiUFBpsqqoH01oFQ==" data-iter="250000">
+  <article class="content" data-salt="IS7qFxtFMNxz+drJw7rOkA==" data-iter="250000">
 <h1 id="análisis-de-datos-con-python-de-los-datos-al-modelo">Análisis de
 datos con Python: de los datos al modelo</h1>
 <div class="ud-head" style="--c:var(--c-datos)">
@@ -452,6 +455,110 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <p>Fíjate en la última regla: cada vez más webs bloquean a los robots
 que recogen texto para entrenar modelos de IA. Es una de las discusiones
 abiertas sobre de dónde salen los datos de los LLM (UD4).</p>
+<h3 id="15-validar-con-reglas-pydantic">1.5 Validar con reglas:
+Pydantic</h3>
+<p>En 1.3 comprobamos los datos <strong>a mano</strong>: contar nulos,
+buscar precios negativos… Funciona, pero cada regla está escondida en el
+código. <a href="https://docs.pydantic.dev/">Pydantic</a> (licencia MIT,
+versión 2) permite <strong>escribir las reglas una sola vez</strong>,
+como una ficha de cómo debe ser cada dato, y que la librería las
+compruebe y explique los errores. Es una de las librerías más usadas de
+Python: la emplean FastAPI (teoría 13.7) y muchas herramientas de
+IA.</p>
+<p>La idea es una <strong>clase</strong> que describe un registro. Cada
+atributo lleva su <strong>tipo</strong> y, si hace falta, sus
+<strong>límites</strong>:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field, ValidationError, field_validator</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Respuesta(BaseModel):                     <span class="co"># una respuesta de la encuesta de clase</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    edad: <span class="bu">int</span> <span class="op">=</span> Field(ge<span class="op">=</span><span class="dv">12</span>, le<span class="op">=</span><span class="dv">99</span>)             <span class="co"># ge: mayor o igual · le: menor o igual</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    concello: <span class="bu">str</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    horas_ia: <span class="bu">float</span> <span class="op">=</span> Field(ge<span class="op">=</span><span class="dv">0</span>, le<span class="op">=</span><span class="dv">24</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    usa_para: Literal[<span class="st">&quot;estudiar&quot;</span>, <span class="st">&quot;ocio&quot;</span>, <span class="st">&quot;traballo&quot;</span>, <span class="st">&quot;non a uso&quot;</span>]   <span class="co"># solo estos valores</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">@field_validator</span>(<span class="st">&quot;concello&quot;</span>)                <span class="co"># regla propia: limpiar el texto</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">@classmethod</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> limpiar(cls, v):</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> v.strip().title()</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>filas <span class="op">=</span> [</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    {<span class="st">&quot;edad&quot;</span>: <span class="st">&quot;17&quot;</span>, <span class="st">&quot;concello&quot;</span>: <span class="st">&quot;  marín &quot;</span>, <span class="st">&quot;horas_ia&quot;</span>: <span class="st">&quot;2.5&quot;</span>, <span class="st">&quot;usa_para&quot;</span>: <span class="st">&quot;estudiar&quot;</span>},</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    {<span class="st">&quot;edad&quot;</span>: <span class="dv">230</span>, <span class="st">&quot;concello&quot;</span>: <span class="st">&quot;Bueu&quot;</span>, <span class="st">&quot;horas_ia&quot;</span>: <span class="dv">1</span>, <span class="st">&quot;usa_para&quot;</span>: <span class="st">&quot;estudiar&quot;</span>},</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    {<span class="st">&quot;edad&quot;</span>: <span class="dv">16</span>, <span class="st">&quot;concello&quot;</span>: <span class="st">&quot;Vigo&quot;</span>, <span class="st">&quot;horas_ia&quot;</span>: <span class="op">-</span><span class="dv">3</span>, <span class="st">&quot;usa_para&quot;</span>: <span class="st">&quot;deberes&quot;</span>},</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>validas <span class="op">=</span> []</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, f <span class="kw">in</span> <span class="bu">enumerate</span>(filas, <span class="dv">1</span>):</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>        validas.append(Respuesta(<span class="op">**</span>f))</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> ValidationError <span class="im">as</span> e:</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> err <span class="kw">in</span> e.errors():</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f&quot;fila </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>err[<span class="st">&#39;loc&#39;</span>][<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> -&gt; </span><span class="sc">{</span>err[<span class="st">&#39;msg&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(validas[<span class="dv">0</span>])</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co"># fila 2: edad -&gt; Input should be less than or equal to 99</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co"># fila 3: horas_ia -&gt; Input should be greater than or equal to 0</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># fila 3: usa_para -&gt; Input should be &#39;estudiar&#39;, &#39;ocio&#39;, &#39;traballo&#39; or &#39;non a uso&#39;</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co"># edad=17 concello=&#39;Marín&#39; horas_ia=2.5 usa_para=&#39;estudiar&#39;</span></span></code></pre></div>
+<p>Qué ha pasado:</p>
+<ul>
+<li><strong>Convierte</strong> lo que puede: el texto <code>"17"</code>
+pasa a ser el número 17 y <code>"2.5"</code> a 2,5. Los datos que llegan
+de un CSV, de un formulario o de una API son casi siempre texto.</li>
+<li><strong>Limpia</strong> con las reglas propias:
+<code>"  marín "</code> → <code>"Marín"</code>.</li>
+<li><strong>Rechaza</strong> lo imposible y dice exactamente qué campo
+falla y por qué, aunque haya varios errores en la misma fila.</li>
+<li>El resultado es un objeto con atributos
+(<code>validas[0].edad</code>) que se convierte en diccionario con
+<code>.model_dump()</code>, listo para un DataFrame.</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Comprobar a mano (1.3, E14)</th>
+<th>Pandas (<code>isna</code>, <code>describe</code>)</th>
+<th>Pydantic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Las reglas están…</td>
+<td>dispersas en <code>if</code></td>
+<td>en cada consulta</td>
+<td>en un solo sitio (la clase)</td>
+</tr>
+<tr class="even">
+<td>Mejor para</td>
+<td>aprender</td>
+<td>explorar tablas enteras</td>
+<td>validar registro a registro: formularios, APIs, respuestas de
+IA</td>
+</tr>
+<tr class="odd">
+<td>Errores</td>
+<td>los que programes</td>
+<td>no los explica</td>
+<td>mensaje por campo</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Ojo con la versión.</strong> Mucho material de internet, y a
+veces el código que genera una IA, está escrito para Pydantic 1, que
+funciona distinto: <code>.dict()</code> en vez de
+<code>.model_dump()</code>, <code>@validator</code> en vez de
+<code>@field_validator</code>… Si un ejemplo da errores raros, comprueba
+la versión con
+<code>import pydantic; print(pydantic.VERSION)</code>.</p>
+</blockquote>
+<p><strong>Lo que Pydantic no hace:</strong> revisa cada fila por
+separado, así que <strong>no detecta duplicados</strong> ni problemas
+que solo se ven mirando la tabla entera (una media rara, una categoría
+que casi no aparece). Para eso sigue haciendo falta Pandas y el EDA del
+bloque 2.</p>
 <h3 id="ejercicios-del-bloque-1">Ejercicios del bloque 1</h3>
 <p><strong>D1.1 · Arrays con NumPy</strong> 🟢 (E18): crea un vector del
 1 al 10, una matriz 3×3 de ceros, otra 2×4 de unos, los pares del 2 al
@@ -499,7 +606,26 @@ venderles un servicio; c) la temperatura diaria de MeteoGalicia para un
 proyecto de clase; d) las reseñas de un restaurante para analizar su
 sentimiento (UD4); e) todos los textos de una red social para entrenar
 un modelo de lenguaje.</p>
-<div class="sol-lock" data-label="Solución orientativa" data-iv="z1kx4ElQEP9ZT7PS" data-ct="FLTpXVzQKaxrFVfcoU2y95HtBaPLPoNubGip0xiWDiof3n7UjmBmDRbeBEL+4H1xZevV97NMNrnmCyG1RAdrf7Ed/SXa/gG09kb8f0bWjapzmM3jky6JsLDUTXDx/XzVnRe0azW0Oc3qnA/al2gBc8Ki177az3ZyZVr4Aj13bhNTacIJGDU2emVadLf7nojXGZUIEvCZHMOyw9UYWk20NTMk8sTKQeZm/0ThjS9MngZ0ce03dOToZ/6S7qhk6W/JRfHn6k+uAJphqUhS5Aw9XdqGvS6dGUONIcs8Zubwzn6BXvq5GsjGykQ5v5dDPougdPq8/P4tCOgQJbQoHK6xB+hBV030VSrCFF/M/H/fhsc/Ndt6Zy9I+TGxLu8wYPqWLdw8S7iqkyJl2xnod6R3fFFC/gQj3osBLk5ZsYqY/hF3e3GJu1s9Bt0iS8wxWTvL2Yb4Zj2oC1xnTUaudYOVMG+OPSWlwgJC2x3CcUJArDxk2fObj0E3WR9YykjKB8uqzt2vV/NyHhU2txHSVhsXgjBYBXOJFc34RKsyG7O/40IGi9XL3OJMqac99dOEWEJLHZ0IyuB66cS7F6Uk4GflSaFoyiM/kTGMdGZtobrFbmFaxNergYjfSrG3i74oNCgxRkKOT+p591LYvINCwFBGTcXIrmDZAYTptpuze6LVkm0EYHRBuNmyma0bI6Kp/iP3WCtMYIKag1rdkRgso6XEXiTNokR54IGHQzclHwecpp8uGTNRZi2cweit4yTHQc3SUlkM6kDLSBNH9FIHk3s3GvqjsIYZSLm3CrsYzU2bef3J2Xaa2gMxWkuygLPNpFfwYAFC/bmEYj55z0YpZzj7vYGYeeER6a1jPeqpy7IrIQdoTMZocgrlYZRRxMearnRoYbaZI9uoN/g0K05YW286aZyp045gcMXLoKexuvB/ORDdLXd+cRsPmpF5ACMh5QIxGmIIObRgjBJKuc08AFrODauXQC0WnSRV2iHz2OhdVFBp/6Zri1qGN73QzWOYITf4ibYjL7tlZsioyBuvDbxicc6bZuvlZhJkO0y2n1oRAHNIYHuy+kITv3PLF5+mDgsh9RKmfHoOsLCDpoEXTru0J60skZS/eJ6XxMPXDMNuiYPBqWiYHx5Vtl0fn/SptycZz0/P2xm47kbm0JCpSHZqy8sxMVLnK37+pCMDF4AOX/rvWfSTtkY9m2A4/OzEZXW+mh7J275GDzWwOGVWF5IgD7f7WkVM49NTDx91ztNOxKYHlm2505G6g4JDJewefzVhTC0lXRRCE6Cgj6vyKVJaQ5wRe2xqyg3bZ4SoyXFWLT1jbSE2BrvGS64IHNOjIvvgerBFvvuE+j7Et1vD1u4tkRLitNVfKUtcfxvtKrngHm5vZXGpaagKYExAmjE/T8ybV7qJE+LZV5xTukS3Y2d69HKyNjL5d8pck5d6Rgi+y5fEoMg11ggr5v+pSo749ZHx2ezzoJmihu+vP2/+gUkEKljJt0qjweg5RjgLT8vinzIhUriQ3kfTuBeMlMQasmOcknaWAhNo4WPKNGqZqMTD/MqHVoB6x+4tyZFWLTlnkkqzf183HQkhw1Mo1T9ct8JSURdNWePW7Tu+bfNeuFYxaTXFIVwofq4yrkdauszAqfRVU2uUTthWYDBgTwvTvygj01XhkBI="></div>
+<div class="sol-lock" data-label="Solución orientativa" data-iv="ncKgxlbtkaPq6/cN" data-ct="wjqII9HEWO09pHDLMKPqz3c31F1oIIZjs0VehKtT7ph+DfgxAwxe7uRl3Za5GjoQUNGRMr0R7agmLTZqL4W4MsaFlfO6Rm0Wx/wk4/otdtvc9pjfU4u5c3Nc7/lEMV3yt3cJ/INR8GlJqsoIBUf7hzaCDVYPf2DMgSmJrOPWfrFSu13eWE8g34VhGxgDIFZONSYlG/QQpyv7+0LA6TgOxktmgxO7ZWqJtdeqhgGRBJpfQlmedwHdzq+26xzX30ZndRFSaLUbR/tJIJ6u9gxYeXrIgmEYIWPrQOgqju8GaRjhUFQT/lGT33Zn9LrQ/LwYQSuHij+cfPuayqrCgxOcof44Yqoq307dW/LKSehgT38aTSB1Wmqocv2wv+jYS4revka2d930bOKaTqdrfkNJW5AE2kZunCZUTysncEUjxrtveY4+co1XL7nNwNrCY7TvKqH/iWl4NBoSZ9jW4ftXvF0BpHFHfSVwIY9tHKXhdcmHhhRts7xqoE0mPMRWkZo2K+wDM0VDzJ/vCVzNEDoJZCcpalmdOxH6iqNDvgXNopwGOFPsFsm5/L9JE5+Jw5BNnBcT22mvXulqWxI64i+kQSn8/CCE4hFEtsOMSqhbvvGxJp+nNligx2g/0JNWGDJ7BOI/tGhBe2njN8rJSMe0ihjAZeLA1LzaTxb53cKWbsyTdhlb4vCK3aGQv/I4tyh8t4lVXk8WEx9yOfkChMNmiP1jvtw9IdmKQDCc3QDhJ7xNJ2anIKxyNz/E7rru9+WrlCaJNIn6ZBHOXAl+uXYKA3zQjOqDl42mdEHZyZNXslKaU1BMAc9TmQ9uevw7cKfES/DsAdGUIgL/L3R3esifqrJfPTRLYHSaIpGLvYVB8Hu2JBUaoKQGVimUeMcQ0ezju8NwKQzSpaGfcCM3E0v7ylXuTZNZF1fCwr8zB3o1o7/EesnEpjIy4WOSzYPV0zJA3rs4khhtfYCmT3LuCOSao+W8V12p9xs8Zw3uz4+sc+28gbzmFluJHtRou9djCJxr6Va4kGhLZ1j2n8Lqcljzp+cvIMBUnyNMUrHGoeIaeBPcnYQsKFHCbUluV2CQ/DsGAb5939TgzM/boDezQ/yWuOT4hiF8b64Exr8yK/kxGF4XCbJfaZGd+skaIjj0oLObKGaLM+gVVTudUeuMz+SQJubF8YYMfZjAMgK+5LF9NKE1IYPn/mTfEjXLoeYbwD4SqIDT+YW00UPXG2Gd9iyecLCJfrsRObgT6+ZbeXhcvL6NHb16kNis0lSHorQvatbbU4IUAoY64hv1HW9okJXDkluZc1Byj0UMvjMHhv6G5Ay+T8cT1qM8p8Rj6Tn+YNVK+5XDBmonuR9OnIzGYF1NNo2wxH4xvFvmYnR/fcfH/d1+ZyrdLfkpzPLH8rMZVAkk9dOM7B6pvWhsnufR3QeLX6O2xStAIMjJd5SS12I9UKNLOXk9/PHyNZt5HSo8hwabEoKWHfVQ3BeISEM/UdXwb34kJ1eCK6TnW4POZnPmfL3AY4OIQzxx5By2m/27mfg+/+r/kvpgedz4da6NhfI7C3zqcozTHVkXmOUxGcR8jMrhuKRzXlOynXi3ggNT7gjyDM++2ZJPKhZJrnu3yZpn20o9tBvxpzNnB+d6tNohpXcDePUuT89k2pcC/LIKAwJBO7OKStI="></div>
+
+<p><strong>D1.7 · Las reglas de un pedido</strong> 🔴 (CA5.2): escribe
+una clase <code>Pedido</code> de Pydantic para las filas de
+<code>pedidos.csv</code> (1.2) con estas reglas: <code>id</code>
+positivo; <code>fecha</code> como fecha de verdad;
+<code>categoria</code> solo una de las cuatro; <code>cantidad</code>
+entre 1 y 100; <code>precio_unitario</code> mayor que 0;
+<code>edad</code> opcional (puede faltar) entre 14 y 110; y que
+<code>total</code> sea igual a <code>cantidad × precio_unitario</code>.
+Valida todas las filas y cuenta cuántas son válidas. Después
+<strong>estropea a propósito</strong> dos filas (un total que no cuadre
+y una categoría inventada) y comprueba que las detecta. ¿Detecta los 3
+duplicados? ¿Por qué? <em>Pista</em>:
+<code>from datetime import date</code>;
+<code>edad: float | None = Field(default=None, ...)</code>; para una
+regla que mira varios campos,
+<code>@model_validator(mode="after")</code>. Pandas guarda los huecos
+como <code>NaN</code>, no como <code>None</code>.</p>
+<div class="sol-lock" data-label="Solución" data-iv="DxH7FiPyB6P+UzNP" data-ct="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"></div>
 
 <p><a href="https://mp5101-ad.vercel.app/docs/unidades/01/">Ampliar en
 el módulo AD: Unidad 1 →</a></p>
@@ -753,20 +879,20 @@ neuronales) comparan distancias. Si una columna va de 0 a 100 000 € y
 otra de 1 a 5 habitaciones, la primera «manda» solo por su escala. Es el
 ejercicio <strong>E27</strong>.</p>
 </blockquote>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MinMaxScaler, StandardScaler</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;pedidos.csv&quot;</span>).drop_duplicates()</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;fecha&quot;</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">&quot;fecha&quot;</span>])</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;edad&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;edad&quot;</span>].fillna(df[<span class="st">&quot;edad&quot;</span>].median())</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;tramo_edad&quot;</span>] <span class="op">=</span> pd.cut(df[<span class="st">&quot;edad&quot;</span>], bins<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">25</span>, <span class="dv">45</span>, <span class="dv">65</span>, <span class="dv">120</span>],</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                          labels<span class="op">=</span>[<span class="st">&quot;joven&quot;</span>, <span class="st">&quot;adulto&quot;</span>, <span class="st">&quot;maduro&quot;</span>, <span class="st">&quot;senior&quot;</span>])</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;cuartil_total&quot;</span>] <span class="op">=</span> pd.qcut(df[<span class="st">&quot;total&quot;</span>], q<span class="op">=</span><span class="dv">4</span>, labels<span class="op">=</span>[<span class="st">&quot;Q1&quot;</span>, <span class="st">&quot;Q2&quot;</span>, <span class="st">&quot;Q3&quot;</span>, <span class="st">&quot;Q4&quot;</span>])</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.get_dummies(df, columns<span class="op">=</span>[<span class="st">&quot;categoria&quot;</span>], prefix<span class="op">=</span><span class="st">&quot;cat&quot;</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">&quot;precio_mm&quot;</span>]] <span class="op">=</span> MinMaxScaler().fit_transform(df[[<span class="st">&quot;precio_unitario&quot;</span>]])   <span class="co"># 0 … 1</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">&quot;precio_z&quot;</span>]] <span class="op">=</span> StandardScaler().fit_transform(df[[<span class="st">&quot;precio_unitario&quot;</span>]])  <span class="co"># media 0, desv. 1</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)                                 <span class="co"># (200, 14)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> MinMaxScaler, StandardScaler</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&quot;pedidos.csv&quot;</span>).drop_duplicates()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;fecha&quot;</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">&quot;fecha&quot;</span>])</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;edad&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;edad&quot;</span>].fillna(df[<span class="st">&quot;edad&quot;</span>].median())</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;tramo_edad&quot;</span>] <span class="op">=</span> pd.cut(df[<span class="st">&quot;edad&quot;</span>], bins<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">25</span>, <span class="dv">45</span>, <span class="dv">65</span>, <span class="dv">120</span>],</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                          labels<span class="op">=</span>[<span class="st">&quot;joven&quot;</span>, <span class="st">&quot;adulto&quot;</span>, <span class="st">&quot;maduro&quot;</span>, <span class="st">&quot;senior&quot;</span>])</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;cuartil_total&quot;</span>] <span class="op">=</span> pd.qcut(df[<span class="st">&quot;total&quot;</span>], q<span class="op">=</span><span class="dv">4</span>, labels<span class="op">=</span>[<span class="st">&quot;Q1&quot;</span>, <span class="st">&quot;Q2&quot;</span>, <span class="st">&quot;Q3&quot;</span>, <span class="st">&quot;Q4&quot;</span>])</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.get_dummies(df, columns<span class="op">=</span>[<span class="st">&quot;categoria&quot;</span>], prefix<span class="op">=</span><span class="st">&quot;cat&quot;</span>, dtype<span class="op">=</span><span class="bu">int</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">&quot;precio_mm&quot;</span>]] <span class="op">=</span> MinMaxScaler().fit_transform(df[[<span class="st">&quot;precio_unitario&quot;</span>]])   <span class="co"># 0 … 1</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">&quot;precio_z&quot;</span>]] <span class="op">=</span> StandardScaler().fit_transform(df[[<span class="st">&quot;precio_unitario&quot;</span>]])  <span class="co"># media 0, desv. 1</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)                                 <span class="co"># (200, 14)</span></span></code></pre></div>
 <blockquote>
 <p><strong>Regla de oro del preprocesamiento:</strong> el escalado y la
 imputación se <strong>aprenden solo con los datos de
@@ -887,40 +1013,40 @@ media</td>
 </table>
 <h3 id="44-ejemplo-precio-de-viviendas-y-sobreajuste">4.4 Ejemplo:
 precio de viviendas y sobreajuste</h3>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, cross_val_score</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeRegressor</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_squared_error, r2_score</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Viviendas inventadas: el precio depende de m², habitaciones y distancia al centro, más ruido</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">300</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.DataFrame({<span class="st">&quot;m2&quot;</span>: rng.uniform(<span class="dv">40</span>, <span class="dv">160</span>, n),</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;habitaciones&quot;</span>: rng.integers(<span class="dv">1</span>, <span class="dv">6</span>, n),</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;dist_centro&quot;</span>: rng.uniform(<span class="fl">0.5</span>, <span class="dv">15</span>, n)})</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">1500</span> <span class="op">*</span> X[<span class="st">&quot;m2&quot;</span>] <span class="op">+</span> <span class="dv">8000</span> <span class="op">*</span> X[<span class="st">&quot;habitaciones&quot;</span>] <span class="op">-</span> <span class="dv">4000</span> <span class="op">*</span> X[<span class="st">&quot;dist_centro&quot;</span>] <span class="op">+</span> rng.normal(<span class="dv">0</span>, <span class="dv">20000</span>, n)</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>modelos <span class="op">=</span> {</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lineal simple (m2)&quot;</span>: (LinearRegression(), [<span class="st">&quot;m2&quot;</span>]),</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lineal múltiple&quot;</span>:    (LinearRegression(), <span class="bu">list</span>(X.columns)),</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Polinómica grado 2&quot;</span>: (make_pipeline(PolynomialFeatures(<span class="dv">2</span>), LinearRegression()), <span class="bu">list</span>(X.columns)),</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol sin límite&quot;</span>:   (DecisionTreeRegressor(random_state<span class="op">=</span><span class="dv">42</span>), <span class="bu">list</span>(X.columns)),</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol max_depth=4&quot;</span>:  (DecisionTreeRegressor(max_depth<span class="op">=</span><span class="dv">4</span>, random_state<span class="op">=</span><span class="dv">42</span>), <span class="bu">list</span>(X.columns)),</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nombre, (modelo, cols) <span class="kw">in</span> modelos.items():</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    modelo.fit(X_tr[cols], y_tr)</span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    r2_tr <span class="op">=</span> r2_score(y_tr, modelo.predict(X_tr[cols]))</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    p_te <span class="op">=</span> modelo.predict(X_te[cols])</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>nombre<span class="sc">:20s}</span><span class="ss"> R² train </span><span class="sc">{</span>r2_tr<span class="sc">:.3f}</span><span class="ss"> · R² test </span><span class="sc">{</span>r2_score(y_te, p_te)<span class="sc">:.3f}</span><span class="ss"> · &quot;</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f&quot;MAE </span><span class="sc">{</span>mean_absolute_error(y_te, p_te)<span class="sc">:,.0f}</span><span class="ss"> € · RMSE </span><span class="sc">{</span>mean_squared_error(y_te, p_te) <span class="op">**</span> <span class="fl">0.5</span><span class="sc">:,.0f}</span><span class="ss"> €&quot;</span>)</span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>cv <span class="op">=</span> cross_val_score(LinearRegression(), X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;r2&quot;</span>)</span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Validación cruzada:&quot;</span>, cv.<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">&quot;media&quot;</span>, cv.mean().<span class="bu">round</span>(<span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, cross_val_score</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeRegressor</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_squared_error, r2_score</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Viviendas inventadas: el precio depende de m², habitaciones y distancia al centro, más ruido</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">300</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> pd.DataFrame({<span class="st">&quot;m2&quot;</span>: rng.uniform(<span class="dv">40</span>, <span class="dv">160</span>, n),</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;habitaciones&quot;</span>: rng.integers(<span class="dv">1</span>, <span class="dv">6</span>, n),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;dist_centro&quot;</span>: rng.uniform(<span class="fl">0.5</span>, <span class="dv">15</span>, n)})</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">1500</span> <span class="op">*</span> X[<span class="st">&quot;m2&quot;</span>] <span class="op">+</span> <span class="dv">8000</span> <span class="op">*</span> X[<span class="st">&quot;habitaciones&quot;</span>] <span class="op">-</span> <span class="dv">4000</span> <span class="op">*</span> X[<span class="st">&quot;dist_centro&quot;</span>] <span class="op">+</span> rng.normal(<span class="dv">0</span>, <span class="dv">20000</span>, n)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>modelos <span class="op">=</span> {</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lineal simple (m2)&quot;</span>: (LinearRegression(), [<span class="st">&quot;m2&quot;</span>]),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lineal múltiple&quot;</span>:    (LinearRegression(), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Polinómica grado 2&quot;</span>: (make_pipeline(PolynomialFeatures(<span class="dv">2</span>), LinearRegression()), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol sin límite&quot;</span>:   (DecisionTreeRegressor(random_state<span class="op">=</span><span class="dv">42</span>), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol max_depth=4&quot;</span>:  (DecisionTreeRegressor(max_depth<span class="op">=</span><span class="dv">4</span>, random_state<span class="op">=</span><span class="dv">42</span>), <span class="bu">list</span>(X.columns)),</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nombre, (modelo, cols) <span class="kw">in</span> modelos.items():</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    modelo.fit(X_tr[cols], y_tr)</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    r2_tr <span class="op">=</span> r2_score(y_tr, modelo.predict(X_tr[cols]))</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    p_te <span class="op">=</span> modelo.predict(X_te[cols])</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>nombre<span class="sc">:20s}</span><span class="ss"> R² train </span><span class="sc">{</span>r2_tr<span class="sc">:.3f}</span><span class="ss"> · R² test </span><span class="sc">{</span>r2_score(y_te, p_te)<span class="sc">:.3f}</span><span class="ss"> · &quot;</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f&quot;MAE </span><span class="sc">{</span>mean_absolute_error(y_te, p_te)<span class="sc">:,.0f}</span><span class="ss"> € · RMSE </span><span class="sc">{</span>mean_squared_error(y_te, p_te) <span class="op">**</span> <span class="fl">0.5</span><span class="sc">:,.0f}</span><span class="ss"> €&quot;</span>)</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>cv <span class="op">=</span> cross_val_score(LinearRegression(), X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;r2&quot;</span>)</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Validación cruzada:&quot;</span>, cv.<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">&quot;media&quot;</span>, cv.mean().<span class="bu">round</span>(<span class="dv">3</span>))</span></code></pre></div>
 <p>Resultado:</p>
 <table>
 <thead>

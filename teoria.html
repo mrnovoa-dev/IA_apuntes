@@ -3510,24 +3510,49 @@ error del servidor</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Mejor con Pydantic.</strong> FastAPI valida los datos de
+entrada con la librería <strong>Pydantic</strong> (ver <a
+href="datos.html#15-validar-con-reglas-pydantic">Análisis de datos
+1.5</a>). En lugar de recibir un <code>dict</code> cualquiera, se
+describe cómo deben ser las medidas y FastAPI rechaza solo, con un error
+422 y un mensaje por campo, lo que no cumpla las reglas: un texto donde
+va un número, un valor negativo o una medida que falta. Además, la ficha
+aparece en la documentación automática de <code>/docs</code>.</p>
+<div class="sourceCode" id="cb104"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> BaseModel, Field</span>
+<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Medidas(BaseModel):          <span class="co"># alias: el nombre de la columna en el modelo entrenado</span></span>
+<span id="cb104-4"><a href="#cb104-4" aria-hidden="true" tabindex="-1"></a>    sepalo_largo: <span class="bu">float</span> <span class="op">=</span> Field(gt<span class="op">=</span><span class="dv">0</span>, lt<span class="op">=</span><span class="dv">30</span>, alias<span class="op">=</span><span class="st">&quot;sepal length (cm)&quot;</span>)</span>
+<span id="cb104-5"><a href="#cb104-5" aria-hidden="true" tabindex="-1"></a>    sepalo_ancho: <span class="bu">float</span> <span class="op">=</span> Field(gt<span class="op">=</span><span class="dv">0</span>, lt<span class="op">=</span><span class="dv">30</span>, alias<span class="op">=</span><span class="st">&quot;sepal width (cm)&quot;</span>)</span>
+<span id="cb104-6"><a href="#cb104-6" aria-hidden="true" tabindex="-1"></a>    petalo_largo: <span class="bu">float</span> <span class="op">=</span> Field(gt<span class="op">=</span><span class="dv">0</span>, lt<span class="op">=</span><span class="dv">30</span>, alias<span class="op">=</span><span class="st">&quot;petal length (cm)&quot;</span>)</span>
+<span id="cb104-7"><a href="#cb104-7" aria-hidden="true" tabindex="-1"></a>    petalo_ancho: <span class="bu">float</span> <span class="op">=</span> Field(gt<span class="op">=</span><span class="dv">0</span>, lt<span class="op">=</span><span class="dv">30</span>, alias<span class="op">=</span><span class="st">&quot;petal width (cm)&quot;</span>)</span>
+<span id="cb104-8"><a href="#cb104-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-9"><a href="#cb104-9" aria-hidden="true" tabindex="-1"></a><span class="at">@app.post</span>(<span class="st">&quot;/predict&quot;</span>)</span>
+<span id="cb104-10"><a href="#cb104-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict(medidas: Medidas):     <span class="co"># FastAPI valida antes de entrar en la función</span></span>
+<span id="cb104-11"><a href="#cb104-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> predecir(medidas.model_dump(by_alias<span class="op">=</span><span class="va">True</span>))</span></code></pre></div>
+<p>Si llega
+<code>{"sepal length (cm)": "cinco", "petal length (cm)": -1}</code>, la
+API responde 422 con cuatro errores: «cinco» no es un número, la
+longitud del pétalo debe ser mayor que 0, y faltan las dos anchuras. La
+función <code>predecir</code> ya no tiene que comprobarlo.</p>
 <h4 id="paso-5--comprobar-que-funciona-tests">Paso 5 · Comprobar que
 funciona: tests</h4>
-<div class="sourceCode" id="cb104"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test_predecir.py  →  pytest</span></span>
-<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pytest</span>
-<span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> predecir <span class="im">import</span> predecir</span>
-<span id="cb104-4"><a href="#cb104-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb104-5"><a href="#cb104-5" aria-hidden="true" tabindex="-1"></a>FLOR <span class="op">=</span> {<span class="st">&quot;sepal length (cm)&quot;</span>: <span class="fl">6.7</span>, <span class="st">&quot;sepal width (cm)&quot;</span>: <span class="fl">3.0</span>,</span>
-<span id="cb104-6"><a href="#cb104-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;petal length (cm)&quot;</span>: <span class="fl">5.2</span>, <span class="st">&quot;petal width (cm)&quot;</span>: <span class="fl">2.3</span>}</span>
-<span id="cb104-7"><a href="#cb104-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb104-8"><a href="#cb104-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_devuelve_una_especie_valida():</span>
-<span id="cb104-9"><a href="#cb104-9" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> predecir(FLOR)</span>
-<span id="cb104-10"><a href="#cb104-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> r[<span class="st">&quot;especie&quot;</span>] <span class="kw">in</span> [<span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;versicolor&quot;</span>, <span class="st">&quot;virginica&quot;</span>]</span>
-<span id="cb104-11"><a href="#cb104-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="dv">0</span> <span class="op">&lt;=</span> r[<span class="st">&quot;confianza&quot;</span>] <span class="op">&lt;=</span> <span class="dv">1</span></span>
-<span id="cb104-12"><a href="#cb104-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb104-13"><a href="#cb104-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_rechaza_entrada_incompleta():</span>
-<span id="cb104-14"><a href="#cb104-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pytest.raises(<span class="pp">ValueError</span>):</span>
-<span id="cb104-15"><a href="#cb104-15" aria-hidden="true" tabindex="-1"></a>        predecir({<span class="st">&quot;sepal length (cm)&quot;</span>: <span class="fl">5.0</span>})</span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test_predecir.py  →  pytest</span></span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pytest</span>
+<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> predecir <span class="im">import</span> predecir</span>
+<span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-5"><a href="#cb105-5" aria-hidden="true" tabindex="-1"></a>FLOR <span class="op">=</span> {<span class="st">&quot;sepal length (cm)&quot;</span>: <span class="fl">6.7</span>, <span class="st">&quot;sepal width (cm)&quot;</span>: <span class="fl">3.0</span>,</span>
+<span id="cb105-6"><a href="#cb105-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;petal length (cm)&quot;</span>: <span class="fl">5.2</span>, <span class="st">&quot;petal width (cm)&quot;</span>: <span class="fl">2.3</span>}</span>
+<span id="cb105-7"><a href="#cb105-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-8"><a href="#cb105-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_devuelve_una_especie_valida():</span>
+<span id="cb105-9"><a href="#cb105-9" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> predecir(FLOR)</span>
+<span id="cb105-10"><a href="#cb105-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> r[<span class="st">&quot;especie&quot;</span>] <span class="kw">in</span> [<span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;versicolor&quot;</span>, <span class="st">&quot;virginica&quot;</span>]</span>
+<span id="cb105-11"><a href="#cb105-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="dv">0</span> <span class="op">&lt;=</span> r[<span class="st">&quot;confianza&quot;</span>] <span class="op">&lt;=</span> <span class="dv">1</span></span>
+<span id="cb105-12"><a href="#cb105-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-13"><a href="#cb105-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_rechaza_entrada_incompleta():</span>
+<span id="cb105-14"><a href="#cb105-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pytest.raises(<span class="pp">ValueError</span>):</span>
+<span id="cb105-15"><a href="#cb105-15" aria-hidden="true" tabindex="-1"></a>        predecir({<span class="st">&quot;sepal length (cm)&quot;</span>: <span class="fl">5.0</span>})</span></code></pre></div>
 <h4 id="más-allá-del-aula-qué-hacen-los-profesionales">Más allá del
 aula: qué hacen los profesionales</h4>
 <p>Estos conceptos no se programan en el curso, pero conviene conocerlos
@@ -3894,12 +3919,12 @@ de Pandas</em>, agrupada por la tarea que resuelve:</p>
 </tbody>
 </table>
 <p><strong>Patrones de una línea muy útiles</strong>:</p>
-<div class="sourceCode" id="cb106"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a>df.isnull().mean().sort_values(ascending<span class="op">=</span><span class="va">False</span>)       <span class="co"># % de nulos por columna</span></span>
-<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a>df.select_dtypes(include<span class="op">=</span><span class="st">&quot;number&quot;</span>).columns            <span class="co"># solo columnas numéricas</span></span>
-<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;col&quot;</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)                <span class="co"># proporciones en vez de conteos</span></span>
-<span id="cb106-4"><a href="#cb106-4" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">&quot;Pclass&quot;</span>).agg(media<span class="op">=</span>(<span class="st">&quot;Age&quot;</span>, <span class="st">&quot;mean&quot;</span>), n<span class="op">=</span>(<span class="st">&quot;Age&quot;</span>, <span class="st">&quot;size&quot;</span>))   <span class="co"># agregación con nombre</span></span>
-<span id="cb106-5"><a href="#cb106-5" aria-hidden="true" tabindex="-1"></a>df.loc[:, df.isnull().mean() <span class="op">&lt;</span> <span class="fl">0.5</span>]                   <span class="co"># quitar columnas con &gt;50 % de nulos</span></span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>df.isnull().mean().sort_values(ascending<span class="op">=</span><span class="va">False</span>)       <span class="co"># % de nulos por columna</span></span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a>df.select_dtypes(include<span class="op">=</span><span class="st">&quot;number&quot;</span>).columns            <span class="co"># solo columnas numéricas</span></span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;col&quot;</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>)                <span class="co"># proporciones en vez de conteos</span></span>
+<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a>df.groupby(<span class="st">&quot;Pclass&quot;</span>).agg(media<span class="op">=</span>(<span class="st">&quot;Age&quot;</span>, <span class="st">&quot;mean&quot;</span>), n<span class="op">=</span>(<span class="st">&quot;Age&quot;</span>, <span class="st">&quot;size&quot;</span>))   <span class="co"># agregación con nombre</span></span>
+<span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a>df.loc[:, df.isnull().mean() <span class="op">&lt;</span> <span class="fl">0.5</span>]                   <span class="co"># quitar columnas con &gt;50 % de nulos</span></span></code></pre></div>
 <hr />
 <h3 id="144-pipeline-completo-de-machine-learning-con-scikit-learn">14.4
 Pipeline completo de Machine Learning con scikit-learn</h3>
@@ -3992,46 +4017,46 @@ mantener las proporciones de clases)</td>
 </table>
 <p><strong>Eliminar outliers con el rango intercuartílico
 (IQR)</strong>: conecta con la sección 6.</p>
-<div class="sourceCode" id="cb108"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>Q1, Q3 <span class="op">=</span> df[<span class="st">&quot;Fare&quot;</span>].quantile([<span class="fl">0.25</span>, <span class="fl">0.75</span>])</span>
-<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>IQR <span class="op">=</span> Q3 <span class="op">-</span> Q1</span>
-<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>df_sin_outliers <span class="op">=</span> df[df[<span class="st">&quot;Fare&quot;</span>].between(Q1 <span class="op">-</span> <span class="fl">1.5</span> <span class="op">*</span> IQR, Q3 <span class="op">+</span> <span class="fl">1.5</span> <span class="op">*</span> IQR)]</span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>Q1, Q3 <span class="op">=</span> df[<span class="st">&quot;Fare&quot;</span>].quantile([<span class="fl">0.25</span>, <span class="fl">0.75</span>])</span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>IQR <span class="op">=</span> Q3 <span class="op">-</span> Q1</span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>df_sin_outliers <span class="op">=</span> df[df[<span class="st">&quot;Fare&quot;</span>].between(Q1 <span class="op">-</span> <span class="fl">1.5</span> <span class="op">*</span> IQR, Q3 <span class="op">+</span> <span class="fl">1.5</span> <span class="op">*</span> IQR)]</span></code></pre></div>
 <p><strong>Ejemplo completo con <code>Pipeline</code></strong> (dataset
 Titanic de Seaborn; <code>load_dataset</code> lo descarga, así que
 necesita conexión a Internet):</p>
-<div class="sourceCode" id="cb109"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, cross_val_score</span>
-<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
-<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
-<span id="cb109-5"><a href="#cb109-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
-<span id="cb109-6"><a href="#cb109-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, OneHotEncoder</span>
-<span id="cb109-7"><a href="#cb109-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
-<span id="cb109-8"><a href="#cb109-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report</span>
-<span id="cb109-9"><a href="#cb109-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb109-10"><a href="#cb109-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> sns.load_dataset(<span class="st">&quot;titanic&quot;</span>)</span>
-<span id="cb109-11"><a href="#cb109-11" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">&quot;pclass&quot;</span>, <span class="st">&quot;sex&quot;</span>, <span class="st">&quot;age&quot;</span>, <span class="st">&quot;fare&quot;</span>, <span class="st">&quot;embarked&quot;</span>]]</span>
-<span id="cb109-12"><a href="#cb109-12" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">&quot;survived&quot;</span>]</span>
-<span id="cb109-13"><a href="#cb109-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb109-14"><a href="#cb109-14" aria-hidden="true" tabindex="-1"></a>numericas <span class="op">=</span> [<span class="st">&quot;pclass&quot;</span>, <span class="st">&quot;age&quot;</span>, <span class="st">&quot;fare&quot;</span>]</span>
-<span id="cb109-15"><a href="#cb109-15" aria-hidden="true" tabindex="-1"></a>categoricas <span class="op">=</span> [<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;embarked&quot;</span>]</span>
-<span id="cb109-16"><a href="#cb109-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb109-17"><a href="#cb109-17" aria-hidden="true" tabindex="-1"></a>preprocesado <span class="op">=</span> ColumnTransformer([</span>
-<span id="cb109-18"><a href="#cb109-18" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;num&quot;</span>, Pipeline([(<span class="st">&quot;imputar&quot;</span>, SimpleImputer(strategy<span class="op">=</span><span class="st">&quot;median&quot;</span>)),</span>
-<span id="cb109-19"><a href="#cb109-19" aria-hidden="true" tabindex="-1"></a>                      (<span class="st">&quot;escalar&quot;</span>, StandardScaler())]), numericas),</span>
-<span id="cb109-20"><a href="#cb109-20" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;cat&quot;</span>, Pipeline([(<span class="st">&quot;imputar&quot;</span>, SimpleImputer(strategy<span class="op">=</span><span class="st">&quot;most_frequent&quot;</span>)),</span>
-<span id="cb109-21"><a href="#cb109-21" aria-hidden="true" tabindex="-1"></a>                      (<span class="st">&quot;onehot&quot;</span>, OneHotEncoder(handle_unknown<span class="op">=</span><span class="st">&quot;ignore&quot;</span>))]), categoricas),</span>
-<span id="cb109-22"><a href="#cb109-22" aria-hidden="true" tabindex="-1"></a>])</span>
-<span id="cb109-23"><a href="#cb109-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb109-24"><a href="#cb109-24" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> Pipeline([(<span class="st">&quot;prep&quot;</span>, preprocesado),</span>
-<span id="cb109-25"><a href="#cb109-25" aria-hidden="true" tabindex="-1"></a>                   (<span class="st">&quot;rf&quot;</span>, RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">200</span>, max_depth<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">42</span>))])</span>
-<span id="cb109-26"><a href="#cb109-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb109-27"><a href="#cb109-27" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
-<span id="cb109-28"><a href="#cb109-28" aria-hidden="true" tabindex="-1"></a>    X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, stratify<span class="op">=</span>y, random_state<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb109-29"><a href="#cb109-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb109-30"><a href="#cb109-30" aria-hidden="true" tabindex="-1"></a>modelo.fit(X_train, y_train)</span>
-<span id="cb109-31"><a href="#cb109-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, modelo.predict(X_test)))</span>
-<span id="cb109-32"><a href="#cb109-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Validación cruzada (5 particiones):&quot;</span>, cross_val_score(modelo, X, y, cv<span class="op">=</span><span class="dv">5</span>).mean().<span class="bu">round</span>(<span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb110"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, cross_val_score</span>
+<span id="cb110-3"><a href="#cb110-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
+<span id="cb110-4"><a href="#cb110-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb110-5"><a href="#cb110-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
+<span id="cb110-6"><a href="#cb110-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, OneHotEncoder</span>
+<span id="cb110-7"><a href="#cb110-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
+<span id="cb110-8"><a href="#cb110-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report</span>
+<span id="cb110-9"><a href="#cb110-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-10"><a href="#cb110-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> sns.load_dataset(<span class="st">&quot;titanic&quot;</span>)</span>
+<span id="cb110-11"><a href="#cb110-11" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">&quot;pclass&quot;</span>, <span class="st">&quot;sex&quot;</span>, <span class="st">&quot;age&quot;</span>, <span class="st">&quot;fare&quot;</span>, <span class="st">&quot;embarked&quot;</span>]]</span>
+<span id="cb110-12"><a href="#cb110-12" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">&quot;survived&quot;</span>]</span>
+<span id="cb110-13"><a href="#cb110-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-14"><a href="#cb110-14" aria-hidden="true" tabindex="-1"></a>numericas <span class="op">=</span> [<span class="st">&quot;pclass&quot;</span>, <span class="st">&quot;age&quot;</span>, <span class="st">&quot;fare&quot;</span>]</span>
+<span id="cb110-15"><a href="#cb110-15" aria-hidden="true" tabindex="-1"></a>categoricas <span class="op">=</span> [<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;embarked&quot;</span>]</span>
+<span id="cb110-16"><a href="#cb110-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-17"><a href="#cb110-17" aria-hidden="true" tabindex="-1"></a>preprocesado <span class="op">=</span> ColumnTransformer([</span>
+<span id="cb110-18"><a href="#cb110-18" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;num&quot;</span>, Pipeline([(<span class="st">&quot;imputar&quot;</span>, SimpleImputer(strategy<span class="op">=</span><span class="st">&quot;median&quot;</span>)),</span>
+<span id="cb110-19"><a href="#cb110-19" aria-hidden="true" tabindex="-1"></a>                      (<span class="st">&quot;escalar&quot;</span>, StandardScaler())]), numericas),</span>
+<span id="cb110-20"><a href="#cb110-20" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;cat&quot;</span>, Pipeline([(<span class="st">&quot;imputar&quot;</span>, SimpleImputer(strategy<span class="op">=</span><span class="st">&quot;most_frequent&quot;</span>)),</span>
+<span id="cb110-21"><a href="#cb110-21" aria-hidden="true" tabindex="-1"></a>                      (<span class="st">&quot;onehot&quot;</span>, OneHotEncoder(handle_unknown<span class="op">=</span><span class="st">&quot;ignore&quot;</span>))]), categoricas),</span>
+<span id="cb110-22"><a href="#cb110-22" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb110-23"><a href="#cb110-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-24"><a href="#cb110-24" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> Pipeline([(<span class="st">&quot;prep&quot;</span>, preprocesado),</span>
+<span id="cb110-25"><a href="#cb110-25" aria-hidden="true" tabindex="-1"></a>                   (<span class="st">&quot;rf&quot;</span>, RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">200</span>, max_depth<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">42</span>))])</span>
+<span id="cb110-26"><a href="#cb110-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-27"><a href="#cb110-27" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb110-28"><a href="#cb110-28" aria-hidden="true" tabindex="-1"></a>    X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, stratify<span class="op">=</span>y, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb110-29"><a href="#cb110-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-30"><a href="#cb110-30" aria-hidden="true" tabindex="-1"></a>modelo.fit(X_train, y_train)</span>
+<span id="cb110-31"><a href="#cb110-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, modelo.predict(X_test)))</span>
+<span id="cb110-32"><a href="#cb110-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Validación cruzada (5 particiones):&quot;</span>, cross_val_score(modelo, X, y, cv<span class="op">=</span><span class="dv">5</span>).mean().<span class="bu">round</span>(<span class="dv">3</span>))</span></code></pre></div>
 <p><strong>¿Por qué un <code>Pipeline</code>?</strong> Porque garantiza
 que la imputación y el escalado se <strong>aprenden solo con los datos
 de entrenamiento</strong>. Si se escala todo el dataset antes de
@@ -4259,15 +4284,15 @@ de edad)</td>
 </table>
 <p><strong>Agrupación inteligente</strong> (rellenar la edad según clase
 y sexo, en vez de con una sola mediana global):</p>
-<div class="sourceCode" id="cb110"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;age&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;age&quot;</span>].fillna(df.groupby([<span class="st">&quot;pclass&quot;</span>, <span class="st">&quot;sex&quot;</span>])[<span class="st">&quot;age&quot;</span>].transform(<span class="st">&quot;median&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb111"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;age&quot;</span>] <span class="op">=</span> df[<span class="st">&quot;age&quot;</span>].fillna(df.groupby([<span class="st">&quot;pclass&quot;</span>, <span class="st">&quot;sex&quot;</span>])[<span class="st">&quot;age&quot;</span>].transform(<span class="st">&quot;median&quot;</span>))</span></code></pre></div>
 <p><strong>EDA automático</strong> (para ampliar, nunca para sustituir
 el análisis propio): <code>ydata-profiling</code>,
 <code>sweetviz</code>, <code>dtale</code>, <code>autoviz</code>.</p>
-<div class="sourceCode" id="cb111"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install ydata-profiling</span></span>
-<span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ydata_profiling <span class="im">import</span> ProfileReport</span>
-<span id="cb111-3"><a href="#cb111-3" aria-hidden="true" tabindex="-1"></a>ProfileReport(df, title<span class="op">=</span><span class="st">&quot;Informe Titanic&quot;</span>).to_file(<span class="st">&quot;informe.html&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install ydata-profiling</span></span>
+<span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> ydata_profiling <span class="im">import</span> ProfileReport</span>
+<span id="cb112-3"><a href="#cb112-3" aria-hidden="true" tabindex="-1"></a>ProfileReport(df, title<span class="op">=</span><span class="st">&quot;Informe Titanic&quot;</span>).to_file(<span class="st">&quot;informe.html&quot;</span>)</span></code></pre></div>
 <hr />
 <h3 id="147-redes-neuronales-desde-cero">14.7 Redes neuronales desde
 cero</h3>
@@ -4282,15 +4307,15 @@ por un peso, <strong>suma</strong> todo más un sesgo (<em>bias</em>) y
 <pre><code> x1 ──(w1)──┐
  x2 ──(w2)──┼──► z = w1·x1 + w2·x2 + w3·x3 + b ──► f(z) ──► salida
  x3 ──(w3)──┘</code></pre>
-<div class="sourceCode" id="cb113"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb113-3"><a href="#cb113-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span>])        <span class="co"># entradas</span></span>
-<span id="cb113-4"><a href="#cb113-4" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.array([<span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.2</span>])        <span class="co"># pesos</span></span>
-<span id="cb113-5"><a href="#cb113-5" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="fl">0.0</span>                              <span class="co"># sesgo</span></span>
-<span id="cb113-6"><a href="#cb113-6" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.dot(x, w) <span class="op">+</span> b                 <span class="co"># suma ponderada → 1.6</span></span>
-<span id="cb113-7"><a href="#cb113-7" aria-hidden="true" tabindex="-1"></a>salida <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>z))        <span class="co"># activación sigmoide → 0.832</span></span>
-<span id="cb113-8"><a href="#cb113-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(z, <span class="dv">2</span>), <span class="bu">round</span>(salida, <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span>])        <span class="co"># entradas</span></span>
+<span id="cb114-4"><a href="#cb114-4" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.array([<span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.2</span>])        <span class="co"># pesos</span></span>
+<span id="cb114-5"><a href="#cb114-5" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="fl">0.0</span>                              <span class="co"># sesgo</span></span>
+<span id="cb114-6"><a href="#cb114-6" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.dot(x, w) <span class="op">+</span> b                 <span class="co"># suma ponderada → 1.6</span></span>
+<span id="cb114-7"><a href="#cb114-7" aria-hidden="true" tabindex="-1"></a>salida <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>z))        <span class="co"># activación sigmoide → 0.832</span></span>
+<span id="cb114-8"><a href="#cb114-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(z, <span class="dv">2</span>), <span class="bu">round</span>(salida, <span class="dv">3</span>))</span></code></pre></div>
 <h4 id="funciones-de-activación">Funciones de activación</h4>
 <table>
 <thead>
@@ -4328,11 +4353,11 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb113-1"><a 
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb114"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.array([<span class="op">-</span><span class="fl">2.0</span>, <span class="fl">0.0</span>, <span class="fl">2.0</span>])</span>
-<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;sigmoide:&quot;</span>, np.<span class="bu">round</span>(<span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>z)), <span class="dv">3</span>))   <span class="co"># [0.119 0.5 0.881]</span></span>
-<span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;relu    :&quot;</span>, np.maximum(<span class="dv">0</span>, z))                     <span class="co"># [0. 0. 2.]</span></span>
-<span id="cb114-4"><a href="#cb114-4" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> np.exp([<span class="fl">2.0</span>, <span class="fl">1.0</span>, <span class="fl">0.1</span>])<span class="op">;</span> <span class="bu">print</span>(<span class="st">&quot;softmax :&quot;</span>, np.<span class="bu">round</span>(s <span class="op">/</span> s.<span class="bu">sum</span>(), <span class="dv">3</span>))  <span class="co"># [0.659 0.242 0.099]</span></span></code></pre></div>
+<div class="sourceCode" id="cb115"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.array([<span class="op">-</span><span class="fl">2.0</span>, <span class="fl">0.0</span>, <span class="fl">2.0</span>])</span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;sigmoide:&quot;</span>, np.<span class="bu">round</span>(<span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>z)), <span class="dv">3</span>))   <span class="co"># [0.119 0.5 0.881]</span></span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;relu    :&quot;</span>, np.maximum(<span class="dv">0</span>, z))                     <span class="co"># [0. 0. 2.]</span></span>
+<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> np.exp([<span class="fl">2.0</span>, <span class="fl">1.0</span>, <span class="fl">0.1</span>])<span class="op">;</span> <span class="bu">print</span>(<span class="st">&quot;softmax :&quot;</span>, np.<span class="bu">round</span>(s <span class="op">/</span> s.<span class="bu">sum</span>(), <span class="dv">3</span>))  <span class="co"># [0.659 0.242 0.099]</span></span></code></pre></div>
 <h4 id="cómo-aprende-una-red">Cómo aprende una red</h4>
 <pre><code>1. FORWARD: los datos atraviesan la red y sale una predicción
 2. PÉRDIDA (loss): se mide el error entre la predicción y el valor real
@@ -4374,14 +4399,14 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb114-1"><a 
 </table>
 <p><strong>Descenso de gradiente con un solo peso</strong> (aprender que
 y = 2x):</p>
-<div class="sourceCode" id="cb116"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a>x, y_real <span class="op">=</span> <span class="fl">1.0</span>, <span class="fl">2.0</span></span>
-<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a>w, lr <span class="op">=</span> <span class="fl">0.0</span>, <span class="fl">0.2</span></span>
-<span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> paso <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">6</span>):</span>
-<span id="cb116-4"><a href="#cb116-4" aria-hidden="true" tabindex="-1"></a>    pred <span class="op">=</span> w <span class="op">*</span> x</span>
-<span id="cb116-5"><a href="#cb116-5" aria-hidden="true" tabindex="-1"></a>    grad <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (pred <span class="op">-</span> y_real) <span class="op">*</span> x          <span class="co"># derivada del error cuadrático</span></span>
-<span id="cb116-6"><a href="#cb116-6" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> w <span class="op">-</span> lr <span class="op">*</span> grad</span>
-<span id="cb116-7"><a href="#cb116-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;paso </span><span class="sc">{</span>paso<span class="sc">}</span><span class="ss">: w = </span><span class="sc">{</span>w<span class="sc">:.3f}</span><span class="ss">&quot;</span>)      <span class="co"># 0.800, 1.280, 1.568, 1.741, 1.844 → se acerca a 2</span></span></code></pre></div>
+<div class="sourceCode" id="cb117"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>x, y_real <span class="op">=</span> <span class="fl">1.0</span>, <span class="fl">2.0</span></span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>w, lr <span class="op">=</span> <span class="fl">0.0</span>, <span class="fl">0.2</span></span>
+<span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> paso <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">6</span>):</span>
+<span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a>    pred <span class="op">=</span> w <span class="op">*</span> x</span>
+<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a>    grad <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (pred <span class="op">-</span> y_real) <span class="op">*</span> x          <span class="co"># derivada del error cuadrático</span></span>
+<span id="cb117-6"><a href="#cb117-6" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> w <span class="op">-</span> lr <span class="op">*</span> grad</span>
+<span id="cb117-7"><a href="#cb117-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;paso </span><span class="sc">{</span>paso<span class="sc">}</span><span class="ss">: w = </span><span class="sc">{</span>w<span class="sc">:.3f}</span><span class="ss">&quot;</span>)      <span class="co"># 0.800, 1.280, 1.568, 1.741, 1.844 → se acerca a 2</span></span></code></pre></div>
 <p><strong>Contar parámetros</strong>: una capa densa con
 <code>n_entrada</code> entradas y <code>n_salida</code> neuronas tiene
 <code>n_entrada × n_salida</code> pesos + <code>n_salida</code> sesgos.
@@ -4398,19 +4423,19 @@ de validación deja de bajar) y <strong>aumento de datos</strong> (en
 imágenes: girar, recortar, voltear).</p>
 <h4 id="una-red-con-scikit-learn-sin-necesidad-de-pytorch">Una red con
 scikit-learn (sin necesidad de PyTorch)</h4>
-<div class="sourceCode" id="cb118"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
-<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb118-4"><a href="#cb118-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neural_network <span class="im">import</span> MLPClassifier</span>
-<span id="cb118-5"><a href="#cb118-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb118-6"><a href="#cb118-6" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_breast_cancer(return_X_y<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb118-7"><a href="#cb118-7" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb118-8"><a href="#cb118-8" aria-hidden="true" tabindex="-1"></a>escalador <span class="op">=</span> StandardScaler().fit(X_train)</span>
-<span id="cb118-9"><a href="#cb118-9" aria-hidden="true" tabindex="-1"></a>red <span class="op">=</span> MLPClassifier(hidden_layer_sizes<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">8</span>), max_iter<span class="op">=</span><span class="dv">1000</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb118-10"><a href="#cb118-10" aria-hidden="true" tabindex="-1"></a>red.fit(escalador.transform(X_train), y_train)</span>
-<span id="cb118-11"><a href="#cb118-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Accuracy test:&quot;</span>, <span class="bu">round</span>(red.score(escalador.transform(X_test), y_test), <span class="dv">3</span>))   <span class="co"># ≈ 0.965</span></span>
-<span id="cb118-12"><a href="#cb118-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Épocas de entrenamiento:&quot;</span>, red.n_iter_)</span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb119-3"><a href="#cb119-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neural_network <span class="im">import</span> MLPClassifier</span>
+<span id="cb119-5"><a href="#cb119-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb119-6"><a href="#cb119-6" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_breast_cancer(return_X_y<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb119-7"><a href="#cb119-7" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb119-8"><a href="#cb119-8" aria-hidden="true" tabindex="-1"></a>escalador <span class="op">=</span> StandardScaler().fit(X_train)</span>
+<span id="cb119-9"><a href="#cb119-9" aria-hidden="true" tabindex="-1"></a>red <span class="op">=</span> MLPClassifier(hidden_layer_sizes<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">8</span>), max_iter<span class="op">=</span><span class="dv">1000</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb119-10"><a href="#cb119-10" aria-hidden="true" tabindex="-1"></a>red.fit(escalador.transform(X_train), y_train)</span>
+<span id="cb119-11"><a href="#cb119-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Accuracy test:&quot;</span>, <span class="bu">round</span>(red.score(escalador.transform(X_test), y_test), <span class="dv">3</span>))   <span class="co"># ≈ 0.965</span></span>
+<span id="cb119-12"><a href="#cb119-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Épocas de entrenamiento:&quot;</span>, red.n_iter_)</span></code></pre></div>
 <blockquote>
 <p><code>MLPClassifier</code> también admite
 <code>early_stopping=True</code>, pero con datasets pequeños puede parar
@@ -4490,17 +4515,17 @@ token probable según lo que ha aprendido de enormes cantidades de
 texto.</p>
 <p><strong>Embeddings en Python</strong> (similitud entre frases, la
 base de la búsqueda semántica):</p>
-<div class="sourceCode" id="cb120"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> similitud_coseno(a, b):</span>
-<span id="cb120-4"><a href="#cb120-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.dot(a, b) <span class="op">/</span> (np.linalg.norm(a) <span class="op">*</span> np.linalg.norm(b))</span>
-<span id="cb120-5"><a href="#cb120-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb120-6"><a href="#cb120-6" aria-hidden="true" tabindex="-1"></a>gato  <span class="op">=</span> np.array([<span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span>])   <span class="co"># vectores de juguete</span></span>
-<span id="cb120-7"><a href="#cb120-7" aria-hidden="true" tabindex="-1"></a>perro <span class="op">=</span> np.array([<span class="fl">0.8</span>, <span class="fl">0.9</span>, <span class="fl">0.2</span>])</span>
-<span id="cb120-8"><a href="#cb120-8" aria-hidden="true" tabindex="-1"></a>coche <span class="op">=</span> np.array([<span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.9</span>])</span>
-<span id="cb120-9"><a href="#cb120-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(similitud_coseno(gato, perro), <span class="dv">2</span>))   <span class="co"># 0.99 → significados parecidos</span></span>
-<span id="cb120-10"><a href="#cb120-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(similitud_coseno(gato, coche), <span class="dv">2</span>))   <span class="co"># 0.3 → significados distintos</span></span></code></pre></div>
+<div class="sourceCode" id="cb121"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb121-2"><a href="#cb121-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb121-3"><a href="#cb121-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> similitud_coseno(a, b):</span>
+<span id="cb121-4"><a href="#cb121-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.dot(a, b) <span class="op">/</span> (np.linalg.norm(a) <span class="op">*</span> np.linalg.norm(b))</span>
+<span id="cb121-5"><a href="#cb121-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb121-6"><a href="#cb121-6" aria-hidden="true" tabindex="-1"></a>gato  <span class="op">=</span> np.array([<span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.1</span>])   <span class="co"># vectores de juguete</span></span>
+<span id="cb121-7"><a href="#cb121-7" aria-hidden="true" tabindex="-1"></a>perro <span class="op">=</span> np.array([<span class="fl">0.8</span>, <span class="fl">0.9</span>, <span class="fl">0.2</span>])</span>
+<span id="cb121-8"><a href="#cb121-8" aria-hidden="true" tabindex="-1"></a>coche <span class="op">=</span> np.array([<span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.9</span>])</span>
+<span id="cb121-9"><a href="#cb121-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(similitud_coseno(gato, perro), <span class="dv">2</span>))   <span class="co"># 0.99 → significados parecidos</span></span>
+<span id="cb121-10"><a href="#cb121-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(similitud_coseno(gato, coche), <span class="dv">2</span>))   <span class="co"># 0.3 → significados distintos</span></span></code></pre></div>
 <h4 id="parámetros-de-generación">Parámetros de generación</h4>
 <table>
 <thead>
@@ -4653,34 +4678,34 @@ tabla se guarda el dato.</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb122"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">hash</span>(<span class="st">&quot;manzana&quot;</span>) <span class="op">%</span> <span class="dv">8</span>)          <span class="co"># posición en una tabla de 8 huecos (varía entre ejecuciones)</span></span>
-<span id="cb122-2"><a href="#cb122-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb122-3"><a href="#cb122-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabla hash hecha a mano, con encadenamiento para las colisiones</span></span>
-<span id="cb122-4"><a href="#cb122-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TablaHash:</span>
-<span id="cb122-5"><a href="#cb122-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, tamaño<span class="op">=</span><span class="dv">8</span>):</span>
-<span id="cb122-6"><a href="#cb122-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.cubetas <span class="op">=</span> [[] <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(tamaño)]</span>
-<span id="cb122-7"><a href="#cb122-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb122-8"><a href="#cb122-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _indice(<span class="va">self</span>, clave):</span>
-<span id="cb122-9"><a href="#cb122-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">hash</span>(clave) <span class="op">%</span> <span class="bu">len</span>(<span class="va">self</span>.cubetas)</span>
-<span id="cb122-10"><a href="#cb122-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb122-11"><a href="#cb122-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> guardar(<span class="va">self</span>, clave, valor):</span>
-<span id="cb122-12"><a href="#cb122-12" aria-hidden="true" tabindex="-1"></a>        cubeta <span class="op">=</span> <span class="va">self</span>.cubetas[<span class="va">self</span>._indice(clave)]</span>
-<span id="cb122-13"><a href="#cb122-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> par <span class="kw">in</span> cubeta:</span>
-<span id="cb122-14"><a href="#cb122-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> par[<span class="dv">0</span>] <span class="op">==</span> clave:</span>
-<span id="cb122-15"><a href="#cb122-15" aria-hidden="true" tabindex="-1"></a>                par[<span class="dv">1</span>] <span class="op">=</span> valor</span>
-<span id="cb122-16"><a href="#cb122-16" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span></span>
-<span id="cb122-17"><a href="#cb122-17" aria-hidden="true" tabindex="-1"></a>        cubeta.append([clave, valor])</span>
-<span id="cb122-18"><a href="#cb122-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb122-19"><a href="#cb122-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> obtener(<span class="va">self</span>, clave):</span>
-<span id="cb122-20"><a href="#cb122-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> k, v <span class="kw">in</span> <span class="va">self</span>.cubetas[<span class="va">self</span>._indice(clave)]:</span>
-<span id="cb122-21"><a href="#cb122-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> k <span class="op">==</span> clave:</span>
-<span id="cb122-22"><a href="#cb122-22" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> v</span>
-<span id="cb122-23"><a href="#cb122-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">KeyError</span>(clave)</span>
-<span id="cb122-24"><a href="#cb122-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb122-25"><a href="#cb122-25" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> TablaHash()</span>
-<span id="cb122-26"><a href="#cb122-26" aria-hidden="true" tabindex="-1"></a>t.guardar(<span class="st">&quot;manzana&quot;</span>, <span class="fl">1.20</span>)<span class="op">;</span> t.guardar(<span class="st">&quot;pera&quot;</span>, <span class="fl">0.95</span>)</span>
-<span id="cb122-27"><a href="#cb122-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t.obtener(<span class="st">&quot;pera&quot;</span>))            <span class="co"># 0.95</span></span></code></pre></div>
+<div class="sourceCode" id="cb123"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">hash</span>(<span class="st">&quot;manzana&quot;</span>) <span class="op">%</span> <span class="dv">8</span>)          <span class="co"># posición en una tabla de 8 huecos (varía entre ejecuciones)</span></span>
+<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-3"><a href="#cb123-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Tabla hash hecha a mano, con encadenamiento para las colisiones</span></span>
+<span id="cb123-4"><a href="#cb123-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TablaHash:</span>
+<span id="cb123-5"><a href="#cb123-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, tamaño<span class="op">=</span><span class="dv">8</span>):</span>
+<span id="cb123-6"><a href="#cb123-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.cubetas <span class="op">=</span> [[] <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(tamaño)]</span>
+<span id="cb123-7"><a href="#cb123-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-8"><a href="#cb123-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _indice(<span class="va">self</span>, clave):</span>
+<span id="cb123-9"><a href="#cb123-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">hash</span>(clave) <span class="op">%</span> <span class="bu">len</span>(<span class="va">self</span>.cubetas)</span>
+<span id="cb123-10"><a href="#cb123-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-11"><a href="#cb123-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> guardar(<span class="va">self</span>, clave, valor):</span>
+<span id="cb123-12"><a href="#cb123-12" aria-hidden="true" tabindex="-1"></a>        cubeta <span class="op">=</span> <span class="va">self</span>.cubetas[<span class="va">self</span>._indice(clave)]</span>
+<span id="cb123-13"><a href="#cb123-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> par <span class="kw">in</span> cubeta:</span>
+<span id="cb123-14"><a href="#cb123-14" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> par[<span class="dv">0</span>] <span class="op">==</span> clave:</span>
+<span id="cb123-15"><a href="#cb123-15" aria-hidden="true" tabindex="-1"></a>                par[<span class="dv">1</span>] <span class="op">=</span> valor</span>
+<span id="cb123-16"><a href="#cb123-16" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span></span>
+<span id="cb123-17"><a href="#cb123-17" aria-hidden="true" tabindex="-1"></a>        cubeta.append([clave, valor])</span>
+<span id="cb123-18"><a href="#cb123-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-19"><a href="#cb123-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> obtener(<span class="va">self</span>, clave):</span>
+<span id="cb123-20"><a href="#cb123-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> k, v <span class="kw">in</span> <span class="va">self</span>.cubetas[<span class="va">self</span>._indice(clave)]:</span>
+<span id="cb123-21"><a href="#cb123-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> k <span class="op">==</span> clave:</span>
+<span id="cb123-22"><a href="#cb123-22" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> v</span>
+<span id="cb123-23"><a href="#cb123-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">KeyError</span>(clave)</span>
+<span id="cb123-24"><a href="#cb123-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb123-25"><a href="#cb123-25" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> TablaHash()</span>
+<span id="cb123-26"><a href="#cb123-26" aria-hidden="true" tabindex="-1"></a>t.guardar(<span class="st">&quot;manzana&quot;</span>, <span class="fl">1.20</span>)<span class="op">;</span> t.guardar(<span class="st">&quot;pera&quot;</span>, <span class="fl">0.95</span>)</span>
+<span id="cb123-27"><a href="#cb123-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(t.obtener(<span class="st">&quot;pera&quot;</span>))            <span class="co"># 0.95</span></span></code></pre></div>
 <p><strong>Colisión</strong>: dos claves distintas que dan la misma
 posición. Se resuelve con <strong>encadenamiento</strong> (cada hueco
 guarda una lista, como arriba) o con <strong>direccionamiento
@@ -4690,28 +4715,28 @@ inmutables</strong>: si una clave cambiara, su hash cambiaría y no se
 volvería a encontrar. Por eso <code>str</code>, <code>int</code> y
 <code>tuple</code> pueden ser claves, pero <code>list</code> no.</p>
 <p><strong>Problemas clásicos que se resuelven con hashing</strong>:</p>
-<div class="sourceCode" id="cb123"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
-<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb123-3"><a href="#cb123-3" aria-hidden="true" tabindex="-1"></a>frase <span class="op">=</span> <span class="st">&quot;el perro y el gato y el pez&quot;</span></span>
-<span id="cb123-4"><a href="#cb123-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Counter(frase.split()).most_common(<span class="dv">2</span>))     <span class="co"># frecuencias → [(&#39;el&#39;, 3), (&#39;y&#39;, 2)]</span></span>
-<span id="cb123-5"><a href="#cb123-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb123-6"><a href="#cb123-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tiene_duplicados(lista):</span>
-<span id="cb123-7"><a href="#cb123-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">len</span>(lista) <span class="op">!=</span> <span class="bu">len</span>(<span class="bu">set</span>(lista))         <span class="co"># O(n) en vez de O(n²)</span></span>
-<span id="cb123-8"><a href="#cb123-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb123-9"><a href="#cb123-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dos_suman(numeros, objetivo):                <span class="co"># ¿qué dos números suman el objetivo?</span></span>
-<span id="cb123-10"><a href="#cb123-10" aria-hidden="true" tabindex="-1"></a>    vistos <span class="op">=</span> {}</span>
-<span id="cb123-11"><a href="#cb123-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, n <span class="kw">in</span> <span class="bu">enumerate</span>(numeros):</span>
-<span id="cb123-12"><a href="#cb123-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> objetivo <span class="op">-</span> n <span class="kw">in</span> vistos:</span>
-<span id="cb123-13"><a href="#cb123-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> vistos[objetivo <span class="op">-</span> n], i</span>
-<span id="cb123-14"><a href="#cb123-14" aria-hidden="true" tabindex="-1"></a>        vistos[n] <span class="op">=</span> i</span>
-<span id="cb123-15"><a href="#cb123-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb123-16"><a href="#cb123-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dos_suman([<span class="dv">2</span>, <span class="dv">7</span>, <span class="dv">11</span>, <span class="dv">15</span>], <span class="dv">9</span>))              <span class="co"># (0, 1)</span></span></code></pre></div>
+<div class="sourceCode" id="cb124"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb124-3"><a href="#cb124-3" aria-hidden="true" tabindex="-1"></a>frase <span class="op">=</span> <span class="st">&quot;el perro y el gato y el pez&quot;</span></span>
+<span id="cb124-4"><a href="#cb124-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Counter(frase.split()).most_common(<span class="dv">2</span>))     <span class="co"># frecuencias → [(&#39;el&#39;, 3), (&#39;y&#39;, 2)]</span></span>
+<span id="cb124-5"><a href="#cb124-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb124-6"><a href="#cb124-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tiene_duplicados(lista):</span>
+<span id="cb124-7"><a href="#cb124-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">len</span>(lista) <span class="op">!=</span> <span class="bu">len</span>(<span class="bu">set</span>(lista))         <span class="co"># O(n) en vez de O(n²)</span></span>
+<span id="cb124-8"><a href="#cb124-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb124-9"><a href="#cb124-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dos_suman(numeros, objetivo):                <span class="co"># ¿qué dos números suman el objetivo?</span></span>
+<span id="cb124-10"><a href="#cb124-10" aria-hidden="true" tabindex="-1"></a>    vistos <span class="op">=</span> {}</span>
+<span id="cb124-11"><a href="#cb124-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, n <span class="kw">in</span> <span class="bu">enumerate</span>(numeros):</span>
+<span id="cb124-12"><a href="#cb124-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> objetivo <span class="op">-</span> n <span class="kw">in</span> vistos:</span>
+<span id="cb124-13"><a href="#cb124-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> vistos[objetivo <span class="op">-</span> n], i</span>
+<span id="cb124-14"><a href="#cb124-14" aria-hidden="true" tabindex="-1"></a>        vistos[n] <span class="op">=</span> i</span>
+<span id="cb124-15"><a href="#cb124-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb124-16"><a href="#cb124-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dos_suman([<span class="dv">2</span>, <span class="dv">7</span>, <span class="dv">11</span>, <span class="dv">15</span>], <span class="dv">9</span>))              <span class="co"># (0, 1)</span></span></code></pre></div>
 <p><strong>Hash criptográfico</strong> (otra aplicación: contraseñas,
 integridad de archivos, blockchain):</p>
-<div class="sourceCode" id="cb124"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib</span>
-<span id="cb124-2"><a href="#cb124-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(hashlib.sha256(<span class="st">&quot;mi_contraseña&quot;</span>.encode()).hexdigest()[:<span class="dv">16</span>])   <span class="co"># siempre el mismo resultado</span></span></code></pre></div>
+<div class="sourceCode" id="cb125"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hashlib</span>
+<span id="cb125-2"><a href="#cb125-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(hashlib.sha256(<span class="st">&quot;mi_contraseña&quot;</span>.encode()).hexdigest()[:<span class="dv">16</span>])   <span class="co"># siempre el mismo resultado</span></span></code></pre></div>
 <hr />
 <h3 id="1410-automatización-con-python">14.10 Automatización con
 Python</h3>
@@ -4720,10 +4745,10 @@ escribir scripts que hacen tareas repetitivas con poca intervención
 humana: organizar archivos, descargar datos, actualizar hojas de
 cálculo, enviar correos o probar webs.</p>
 <p><strong>Buenas prácticas antes de empezar</strong>:</p>
-<div class="sourceCode" id="cb125"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv                  <span class="co"># entorno virtual por proyecto</span></span>
-<span id="cb125-2"><a href="#cb125-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate             <span class="co"># macOS/Linux  (Windows: .venv\Scripts\activate)</span></span>
-<span id="cb125-3"><a href="#cb125-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install requests beautifulsoup4 pandas openpyxl python-dotenv schedule</span></code></pre></div>
+<div class="sourceCode" id="cb126"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv                  <span class="co"># entorno virtual por proyecto</span></span>
+<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate             <span class="co"># macOS/Linux  (Windows: .venv\Scripts\activate)</span></span>
+<span id="cb126-3"><a href="#cb126-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install requests beautifulsoup4 pandas openpyxl python-dotenv schedule</span></code></pre></div>
 <p>Las claves secretas (API keys, contraseñas) van en un archivo
 <code>.env</code> leído con <code>python-dotenv</code>, <strong>nunca
 dentro del código</strong> ni subidas a GitHub.</p>
@@ -4790,45 +4815,45 @@ dentro del código</strong> ni subidas a GitHub.</p>
 </table>
 <p><strong>Ejemplo 1: ordenar una carpeta por tipo de
 archivo</strong></p>
-<div class="sourceCode" id="cb126"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
-<span id="cb126-3"><a href="#cb126-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb126-4"><a href="#cb126-4" aria-hidden="true" tabindex="-1"></a>carpeta <span class="op">=</span> Path(<span class="st">&quot;Descargas&quot;</span>)</span>
-<span id="cb126-5"><a href="#cb126-5" aria-hidden="true" tabindex="-1"></a>tipos <span class="op">=</span> {<span class="st">&quot;.pdf&quot;</span>: <span class="st">&quot;Documentos&quot;</span>, <span class="st">&quot;.jpg&quot;</span>: <span class="st">&quot;Imagenes&quot;</span>, <span class="st">&quot;.png&quot;</span>: <span class="st">&quot;Imagenes&quot;</span>, <span class="st">&quot;.csv&quot;</span>: <span class="st">&quot;Datos&quot;</span>}</span>
-<span id="cb126-6"><a href="#cb126-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb126-7"><a href="#cb126-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> archivo <span class="kw">in</span> carpeta.iterdir():</span>
-<span id="cb126-8"><a href="#cb126-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> archivo.is_file() <span class="kw">and</span> archivo.suffix.lower() <span class="kw">in</span> tipos:</span>
-<span id="cb126-9"><a href="#cb126-9" aria-hidden="true" tabindex="-1"></a>        destino <span class="op">=</span> carpeta <span class="op">/</span> tipos[archivo.suffix.lower()]</span>
-<span id="cb126-10"><a href="#cb126-10" aria-hidden="true" tabindex="-1"></a>        destino.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb126-11"><a href="#cb126-11" aria-hidden="true" tabindex="-1"></a>        shutil.move(<span class="bu">str</span>(archivo), destino <span class="op">/</span> archivo.name)</span></code></pre></div>
+<div class="sourceCode" id="cb127"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
+<span id="cb127-3"><a href="#cb127-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb127-4"><a href="#cb127-4" aria-hidden="true" tabindex="-1"></a>carpeta <span class="op">=</span> Path(<span class="st">&quot;Descargas&quot;</span>)</span>
+<span id="cb127-5"><a href="#cb127-5" aria-hidden="true" tabindex="-1"></a>tipos <span class="op">=</span> {<span class="st">&quot;.pdf&quot;</span>: <span class="st">&quot;Documentos&quot;</span>, <span class="st">&quot;.jpg&quot;</span>: <span class="st">&quot;Imagenes&quot;</span>, <span class="st">&quot;.png&quot;</span>: <span class="st">&quot;Imagenes&quot;</span>, <span class="st">&quot;.csv&quot;</span>: <span class="st">&quot;Datos&quot;</span>}</span>
+<span id="cb127-6"><a href="#cb127-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb127-7"><a href="#cb127-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> archivo <span class="kw">in</span> carpeta.iterdir():</span>
+<span id="cb127-8"><a href="#cb127-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> archivo.is_file() <span class="kw">and</span> archivo.suffix.lower() <span class="kw">in</span> tipos:</span>
+<span id="cb127-9"><a href="#cb127-9" aria-hidden="true" tabindex="-1"></a>        destino <span class="op">=</span> carpeta <span class="op">/</span> tipos[archivo.suffix.lower()]</span>
+<span id="cb127-10"><a href="#cb127-10" aria-hidden="true" tabindex="-1"></a>        destino.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb127-11"><a href="#cb127-11" aria-hidden="true" tabindex="-1"></a>        shutil.move(<span class="bu">str</span>(archivo), destino <span class="op">/</span> archivo.name)</span></code></pre></div>
 <p><strong>Ejemplo 2: consultar una API con gestión de
 errores</strong></p>
-<div class="sourceCode" id="cb127"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
-<span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb127-3"><a href="#cb127-3" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">&quot;https://api.open-meteo.com/v1/forecast&quot;</span></span>
-<span id="cb127-4"><a href="#cb127-4" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> {<span class="st">&quot;latitude&quot;</span>: <span class="fl">42.88</span>, <span class="st">&quot;longitude&quot;</span>: <span class="op">-</span><span class="fl">8.54</span>, <span class="st">&quot;current_weather&quot;</span>: <span class="va">True</span>}   <span class="co"># Santiago</span></span>
-<span id="cb127-5"><a href="#cb127-5" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
-<span id="cb127-6"><a href="#cb127-6" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> requests.get(url, params<span class="op">=</span>params, timeout<span class="op">=</span><span class="dv">10</span>)</span>
-<span id="cb127-7"><a href="#cb127-7" aria-hidden="true" tabindex="-1"></a>    r.raise_for_status()                       <span class="co"># lanza error si el código no es 200</span></span>
-<span id="cb127-8"><a href="#cb127-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(r.json()[<span class="st">&quot;current_weather&quot;</span>][<span class="st">&quot;temperature&quot;</span>], <span class="st">&quot;°C&quot;</span>)</span>
-<span id="cb127-9"><a href="#cb127-9" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> requests.RequestException <span class="im">as</span> e:</span>
-<span id="cb127-10"><a href="#cb127-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;No se pudo obtener el dato:&quot;</span>, e)</span></code></pre></div>
-<p><strong>Ejemplo 3: tarea programada con registro</strong></p>
 <div class="sourceCode" id="cb128"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging, schedule, time</span>
+class="sourceCode python"><code class="sourceCode python"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb128-2"><a href="#cb128-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb128-3"><a href="#cb128-3" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(filename<span class="op">=</span><span class="st">&quot;tareas.log&quot;</span>, level<span class="op">=</span>logging.INFO,</span>
-<span id="cb128-4"><a href="#cb128-4" aria-hidden="true" tabindex="-1"></a>                    <span class="bu">format</span><span class="op">=</span><span class="st">&quot;</span><span class="sc">%(asctime)s</span><span class="st"> </span><span class="sc">%(levelname)s</span><span class="st"> </span><span class="sc">%(message)s</span><span class="st">&quot;</span>)</span>
-<span id="cb128-5"><a href="#cb128-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb128-6"><a href="#cb128-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> copia_de_seguridad():</span>
-<span id="cb128-7"><a href="#cb128-7" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">&quot;Copia de seguridad realizada&quot;</span>)</span>
-<span id="cb128-8"><a href="#cb128-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb128-9"><a href="#cb128-9" aria-hidden="true" tabindex="-1"></a>schedule.every().day.at(<span class="st">&quot;08:00&quot;</span>).do(copia_de_seguridad)</span>
-<span id="cb128-10"><a href="#cb128-10" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="va">True</span>:</span>
-<span id="cb128-11"><a href="#cb128-11" aria-hidden="true" tabindex="-1"></a>    schedule.run_pending()</span>
-<span id="cb128-12"><a href="#cb128-12" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="dv">60</span>)</span></code></pre></div>
+<span id="cb128-3"><a href="#cb128-3" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">&quot;https://api.open-meteo.com/v1/forecast&quot;</span></span>
+<span id="cb128-4"><a href="#cb128-4" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> {<span class="st">&quot;latitude&quot;</span>: <span class="fl">42.88</span>, <span class="st">&quot;longitude&quot;</span>: <span class="op">-</span><span class="fl">8.54</span>, <span class="st">&quot;current_weather&quot;</span>: <span class="va">True</span>}   <span class="co"># Santiago</span></span>
+<span id="cb128-5"><a href="#cb128-5" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb128-6"><a href="#cb128-6" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> requests.get(url, params<span class="op">=</span>params, timeout<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb128-7"><a href="#cb128-7" aria-hidden="true" tabindex="-1"></a>    r.raise_for_status()                       <span class="co"># lanza error si el código no es 200</span></span>
+<span id="cb128-8"><a href="#cb128-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(r.json()[<span class="st">&quot;current_weather&quot;</span>][<span class="st">&quot;temperature&quot;</span>], <span class="st">&quot;°C&quot;</span>)</span>
+<span id="cb128-9"><a href="#cb128-9" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> requests.RequestException <span class="im">as</span> e:</span>
+<span id="cb128-10"><a href="#cb128-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;No se pudo obtener el dato:&quot;</span>, e)</span></code></pre></div>
+<p><strong>Ejemplo 3: tarea programada con registro</strong></p>
+<div class="sourceCode" id="cb129"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging, schedule, time</span>
+<span id="cb129-2"><a href="#cb129-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb129-3"><a href="#cb129-3" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(filename<span class="op">=</span><span class="st">&quot;tareas.log&quot;</span>, level<span class="op">=</span>logging.INFO,</span>
+<span id="cb129-4"><a href="#cb129-4" aria-hidden="true" tabindex="-1"></a>                    <span class="bu">format</span><span class="op">=</span><span class="st">&quot;</span><span class="sc">%(asctime)s</span><span class="st"> </span><span class="sc">%(levelname)s</span><span class="st"> </span><span class="sc">%(message)s</span><span class="st">&quot;</span>)</span>
+<span id="cb129-5"><a href="#cb129-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb129-6"><a href="#cb129-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> copia_de_seguridad():</span>
+<span id="cb129-7"><a href="#cb129-7" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">&quot;Copia de seguridad realizada&quot;</span>)</span>
+<span id="cb129-8"><a href="#cb129-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb129-9"><a href="#cb129-9" aria-hidden="true" tabindex="-1"></a>schedule.every().day.at(<span class="st">&quot;08:00&quot;</span>).do(copia_de_seguridad)</span>
+<span id="cb129-10"><a href="#cb129-10" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb129-11"><a href="#cb129-11" aria-hidden="true" tabindex="-1"></a>    schedule.run_pending()</span>
+<span id="cb129-12"><a href="#cb129-12" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="dv">60</span>)</span></code></pre></div>
 <blockquote>
 <p>⚠️ <strong>Scraping responsable</strong>: lee los términos de uso y
 el <code>robots.txt</code> de la web, no hagas peticiones masivas (añade
@@ -4849,26 +4874,26 @@ las notas de automatización.</p>
 <p>Un <strong>test</strong> es un pequeño programa que comprueba que
 otro funciona. Si mañana cambias el código y rompes algo, los tests lo
 detectan.</p>
-<div class="sourceCode" id="cb129"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="co"># archivo: notas.py</span></span>
-<span id="cb129-2"><a href="#cb129-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> media(notas):</span>
-<span id="cb129-3"><a href="#cb129-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> notas:</span>
-<span id="cb129-4"><a href="#cb129-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;La lista está vacía&quot;</span>)</span>
-<span id="cb129-5"><a href="#cb129-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">round</span>(<span class="bu">sum</span>(notas) <span class="op">/</span> <span class="bu">len</span>(notas), <span class="dv">2</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb130"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="co"># archivo: test_notas.py      →  ejecutar con:  pytest</span></span>
-<span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pytest</span>
-<span id="cb130-3"><a href="#cb130-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> notas <span class="im">import</span> media</span>
-<span id="cb130-4"><a href="#cb130-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb130-5"><a href="#cb130-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_media_normal():</span>
-<span id="cb130-6"><a href="#cb130-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> media([<span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>]) <span class="op">==</span> <span class="dv">7</span></span>
-<span id="cb130-7"><a href="#cb130-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb130-8"><a href="#cb130-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_media_decimales():</span>
-<span id="cb130-9"><a href="#cb130-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> media([<span class="dv">5</span>, <span class="dv">6</span>]) <span class="op">==</span> <span class="fl">5.5</span></span>
-<span id="cb130-10"><a href="#cb130-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb130-11"><a href="#cb130-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_lista_vacia():</span>
-<span id="cb130-12"><a href="#cb130-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pytest.raises(<span class="pp">ValueError</span>):</span>
-<span id="cb130-13"><a href="#cb130-13" aria-hidden="true" tabindex="-1"></a>        media([])</span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="co"># archivo: notas.py</span></span>
+<span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> media(notas):</span>
+<span id="cb130-3"><a href="#cb130-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> notas:</span>
+<span id="cb130-4"><a href="#cb130-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;La lista está vacía&quot;</span>)</span>
+<span id="cb130-5"><a href="#cb130-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">round</span>(<span class="bu">sum</span>(notas) <span class="op">/</span> <span class="bu">len</span>(notas), <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb131"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a><span class="co"># archivo: test_notas.py      →  ejecutar con:  pytest</span></span>
+<span id="cb131-2"><a href="#cb131-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pytest</span>
+<span id="cb131-3"><a href="#cb131-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> notas <span class="im">import</span> media</span>
+<span id="cb131-4"><a href="#cb131-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb131-5"><a href="#cb131-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_media_normal():</span>
+<span id="cb131-6"><a href="#cb131-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> media([<span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>]) <span class="op">==</span> <span class="dv">7</span></span>
+<span id="cb131-7"><a href="#cb131-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb131-8"><a href="#cb131-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_media_decimales():</span>
+<span id="cb131-9"><a href="#cb131-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> media([<span class="dv">5</span>, <span class="dv">6</span>]) <span class="op">==</span> <span class="fl">5.5</span></span>
+<span id="cb131-10"><a href="#cb131-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb131-11"><a href="#cb131-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_lista_vacia():</span>
+<span id="cb131-12"><a href="#cb131-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pytest.raises(<span class="pp">ValueError</span>):</span>
+<span id="cb131-13"><a href="#cb131-13" aria-hidden="true" tabindex="-1"></a>        media([])</span></code></pre></div>
 <p>Para empezar sin instalar nada, <code>assert</code> dentro del propio
 script ya sirve: <code>assert media([4, 6]) == 5</code>.</p>
 <h4 id="bases-de-datos-con-sqlite3-incluido-en-python">Bases de datos
@@ -4876,23 +4901,23 @@ con <code>sqlite3</code> (incluido en Python)</h4>
 <p>SQLite guarda una base de datos completa en <strong>un solo
 archivo</strong>. Es ideal para el Laboratorio 1 (sistema de gestión,
 sesiones 47–52).</p>
-<div class="sourceCode" id="cb131"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
-<span id="cb131-2"><a href="#cb131-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb131-3"><a href="#cb131-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb131-4"><a href="#cb131-4" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">&quot;instituto.db&quot;</span>)</span>
-<span id="cb131-5"><a href="#cb131-5" aria-hidden="true" tabindex="-1"></a>cur <span class="op">=</span> con.cursor()</span>
-<span id="cb131-6"><a href="#cb131-6" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">&quot;CREATE TABLE IF NOT EXISTS alumnos (id INTEGER PRIMARY KEY, nombre TEXT, nota REAL)&quot;</span>)</span>
-<span id="cb131-7"><a href="#cb131-7" aria-hidden="true" tabindex="-1"></a>cur.executemany(<span class="st">&quot;INSERT INTO alumnos (nombre, nota) VALUES (?, ?)&quot;</span>,</span>
-<span id="cb131-8"><a href="#cb131-8" aria-hidden="true" tabindex="-1"></a>                [(<span class="st">&quot;Ana&quot;</span>, <span class="fl">8.5</span>), (<span class="st">&quot;Luis&quot;</span>, <span class="fl">6.0</span>), (<span class="st">&quot;Sara&quot;</span>, <span class="fl">9.2</span>)])      <span class="co"># ? evita la inyección SQL</span></span>
-<span id="cb131-9"><a href="#cb131-9" aria-hidden="true" tabindex="-1"></a>con.commit()</span>
-<span id="cb131-10"><a href="#cb131-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb131-11"><a href="#cb131-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fila <span class="kw">in</span> cur.execute(<span class="st">&quot;SELECT nombre, nota FROM alumnos WHERE nota &gt;= ?&quot;</span>, (<span class="dv">7</span>,)):</span>
-<span id="cb131-12"><a href="#cb131-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(fila)</span>
-<span id="cb131-13"><a href="#cb131-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb131-14"><a href="#cb131-14" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_sql(<span class="st">&quot;SELECT * FROM alumnos&quot;</span>, con)    <span class="co"># de SQL a Pandas en una línea</span></span>
-<span id="cb131-15"><a href="#cb131-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(df[<span class="st">&quot;nota&quot;</span>].mean(), <span class="dv">2</span>))</span>
-<span id="cb131-16"><a href="#cb131-16" aria-hidden="true" tabindex="-1"></a>con.close()</span></code></pre></div>
+<div class="sourceCode" id="cb132"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
+<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb132-3"><a href="#cb132-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-4"><a href="#cb132-4" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">&quot;instituto.db&quot;</span>)</span>
+<span id="cb132-5"><a href="#cb132-5" aria-hidden="true" tabindex="-1"></a>cur <span class="op">=</span> con.cursor()</span>
+<span id="cb132-6"><a href="#cb132-6" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">&quot;CREATE TABLE IF NOT EXISTS alumnos (id INTEGER PRIMARY KEY, nombre TEXT, nota REAL)&quot;</span>)</span>
+<span id="cb132-7"><a href="#cb132-7" aria-hidden="true" tabindex="-1"></a>cur.executemany(<span class="st">&quot;INSERT INTO alumnos (nombre, nota) VALUES (?, ?)&quot;</span>,</span>
+<span id="cb132-8"><a href="#cb132-8" aria-hidden="true" tabindex="-1"></a>                [(<span class="st">&quot;Ana&quot;</span>, <span class="fl">8.5</span>), (<span class="st">&quot;Luis&quot;</span>, <span class="fl">6.0</span>), (<span class="st">&quot;Sara&quot;</span>, <span class="fl">9.2</span>)])      <span class="co"># ? evita la inyección SQL</span></span>
+<span id="cb132-9"><a href="#cb132-9" aria-hidden="true" tabindex="-1"></a>con.commit()</span>
+<span id="cb132-10"><a href="#cb132-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-11"><a href="#cb132-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fila <span class="kw">in</span> cur.execute(<span class="st">&quot;SELECT nombre, nota FROM alumnos WHERE nota &gt;= ?&quot;</span>, (<span class="dv">7</span>,)):</span>
+<span id="cb132-12"><a href="#cb132-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(fila)</span>
+<span id="cb132-13"><a href="#cb132-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-14"><a href="#cb132-14" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_sql(<span class="st">&quot;SELECT * FROM alumnos&quot;</span>, con)    <span class="co"># de SQL a Pandas en una línea</span></span>
+<span id="cb132-15"><a href="#cb132-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(df[<span class="st">&quot;nota&quot;</span>].mean(), <span class="dv">2</span>))</span>
+<span id="cb132-16"><a href="#cb132-16" aria-hidden="true" tabindex="-1"></a>con.close()</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -5010,29 +5035,29 @@ paralelogramo = entrada/salida · rectángulo = proceso · rombo = decisión
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb134"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> functools <span class="im">import</span> lru_cache</span>
-<span id="cb134-2"><a href="#cb134-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb134-3"><a href="#cb134-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> factorial(n):                     <span class="co"># recursión: caso base + caso recursivo</span></span>
-<span id="cb134-4"><a href="#cb134-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span> <span class="cf">if</span> n <span class="op">&lt;=</span> <span class="dv">1</span> <span class="cf">else</span> n <span class="op">*</span> factorial(n <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb134-5"><a href="#cb134-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb134-6"><a href="#cb134-6" aria-hidden="true" tabindex="-1"></a><span class="at">@lru_cache</span>                            <span class="co"># programación dinámica: memoriza resultados</span></span>
-<span id="cb134-7"><a href="#cb134-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fib(n):</span>
-<span id="cb134-8"><a href="#cb134-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> n <span class="cf">if</span> n <span class="op">&lt;</span> <span class="dv">2</span> <span class="cf">else</span> fib(n <span class="op">-</span> <span class="dv">1</span>) <span class="op">+</span> fib(n <span class="op">-</span> <span class="dv">2</span>)</span>
-<span id="cb134-9"><a href="#cb134-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb134-10"><a href="#cb134-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> busqueda_binaria(lista, x):       <span class="co"># divide y vencerás: O(log n), lista ORDENADA</span></span>
-<span id="cb134-11"><a href="#cb134-11" aria-hidden="true" tabindex="-1"></a>    izq, der <span class="op">=</span> <span class="dv">0</span>, <span class="bu">len</span>(lista) <span class="op">-</span> <span class="dv">1</span></span>
-<span id="cb134-12"><a href="#cb134-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> izq <span class="op">&lt;=</span> der:</span>
-<span id="cb134-13"><a href="#cb134-13" aria-hidden="true" tabindex="-1"></a>        medio <span class="op">=</span> (izq <span class="op">+</span> der) <span class="op">//</span> <span class="dv">2</span></span>
-<span id="cb134-14"><a href="#cb134-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> lista[medio] <span class="op">==</span> x:</span>
-<span id="cb134-15"><a href="#cb134-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> medio</span>
-<span id="cb134-16"><a href="#cb134-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> lista[medio] <span class="op">&lt;</span> x:</span>
-<span id="cb134-17"><a href="#cb134-17" aria-hidden="true" tabindex="-1"></a>            izq <span class="op">=</span> medio <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb134-18"><a href="#cb134-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
-<span id="cb134-19"><a href="#cb134-19" aria-hidden="true" tabindex="-1"></a>            der <span class="op">=</span> medio <span class="op">-</span> <span class="dv">1</span></span>
-<span id="cb134-20"><a href="#cb134-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span></span>
-<span id="cb134-21"><a href="#cb134-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb134-22"><a href="#cb134-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(factorial(<span class="dv">5</span>), fib(<span class="dv">50</span>), busqueda_binaria([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>], <span class="dv">7</span>))   <span class="co"># 120 12586269025 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb135"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> functools <span class="im">import</span> lru_cache</span>
+<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> factorial(n):                     <span class="co"># recursión: caso base + caso recursivo</span></span>
+<span id="cb135-4"><a href="#cb135-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span> <span class="cf">if</span> n <span class="op">&lt;=</span> <span class="dv">1</span> <span class="cf">else</span> n <span class="op">*</span> factorial(n <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb135-5"><a href="#cb135-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb135-6"><a href="#cb135-6" aria-hidden="true" tabindex="-1"></a><span class="at">@lru_cache</span>                            <span class="co"># programación dinámica: memoriza resultados</span></span>
+<span id="cb135-7"><a href="#cb135-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fib(n):</span>
+<span id="cb135-8"><a href="#cb135-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> n <span class="cf">if</span> n <span class="op">&lt;</span> <span class="dv">2</span> <span class="cf">else</span> fib(n <span class="op">-</span> <span class="dv">1</span>) <span class="op">+</span> fib(n <span class="op">-</span> <span class="dv">2</span>)</span>
+<span id="cb135-9"><a href="#cb135-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb135-10"><a href="#cb135-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> busqueda_binaria(lista, x):       <span class="co"># divide y vencerás: O(log n), lista ORDENADA</span></span>
+<span id="cb135-11"><a href="#cb135-11" aria-hidden="true" tabindex="-1"></a>    izq, der <span class="op">=</span> <span class="dv">0</span>, <span class="bu">len</span>(lista) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb135-12"><a href="#cb135-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> izq <span class="op">&lt;=</span> der:</span>
+<span id="cb135-13"><a href="#cb135-13" aria-hidden="true" tabindex="-1"></a>        medio <span class="op">=</span> (izq <span class="op">+</span> der) <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb135-14"><a href="#cb135-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> lista[medio] <span class="op">==</span> x:</span>
+<span id="cb135-15"><a href="#cb135-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> medio</span>
+<span id="cb135-16"><a href="#cb135-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> lista[medio] <span class="op">&lt;</span> x:</span>
+<span id="cb135-17"><a href="#cb135-17" aria-hidden="true" tabindex="-1"></a>            izq <span class="op">=</span> medio <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb135-18"><a href="#cb135-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb135-19"><a href="#cb135-19" aria-hidden="true" tabindex="-1"></a>            der <span class="op">=</span> medio <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb135-20"><a href="#cb135-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb135-21"><a href="#cb135-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb135-22"><a href="#cb135-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(factorial(<span class="dv">5</span>), fib(<span class="dv">50</span>), busqueda_binaria([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>], <span class="dv">7</span>))   <span class="co"># 120 12586269025 3</span></span></code></pre></div>
 <p><strong>Complejidad (notación O)</strong>: cómo crece el tiempo
 cuando crecen los datos.</p>
 <table>
@@ -5269,19 +5294,19 @@ carpeta de módulos es un <strong>paquete</strong> (con
 </table>
 <h4 id="errores-frecuentes-que-conviene-evitar">Errores frecuentes que
 conviene evitar</h4>
-<div class="sourceCode" id="cb135"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ❌ Argumento por defecto mutable: la lista se comparte entre llamadas</span></span>
-<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> añadir(x, lista<span class="op">=</span>[]):</span>
-<span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a>    lista.append(x)</span>
-<span id="cb135-4"><a href="#cb135-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> lista</span>
-<span id="cb135-5"><a href="#cb135-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(añadir(<span class="dv">1</span>), añadir(<span class="dv">2</span>))      <span class="co"># [1, 2] [1, 2]  ← ¡sorpresa!</span></span>
-<span id="cb135-6"><a href="#cb135-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb135-7"><a href="#cb135-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ✅ Correcto</span></span>
-<span id="cb135-8"><a href="#cb135-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> añadir(x, lista<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb135-9"><a href="#cb135-9" aria-hidden="true" tabindex="-1"></a>    lista <span class="op">=</span> [] <span class="cf">if</span> lista <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> lista</span>
-<span id="cb135-10"><a href="#cb135-10" aria-hidden="true" tabindex="-1"></a>    lista.append(x)</span>
-<span id="cb135-11"><a href="#cb135-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> lista</span>
-<span id="cb135-12"><a href="#cb135-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(añadir(<span class="dv">1</span>), añadir(<span class="dv">2</span>))      <span class="co"># [1] [2]</span></span></code></pre></div>
+<div class="sourceCode" id="cb136"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ❌ Argumento por defecto mutable: la lista se comparte entre llamadas</span></span>
+<span id="cb136-2"><a href="#cb136-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> añadir(x, lista<span class="op">=</span>[]):</span>
+<span id="cb136-3"><a href="#cb136-3" aria-hidden="true" tabindex="-1"></a>    lista.append(x)</span>
+<span id="cb136-4"><a href="#cb136-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> lista</span>
+<span id="cb136-5"><a href="#cb136-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(añadir(<span class="dv">1</span>), añadir(<span class="dv">2</span>))      <span class="co"># [1, 2] [1, 2]  ← ¡sorpresa!</span></span>
+<span id="cb136-6"><a href="#cb136-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb136-7"><a href="#cb136-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ✅ Correcto</span></span>
+<span id="cb136-8"><a href="#cb136-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> añadir(x, lista<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb136-9"><a href="#cb136-9" aria-hidden="true" tabindex="-1"></a>    lista <span class="op">=</span> [] <span class="cf">if</span> lista <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> lista</span>
+<span id="cb136-10"><a href="#cb136-10" aria-hidden="true" tabindex="-1"></a>    lista.append(x)</span>
+<span id="cb136-11"><a href="#cb136-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> lista</span>
+<span id="cb136-12"><a href="#cb136-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(añadir(<span class="dv">1</span>), añadir(<span class="dv">2</span>))      <span class="co"># [1] [2]</span></span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -5339,25 +5364,25 @@ es mezclar tipos incompatibles: <code>"3" + 2</code> da
 id="excepciones-completas-try--except--else--finally-y-raise">Excepciones
 completas: <code>try / except / else / finally</code> y
 <code>raise</code></h4>
-<div class="sourceCode" id="cb136"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EdadNoValida(<span class="pp">Exception</span>):              <span class="co"># excepción propia</span></span>
-<span id="cb136-2"><a href="#cb136-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span>
-<span id="cb136-3"><a href="#cb136-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb136-4"><a href="#cb136-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> leer_edad(texto):</span>
-<span id="cb136-5"><a href="#cb136-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb136-6"><a href="#cb136-6" aria-hidden="true" tabindex="-1"></a>        edad <span class="op">=</span> <span class="bu">int</span>(texto)                    <span class="co"># puede lanzar ValueError</span></span>
-<span id="cb136-7"><a href="#cb136-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">ValueError</span>:</span>
-<span id="cb136-8"><a href="#cb136-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">&quot;Escribe un número entero&quot;</span>)</span>
-<span id="cb136-9"><a href="#cb136-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
-<span id="cb136-10"><a href="#cb136-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:                                    <span class="co"># solo si no hubo error</span></span>
-<span id="cb136-11"><a href="#cb136-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> edad <span class="op">&lt;</span> <span class="dv">0</span>:</span>
-<span id="cb136-12"><a href="#cb136-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> EdadNoValida(<span class="st">&quot;La edad no puede ser negativa&quot;</span>)</span>
-<span id="cb136-13"><a href="#cb136-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> edad</span>
-<span id="cb136-14"><a href="#cb136-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">finally</span>:                                 <span class="co"># se ejecuta SIEMPRE</span></span>
-<span id="cb136-15"><a href="#cb136-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">&quot;Lectura terminada&quot;</span>)</span>
-<span id="cb136-16"><a href="#cb136-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb136-17"><a href="#cb136-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(leer_edad(<span class="st">&quot;17&quot;</span>))                       <span class="co"># Lectura terminada · 17</span></span>
-<span id="cb136-18"><a href="#cb136-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(leer_edad(<span class="st">&quot;hola&quot;</span>))                     <span class="co"># Escribe un número entero · Lectura terminada · None</span></span></code></pre></div>
+<div class="sourceCode" id="cb137"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> EdadNoValida(<span class="pp">Exception</span>):              <span class="co"># excepción propia</span></span>
+<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span>
+<span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-4"><a href="#cb137-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> leer_edad(texto):</span>
+<span id="cb137-5"><a href="#cb137-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb137-6"><a href="#cb137-6" aria-hidden="true" tabindex="-1"></a>        edad <span class="op">=</span> <span class="bu">int</span>(texto)                    <span class="co"># puede lanzar ValueError</span></span>
+<span id="cb137-7"><a href="#cb137-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">ValueError</span>:</span>
+<span id="cb137-8"><a href="#cb137-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">&quot;Escribe un número entero&quot;</span>)</span>
+<span id="cb137-9"><a href="#cb137-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb137-10"><a href="#cb137-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:                                    <span class="co"># solo si no hubo error</span></span>
+<span id="cb137-11"><a href="#cb137-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> edad <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb137-12"><a href="#cb137-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> EdadNoValida(<span class="st">&quot;La edad no puede ser negativa&quot;</span>)</span>
+<span id="cb137-13"><a href="#cb137-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> edad</span>
+<span id="cb137-14"><a href="#cb137-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">finally</span>:                                 <span class="co"># se ejecuta SIEMPRE</span></span>
+<span id="cb137-15"><a href="#cb137-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">&quot;Lectura terminada&quot;</span>)</span>
+<span id="cb137-16"><a href="#cb137-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-17"><a href="#cb137-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(leer_edad(<span class="st">&quot;17&quot;</span>))                       <span class="co"># Lectura terminada · 17</span></span>
+<span id="cb137-18"><a href="#cb137-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(leer_edad(<span class="st">&quot;hola&quot;</span>))                     <span class="co"># Escribe un número entero · Lectura terminada · None</span></span></code></pre></div>
 <p><strong>Leer un <em>traceback</em></strong>: se lee <strong>de abajo
 arriba</strong>. La última línea dice el tipo de error
 (<code>ZeroDivisionError</code>) y la anterior, el archivo y la línea
@@ -5404,38 +5429,38 @@ modelos de scikit-learn heredan de una clase base y comparten
 otro sin cambiar el resto del código (14.4). El agente aspirador de 0.9
 es otro ejemplo de clase.</p>
 <h4 id="conceptos-avanzados">Conceptos avanzados</h4>
-<div class="sourceCode" id="cb137"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generador: produce valores de uno en uno (no guarda toda la lista en memoria)</span></span>
-<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pares(n):</span>
-<span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, n, <span class="dv">2</span>):</span>
-<span id="cb137-4"><a href="#cb137-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> i</span>
-<span id="cb137-5"><a href="#cb137-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">list</span>(pares(<span class="dv">10</span>)))                       <span class="co"># [0, 2, 4, 6, 8]</span></span>
-<span id="cb137-6"><a href="#cb137-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb137-7"><a href="#cb137-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Decorador: añade comportamiento a una función sin modificarla</span></span>
-<span id="cb137-8"><a href="#cb137-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
-<span id="cb137-9"><a href="#cb137-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cronometrar(func):</span>
-<span id="cb137-10"><a href="#cb137-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> envoltura(<span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
-<span id="cb137-11"><a href="#cb137-11" aria-hidden="true" tabindex="-1"></a>        inicio <span class="op">=</span> time.perf_counter()</span>
-<span id="cb137-12"><a href="#cb137-12" aria-hidden="true" tabindex="-1"></a>        resultado <span class="op">=</span> func(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
-<span id="cb137-13"><a href="#cb137-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>func<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss"> tardó </span><span class="sc">{</span>time<span class="sc">.</span>perf_counter() <span class="op">-</span> inicio<span class="sc">:.4f}</span><span class="ss"> s&quot;</span>)</span>
-<span id="cb137-14"><a href="#cb137-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> resultado</span>
-<span id="cb137-15"><a href="#cb137-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> envoltura</span>
-<span id="cb137-16"><a href="#cb137-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb137-17"><a href="#cb137-17" aria-hidden="true" tabindex="-1"></a><span class="at">@cronometrar</span></span>
-<span id="cb137-18"><a href="#cb137-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> suma_cuadrados(n):</span>
-<span id="cb137-19"><a href="#cb137-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(i <span class="op">*</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n))      <span class="co"># generador dentro de sum()</span></span>
-<span id="cb137-20"><a href="#cb137-20" aria-hidden="true" tabindex="-1"></a>suma_cuadrados(<span class="dv">1_000_000</span>)</span>
-<span id="cb137-21"><a href="#cb137-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb137-22"><a href="#cb137-22" aria-hidden="true" tabindex="-1"></a><span class="co"># *args y **kwargs: número variable de argumentos</span></span>
-<span id="cb137-23"><a href="#cb137-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> resumen(<span class="op">*</span>notas, <span class="op">**</span>datos):</span>
-<span id="cb137-24"><a href="#cb137-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f&quot;</span><span class="sc">{</span>datos<span class="sc">.</span>get(<span class="st">&#39;nombre&#39;</span>, <span class="st">&#39;?&#39;</span>)<span class="sc">}</span><span class="ss">: media </span><span class="sc">{</span><span class="bu">sum</span>(notas) <span class="op">/</span> <span class="bu">len</span>(notas)<span class="sc">:.1f}</span><span class="ss">&quot;</span></span>
-<span id="cb137-25"><a href="#cb137-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(resumen(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, nombre<span class="op">=</span><span class="st">&quot;Uxía&quot;</span>))       <span class="co"># Uxía: media 8.0</span></span>
-<span id="cb137-26"><a href="#cb137-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb137-27"><a href="#cb137-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Funciones integradas muy útiles</span></span>
-<span id="cb137-28"><a href="#cb137-28" aria-hidden="true" tabindex="-1"></a>nombres, notas <span class="op">=</span> [<span class="st">&quot;Ana&quot;</span>, <span class="st">&quot;Brais&quot;</span>], [<span class="fl">8.5</span>, <span class="fl">6.0</span>]</span>
-<span id="cb137-29"><a href="#cb137-29" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (n, x) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(nombres, notas), start<span class="op">=</span><span class="dv">1</span>):</span>
-<span id="cb137-30"><a href="#cb137-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(i, n, x)                           <span class="co"># 1 Ana 8.5 · 2 Brais 6.0</span></span>
-<span id="cb137-31"><a href="#cb137-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">any</span>(x <span class="op">&lt;</span> <span class="dv">5</span> <span class="cf">for</span> x <span class="kw">in</span> notas), <span class="bu">all</span>(x <span class="op">&gt;=</span> <span class="dv">5</span> <span class="cf">for</span> x <span class="kw">in</span> notas))   <span class="co"># False True</span></span></code></pre></div>
+<div class="sourceCode" id="cb138"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generador: produce valores de uno en uno (no guarda toda la lista en memoria)</span></span>
+<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pares(n):</span>
+<span id="cb138-3"><a href="#cb138-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, n, <span class="dv">2</span>):</span>
+<span id="cb138-4"><a href="#cb138-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> i</span>
+<span id="cb138-5"><a href="#cb138-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">list</span>(pares(<span class="dv">10</span>)))                       <span class="co"># [0, 2, 4, 6, 8]</span></span>
+<span id="cb138-6"><a href="#cb138-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb138-7"><a href="#cb138-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Decorador: añade comportamiento a una función sin modificarla</span></span>
+<span id="cb138-8"><a href="#cb138-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb138-9"><a href="#cb138-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cronometrar(func):</span>
+<span id="cb138-10"><a href="#cb138-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> envoltura(<span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb138-11"><a href="#cb138-11" aria-hidden="true" tabindex="-1"></a>        inicio <span class="op">=</span> time.perf_counter()</span>
+<span id="cb138-12"><a href="#cb138-12" aria-hidden="true" tabindex="-1"></a>        resultado <span class="op">=</span> func(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
+<span id="cb138-13"><a href="#cb138-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>func<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss"> tardó </span><span class="sc">{</span>time<span class="sc">.</span>perf_counter() <span class="op">-</span> inicio<span class="sc">:.4f}</span><span class="ss"> s&quot;</span>)</span>
+<span id="cb138-14"><a href="#cb138-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> resultado</span>
+<span id="cb138-15"><a href="#cb138-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> envoltura</span>
+<span id="cb138-16"><a href="#cb138-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb138-17"><a href="#cb138-17" aria-hidden="true" tabindex="-1"></a><span class="at">@cronometrar</span></span>
+<span id="cb138-18"><a href="#cb138-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> suma_cuadrados(n):</span>
+<span id="cb138-19"><a href="#cb138-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(i <span class="op">*</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n))      <span class="co"># generador dentro de sum()</span></span>
+<span id="cb138-20"><a href="#cb138-20" aria-hidden="true" tabindex="-1"></a>suma_cuadrados(<span class="dv">1_000_000</span>)</span>
+<span id="cb138-21"><a href="#cb138-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb138-22"><a href="#cb138-22" aria-hidden="true" tabindex="-1"></a><span class="co"># *args y **kwargs: número variable de argumentos</span></span>
+<span id="cb138-23"><a href="#cb138-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> resumen(<span class="op">*</span>notas, <span class="op">**</span>datos):</span>
+<span id="cb138-24"><a href="#cb138-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f&quot;</span><span class="sc">{</span>datos<span class="sc">.</span>get(<span class="st">&#39;nombre&#39;</span>, <span class="st">&#39;?&#39;</span>)<span class="sc">}</span><span class="ss">: media </span><span class="sc">{</span><span class="bu">sum</span>(notas) <span class="op">/</span> <span class="bu">len</span>(notas)<span class="sc">:.1f}</span><span class="ss">&quot;</span></span>
+<span id="cb138-25"><a href="#cb138-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(resumen(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, nombre<span class="op">=</span><span class="st">&quot;Uxía&quot;</span>))       <span class="co"># Uxía: media 8.0</span></span>
+<span id="cb138-26"><a href="#cb138-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb138-27"><a href="#cb138-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Funciones integradas muy útiles</span></span>
+<span id="cb138-28"><a href="#cb138-28" aria-hidden="true" tabindex="-1"></a>nombres, notas <span class="op">=</span> [<span class="st">&quot;Ana&quot;</span>, <span class="st">&quot;Brais&quot;</span>], [<span class="fl">8.5</span>, <span class="fl">6.0</span>]</span>
+<span id="cb138-29"><a href="#cb138-29" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (n, x) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(nombres, notas), start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb138-30"><a href="#cb138-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(i, n, x)                           <span class="co"># 1 Ana 8.5 · 2 Brais 6.0</span></span>
+<span id="cb138-31"><a href="#cb138-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">any</span>(x <span class="op">&lt;</span> <span class="dv">5</span> <span class="cf">for</span> x <span class="kw">in</span> notas), <span class="bu">all</span>(x <span class="op">&gt;=</span> <span class="dv">5</span> <span class="cf">for</span> x <span class="kw">in</span> notas))   <span class="co"># False True</span></span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -5812,28 +5837,28 @@ Code)</h4>
 <li>⚙️ Requiere más configuración manual</li>
 </ul>
 <p><strong>Instalación</strong>:</p>
-<div class="sourceCode" id="cb138"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar VS Code: https://code.visualstudio.com/</span></span>
-<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar extensión Python (Microsoft)</span></span>
-<span id="cb138-3"><a href="#cb138-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Instalar extensión Pylance (ayudas de código)</span></span></code></pre></div>
-<p><strong>Cómo usarlo para UD2</strong>:</p>
 <div class="sourceCode" id="cb139"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear archivo: ejercicio1.py</span></span>
-<span id="cb139-2"><a href="#cb139-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Hola, Python&quot;</span>)</span>
-<span id="cb139-3"><a href="#cb139-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb139-4"><a href="#cb139-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Para ejecutar:</span></span>
-<span id="cb139-5"><a href="#cb139-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 1: Click derecho → Run Python File</span></span>
-<span id="cb139-6"><a href="#cb139-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 2: Terminal → python ejercicio1.py</span></span></code></pre></div>
-<p><strong>Configuración recomendada</strong>:</p>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar VS Code: https://code.visualstudio.com/</span></span>
+<span id="cb139-2"><a href="#cb139-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar extensión Python (Microsoft)</span></span>
+<span id="cb139-3"><a href="#cb139-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Instalar extensión Pylance (ayudas de código)</span></span></code></pre></div>
+<p><strong>Cómo usarlo para UD2</strong>:</p>
 <div class="sourceCode" id="cb140"><pre
-class="sourceCode json"><code class="sourceCode json"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">settings.json</span> <span class="er">(Ctrl+Shift+P</span> <span class="er">→</span> <span class="er">&quot;Preferences:</span> <span class="er">Open</span> <span class="er">User</span> <span class="er">Settings</span> <span class="er">(JSON)&quot;)</span></span>
-<span id="cb140-2"><a href="#cb140-2" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">Requiere</span> <span class="er">instalar</span> <span class="er">las</span> <span class="er">extensiones</span> <span class="er">&quot;Black</span> <span class="er">Formatter&quot;</span> <span class="er">y</span> <span class="er">&quot;Pylint&quot;</span> <span class="er">(Microsoft)</span></span>
-<span id="cb140-3"><a href="#cb140-3" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb140-4"><a href="#cb140-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;editor.formatOnSave&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
-<span id="cb140-5"><a href="#cb140-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;[python]&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb140-6"><a href="#cb140-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;editor.defaultFormatter&quot;</span><span class="fu">:</span> <span class="st">&quot;ms-python.black-formatter&quot;</span></span>
-<span id="cb140-7"><a href="#cb140-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb140-8"><a href="#cb140-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear archivo: ejercicio1.py</span></span>
+<span id="cb140-2"><a href="#cb140-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Hola, Python&quot;</span>)</span>
+<span id="cb140-3"><a href="#cb140-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb140-4"><a href="#cb140-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Para ejecutar:</span></span>
+<span id="cb140-5"><a href="#cb140-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 1: Click derecho → Run Python File</span></span>
+<span id="cb140-6"><a href="#cb140-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 2: Terminal → python ejercicio1.py</span></span></code></pre></div>
+<p><strong>Configuración recomendada</strong>:</p>
+<div class="sourceCode" id="cb141"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">settings.json</span> <span class="er">(Ctrl+Shift+P</span> <span class="er">→</span> <span class="er">&quot;Preferences:</span> <span class="er">Open</span> <span class="er">User</span> <span class="er">Settings</span> <span class="er">(JSON)&quot;)</span></span>
+<span id="cb141-2"><a href="#cb141-2" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">Requiere</span> <span class="er">instalar</span> <span class="er">las</span> <span class="er">extensiones</span> <span class="er">&quot;Black</span> <span class="er">Formatter&quot;</span> <span class="er">y</span> <span class="er">&quot;Pylint&quot;</span> <span class="er">(Microsoft)</span></span>
+<span id="cb141-3"><a href="#cb141-3" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb141-4"><a href="#cb141-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;editor.formatOnSave&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb141-5"><a href="#cb141-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;[python]&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb141-6"><a href="#cb141-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;editor.defaultFormatter&quot;</span><span class="fu">:</span> <span class="st">&quot;ms-python.black-formatter&quot;</span></span>
+<span id="cb141-7"><a href="#cb141-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb141-8"><a href="#cb141-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <hr />
 <h4 id="2️⃣-pycharm-community-edition">2️⃣ PyCharm Community Edition</h4>
 <p><strong>¿Qué es?</strong></p>
@@ -5858,10 +5883,10 @@ class="sourceCode json"><code class="sourceCode json"><span id="cb140-1"><a href
 <li>⏳ Tiempo de inicio más lento</li>
 </ul>
 <p><strong>Instalación</strong>:</p>
-<div class="sourceCode" id="cb141"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar Community Edition: https://www.jetbrains.com/pycharm/download/</span></span>
-<span id="cb141-2"><a href="#cb141-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar (el Community es gratis permanentemente)</span></span>
-<span id="cb141-3"><a href="#cb141-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Crear nuevo proyecto</span></span></code></pre></div>
+<div class="sourceCode" id="cb142"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar Community Edition: https://www.jetbrains.com/pycharm/download/</span></span>
+<span id="cb142-2"><a href="#cb142-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar (el Community es gratis permanentemente)</span></span>
+<span id="cb142-3"><a href="#cb142-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Crear nuevo proyecto</span></span></code></pre></div>
 <p><strong>Estructura de Proyecto PyCharm</strong>:</p>
 <pre><code>mi_proyecto/
 ├── venv/              # Entorno virtual (automático)
@@ -5871,25 +5896,25 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb141-1"><a href
 │   └── datos.csv
 └── main.py</code></pre>
 <p><strong>Características útiles</strong>:</p>
-<div class="sourceCode" id="cb143"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+Space: Autocompletado</span></span>
-<span id="cb143-2"><a href="#cb143-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+/: Comentar línea</span></span>
-<span id="cb143-3"><a href="#cb143-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Shift+F6: Renombrar variable en todas partes</span></span>
-<span id="cb143-4"><a href="#cb143-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alt+Enter: &quot;Bombilla&quot; - sugerencias automáticas</span></span>
-<span id="cb143-5"><a href="#cb143-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb143-6"><a href="#cb143-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo: PyCharm detecta:</span></span>
-<span id="cb143-7"><a href="#cb143-7" aria-hidden="true" tabindex="-1"></a>lista <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
-<span id="cb143-8"><a href="#cb143-8" aria-hidden="true" tabindex="-1"></a>lista.appnd(<span class="dv">4</span>)  <span class="co"># ⚠️ Error: &quot;appnd&quot; debería ser &quot;append&quot;</span></span></code></pre></div>
-<p><strong>Debugging en PyCharm</strong>:</p>
 <div class="sourceCode" id="cb144"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en la línea número para añadir breakpoint</span></span>
-<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego: Shift+F9 para ejecutar en debug</span></span>
-<span id="cb144-3"><a href="#cb144-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Paso a paso: F10 (siguiente línea), F11 (dentro función)</span></span>
-<span id="cb144-4"><a href="#cb144-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb144-5"><a href="#cb144-5" aria-hidden="true" tabindex="-1"></a>numero <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb144-6"><a href="#cb144-6" aria-hidden="true" tabindex="-1"></a><span class="co"># &gt;&gt;&gt; Breakpoint aquí</span></span>
-<span id="cb144-7"><a href="#cb144-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> numero <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb144-8"><a href="#cb144-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Es par&quot;</span>)</span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+Space: Autocompletado</span></span>
+<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+/: Comentar línea</span></span>
+<span id="cb144-3"><a href="#cb144-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Shift+F6: Renombrar variable en todas partes</span></span>
+<span id="cb144-4"><a href="#cb144-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alt+Enter: &quot;Bombilla&quot; - sugerencias automáticas</span></span>
+<span id="cb144-5"><a href="#cb144-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb144-6"><a href="#cb144-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo: PyCharm detecta:</span></span>
+<span id="cb144-7"><a href="#cb144-7" aria-hidden="true" tabindex="-1"></a>lista <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb144-8"><a href="#cb144-8" aria-hidden="true" tabindex="-1"></a>lista.appnd(<span class="dv">4</span>)  <span class="co"># ⚠️ Error: &quot;appnd&quot; debería ser &quot;append&quot;</span></span></code></pre></div>
+<p><strong>Debugging en PyCharm</strong>:</p>
+<div class="sourceCode" id="cb145"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en la línea número para añadir breakpoint</span></span>
+<span id="cb145-2"><a href="#cb145-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego: Shift+F9 para ejecutar en debug</span></span>
+<span id="cb145-3"><a href="#cb145-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Paso a paso: F10 (siguiente línea), F11 (dentro función)</span></span>
+<span id="cb145-4"><a href="#cb145-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb145-5"><a href="#cb145-5" aria-hidden="true" tabindex="-1"></a>numero <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb145-6"><a href="#cb145-6" aria-hidden="true" tabindex="-1"></a><span class="co"># &gt;&gt;&gt; Breakpoint aquí</span></span>
+<span id="cb145-7"><a href="#cb145-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> numero <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb145-8"><a href="#cb145-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Es par&quot;</span>)</span></code></pre></div>
 <hr />
 <h4 id="3️⃣-jupyter-notebook">3️⃣ Jupyter Notebook</h4>
 <p><strong>¿Qué es?</strong></p>
@@ -5912,11 +5937,11 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb144-1"><a 
 <li>🐛 Debugging más complicado</li>
 </ul>
 <p><strong>Instalación</strong>:</p>
-<div class="sourceCode" id="cb145"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install jupyter notebook</span>
-<span id="cb145-2"><a href="#cb145-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego ejecutar:</span></span>
-<span id="cb145-3"><a href="#cb145-3" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> notebook</span>
-<span id="cb145-4"><a href="#cb145-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Se abre en: http://localhost:8888</span></span></code></pre></div>
+<div class="sourceCode" id="cb146"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install jupyter notebook</span>
+<span id="cb146-2"><a href="#cb146-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego ejecutar:</span></span>
+<span id="cb146-3"><a href="#cb146-3" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> notebook</span>
+<span id="cb146-4"><a href="#cb146-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Se abre en: http://localhost:8888</span></span></code></pre></div>
 <p><strong>Estructura de Jupyter</strong>:</p>
 <pre><code>Celda 1: [Código] - Importar librerías
 import pandas as pd
@@ -5943,27 +5968,27 @@ M: Convertir a Markdown
 Y: Convertir a código
 DD: Eliminar celda</code></pre>
 <p><strong>Ejemplo completo en Jupyter</strong>:</p>
-<div class="sourceCode" id="cb148"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 1</span></span>
-<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb148-3"><a href="#cb148-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb148-4"><a href="#cb148-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb148-5"><a href="#cb148-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 2</span></span>
-<span id="cb148-6"><a href="#cb148-6" aria-hidden="true" tabindex="-1"></a>datos <span class="op">=</span> {</span>
-<span id="cb148-7"><a href="#cb148-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;nombre&#39;</span>: [<span class="st">&#39;Ana&#39;</span>, <span class="st">&#39;Bruno&#39;</span>, <span class="st">&#39;Carlos&#39;</span>],</span>
-<span id="cb148-8"><a href="#cb148-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;edad&#39;</span>: [<span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">28</span>],</span>
-<span id="cb148-9"><a href="#cb148-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;ciudad&#39;</span>: [<span class="st">&#39;Madrid&#39;</span>, <span class="st">&#39;Barcelona&#39;</span>, <span class="st">&#39;Valencia&#39;</span>]</span>
-<span id="cb148-10"><a href="#cb148-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb148-11"><a href="#cb148-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(datos)</span>
-<span id="cb148-12"><a href="#cb148-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span>
-<span id="cb148-13"><a href="#cb148-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb148-14"><a href="#cb148-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 3</span></span>
-<span id="cb148-15"><a href="#cb148-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculo de edad promedio</span></span>
-<span id="cb148-16"><a href="#cb148-16" aria-hidden="true" tabindex="-1"></a>edad_promedio <span class="op">=</span> df[<span class="st">&#39;edad&#39;</span>].mean()</span>
-<span id="cb148-17"><a href="#cb148-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Edad promedio: </span><span class="sc">{</span>edad_promedio<span class="sc">:.1f}</span><span class="ss">&quot;</span>)</span>
-<span id="cb148-18"><a href="#cb148-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb148-19"><a href="#cb148-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultado aparece automáticamente:</span></span>
-<span id="cb148-20"><a href="#cb148-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Edad promedio: 27.7</span></span></code></pre></div>
+<div class="sourceCode" id="cb149"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 1</span></span>
+<span id="cb149-2"><a href="#cb149-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb149-3"><a href="#cb149-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb149-4"><a href="#cb149-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb149-5"><a href="#cb149-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 2</span></span>
+<span id="cb149-6"><a href="#cb149-6" aria-hidden="true" tabindex="-1"></a>datos <span class="op">=</span> {</span>
+<span id="cb149-7"><a href="#cb149-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;nombre&#39;</span>: [<span class="st">&#39;Ana&#39;</span>, <span class="st">&#39;Bruno&#39;</span>, <span class="st">&#39;Carlos&#39;</span>],</span>
+<span id="cb149-8"><a href="#cb149-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;edad&#39;</span>: [<span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">28</span>],</span>
+<span id="cb149-9"><a href="#cb149-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;ciudad&#39;</span>: [<span class="st">&#39;Madrid&#39;</span>, <span class="st">&#39;Barcelona&#39;</span>, <span class="st">&#39;Valencia&#39;</span>]</span>
+<span id="cb149-10"><a href="#cb149-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb149-11"><a href="#cb149-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(datos)</span>
+<span id="cb149-12"><a href="#cb149-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span>
+<span id="cb149-13"><a href="#cb149-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb149-14"><a href="#cb149-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 3</span></span>
+<span id="cb149-15"><a href="#cb149-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculo de edad promedio</span></span>
+<span id="cb149-16"><a href="#cb149-16" aria-hidden="true" tabindex="-1"></a>edad_promedio <span class="op">=</span> df[<span class="st">&#39;edad&#39;</span>].mean()</span>
+<span id="cb149-17"><a href="#cb149-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Edad promedio: </span><span class="sc">{</span>edad_promedio<span class="sc">:.1f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb149-18"><a href="#cb149-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb149-19"><a href="#cb149-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultado aparece automáticamente:</span></span>
+<span id="cb149-20"><a href="#cb149-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Edad promedio: 27.7</span></span></code></pre></div>
 <hr />
 <h3 id="comparación-cuál-usar">Comparación: ¿Cuál usar?</h3>
 <table>
@@ -6045,24 +6070,24 @@ pétalo</li>
 <li>Perfecto para <strong>principiantes</strong></li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb149"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
-<span id="cb149-2"><a href="#cb149-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb149-3"><a href="#cb149-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb149-4"><a href="#cb149-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar</span></span>
-<span id="cb149-5"><a href="#cb149-5" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
-<span id="cb149-6"><a href="#cb149-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(iris.data, columns<span class="op">=</span>iris.feature_names)</span>
-<span id="cb149-7"><a href="#cb149-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;species&#39;</span>] <span class="op">=</span> iris.target_names[iris.target]</span>
-<span id="cb149-8"><a href="#cb149-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb149-9"><a href="#cb149-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
-<span id="cb149-10"><a href="#cb149-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span>
-<span id="cb149-11"><a href="#cb149-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.describe())</span>
-<span id="cb149-12"><a href="#cb149-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;species&#39;</span>].value_counts())</span>
-<span id="cb149-13"><a href="#cb149-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb149-14"><a href="#cb149-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficos</span></span>
-<span id="cb149-15"><a href="#cb149-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb149-16"><a href="#cb149-16" aria-hidden="true" tabindex="-1"></a>df.plot(subplots<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
-<span id="cb149-17"><a href="#cb149-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb150"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb150-1"><a href="#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
+<span id="cb150-2"><a href="#cb150-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb150-3"><a href="#cb150-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-4"><a href="#cb150-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar</span></span>
+<span id="cb150-5"><a href="#cb150-5" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb150-6"><a href="#cb150-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(iris.data, columns<span class="op">=</span>iris.feature_names)</span>
+<span id="cb150-7"><a href="#cb150-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;species&#39;</span>] <span class="op">=</span> iris.target_names[iris.target]</span>
+<span id="cb150-8"><a href="#cb150-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-9"><a href="#cb150-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
+<span id="cb150-10"><a href="#cb150-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span>
+<span id="cb150-11"><a href="#cb150-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.describe())</span>
+<span id="cb150-12"><a href="#cb150-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;species&#39;</span>].value_counts())</span>
+<span id="cb150-13"><a href="#cb150-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-14"><a href="#cb150-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficos</span></span>
+<span id="cb150-15"><a href="#cb150-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb150-16"><a href="#cb150-16" aria-hidden="true" tabindex="-1"></a>df.plot(subplots<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb150-17"><a href="#cb150-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E15: Calcular estadísticas de cada especie</li>
@@ -6071,9 +6096,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb149-1"><a 
 <li>E26: EDA completo</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb150"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb150-1"><a href="#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ya está incluido en sklearn, o:</span></span>
-<span id="cb150-2"><a href="#cb150-2" aria-hidden="true" tabindex="-1"></a><span class="co"># https://archive.ics.uci.edu/ml/datasets/iris</span></span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ya está incluido en sklearn, o:</span></span>
+<span id="cb151-2"><a href="#cb151-2" aria-hidden="true" tabindex="-1"></a><span class="co"># https://archive.ics.uci.edu/ml/datasets/iris</span></span></code></pre></div>
 <hr />
 <h4 id="2️⃣-titanic-dataset-kaggle">2️⃣ Titanic Dataset (Kaggle)</h4>
 <p><strong>Descripción</strong>:</p>
@@ -6090,26 +6115,26 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb150-1"><a href
 <li>Ideal para aprender limpieza de datos</li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb151"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb151-2"><a href="#cb151-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-3"><a href="#cb151-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar de Kaggle o local</span></span>
-<span id="cb151-4"><a href="#cb151-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;titanic.csv&#39;</span>)</span>
-<span id="cb151-5"><a href="#cb151-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-6"><a href="#cb151-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (891, 12)</span></span>
-<span id="cb151-7"><a href="#cb151-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos y NaN</span></span>
-<span id="cb151-8"><a href="#cb151-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.isnull().<span class="bu">sum</span>())  <span class="co"># Contar faltantes</span></span>
-<span id="cb151-9"><a href="#cb151-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-10"><a href="#cb151-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Limpieza</span></span>
-<span id="cb151-11"><a href="#cb151-11" aria-hidden="true" tabindex="-1"></a>df_clean <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">&#39;Age&#39;</span>, <span class="st">&#39;Embarked&#39;</span>]).copy()</span>
-<span id="cb151-12"><a href="#cb151-12" aria-hidden="true" tabindex="-1"></a>df_clean[<span class="st">&#39;Age&#39;</span>] <span class="op">=</span> df_clean[<span class="st">&#39;Age&#39;</span>].astype(<span class="bu">int</span>)</span>
-<span id="cb151-13"><a href="#cb151-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-14"><a href="#cb151-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis</span></span>
-<span id="cb151-15"><a href="#cb151-15" aria-hidden="true" tabindex="-1"></a>supervivencia <span class="op">=</span> df_clean[<span class="st">&#39;Survived&#39;</span>].mean()</span>
-<span id="cb151-16"><a href="#cb151-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Tasa supervivencia: </span><span class="sc">{</span>supervivencia<span class="sc">:.1%}</span><span class="ss">&quot;</span>)</span>
-<span id="cb151-17"><a href="#cb151-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb151-18"><a href="#cb151-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Por género</span></span>
-<span id="cb151-19"><a href="#cb151-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_clean.groupby(<span class="st">&#39;Sex&#39;</span>)[<span class="st">&#39;Survived&#39;</span>].mean())</span></code></pre></div>
+<div class="sourceCode" id="cb152"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-3"><a href="#cb152-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar de Kaggle o local</span></span>
+<span id="cb152-4"><a href="#cb152-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;titanic.csv&#39;</span>)</span>
+<span id="cb152-5"><a href="#cb152-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-6"><a href="#cb152-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (891, 12)</span></span>
+<span id="cb152-7"><a href="#cb152-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos y NaN</span></span>
+<span id="cb152-8"><a href="#cb152-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.isnull().<span class="bu">sum</span>())  <span class="co"># Contar faltantes</span></span>
+<span id="cb152-9"><a href="#cb152-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-10"><a href="#cb152-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Limpieza</span></span>
+<span id="cb152-11"><a href="#cb152-11" aria-hidden="true" tabindex="-1"></a>df_clean <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">&#39;Age&#39;</span>, <span class="st">&#39;Embarked&#39;</span>]).copy()</span>
+<span id="cb152-12"><a href="#cb152-12" aria-hidden="true" tabindex="-1"></a>df_clean[<span class="st">&#39;Age&#39;</span>] <span class="op">=</span> df_clean[<span class="st">&#39;Age&#39;</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb152-13"><a href="#cb152-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-14"><a href="#cb152-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis</span></span>
+<span id="cb152-15"><a href="#cb152-15" aria-hidden="true" tabindex="-1"></a>supervivencia <span class="op">=</span> df_clean[<span class="st">&#39;Survived&#39;</span>].mean()</span>
+<span id="cb152-16"><a href="#cb152-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Tasa supervivencia: </span><span class="sc">{</span>supervivencia<span class="sc">:.1%}</span><span class="ss">&quot;</span>)</span>
+<span id="cb152-17"><a href="#cb152-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-18"><a href="#cb152-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Por género</span></span>
+<span id="cb152-19"><a href="#cb152-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_clean.groupby(<span class="st">&#39;Sex&#39;</span>)[<span class="st">&#39;Survived&#39;</span>].mean())</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E14: Validación de datos</li>
@@ -6118,9 +6143,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb151-1"><a 
 <li>E27: Normalización para ML</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb152"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/titanic</span></span>
-<span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O directo: https://raw.githubusercontent.com/pandas-dev/pandas/main/doc/data/titanic.csv</span></span></code></pre></div>
+<div class="sourceCode" id="cb153"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/titanic</span></span>
+<span id="cb153-2"><a href="#cb153-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O directo: https://raw.githubusercontent.com/pandas-dev/pandas/main/doc/data/titanic.csv</span></span></code></pre></div>
 <hr />
 <h4 id="3️⃣-world-happiness-report">3️⃣ World Happiness Report</h4>
 <p><strong>Descripción</strong>:</p>
@@ -6137,35 +6162,35 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb152-1"><a href
 <li>Ideal para análisis temporal</li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb153"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb153-2"><a href="#cb153-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-3"><a href="#cb153-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;world-happiness-report.csv&#39;</span>)</span>
-<span id="cb153-4"><a href="#cb153-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ⚠️ Los nombres de columnas cambian según el año/versión del fichero</span></span>
-<span id="cb153-5"><a href="#cb153-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (p. ej. &#39;Life Ladder&#39; o &#39;Ladder score&#39;; &#39;Country&#39; o &#39;Country name&#39;).</span></span>
-<span id="cb153-6"><a href="#cb153-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compruébalos siempre con df.columns y adapta el código.</span></span>
-<span id="cb153-7"><a href="#cb153-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-8"><a href="#cb153-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
-<span id="cb153-9"><a href="#cb153-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.columns)</span>
-<span id="cb153-10"><a href="#cb153-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head(<span class="dv">10</span>))</span>
-<span id="cb153-11"><a href="#cb153-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-12"><a href="#cb153-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas</span></span>
-<span id="cb153-13"><a href="#cb153-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;Life Ladder&#39;</span>].describe())  <span class="co"># Score felicidad</span></span>
-<span id="cb153-14"><a href="#cb153-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-15"><a href="#cb153-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Comparar países</span></span>
-<span id="cb153-16"><a href="#cb153-16" aria-hidden="true" tabindex="-1"></a>top5 <span class="op">=</span> df.nlargest(<span class="dv">5</span>, <span class="st">&#39;Life Ladder&#39;</span>)[[<span class="st">&#39;Country name&#39;</span>, <span class="st">&#39;Life Ladder&#39;</span>]]</span>
-<span id="cb153-17"><a href="#cb153-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(top5)</span>
-<span id="cb153-18"><a href="#cb153-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-19"><a href="#cb153-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis por región</span></span>
-<span id="cb153-20"><a href="#cb153-20" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">&#39;Region&#39;</span> <span class="kw">in</span> df.columns:</span>
-<span id="cb153-21"><a href="#cb153-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df.groupby(<span class="st">&#39;Region&#39;</span>)[<span class="st">&#39;Life Ladder&#39;</span>].mean())</span>
-<span id="cb153-22"><a href="#cb153-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb153-23"><a href="#cb153-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar</span></span>
-<span id="cb153-24"><a href="#cb153-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb153-25"><a href="#cb153-25" aria-hidden="true" tabindex="-1"></a>df.sort_values(<span class="st">&#39;Life Ladder&#39;</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>).plot(</span>
-<span id="cb153-26"><a href="#cb153-26" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">&#39;Country name&#39;</span>, y<span class="op">=</span><span class="st">&#39;Life Ladder&#39;</span>, kind<span class="op">=</span><span class="st">&#39;barh&#39;</span></span>
-<span id="cb153-27"><a href="#cb153-27" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb153-28"><a href="#cb153-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb154"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb154-3"><a href="#cb154-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;world-happiness-report.csv&#39;</span>)</span>
+<span id="cb154-4"><a href="#cb154-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ⚠️ Los nombres de columnas cambian según el año/versión del fichero</span></span>
+<span id="cb154-5"><a href="#cb154-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (p. ej. &#39;Life Ladder&#39; o &#39;Ladder score&#39;; &#39;Country&#39; o &#39;Country name&#39;).</span></span>
+<span id="cb154-6"><a href="#cb154-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compruébalos siempre con df.columns y adapta el código.</span></span>
+<span id="cb154-7"><a href="#cb154-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb154-8"><a href="#cb154-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
+<span id="cb154-9"><a href="#cb154-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.columns)</span>
+<span id="cb154-10"><a href="#cb154-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head(<span class="dv">10</span>))</span>
+<span id="cb154-11"><a href="#cb154-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb154-12"><a href="#cb154-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas</span></span>
+<span id="cb154-13"><a href="#cb154-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;Life Ladder&#39;</span>].describe())  <span class="co"># Score felicidad</span></span>
+<span id="cb154-14"><a href="#cb154-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb154-15"><a href="#cb154-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Comparar países</span></span>
+<span id="cb154-16"><a href="#cb154-16" aria-hidden="true" tabindex="-1"></a>top5 <span class="op">=</span> df.nlargest(<span class="dv">5</span>, <span class="st">&#39;Life Ladder&#39;</span>)[[<span class="st">&#39;Country name&#39;</span>, <span class="st">&#39;Life Ladder&#39;</span>]]</span>
+<span id="cb154-17"><a href="#cb154-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(top5)</span>
+<span id="cb154-18"><a href="#cb154-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb154-19"><a href="#cb154-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis por región</span></span>
+<span id="cb154-20"><a href="#cb154-20" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">&#39;Region&#39;</span> <span class="kw">in</span> df.columns:</span>
+<span id="cb154-21"><a href="#cb154-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df.groupby(<span class="st">&#39;Region&#39;</span>)[<span class="st">&#39;Life Ladder&#39;</span>].mean())</span>
+<span id="cb154-22"><a href="#cb154-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb154-23"><a href="#cb154-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar</span></span>
+<span id="cb154-24"><a href="#cb154-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb154-25"><a href="#cb154-25" aria-hidden="true" tabindex="-1"></a>df.sort_values(<span class="st">&#39;Life Ladder&#39;</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>).plot(</span>
+<span id="cb154-26"><a href="#cb154-26" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">&#39;Country name&#39;</span>, y<span class="op">=</span><span class="st">&#39;Life Ladder&#39;</span>, kind<span class="op">=</span><span class="st">&#39;barh&#39;</span></span>
+<span id="cb154-27"><a href="#cb154-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb154-28"><a href="#cb154-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E16: Agrupar por región/año</li>
@@ -6174,9 +6199,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb153-1"><a 
 <li>E26: Correlación entre variables</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb154"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2023</span></span>
-<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O: https://worldhappiness.report/</span></span></code></pre></div>
+<div class="sourceCode" id="cb155"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2023</span></span>
+<span id="cb155-2"><a href="#cb155-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O: https://worldhappiness.report/</span></span></code></pre></div>
 <hr />
 <h4 id="4️⃣-house-prices-dataset-kaggle">4️⃣ House Prices Dataset
 (Kaggle)</h4>
@@ -6194,36 +6219,36 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb154-1"><a href
 <li>Perfecto para aprender <strong>feature engineering</strong></li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb155"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb155-2"><a href="#cb155-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb155-3"><a href="#cb155-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb155-4"><a href="#cb155-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;house-prices-advanced-regression-techniques/train.csv&#39;</span>)</span>
-<span id="cb155-5"><a href="#cb155-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb155-6"><a href="#cb155-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (1460, 81)</span></span>
-<span id="cb155-7"><a href="#cb155-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos</span></span>
-<span id="cb155-8"><a href="#cb155-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb155-9"><a href="#cb155-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar precio</span></span>
-<span id="cb155-10"><a href="#cb155-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;SalePrice&#39;</span>].describe())</span>
-<span id="cb155-11"><a href="#cb155-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb155-12"><a href="#cb155-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Encontrar correlación con precio</span></span>
-<span id="cb155-13"><a href="#cb155-13" aria-hidden="true" tabindex="-1"></a>correlaciones <span class="op">=</span> df.corr(numeric_only<span class="op">=</span><span class="va">True</span>)[<span class="st">&#39;SalePrice&#39;</span>].sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb155-14"><a href="#cb155-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(correlaciones.head(<span class="dv">10</span>))</span>
-<span id="cb155-15"><a href="#cb155-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb155-16"><a href="#cb155-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico: Tamaño vs Precio</span></span>
-<span id="cb155-17"><a href="#cb155-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb155-18"><a href="#cb155-18" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">&#39;GrLivArea&#39;</span>], df[<span class="st">&#39;SalePrice&#39;</span>])</span>
-<span id="cb155-19"><a href="#cb155-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;Área&#39;</span>)</span>
-<span id="cb155-20"><a href="#cb155-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Precio&#39;</span>)</span>
-<span id="cb155-21"><a href="#cb155-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb155-22"><a href="#cb155-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb155-23"><a href="#cb155-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejercicio: Normalizar características</span></span>
-<span id="cb155-24"><a href="#cb155-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb155-25"><a href="#cb155-25" aria-hidden="true" tabindex="-1"></a>caracteristicas_numericas <span class="op">=</span> df.select_dtypes(include<span class="op">=</span>[np.number]).columns</span>
-<span id="cb155-26"><a href="#cb155-26" aria-hidden="true" tabindex="-1"></a>df_normalizado <span class="op">=</span> df.copy()</span>
-<span id="cb155-27"><a href="#cb155-27" aria-hidden="true" tabindex="-1"></a>df_normalizado[caracteristicas_numericas] <span class="op">=</span> StandardScaler().fit_transform(</span>
-<span id="cb155-28"><a href="#cb155-28" aria-hidden="true" tabindex="-1"></a>    df[caracteristicas_numericas]</span>
-<span id="cb155-29"><a href="#cb155-29" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb156"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb156-3"><a href="#cb156-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-4"><a href="#cb156-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;house-prices-advanced-regression-techniques/train.csv&#39;</span>)</span>
+<span id="cb156-5"><a href="#cb156-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-6"><a href="#cb156-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (1460, 81)</span></span>
+<span id="cb156-7"><a href="#cb156-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos</span></span>
+<span id="cb156-8"><a href="#cb156-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-9"><a href="#cb156-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar precio</span></span>
+<span id="cb156-10"><a href="#cb156-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;SalePrice&#39;</span>].describe())</span>
+<span id="cb156-11"><a href="#cb156-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-12"><a href="#cb156-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Encontrar correlación con precio</span></span>
+<span id="cb156-13"><a href="#cb156-13" aria-hidden="true" tabindex="-1"></a>correlaciones <span class="op">=</span> df.corr(numeric_only<span class="op">=</span><span class="va">True</span>)[<span class="st">&#39;SalePrice&#39;</span>].sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb156-14"><a href="#cb156-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(correlaciones.head(<span class="dv">10</span>))</span>
+<span id="cb156-15"><a href="#cb156-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-16"><a href="#cb156-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico: Tamaño vs Precio</span></span>
+<span id="cb156-17"><a href="#cb156-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb156-18"><a href="#cb156-18" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">&#39;GrLivArea&#39;</span>], df[<span class="st">&#39;SalePrice&#39;</span>])</span>
+<span id="cb156-19"><a href="#cb156-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;Área&#39;</span>)</span>
+<span id="cb156-20"><a href="#cb156-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Precio&#39;</span>)</span>
+<span id="cb156-21"><a href="#cb156-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb156-22"><a href="#cb156-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-23"><a href="#cb156-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejercicio: Normalizar características</span></span>
+<span id="cb156-24"><a href="#cb156-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb156-25"><a href="#cb156-25" aria-hidden="true" tabindex="-1"></a>caracteristicas_numericas <span class="op">=</span> df.select_dtypes(include<span class="op">=</span>[np.number]).columns</span>
+<span id="cb156-26"><a href="#cb156-26" aria-hidden="true" tabindex="-1"></a>df_normalizado <span class="op">=</span> df.copy()</span>
+<span id="cb156-27"><a href="#cb156-27" aria-hidden="true" tabindex="-1"></a>df_normalizado[caracteristicas_numericas] <span class="op">=</span> StandardScaler().fit_transform(</span>
+<span id="cb156-28"><a href="#cb156-28" aria-hidden="true" tabindex="-1"></a>    df[caracteristicas_numericas]</span>
+<span id="cb156-29"><a href="#cb156-29" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E22: Análisis y agregación</li>
@@ -6232,9 +6257,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb155-1"><a 
 <li>E27: Normalización necesaria para ML</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb156"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/house-prices-advanced-regression-techniques</span></span>
-<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: train.csv</span></span></code></pre></div>
+<div class="sourceCode" id="cb157"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/house-prices-advanced-regression-techniques</span></span>
+<span id="cb157-2"><a href="#cb157-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: train.csv</span></span></code></pre></div>
 <hr />
 <h3 id="matriz-de-datasets-por-ejercicio">Matriz de Datasets por
 Ejercicio</h3>
@@ -6302,31 +6327,31 @@ enfoques)</li>
 <h3 id="cómo-descargar-y-usar-datasets">Cómo Descargar y Usar
 Datasets</h3>
 <p><strong>Opción 1: Desde Kaggle (Recomendado)</strong></p>
-<div class="sourceCode" id="cb157"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar kaggle CLI</span></span>
-<span id="cb157-2"><a href="#cb157-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install kaggle</span>
-<span id="cb157-3"><a href="#cb157-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb157-4"><a href="#cb157-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar: https://www.kaggle.com/settings/account</span></span>
-<span id="cb157-5"><a href="#cb157-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: cp kaggle.json ~/.kaggle/</span></span>
-<span id="cb157-6"><a href="#cb157-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb157-7"><a href="#cb157-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar dataset</span></span>
-<span id="cb157-8"><a href="#cb157-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kaggle</span> datasets download <span class="at">-d</span> ajaypalsinghlo/world-happiness-report-2023</span>
-<span id="cb157-9"><a href="#cb157-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb157-10"><a href="#cb157-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer</span></span>
-<span id="cb157-11"><a href="#cb157-11" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> world-happiness-report-2023.zip</span></code></pre></div>
-<p><strong>Opción 2: Descarga manual</strong></p>
 <div class="sourceCode" id="cb158"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ir a Kaggle, buscar dataset</span></span>
-<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en &quot;Download&quot;</span></span>
-<span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Guardar en carpeta del proyecto</span></span></code></pre></div>
-<p><strong>Opción 3: Desde sklearn (solo Iris)</strong></p>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar kaggle CLI</span></span>
+<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install kaggle</span>
+<span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-4"><a href="#cb158-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar: https://www.kaggle.com/settings/account</span></span>
+<span id="cb158-5"><a href="#cb158-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: cp kaggle.json ~/.kaggle/</span></span>
+<span id="cb158-6"><a href="#cb158-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-7"><a href="#cb158-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar dataset</span></span>
+<span id="cb158-8"><a href="#cb158-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kaggle</span> datasets download <span class="at">-d</span> ajaypalsinghlo/world-happiness-report-2023</span>
+<span id="cb158-9"><a href="#cb158-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-10"><a href="#cb158-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer</span></span>
+<span id="cb158-11"><a href="#cb158-11" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> world-happiness-report-2023.zip</span></code></pre></div>
+<p><strong>Opción 2: Descarga manual</strong></p>
 <div class="sourceCode" id="cb159"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb159-1"><a href="#cb159-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
-<span id="cb159-2"><a href="#cb159-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb159-3"><a href="#cb159-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb159-4"><a href="#cb159-4" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris(as_frame<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb159-5"><a href="#cb159-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> iris.frame          <span class="co"># DataFrame listo con columna &#39;target&#39;</span></span>
-<span id="cb159-6"><a href="#cb159-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code></pre></div>
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb159-1"><a href="#cb159-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ir a Kaggle, buscar dataset</span></span>
+<span id="cb159-2"><a href="#cb159-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en &quot;Download&quot;</span></span>
+<span id="cb159-3"><a href="#cb159-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Guardar en carpeta del proyecto</span></span></code></pre></div>
+<p><strong>Opción 3: Desde sklearn (solo Iris)</strong></p>
+<div class="sourceCode" id="cb160"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
+<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb160-3"><a href="#cb160-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb160-4"><a href="#cb160-4" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris(as_frame<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb160-5"><a href="#cb160-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> iris.frame          <span class="co"># DataFrame listo con columna &#39;target&#39;</span></span>
+<span id="cb160-6"><a href="#cb160-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code></pre></div>
 <hr />
 <h2 id="-guía-práctica-cómo-usar-estos-conceptos">📝 GUÍA PRÁCTICA: CÓMO
 USAR ESTOS CONCEPTOS</h2>

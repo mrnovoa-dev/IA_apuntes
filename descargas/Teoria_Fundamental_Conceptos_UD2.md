@@ -1,15 +1,15 @@
 # Teoría Fundamental y Referencias Externas
-## Conceptos para Resolver Ejercicios Python UD2 (E1-E27)
+## Conceptos para Resolver Ejercicios Python UD2 (E1-E37)
 
 ---
 
 ## 📚 Tabla de Contenidos
 0. Punto de partida: conceptos fundamentales de IA (UD1)
-1. Fundamentos de Programación
-2. Tipos de Datos en Python
-3. Estructuras de Control
-4. Funciones
-5. Estructuras de Datos Complejas
+1. Fundamentos de Programación (nombres, constantes, operadores)
+2. Tipos de Datos en Python (conversión, entrada/salida y formato, cadenas a fondo)
+3. Estructuras de Control (bucles anidados, patrones, problemas numéricos)
+4. Funciones (argumentos, lambda, map/filter/reduce, recursión, ámbito)
+5. Estructuras de Datos Complejas (listas a fondo, conjuntos, comprensiones, módulos, chuleta)
 6. Conceptos Estadísticos
 7. Librerías Científicas (NumPy, Pandas)
 8. Visualización (Matplotlib)
@@ -201,7 +201,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E27 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E37 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -668,6 +668,46 @@ else:
 
 [Referencia oficial: Operadores aritméticos](https://docs.python.org/3/reference/lexical_analysis.html#operators)
 
+### 1.5 Nombres, constantes y más operadores
+
+**Reglas para nombrar variables**: empiezan por letra o `_`; pueden llevar letras, dígitos y `_`; distinguen mayúsculas (`nota` y `Nota` son dos variables distintas) y no pueden ser palabras reservadas (`if`, `for`, `while`, `def`, `class`, `True`, `None`…). Por convenio se escriben en `minusculas_con_guiones_bajos` y con nombres que expliquen qué guardan: `temperatura_media` mejor que `t2`.
+
+**Constantes**: Python no tiene un tipo «constante». Lo que hay es un **convenio**: si el nombre va en MAYÚSCULAS, nadie debería cambiarlo.
+
+```python
+IVA = 0.21                 # constante por convenio
+NOTA_APROBADO = 5
+precio = 40
+print(precio * (1 + IVA))  # 48.4
+```
+
+**Operadores de asignación compuesta, pertenencia e identidad**:
+
+```python
+puntos = 10
+puntos += 5        # puntos = puntos + 5  → 15
+puntos //= 2       # división entera       → 7
+puntos **= 2       # potencia              → 49
+
+concellos = ["Marín", "Bueu", "Cangas"]
+print("Bueu" in concellos)        # True  (pertenencia)
+print("Vigo" not in concellos)    # True
+
+a = [1, 2]
+b = [1, 2]
+print(a == b)      # True:  mismo contenido
+print(a is b)      # False: son dos objetos distintos en memoria
+```
+
+| Operador | Pregunta que responde | Ejemplo |
+|----------|-----------------------|---------|
+| `==` | ¿Tienen el mismo **valor**? | `[1, 2] == [1, 2]` → `True` |
+| `is` | ¿Son el **mismo objeto**? | Se usa casi solo con `None`: `if x is None:` |
+| `in` | ¿Está **dentro**? | `"a" in "casa"` → `True` |
+| `//`, `%` | Cociente entero y resto | `17 // 5` → `3`, `17 % 5` → `2` |
+
+**Precedencia**: primero `**`, después `*  /  //  %`, después `+  -`, después las comparaciones y al final `not`, `and`, `or`. Ante la duda, paréntesis: `(a + b) * 2`.
+
 ---
 
 ## 2️⃣ TIPOS DE DATOS EN PYTHON
@@ -763,6 +803,94 @@ False, 0, 0.0, "", [], {}, None
 1, -1, "texto", [1], {"a": 1}
 ```
 
+### 2.4 Conversión de tipos (*casting*)
+
+`input()` **siempre devuelve un texto**. Para operar con números hay que convertirlo:
+
+```python
+edad_txt = "16"
+print(edad_txt + "1")          # "161": junta textos
+print(int(edad_txt) + 1)       # 17:   suma números
+
+int("42")        # 42
+float("3.5")     # 3.5
+str(2026)        # "2026"
+int(7.9)         # 7  (trunca, no redondea)
+round(7.9)       # 8
+bool("")         # False (texto vacío)
+bool("0")        # True  (¡es un texto con un carácter!)
+list("IA")       # ['I', 'A']
+```
+
+| Conversión | Funciona | Falla con `ValueError` |
+|------------|----------|------------------------|
+| `int()` | `int("12")`, `int(" 12 ")`, `int(3.9)` | `int("3.9")`, `int("doce")`, `int("")` |
+| `float()` | `float("3.9")`, `float("1e3")` | `float("3,9")` (coma decimal española) |
+
+**Conversión implícita**: al mezclar `int` y `float`, Python pasa a `float` sin avisar (`3 + 0.5` → `3.5`). Entre texto y número **no** convierte: `"3" + 2` da `TypeError`. Para leer números que escribe una persona, se combinan `strip()`, `replace(",", ".")` y `try/except` (14.14).
+
+### 2.5 Entrada, salida y formato
+
+```python
+nombre = input("¿Cómo te llamas? ")          # lo que escribe el usuario (texto)
+nota = float(input("Nota del examen: "))     # convertido a número
+
+print("Ola", nombre)                         # varios valores: separa con espacio
+print("2026", "11", "08", sep="-")           # 2026-11-08
+print("Cargando", end="... ")                # no salta de línea
+print("listo")                               # Cargando... listo
+```
+
+**F-strings con formato**: después de `:` se indica cómo mostrar el valor.
+
+```python
+media = 7.4567
+alumnado = 1234567
+print(f"Media: {media:.2f}")         # Media: 7.46    (2 decimales)
+print(f"Aprobados: {0.8125:.1%}")    # Aprobados: 81.2%
+print(f"Población: {alumnado:,}")    # Población: 1,234,567
+print(f"|{'Marín':<10}|")            # |Marín     |   (alinear a la izquierda)
+print(f"|{'Marín':>10}|")            # |     Marín|   (a la derecha)
+print(f"|{7:03d}|")                  # |007|          (relleno con ceros)
+print(f"{media=}")                   # media=7.4567   (útil para depurar)
+```
+
+Con estas marcas se hacen tablas alineadas en la consola, como las de los informes de E15.
+
+### 2.6 Cadenas a fondo: índices, *slicing* e inmutabilidad
+
+Una cadena es una **secuencia de caracteres**: cada uno tiene una posición que empieza en 0, y las posiciones negativas cuentan desde el final.
+
+```python
+palabra = "Pontevedra"
+#          0123456789
+palabra[0]       # 'P'
+palabra[-1]      # 'a'
+palabra[0:5]     # 'Ponte'   (del 0 al 4: el final no se incluye)
+palabra[5:]      # 'vedra'
+palabra[::2]     # 'Pneer'   (de dos en dos)
+palabra[::-1]    # 'ardevetnoP' (al revés)
+len(palabra)     # 10
+```
+
+Las cadenas son **inmutables**: `palabra[0] = "p"` da `TypeError`. Los métodos **no cambian** la cadena, **devuelven una nueva** que hay que guardar: `palabra = palabra.lower()`.
+
+**Métodos para comprobar y unir**:
+
+```python
+"2026".isdigit()          # True  (solo dígitos)
+"Antía".isalpha()         # True  (solo letras, también con tilde)
+"ola mundo".isalpha()     # False (el espacio no es letra)
+"IES".isupper()           # True
+"informe.csv".endswith(".csv")       # True
+"https://x.gal".startswith("https")  # True
+"-".join(["2026", "11", "08"])       # '2026-11-08'  (lo contrario de split)
+"Hola mundo".index("mundo")          # 5  (como find, pero da error si no está)
+"Hola mundo".find("Vigo")            # -1
+```
+
+**Recorrer una cadena**: `for letra in palabra:` da cada carácter; `for i, letra in enumerate(palabra):` da también la posición. Con `ord("A")` (65) y `chr(65)` ("A") se pasa de carácter a número Unicode y al revés (UD4, sección de texto como números).
+
 ---
 
 ## 3️⃣ ESTRUCTURAS DE CONTROL
@@ -853,6 +981,122 @@ for i in range(5):
 
 [Referencia: Bucles](https://docs.python.org/3/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops)
 
+### 3.3 Bucles anidados y programas de patrones
+
+Un bucle dentro de otro: **el exterior recorre las filas y el interior, lo que va en cada fila**. Por cada vuelta del exterior, el interior se ejecuta entero.
+
+```python
+# Tabla de multiplicar del 1 al 3
+for i in range(1, 4):
+    for j in range(1, 4):
+        print(f"{i*j:3}", end="")
+    print()          # salto de línea al acabar cada fila
+#   1  2  3
+#   2  4  6
+#   3  6  9
+```
+
+Los **patrones** de asteriscos o números son el ejercicio clásico para entrenar esta idea. El truco es escribir una tabla: fila `i` → cuántos espacios y cuántos símbolos.
+
+```python
+n = 4
+# Triángulo:  fila i → i asteriscos
+for i in range(1, n + 1):
+    print("*" * i)
+
+# Pirámide:   fila i → (n - i) espacios y (2i - 1) asteriscos
+for i in range(1, n + 1):
+    print(" " * (n - i) + "*" * (2 * i - 1))
+
+# Números:    fila i → 1 2 … i
+for i in range(1, n + 1):
+    for j in range(1, i + 1):
+        print(j, end=" ")
+    print()
+
+# Letras:     fila i → la letra i-ésima repetida (chr(65) es 'A')
+for i in range(1, n + 1):
+    print(chr(64 + i) * i)
+```
+
+Salida de la pirámide con `n = 4`:
+
+```text
+   *
+  ***
+ *****
+*******
+```
+
+En Python, `"*" * i` repite un texto, así que muchos patrones salen con un solo bucle. Los apuntes en inglés de los que parte esta sección usan siempre dos bucles con `print(..., end="")`: los dos caminos son correctos, y conviene saber hacerlo de las dos formas porque en otros lenguajes no existe la multiplicación de textos.
+
+**Coste**: dos bucles anidados de `n` vueltas hacen `n × n` operaciones. Con 1 000 filas ya es un millón. Es la misma razón por la que comparar cada imagen con todas las demás (UD3) o cada palabra con todas (UD4) se vuelve lento muy rápido.
+
+### 3.4 Problemas numéricos clásicos
+
+Casi todos se resuelven con dos herramientas: `n % 10` (la última cifra) y `n // 10` (quitar la última cifra).
+
+```python
+def suma_cifras(n):
+    n = abs(n)                 # así también funciona con negativos
+    total = 0
+    while n > 0:
+        total += n % 10        # última cifra
+        n //= 10               # quitarla
+    return total
+
+def invertir(n):
+    resultado = 0
+    while n > 0:
+        resultado = resultado * 10 + n % 10
+        n //= 10
+    return resultado
+
+def es_capicua(n):             # «palíndromo numérico»
+    return n == invertir(n)
+
+def es_armstrong(n):           # suma de cada cifra elevada al número de cifras
+    k = len(str(n))
+    return n == sum(int(c) ** k for c in str(n))
+
+def es_primo(n):
+    if n < 2:
+        return False
+    for d in range(2, int(n ** 0.5) + 1):   # basta llegar a la raíz cuadrada
+        if n % d == 0:
+            return False
+    return True
+
+print(suma_cifras(2026), invertir(2026), es_capicua(1221))   # 10 6202 True
+print([n for n in range(100, 1000) if es_armstrong(n)])      # [153, 370, 371, 407]
+print([n for n in range(30) if es_primo(n)])                 # [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+```
+
+| Problema | Idea clave | Cuidado con |
+|----------|-----------|-------------|
+| Par o impar | `n % 2 == 0` | Nada: funciona también con negativos |
+| Primo | Probar divisores hasta √n | 0 y 1 **no** son primos |
+| Factorial | Acumular un producto empezando en 1 | `0! = 1` |
+| Fibonacci | `a, b = b, a + b` | Empieza en 0, 1 |
+| Suma de cifras / invertir | `% 10` y `// 10` | Con negativos, `while n > 0` no entra: usar `abs()` |
+| Capicúa | Comparar con el número invertido | `invertir(120)` da `21`: los ceros finales se pierden |
+| Año bisiesto | Divisible entre 4 y no entre 100, **o** entre 400 | 1900 no fue bisiesto; 2000 sí |
+
+**`for … else`**: el bloque `else` de un bucle se ejecuta **solo si el bucle no terminó con `break`**. Es otra forma de escribir el test de primo:
+
+```python
+n = 91
+for d in range(2, n):
+    if n % d == 0:
+        print(n, "no es primo:", d, "×", n // d)
+        break
+else:
+    print(n, "es primo")
+# 91 no es primo: 7 × 13
+```
+
+Los apuntes de origen prueban divisores **hasta `n`**: funciona, pero con un número de 12 cifras haría un billón de pruebas en vez de un millón. Pensar cuánto trabajo hace un algoritmo es la idea central de la algoritmia (14.12).
+
 ---
 
 ## 4️⃣ FUNCIONES
@@ -920,6 +1164,138 @@ help(es_par)  # Muestra el docstring
 ```
 
 [Referencia: Funciones](https://docs.python.org/3/tutorial/controlflow.html#defining-functions)
+
+### 4.6 Argumentos y valores de retorno
+
+```python
+def ficha(nombre, curso="1º BAC", *, centro="IES Chan do Monte"):
+    return f"{nombre} · {curso} · {centro}"
+
+ficha("Uxía")                          # posicional + valores por defecto
+ficha("Brais", "2º BAC")               # dos posicionales
+ficha(curso="2º BAC", nombre="Antía")  # nombrados: el orden da igual
+ficha("Xoán", centro="IES de Vigo")    # tras el * solo se admite nombrado
+```
+
+**Devolver varios valores**: en realidad se devuelve una **tupla**, que se desempaqueta en varias variables.
+
+```python
+def min_max(notas):
+    return min(notas), max(notas)
+
+baja, alta = min_max([6.5, 9, 4.25, 7])
+print(baja, alta)                      # 4.25 9
+```
+
+Una función **sin `return`** devuelve `None`. Error típico: `lista = lista.sort()` deja `lista` en `None`, porque `sort()` ordena en el sitio y no devuelve nada (5.4).
+
+### 4.7 Funciones lambda
+
+Una **lambda** es una función **anónima de una sola expresión**. Devuelve el resultado sin escribir `return`.
+
+```python
+doble = lambda x: x * 2          # equivale a: def doble(x): return x * 2
+print(doble(21))                 # 42
+```
+
+Donde de verdad se usa es **como argumento de otra función**, sobre todo para decir **por qué ordenar**:
+
+```python
+alumnado = [("Uxía", 8.5), ("Brais", 6.0), ("Antía", 9.25)]
+print(sorted(alumnado, key=lambda a: a[1], reverse=True))
+# [('Antía', 9.25), ('Uxía', 8.5), ('Brais', 6.0)]
+
+palabras = ["ría", "Ourense", "mar", "Lugo"]
+print(sorted(palabras, key=len))             # ['ría', 'mar', 'Lugo', 'Ourense']
+print(max(palabras, key=str.lower))          # 'ría'
+```
+
+Si una lambda se guarda en una variable para usarla varias veces (como `doble` arriba), la guía de estilo PEP 8 recomienda **escribir un `def`**: tiene nombre en los mensajes de error y admite docstring. Los apuntes de origen usan `square = lambda x: x * x` como ejemplo básico; sirve para entender la sintaxis, pero no es buena práctica.
+
+### 4.8 `map`, `filter` y `reduce`
+
+Tres herramientas de **programación funcional**: transformar, seleccionar y combinar.
+
+```python
+from functools import reduce
+
+temperaturas_c = [12, 18, 25, 31]
+print(list(map(lambda c: c * 9 / 5 + 32, temperaturas_c)))   # [53.6, 64.4, 77.0, 87.8]
+print(list(filter(lambda c: c >= 20, temperaturas_c)))       # [25, 31]
+print(reduce(lambda a, b: a * b, [1, 2, 3, 4]))              # 24
+
+# map con dos listas: empareja elemento a elemento
+print(list(map(lambda a, b: a + b, [1, 2, 3], [10, 20, 30])))   # [11, 22, 33]
+```
+
+| Herramienta | Qué hace | Equivalente con comprensión (5.6) |
+|-------------|----------|-----------------------------------|
+| `map(f, datos)` | Aplica `f` a cada elemento | `[f(x) for x in datos]` |
+| `filter(f, datos)` | Se queda con los que cumplen `f` | `[x for x in datos if f(x)]` |
+| `reduce(f, datos)` | Combina todo en un valor | Muchas veces hay una función hecha: `sum`, `max`, `math.prod` |
+
+Dos detalles: `map` y `filter` devuelven un **iterador** (por eso `list(...)`), que **se gasta** al recorrerlo una vez; y `reduce` vive en `functools`, no es una función integrada. En Python moderno las comprensiones suelen ser más legibles, pero `map` aparece mucho en Pandas (`df["col"].map(...)`) y la idea de «aplicar una función a cada dato» es la misma que en las capas de una red neuronal.
+
+### 4.9 Recursión
+
+Una función **recursiva** se llama a sí misma con un problema **más pequeño**. Necesita dos partes: un **caso base** que para y un **caso recursivo** que se acerca al caso base.
+
+```python
+def factorial(n):
+    if n == 0:                 # caso base
+        return 1
+    return n * factorial(n - 1)   # caso recursivo
+
+def cuenta_atras(n):
+    if n == 0:
+        print("¡Despegue!")
+        return
+    print(n)
+    cuenta_atras(n - 1)
+
+print(factorial(5))            # 120   (5 · 4 · 3 · 2 · 1)
+```
+
+Cada llamada queda «apilada» en memoria esperando el resultado de la siguiente. Sin caso base, la pila se llena: Python corta a unas 1 000 llamadas con `RecursionError`. Fibonacci recursivo es elegante pero **lentísimo** (`fib(35)` repite millones de cálculos); la solución con memoria, `@lru_cache`, está en 14.12, igual que las Torres de Hanói.
+
+| Recursión | Iteración (bucles) |
+|-----------|--------------------|
+| Código corto cuando el problema es recursivo (árboles, carpetas, búsqueda en grafos de 0.7) | Más rápida y con menos memoria |
+| Riesgo de `RecursionError` | Riesgo de bucle infinito si no cambia la condición |
+
+### 4.10 Ámbito de las variables (regla LEGB)
+
+El **ámbito** es la zona del programa donde se puede usar un nombre. Python busca cada nombre en este orden y se queda con el primero que encuentra:
+
+| Letra | Ámbito | Dónde |
+|-------|--------|-------|
+| **L** | Local | Dentro de la función que se ejecuta |
+| **E** | *Enclosing* (envolvente) | En la función que contiene a la actual |
+| **G** | Global | Fuera de todas las funciones, en el archivo |
+| **B** | *Built-in* | Nombres de Python: `print`, `len`, `sum`… |
+
+```python
+mensaje = "global"
+
+def exterior():
+    mensaje = "envolvente"
+    def interior():
+        print(mensaje)         # no hay local → usa el envolvente
+    interior()
+
+exterior()                     # envolvente
+print(mensaje)                 # global: la función no la cambió
+
+contador = 0
+def sumar_visita():
+    global contador            # sin esta línea: UnboundLocalError
+    contador += 1
+
+sumar_visita(); sumar_visita()
+print(contador)                # 2
+```
+
+`nonlocal` hace lo mismo que `global` pero con la variable de la función envolvente. **Consejo**: casi siempre es mejor **pasar datos como parámetros y devolverlos con `return`** que modificar globales; el código se entiende y se prueba mejor (14.14). Otro error de ámbito muy común: llamar `sum = 0` o `list = [...]` a una variable **tapa** la función integrada, y después `sum(notas)` falla.
 
 ---
 
@@ -1032,6 +1408,153 @@ def obtener_coordenadas():
 
 x, y = obtener_coordenadas()
 ```
+
+### 5.4 Listas a fondo: más métodos, copias y alias
+
+```python
+notas = [7, 4.5, 9, 6]
+notas.extend([8, 5])         # añade varios: [7, 4.5, 9, 6, 8, 5]
+notas.count(9)               # cuántas veces aparece: 1
+ordenada = sorted(notas)     # devuelve una lista NUEVA ordenada
+notas.sort(reverse=True)     # ordena la MISMA lista (no devuelve nada)
+ultima = notas.pop()         # quita y devuelve la última: 4.5
+del notas[0]                 # borra por posición
+notas.clear()                # vacía la lista
+```
+
+| `append(x)` | `extend(lista)` | `insert(i, x)` |
+|-------------|-----------------|----------------|
+| Añade **un** elemento al final (si es una lista, entra como sublista) | Añade **cada** elemento | Añade en la posición `i` |
+
+**Alias frente a copia**: `b = a` **no copia** la lista, le pone otro nombre. Lo que cambie por un lado se ve por el otro.
+
+```python
+a = [1, 2, 3]
+b = a            # alias: el mismo objeto
+c = a.copy()     # copia (también a[:] o list(a))
+a.append(4)
+print(b)         # [1, 2, 3, 4]
+print(c)         # [1, 2, 3]
+```
+
+Con listas de listas, `copy()` solo copia el primer nivel; para copiarlo todo, `copy.deepcopy()`. El mismo problema aparece en Pandas: `df2 = df` es un alias y `df2 = df.copy()` una copia.
+
+### 5.5 Conjuntos (`set`)
+
+Un **conjunto** guarda elementos **sin repetir y sin orden**. No tiene posiciones (`s[0]` da error).
+
+```python
+visitas = ["Vigo", "Marín", "Vigo", "Lugo", "Marín"]
+unicas = set(visitas)              # {'Vigo', 'Marín', 'Lugo'} (en cualquier orden)
+print(len(unicas))                 # 3 ciudades distintas
+vacio = set()                      # ¡{} crea un diccionario vacío, no un conjunto!
+
+unicas.add("Ourense")
+unicas.discard("Cádiz")            # no da error si no está (remove sí lo daría)
+
+ingles = {"Uxía", "Brais", "Antía"}
+frances = {"Brais", "Xoán"}
+print(ingles | frances)            # unión: los 4
+print(ingles & frances)            # intersección: {'Brais'}
+print(ingles - frances)            # diferencia: {'Uxía', 'Antía'}
+print(ingles ^ frances)            # diferencia simétrica: en uno solo
+```
+
+Usos en IA y datos: **quitar duplicados**, saber el **vocabulario** de un texto (`set(texto.split())`, UD4), comparar etiquetas de dos clasificadores y comprobar pertenencia muy rápido (`"Vigo" in unicas` no recorre nada: usa *hashing*, 14.9). Para quitar duplicados **conservando el orden**: `list(dict.fromkeys(visitas))`.
+
+| | Lista | Tupla | Conjunto | Diccionario |
+|-|-------|-------|----------|-------------|
+| Sintaxis | `[1, 2]` | `(1, 2)` | `{1, 2}` | `{"a": 1}` |
+| Orden y posición | Sí | Sí | No | Por clave (mantiene orden de inserción) |
+| Repetidos | Sí | Sí | No | Claves no |
+| Se puede modificar | Sí | No | Sí | Sí |
+| Típico para | Secuencias de datos | Registros fijos, coordenadas | Únicos, pertenencia | Buscar por nombre |
+
+### 5.6 Comprensiones de listas, diccionarios y conjuntos
+
+Una **comprensión** construye una colección en una línea: `[expresión for elemento in datos if condición]`.
+
+```python
+notas = {"Uxía": 8.5, "Brais": 4.0, "Antía": 9.25, "Xoán": 4.75}
+
+cuadrados = [x ** 2 for x in range(1, 6)]                    # [1, 4, 9, 16, 25]
+aprobados = [n for n, x in notas.items() if x >= 5]          # ['Uxía', 'Antía']
+calificacion = ["apto" if x >= 5 else "no apto" for x in notas.values()]
+# ['apto', 'no apto', 'apto', 'no apto']
+
+redondeadas = {n: round(x) for n, x in notas.items()}        # diccionario
+# {'Uxía': 8, 'Brais': 4, 'Antía': 9, 'Xoán': 5}
+largos = {len(n) for n in notas}                             # conjunto: {4, 5}
+
+tabla = [[i * j for j in range(1, 4)] for i in range(1, 4)]  # anidada
+# [[1, 2, 3], [2, 4, 6], [3, 6, 9]]
+```
+
+Fíjate en las dos posiciones del `if`: **al final filtra** (deja menos elementos); **delante del `for`, con `else`, transforma** (deja todos, con un valor u otro). `round(8.5)` da 8 y `round(4.75)` da 5: Python redondea los empates al **par** más cercano (*redondeo del banquero*), algo que sorprende cuando se pasan notas.
+
+Si la comprensión no cabe en una línea o tiene varios `if`, es mejor un bucle normal: la legibilidad manda (14.14).
+
+### 5.7 Funciones integradas y módulos útiles
+
+**Integradas** (no hay que importar nada):
+
+```python
+datos = [7, 3, 9, 3]
+len(datos), sum(datos), min(datos), max(datos)    # (4, 22, 3, 9)
+sorted(datos), list(reversed(datos))              # ([3, 3, 7, 9], [3, 9, 3, 7])
+abs(-4), round(3.14159, 2), pow(2, 10)            # (4, 3.14, 1024)
+type(3.5), isinstance(3.5, float)                 # (<class 'float'>, True)
+list(range(0, 10, 3))                             # [0, 3, 6, 9]
+list(zip(["a", "b"], [1, 2]))                     # [('a', 1), ('b', 2)]
+any(x > 8 for x in datos), all(x > 0 for x in datos)   # (True, True)
+```
+
+`help(función)` y `dir(objeto)` explican qué hace algo y qué métodos tiene, sin salir del cuaderno.
+
+**Módulos de la biblioteca estándar**: vienen con Python, pero hay que importarlos.
+
+```python
+import math, random, statistics
+from collections import Counter
+from datetime import date
+
+math.sqrt(16), math.pi, math.ceil(4.1), math.floor(4.9)   # (4.0, 3.14159..., 5, 4)
+random.seed(1)                       # misma «suerte» siempre: resultados reproducibles
+random.randint(1, 6)                 # un dado
+random.choice(["piedra", "papel", "tijera"])
+statistics.mean([7, 3, 9, 3]), statistics.median([7, 3, 9, 3])   # (5.5, 5.0)
+Counter("abracadabra").most_common(2)                    # [('a', 5), ('b', 2)]
+(date(2027, 6, 23) - date(2026, 11, 8)).days             # días que faltan para San Xoán
+```
+
+| Forma | Ejemplo | Cuándo |
+|-------|---------|--------|
+| `import math` | `math.sqrt(2)` | Lo normal: se ve de dónde viene cada función |
+| `from math import sqrt` | `sqrt(2)` | Una o dos funciones que se usan mucho |
+| `import numpy as np` | `np.array(...)` | Alias que usa todo el mundo: `np`, `pd`, `plt` |
+| `from math import *` | — | **Evitar**: no se sabe qué nombres entran y pueden tapar otros |
+
+Un **módulo** es un archivo `.py`; un **paquete** es una carpeta de módulos; una **librería** como NumPy o Pandas (sección 7) es un paquete que se instala con `pip` (en Colab ya vienen casi todas). `random.seed()` es la misma idea que `random_state=42` en scikit-learn (UD5): fijar la semilla para que otra persona obtenga los mismos resultados.
+
+### 5.8 Chuleta de repaso de Python básico
+
+| Tema | Lo esencial | Error típico |
+|------|-------------|--------------|
+| Tipos | `int`, `float`, `str`, `bool`, `None` | `input()` devuelve texto: convertir con `int()` / `float()` |
+| Cadenas | Índices desde 0, `[inicio:fin:paso]`, inmutables | Olvidar guardar el resultado: `s.upper()` sola no cambia `s` |
+| Condicionales | `if` / `elif` / `else`, `and`, `or`, `not` | `=` (asignar) en lugar de `==` (comparar) |
+| Bucles | `for x in datos`, `range(ini, fin, paso)`, `while`, `break`, `continue` | `range(1, 10)` no incluye el 10 |
+| Listas | `append`, `extend`, `sort`, `sorted`, *slicing* | `b = a` no copia; `lista = lista.sort()` da `None` |
+| Tuplas | Inmutables; `(5,)` con una sola coma | `(5)` es un número, no una tupla |
+| Conjuntos | Únicos, sin orden, `| & - ^` | `{}` es un diccionario vacío |
+| Diccionarios | `d[clave]`, `d.get(clave, defecto)`, `.items()` | `d[clave]` con clave inexistente da `KeyError` |
+| Funciones | `def`, parámetros, `return`, valores por defecto | Sin `return` devuelve `None` |
+| Lambda y funcional | `sorted(datos, key=lambda x: ...)`, `map`, `filter` | `map` es un iterador: se gasta tras recorrerlo |
+| Ámbito | Regla LEGB, `global`, `nonlocal` | Llamar `sum` o `list` a una variable |
+| Recursión | Caso base + caso recursivo | Olvidar el caso base → `RecursionError` |
+| Módulos | `import`, `from … import`, alias | `from x import *` |
+
+Para practicar todo esto hay un bloque de ejercicios (E28–E37) en la página de [ejercicios](ejercicios.html#bloque-f--más-práctica-de-python-básico-e28e37).
 
 ---
 
@@ -3141,6 +3664,7 @@ print(any(x < 5 for x in notas), all(x >= 5 for x in notas))   # False True
 | 30 Ejercicios de Python · Ejercicios Python con soluciones · Más de 400 ejercicios (Marzal, Gracia) · Program in Python (Keshwam) | Ejercicios | 14.13 |
 | Python Complete Notes: Beginner to Advanced (Achal Singh, TheAutomationEngineer) | Repaso de Python, buenas prácticas, POO, Python avanzado | 1–5, 14.14 |
 | ML Model Deployment Handbook: From Notebook to Production | Guardar, servir, probar y desplegar modelos; MLOps | 13.7 |
+| Python Part 1 y Part 2: Core Python (@codedsoul_05), apuntes manuscritos procesados con OCR | Conversión de tipos, formato, patrones, problemas numéricos, cadenas, conjuntos, comprensiones, `lambda`, `map`/`filter`/`reduce`, recursión, ámbito, módulos | 1.5, 2.4–2.6, 3.3–3.4, 4.6–4.10, 5.4–5.8 y ejercicios E28–E37 |
 
 ---
 

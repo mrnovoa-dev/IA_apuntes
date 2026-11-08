@@ -3955,6 +3955,8 @@ print(f"Edad promedio: {edad_promedio:.1f}")
 
 ### Datasets Recomendados
 
+> **Más allá de Kaggle.** Para buscar datos propios (portales gallegos, españoles e internacionales, UCI, Hugging Face, Our World in Data, NASA, OMS, Banco Mundial) y saber cómo elegirlos, mira la sección 1.6 de [Análisis de datos](datos.html#16-dónde-encontrar-datos-más-allá-de-kaggle).
+
 #### 1️⃣ Iris Dataset (Flores)
 
 **Descripción**:

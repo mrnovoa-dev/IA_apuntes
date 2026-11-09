@@ -1958,7 +1958,7 @@ datos_escalados = scaler.fit_transform(datos)
 2. **Aprendizaje No Supervisado** (Datos SIN etiquetas)
    - Encontrar patrones sin respuestas conocidas
    - Ejemplos: clustering, reducción dimensional
-   - **En UD4 y UD5**: Análisis de imágenes, agrupación de datos
+   - **En UD3 y UD5**: Análisis de imágenes, agrupación de datos
 
 3. **Refuerzo** (Aprender por interacción)
    - La máquina aprende por prueba-error
@@ -2109,7 +2109,7 @@ resultado = df.groupby('ciudad')['salario'].mean().compute()
 4. ANÁLISIS (UD2 + UD5)
    ├─ Estadísticas descriptivas
    ├─ Machine Learning
-   └─ Deep Learning con imágenes (UD4)
+   └─ Deep Learning con imágenes (UD3)
 
 5. VISUALIZACIÓN (UD2: Matplotlib)
    ├─ Dashboards
@@ -2125,15 +2125,15 @@ resultado = df.groupby('ciudad')['salario'].mean().compute()
 - ETL: el proceso fundamental en Big Data
 - EDA: exploración es crítica con datos masivos
 
-**UD3 (Lenguaje Natural)**:
-- NLP con Big Data: procesar millones de textos
-- Análisis de sentimientos a escala
-- Tokenización, vectorización (análogo a normalización UD2)
-
-**UD4 (Visión Artificial)**:
+**UD3 (Visión Artificial)**:
 - Imágenes = datos estructurados enormes
 - Procesamiento en paralelo (similar a Big Data)
 - CNNs: redes neuronales para volúmenes masivos
+
+**UD4 (Lenguaje Natural)**:
+- NLP con Big Data: procesar millones de textos
+- Análisis de sentimientos a escala
+- Tokenización, vectorización (análogo a normalización UD2)
 
 **UD5 (Machine Learning)**:
 - ML requiere Big Data para modelos precisos
@@ -2154,8 +2154,8 @@ E20-E22: Pandas agrupación   → Distributed groupby
 ```
 
 **Próximos pasos después de UD2**:
-- 📊 UD3: Aplicar ETL a millones de textos (NLP)
-- 🖼️ UD4: Procesar datasets de imágenes masivos
+- 🖼️ UD3: Procesar datasets de imágenes masivos
+- 📊 UD4: Aplicar ETL a millones de textos (NLP)
 - 🧠 UD5: Entrenar modelos ML con Big Data
 - ☁️ Futuro: Cloud (AWS, Google Cloud, Azure)
 
@@ -2176,9 +2176,9 @@ Antes de comparar librerías conviene saber **qué problema resuelve cada una**.
 | **Pandas** | Tablas de datos (DataFrames) | ¿Cómo cargo, limpio y organizo los datos? | UD2 |
 | **Matplotlib** | Gráficos básicos y personalizables | ¿Cómo dibujo mis datos? | UD2 |
 | **Seaborn** | Gráficos estadísticos rápidos y vistosos | ¿Qué patrones esconden mis datos? | UD2 |
-| **scikit-learn** | Machine Learning clásico | ¿Cómo entreno un modelo que prediga? | UD2 (intro) → UD3, UD5 |
-| **PyTorch** | Deep Learning (redes neuronales) | ¿Cómo entreno una red neuronal profunda? | UD2 (conocer) → UD4, UD5 |
-| **TensorFlow/Keras** | Deep Learning (alternativa a PyTorch) | La misma que PyTorch | UD4, UD5 |
+| **scikit-learn** | Machine Learning clásico | ¿Cómo entreno un modelo que prediga? | UD2 (intro) → UD4, UD5 |
+| **PyTorch** | Deep Learning (redes neuronales) | ¿Cómo entreno una red neuronal profunda? | UD2 (conocer) → UD3, UD5 |
+| **TensorFlow/Keras** | Deep Learning (alternativa a PyTorch) | La misma que PyTorch | UD3, UD5 |
 
 **El flujo típico de un proyecto de IA**:
 
@@ -2225,9 +2225,9 @@ a2 = t.numpy()
 | Unidad | Qué se hace con PyTorch | Nivel |
 |--------|--------------------------|-------|
 | **UD2** (sesiones de librerías, laboratorio de introducción a ML) | Conocer qué es, para qué sirve y ver un ejemplo con tensores. El currículo LOMLOE cita PyTorch entre las librerías de UD2 (criterio CA1.2: *coñecer as bibliotecas polas súas funcionalidades*) | Conocer |
-| **UD4 Visión Artificial** (sesiones 10-15: CNN y Transfer Learning) | Alternativa a TensorFlow/Keras para entrenar redes convolucionales. `torchvision` ofrece datasets (MNIST, CIFAR-10) y modelos preentrenados (ResNet, MobileNet) | Aplicar |
+| **UD3 Visión Artificial** (sesiones 10-15: CNN y Transfer Learning) | Alternativa a TensorFlow/Keras para entrenar redes convolucionales. `torchvision` ofrece datasets (MNIST, CIFAR-10) y modelos preentrenados (ResNet, MobileNet) | Aplicar |
 | **UD5 Machine Learning** (bloque de redes neuronales) | Construir una red neuronal sencilla y compararla con los modelos de scikit-learn | Aplicar |
-| **UD3 Lenguaje Natural** | Solo como referencia: los modelos de lenguaje modernos (Hugging Face Transformers) funcionan sobre PyTorch | Conocer |
+| **UD4 Lenguaje Natural** | Solo como referencia: los modelos de lenguaje modernos (Hugging Face Transformers) funcionan sobre PyTorch | Conocer |
 
 **Ejemplo mínimo de red neuronal (para UD5)**:
 
@@ -2263,9 +2263,9 @@ Fíjate en que el bucle de entrenamiento es un **bucle `for` normal** (E6): los 
 | Estilo | Python "puro", se ve cada paso del entrenamiento | Más automático (`model.fit()`), parecido a scikit-learn |
 | Curva de aprendizaje | Algo más exigente al principio | Más sencilla para empezar |
 | Uso actual | Dominante en investigación y modelos recientes | Muy extendido en industria y en material educativo |
-| En este curso | Alternativa / ampliación en UD4-UD5 | Herramienta principal prevista en UD4 |
+| En este curso | Alternativa / ampliación en UD3-UD5 | Herramienta principal prevista en UD3 |
 
-**Recomendación didáctica**: en Bachillerato basta con usar **una** de las dos en profundidad. Keras es más fácil para el primer contacto con CNN (UD4). PyTorch es una buena ampliación para el alumnado más avanzado, o si se quieren usar modelos de Hugging Face.
+**Recomendación didáctica**: en Bachillerato basta con usar **una** de las dos en profundidad. Keras es más fácil para el primer contacto con CNN (UD3). PyTorch es una buena ampliación para el alumnado más avanzado, o si se quieren usar modelos de Hugging Face.
 
 **Instalación**:
 ```bash
@@ -2301,7 +2301,7 @@ Una comparación más justa sería *Seaborn frente a Matplotlib* (las dos dibuja
 | **Entrada típica** | Un DataFrame de Pandas | Arrays o DataFrames (X = características, y = objetivo) |
 | **Funciones típicas** | `histplot`, `boxplot`, `scatterplot`, `pairplot`, `heatmap` | `train_test_split`, `fit`, `predict`, `StandardScaler`, `accuracy_score` |
 | **Ejercicios UD2** | E23, E24, E26 (gráficos y EDA) | E27 (normalización) y laboratorio de introducción a ML |
-| **Unidades posteriores** | Todas (para mostrar resultados) | UD3 (clasificar textos), UD5 (núcleo de la unidad) |
+| **Unidades posteriores** | Todas (para mostrar resultados) | UD4 (clasificar textos), UD5 (núcleo de la unidad) |
 | **Dificultad** | Baja: una línea = un gráfico | Media: hay que entender entrenamiento y prueba |
 
 #### Cómo trabajan juntas: ejemplo completo con Iris
@@ -2386,7 +2386,7 @@ plt.show()
 | Datos ideales | Tablas (CSV), de cientos a cientos de miles de filas | Imágenes, texto, audio; grandes volúmenes |
 | Facilidad | Muy alta: `fit()` y `predict()` | Media-alta: hay que escribir el bucle de entrenamiento |
 | Necesita GPU | No | Recomendable para modelos grandes |
-| En el curso | UD3 (clasificar textos con TF-IDF), UD5 (núcleo) | UD4 (CNN, opcional frente a Keras), UD5 (redes neuronales) |
+| En el curso | UD4 (clasificar textos con TF-IDF), UD5 (núcleo) | UD3 (CNN, opcional frente a Keras), UD5 (redes neuronales) |
 
 **Regla práctica para el alumnado**: si los datos caben en una tabla, **empieza siempre por scikit-learn**. Pasa a PyTorch o Keras solo cuando trabajes con imágenes, texto o audio, o cuando un modelo clásico no sea suficiente.
 
@@ -2576,7 +2576,7 @@ demo = gr.Interface(fn=analizar, inputs="text", outputs="text",
 demo.launch()        # Abre la app en el navegador
 ```
 
-Este ejemplo usa una regla sencilla. En UD3 la función `analizar` se sustituye por un modelo entrenado, y en UD4 la entrada pasa a ser una imagen (`inputs="image"`).
+Este ejemplo usa una regla sencilla. En UD4 la función `analizar` se sustituye por un modelo entrenado, y en UD3 la entrada pasa a ser una imagen (`inputs="image"`).
 
 [Referencia: Gradio docs](https://www.gradio.app/docs)
 
@@ -2874,8 +2874,8 @@ Son cuatro términos **relacionados pero no intercambiables**. Cada uno está co
 |---------|-----------|----------|------------------|
 | **IA** | Campo amplio: máquinas con comportamiento inteligente | Sistemas expertos, ajedrez, recomendadores, coche autónomo | UD1 |
 | **ML** | Aprende de datos para predecir o clasificar | Filtro de spam, precio de una casa, riesgo de crédito, abandono de clientes | UD5 (intro en sección 10) |
-| **DL** | Redes neuronales de muchas capas; aprende patrones complejos | Reconocimiento facial, de voz, detección de objetos | UD4 y UD5 |
-| **GenAI** | Genera contenido nuevo a partir de lo aprendido | Chatbots (ChatGPT, Claude), generadores de imágenes, asistentes de código | UD3 |
+| **DL** | Redes neuronales de muchas capas; aprende patrones complejos | Reconocimiento facial, de voz, detección de objetos | UD3 y UD5 |
+| **GenAI** | Genera contenido nuevo a partir de lo aprendido | Chatbots (ChatGPT, Claude), generadores de imágenes, asistentes de código | UD4 |
 
 **Diferencia clave ML ↔ GenAI**: un modelo de ML clásico *clasifica o predice* ("¿este correo es spam?"). Un modelo generativo *crea* ("escribe un correo"). Una analogía de los materiales: el ML es "una persona con un cerebro muy potente para reconocer patrones"; la GenAI es "una persona creativa que, además, produce cosas nuevas".
 
@@ -3086,7 +3086,7 @@ ProfileReport(df, title="Informe Titanic").to_file("informe.html")
 
 ### 14.7 Redes neuronales desde cero
 
-Base de *Neural Networks Beginner Notes* y *Deep Learning*. Es la introducción a la parte de Deep Learning de **UD4 (Visión Artificial)** y **UD5 (Machine Learning)**.
+Base de *Neural Networks Beginner Notes* y *Deep Learning*. Es la introducción a la parte de Deep Learning de **UD3 (Visión Artificial)** y **UD5 (Machine Learning)**.
 
 #### La neurona artificial
 
@@ -3191,9 +3191,9 @@ print("Épocas de entrenamiento:", red.n_iter_)
 | Arquitectura | Idea | Datos | Dónde se ve |
 |--------------|------|-------|-------------|
 | **Red densa (MLP)** | Todas las neuronas conectadas con la capa siguiente | Tablas | UD5 |
-| **CNN** (convolucional) | Filtros (*kernels*) que recorren la imagen detectando bordes, texturas, formas; *pooling* para reducir tamaño | Imágenes | **UD4** (CIFAR-10, MNIST) |
-| **RNN** (recurrente) | Tiene "memoria" (estado oculto) de lo anterior | Secuencias, texto, series temporales | UD3, UD5 |
-| **LSTM / GRU** | RNN con "puertas" que deciden qué recordar y qué olvidar | Secuencias largas | UD3 |
+| **CNN** (convolucional) | Filtros (*kernels*) que recorren la imagen detectando bordes, texturas, formas; *pooling* para reducir tamaño | Imágenes | **UD3** (CIFAR-10, MNIST) |
+| **RNN** (recurrente) | Tiene "memoria" (estado oculto) de lo anterior | Secuencias, texto, series temporales | UD4, UD5 |
+| **LSTM / GRU** | RNN con "puertas" que deciden qué recordar y qué olvidar | Secuencias largas | UD4 |
 | **Transformer** | Mecanismo de **atención**: cada palabra "mira" a todas las demás | Texto (LLM), también imágenes | **UD4** (14.8) |
 
 ---
@@ -4587,15 +4587,15 @@ Ejercicio 25-27 (ETL, EDA: completo)
   ╔════════════════════════════════════╗
   ║  UD2 ← PUENTE → SIGUIENTE CURSO    ║
   ╠════════════════════════════════════╣
-  ║ UD3: NLP (lenguaje natural)        ║
-  ║ - Aplicar ETL a textos masivos     ║
-  ║ - Análisis de sentimientos         ║
-  ║ - Big Data: millones de palabras   ║
-  ║                                    ║
-  ║ UD4: Visión Artificial             ║
+  ║ UD3: Visión Artificial             ║
   ║ - Imágenes como datos numéricos    ║
   ║ - Redes convolucionales            ║
   ║ - Big Data: datasets de imágenes   ║
+  ║                                    ║
+  ║ UD4: NLP (lenguaje natural)        ║
+  ║ - Aplicar ETL a textos masivos     ║
+  ║ - Análisis de sentimientos         ║
+  ║ - Big Data: millones de palabras   ║
   ║                                    ║
   ║ UD5: Machine Learning              ║
   ║ - NumPy para álgebra lineal        ║
@@ -4648,7 +4648,7 @@ Ejercicio 25-27 (ETL, EDA: completo)
 **Librerías del ecosistema IA**:
 - ☐ Sé qué hace cada librería (NumPy, Pandas, Matplotlib, Seaborn, scikit-learn, PyTorch)
 - ☐ Entiendo que Seaborn sirve para ver los datos y scikit-learn para aprender de ellos
-- ☐ Sé en qué unidades se usa PyTorch (UD4, UD5) y por qué NumPy es su base
+- ☐ Sé en qué unidades se usa PyTorch (UD3, UD5) y por qué NumPy es su base
 - ☐ Sé elegir entre scikit-learn (datos en tabla) y PyTorch/Keras (imágenes, texto, audio)
 
 **Aplicaciones de escritorio y web**:
@@ -4684,8 +4684,8 @@ Ejercicio 25-27 (ETL, EDA: completo)
 
 **Después de UD2, estás preparado para**:
 1. **UD5: Machine Learning** - Usar Pandas + NumPy para entrenar modelos
-2. **UD4: Visión Artificial** - Procesar imágenes como matrices NumPy
-3. **UD3: Lenguaje Natural** - Aplicar ETL a textos, análisis de sentimientos
+2. **UD3: Visión Artificial** - Procesar imágenes como matrices NumPy
+3. **UD4: Lenguaje Natural** - Aplicar ETL a textos, análisis de sentimientos
 4. **Cloud Computing** - Escalar a Spark, PySpark, Databricks
 5. **Análisis de Datos Profesional** - Crear pipelines ETL empresariales
 

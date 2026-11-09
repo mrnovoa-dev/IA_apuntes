@@ -1,5 +1,5 @@
 # Teoría Fundamental y Referencias Externas
-## Conceptos para Resolver Ejercicios Python UD2 (E1-E37)
+## Conceptos para Resolver Ejercicios Python UD2 (E1-E46)
 
 ---
 
@@ -9,7 +9,7 @@
 2. Tipos de Datos en Python (conversión, entrada/salida y formato, cadenas a fondo)
 3. Estructuras de Control (bucles anidados, patrones, problemas numéricos)
 4. Funciones (argumentos, lambda, map/filter/reduce, recursión, ámbito)
-5. Estructuras de Datos Complejas (listas a fondo, conjuntos, comprensiones, módulos, chuleta)
+5. Estructuras de Datos Complejas (listas a fondo, conjuntos, comprensiones, módulos, chuleta, tablas y CSV sin Pandas)
 6. Conceptos Estadísticos
 7. Librerías Científicas (NumPy, Pandas)
 8. Visualización (Matplotlib)
@@ -201,7 +201,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E37 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E46 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -1553,8 +1553,93 @@ Un **módulo** es un archivo `.py`; un **paquete** es una carpeta de módulos; u
 | Ámbito | Regla LEGB, `global`, `nonlocal` | Llamar `sum` o `list` a una variable |
 | Recursión | Caso base + caso recursivo | Olvidar el caso base → `RecursionError` |
 | Módulos | `import`, `from … import`, alias | `from x import *` |
+| Datos y decimales | Lista de diccionarios = tabla; `csv.DictReader`; `Decimal` para dinero | Sumar textos de un CSV; `0.1 + 0.2 == 0.3` da `False` |
 
 Para practicar todo esto hay un bloque de ejercicios (E28–E37) en la página de [ejercicios](ejercicios.html#bloque-f--más-práctica-de-python-básico-e28e37).
+
+### 5.9 De Python puro a una tabla de datos
+
+Antes de usar Pandas (sección 7) conviene saber trabajar con datos tabulares **solo con Python**. Así es como llegan muchos datos de una API o de un JSON, y así se entiende qué hace `pd.DataFrame` por dentro.
+
+**Una lista de diccionarios es una tabla**: la lista son las filas y cada diccionario, una fila con `columna → valor`.
+
+```python
+socios = [
+    {"nombre": "Uxía",  "grupo": "A", "cuota": 30},
+    {"nombre": "Brais", "grupo": "B", "cuota": 20},
+    {"nombre": "Antía", "grupo": "A", "cuota": 30},
+    {"nombre": "Xoán",  "grupo": "B", "cuota": 0},
+]
+pendientes = [s["nombre"] for s in socios if s["cuota"] == 0]
+print(pendientes)                                   # ['Xoán']
+print(sum(s["cuota"] for s in socios))              # 80
+
+from collections import Counter
+print(Counter(s["grupo"] for s in socios))          # Counter({'A': 2, 'B': 2})
+print(max(socios, key=lambda s: s["cuota"])["nombre"])   # Uxía (el primero de los empatados)
+```
+
+Lo mismo con Pandas sería `pd.DataFrame(socios)`: si entiendes la versión con bucles, Pandas deja de ser magia.
+
+**Leer y escribir CSV con el módulo `csv`**: `DictReader` devuelve cada fila como un diccionario con los nombres de la cabecera.
+
+```python
+import csv
+
+with open("socios.csv", "w", newline="", encoding="utf-8") as f:
+    escritor = csv.DictWriter(f, fieldnames=["nombre", "grupo", "cuota"])
+    escritor.writeheader()
+    escritor.writerows(socios)
+
+with open("socios.csv", encoding="utf-8") as f:     # with cierra el archivo solo
+    filas = list(csv.DictReader(f))
+
+print(filas[0])                     # {'nombre': 'Uxía', 'grupo': 'A', 'cuota': '30'}
+print(filas[0]["cuota"] + filas[1]["cuota"])         # 3020  ← ¡se juntan dos textos!
+print(sum(int(f["cuota"]) for f in filas))           # 80
+```
+
+**Todo lo que sale de un CSV es texto**: `'30' + '20'` da `'3020'`. Hay que convertir con `int()` o `float()` antes de operar. Con tildes, indica siempre `encoding="utf-8"`.
+
+**Limpiar valores sucios fila a fila.** Los datos reales llegan con errores. En lugar de que el programa se pare en la primera fila mala, se captura **el error concreto** y se marca el valor como desconocido (`None`), para revisarlo después:
+
+```python
+crudos = ["4500", "3.000", "", "dous mil", "1250,5"]
+
+def a_numero(texto):
+    try:
+        return float(texto.replace(".", "").replace(",", "."))   # formato español
+    except ValueError:
+        return None
+
+limpios = [a_numero(v) for v in crudos]
+print(limpios)        # [4500.0, 3000.0, None, None, 1250.5]
+print(f"{limpios.count(None)} valores para revisar")   # 2 valores para revisar
+```
+
+Un `except:` **sin indicar el error** también atraparía fallos de programación (un nombre mal escrito, por ejemplo) y los escondería. Se captura solo lo que se espera, aquí `ValueError`.
+
+**Decimales y dinero.** Los `float` se guardan en binario y muchos decimales no son exactos:
+
+```python
+print(0.1 + 0.2)                  # 0.30000000000000004
+print(round(2.675, 2))            # 2.67 (no 2.68: 2.675 se guarda como 2.67499999…)
+
+from decimal import Decimal, ROUND_HALF_UP
+print(Decimal("2.675").quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))   # 2.68
+```
+
+Para comparar decimales se usa `math.isclose(a, b)` en lugar de `==`; para dinero, `Decimal` creado **a partir de texto** (`Decimal(2.675)` arrastraría el error del float) o trabajar en céntimos con enteros. Y se redondea **al final**, no en cada paso.
+
+| Trampa | Qué pasa | Cómo evitarla |
+|--------|----------|---------------|
+| Sumar columnas de un CSV | Se juntan textos: `'30' + '20'` = `'3020'` | `int()` / `float()` al leer |
+| `except:` sin tipo | Esconde errores de programación | `except ValueError:` |
+| `0.1 + 0.2 == 0.3` | `False` | `math.isclose()` |
+| `round()` con dinero | 2.675 → 2.67 | `Decimal("2.675")` o céntimos |
+| `print` en lugar de `return` | La función devuelve `None` | Devolver el resultado; imprimir fuera |
+
+Los ejercicios E38–E41 de la página de [ejercicios](ejercicios.html#bloque-g--tablas-csv-y-datos-sucios-sin-pandas-e38e41) practican todo esto con un CSV de una biblioteca escolar.
 
 ---
 
@@ -3109,13 +3194,13 @@ print("Épocas de entrenamiento:", red.n_iter_)
 | **CNN** (convolucional) | Filtros (*kernels*) que recorren la imagen detectando bordes, texturas, formas; *pooling* para reducir tamaño | Imágenes | **UD4** (CIFAR-10, MNIST) |
 | **RNN** (recurrente) | Tiene "memoria" (estado oculto) de lo anterior | Secuencias, texto, series temporales | UD3, UD5 |
 | **LSTM / GRU** | RNN con "puertas" que deciden qué recordar y qué olvidar | Secuencias largas | UD3 |
-| **Transformer** | Mecanismo de **atención**: cada palabra "mira" a todas las demás | Texto (LLM), también imágenes | **UD3** (14.8) |
+| **Transformer** | Mecanismo de **atención**: cada palabra "mira" a todas las demás | Texto (LLM), también imágenes | **UD4** (14.8) |
 
 ---
 
 ### 14.8 IA Generativa y modelos de lenguaje (LLM)
 
-Resumen de *GenAI: Zero to Hero*. Es la base conceptual de **UD3 (Lenguaje Natural)**.
+Resumen de *GenAI: Zero to Hero*, ampliado con los apuntes visuales *15 Gen AI Concepts* (@darpan.decoded). Es la base conceptual de la **UD4 (Lenguaje)**.
 
 #### Cómo "lee" un LLM: tokens y embeddings
 
@@ -3170,7 +3255,7 @@ print(round(similitud_coseno(gato, coche), 2))   # 0.3 → significados distinto
 
 Buenas prácticas: dar **contexto** y **rol**, indicar el **formato** de salida, dar **ejemplos** y **iterar** refinando el prompt.
 
-#### Conceptos que aparecerán en UD3
+#### Conceptos que aparecerán en la UD4
 
 | Concepto | Qué es |
 |----------|--------|
@@ -3184,6 +3269,199 @@ Buenas prácticas: dar **contexto** y **rol**, indicar el **formato** de salida,
 **Usos reales**: chatbots y asistentes, resúmenes, traducción, generación de código, búsqueda semántica, recomendación, generación de imágenes y música.
 
 > ⚠️ **Ética** (conecta con UD1): sesgos aprendidos de los datos, privacidad (no introducir datos personales), derechos de autor, desinformación y uso responsable en tareas académicas.
+
+#### La ventana de contexto es un presupuesto
+
+La **ventana de contexto** es la cantidad máxima de tokens que el modelo puede tener en cuenta a la vez. En ella tienen que caber **todas** estas piezas:
+
+| Pieza | Ejemplo | Quién la pone |
+|-------|---------|---------------|
+| Instrucciones del sistema | «Eres un asistente del instituto, responde en gallego» | La aplicación (oculta) |
+| Historial | Los mensajes anteriores de la conversación | Se reenvía entero en cada turno |
+| Documentos añadidos | Un PDF, los fragmentos recuperados por RAG | La persona o la aplicación |
+| Pregunta actual | «¿Cuándo es o exame de Física?» | La persona |
+| Respuesta | Lo que el modelo va a escribir | El modelo (¡también ocupa sitio!) |
+
+Cuando no cabe todo, la aplicación **recorta**: suele descartar los mensajes más antiguos, que el modelo «olvida». Por eso un chat muy largo pierde detalles del principio, y por eso un libro entero no se puede pegar en un modelo con una ventana pequeña: hay que trocearlo (*chunking*) y enviar solo los trozos útiles, que es lo que hace RAG. Los tamaños cambian muy rápido (de unos pocos miles de tokens en 2022 a cientos de miles o millones en 2025), así que conviene consultar la documentación del modelo que se use. Más tokens también significa **más coste y más tiempo** de respuesta.
+
+```python
+def recortar_historial(mensajes, max_tokens, tokens_de=lambda m: len(m.split())):
+    """Se queda con los mensajes más recientes que caben en el presupuesto."""
+    elegidos, usados = [], 0
+    for m in reversed(mensajes):                 # del más nuevo al más viejo
+        t = tokens_de(m)
+        if usados + t > max_tokens:
+            break
+        elegidos.append(m)
+        usados += t
+    return list(reversed(elegidos)), usados
+
+chat = ["Ola, son Uxía e estudo 1º BAC",
+        "Gústame a física e o baloncesto",
+        "Que libros me recomendas para o verán?",
+        "E algún sobre intelixencia artificial?"]
+print(recortar_historial(chat, 12))
+# (['Que libros me recomendas para o verán?', 'E algún sobre intelixencia artificial?'], 12)
+```
+
+Aquí se cuentan **palabras** como aproximación; los modelos reales cuentan tokens con su propio *tokenizador*, y en gallego o castellano salen más tokens por palabra que en inglés. Fíjate en el efecto: el modelo ya no sabe que habla con Uxía ni qué le gusta. Algunas aplicaciones, en lugar de borrar, **resumen** lo antiguo o guardan datos en una «memoria» aparte.
+
+#### Temperatura, top-k y top-p en Python
+
+El modelo no da una palabra: da una **puntuación** (*logit*) para cada token posible. La función **softmax** las convierte en probabilidades, y la **temperatura** divide las puntuaciones antes: con temperatura baja la distribución se vuelve muy picuda (casi siempre gana el favorito); con temperatura alta se aplana (los tokens raros tienen más opciones).
+
+```python
+import numpy as np
+
+tokens = ["azul", "nubrado", "gris", "escuro", "verde"]
+logits = np.array([3.0, 2.0, 1.5, 0.5, -1.0])        # «O ceo está…»
+
+def softmax(x, temperatura=1.0):
+    z = x / temperatura
+    e = np.exp(z - z.max())                           # restar el máximo evita desbordes
+    return e / e.sum()
+
+for t in (0.2, 1.0, 2.0):
+    p = softmax(logits, t)
+    print(t, " ".join(f"{tok}:{v:.2f}" for tok, v in zip(tokens, p)))
+# 0.2 azul:0.99 nubrado:0.01 gris:0.00 escuro:0.00 verde:0.00
+# 1.0 azul:0.59 nubrado:0.22 gris:0.13 escuro:0.05 verde:0.01
+# 2.0 azul:0.40 nubrado:0.24 gris:0.19 escuro:0.11 verde:0.05
+
+def top_k(p, k):
+    q = np.zeros_like(p)
+    mejores = np.argsort(p)[::-1][:k]                 # índices de los k más probables
+    q[mejores] = p[mejores]
+    return q / q.sum()                                # volver a repartir hasta sumar 1
+
+def top_p(p, umbral):
+    orden = np.argsort(p)[::-1]
+    acumulada = np.cumsum(p[orden])
+    n = np.searchsorted(acumulada, umbral) + 1        # cuántos hacen falta para llegar a p
+    q = np.zeros_like(p)
+    q[orden[:n]] = p[orden[:n]]
+    return q / q.sum()
+
+p = softmax(logits)
+print(np.round(top_k(p, 2), 2))        # [0.73 0.27 0.   0.   0.  ]
+print(np.round(top_p(p, 0.9), 2))      # [0.63 0.23 0.14 0.   0.  ]
+
+rng = np.random.default_rng(0)
+print([tokens[rng.choice(5, p=softmax(logits, 1.0))] for _ in range(8)])
+# ['nubrado', 'azul', 'azul', 'azul', 'gris', 'gris', 'nubrado', 'nubrado']: muestrear da variedad
+```
+
+| Ajuste | Qué hace | Cuándo |
+|--------|----------|--------|
+| *Greedy* (temperatura 0) | Siempre el más probable | Extraer datos, clasificar, respuestas que se puedan repetir |
+| Temperatura baja (≈ 0,2) | Casi siempre el favorito | Resúmenes, preguntas con respuesta concreta |
+| Temperatura media o alta (≈ 0,7–1) | Más variedad | Lluvia de ideas, textos creativos |
+| Top-k | Solo entre los k mejores | Evitar tokens absurdos de la cola |
+| Top-p (núcleo) | Solo los mejores hasta sumar p | Igual, pero adaptándose: si el modelo duda, deja más opciones |
+
+Los rangos exactos dependen de cada servicio; lo importante es la idea. Una temperatura baja **no** hace que el modelo diga la verdad: solo hace que repita su respuesta más probable, que puede estar mal.
+
+#### RAG paso a paso
+
+**RAG** (*Retrieval-Augmented Generation*) da al modelo los documentos correctos **antes** de que responda. Tiene dos fases:
+
+| Fase | Cuándo | Pasos |
+|------|--------|-------|
+| **Preparar** (una vez) | Al cargar los documentos | Trocear en fragmentos → calcular el *embedding* de cada uno → guardarlos en una **base de datos vectorial** |
+| **Responder** (cada pregunta) | Cada vez que alguien pregunta | *Embedding* de la pregunta → buscar los k fragmentos más parecidos (**recuperar**) → pegarlos en el prompt (**aumentar**) → el LLM responde con ellos (**generar**) |
+
+Una versión mínima que funciona sin internet, usando TF-IDF (UD4) en lugar de un modelo de *embeddings*:
+
+```python
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+documentos = [
+    "A biblioteca abre de luns a venres de 9:00 a 14:30 e os martes pola tarde.",
+    "Os préstamos de libros duran 15 días e pódense renovar unha vez.",
+    "O comedor escolar funciona de 14:30 a 15:30.",
+    "Para usar os portátiles hai que reservar na conserxería cun día de antelación.",
+]
+vectorizador = TfidfVectorizer()
+matriz = vectorizador.fit_transform(documentos)       # «base de datos vectorial» de juguete
+
+def recuperar(pregunta, k=2):
+    sim = cosine_similarity(vectorizador.transform([pregunta]), matriz)[0]
+    mejores = sim.argsort()[::-1][:k]
+    return [(documentos[i], round(float(sim[i]), 2)) for i in mejores]
+
+pregunta = "Canto tempo duran os préstamos?"
+contexto = recuperar(pregunta)
+print(contexto[0])
+# ('Os préstamos de libros duran 15 días e pódense renovar unha vez.', 0.51)
+
+prompt = ("Responde SÓ coa información do contexto. Se non está, di «non o sei».\n"
+          "Contexto:\n" + "\n".join(f"- {d}" for d, _ in contexto) +
+          f"\nPregunta: {pregunta}")
+print(prompt)       # esto es lo que recibiría el LLM
+```
+
+TF-IDF solo encuentra **palabras iguales** («préstamos» con «préstamos»); un modelo de *embeddings* encuentra también **significados parecidos** («cuánto puedo tener un libro» con «préstamos de 15 días»). Las bases de datos vectoriales (FAISS, Chroma, Qdrant, Milvus, Weaviate, pgvector…) hacen esta búsqueda rápida con millones de fragmentos y guardan **metadatos** (fuente, fecha) para filtrar y citar.
+
+**Lo que RAG no arregla:** si la recuperación trae el fragmento equivocado, el modelo responderá con seguridad a partir de él; y el modelo puede ignorar el contexto. Por eso se evalúa por separado **si recupera bien** y **si responde bien**, y se pide que cite el fragmento usado.
+
+#### ¿Prompt, RAG o ajuste fino?
+
+| Necesidad | Mejor opción | Por qué |
+|-----------|--------------|---------|
+| Cambiar el formato, el tono o dar ejemplos | **Prompt** (instrucciones y *few-shot*) | Gratis e inmediato |
+| Responder con datos propios o actuales (normas del centro, apuntes, catálogo) | **RAG** | Los datos se actualizan sin reentrenar y se pueden citar |
+| Un estilo o una tarea muy concreta que el prompt no consigue, con cientos o miles de ejemplos | **Ajuste fino** (*fine-tuning*), a menudo con **LoRA** | Cambia los pesos del modelo; caro y con riesgo de sobreajuste |
+| Actuar: buscar en internet, calcular, consultar una base de datos | **Herramientas** (llamada a funciones) | El modelo no sabe hacerlo solo ni tiene datos en tiempo real |
+
+Se suele empezar por el prompt, añadir RAG si faltan datos y dejar el ajuste fino para el final. Se pueden combinar.
+
+#### Llamada a funciones, herramientas y agentes
+
+Un LLM solo produce texto. Para **hacer** cosas, la aplicación le describe unas **herramientas** (nombre, para qué sirven, qué parámetros piden) y el modelo responde con un JSON que dice **qué herramienta usar y con qué datos**. Es el programa, no el modelo, quien la ejecuta y le devuelve el resultado.
+
+```python
+import json
+
+def tiempo(concello):                                 # herramienta 1 (datos inventados)
+    return {"Marín": "chuvia, 14 °C", "Lugo": "néboa, 9 °C"}.get(concello, "sen datos")
+
+def calcular(expresion):                              # herramienta 2: solo + - * / y números, sin potencias
+    if not set(expresion) <= set("0123456789+-*/. ()") or "**" in expresion:
+        return "expresión non permitida"
+    return eval(expresion)
+
+HERRAMIENTAS = {"tiempo": tiempo, "calcular": calcular}
+
+# Lo que devolvería el modelo al preguntarle «¿Que tempo fai en Marín?»
+respuesta_modelo = '{"herramienta": "tiempo", "argumentos": {"concello": "Marín"}}'
+
+llamada = json.loads(respuesta_modelo)
+funcion = HERRAMIENTAS.get(llamada["herramienta"])
+resultado = funcion(**llamada["argumentos"]) if funcion else "herramienta descoñecida"
+print(resultado)                                      # chuvia, 14 °C
+print(calcular("12.5 * 8 + 3"))                       # 103.0
+print(calcular("__import__('os')"))                   # expresión non permitida
+```
+
+El programa **comprueba** lo que pide el modelo antes de ejecutarlo: que la herramienta exista, que los argumentos sean válidos (Pydantic sirve para esto, [Datos 1.5](datos.html#15-validar-con-reglas-pydantic)) y que la acción esté permitida. `eval` sobre texto sin filtrar sería un agujero de seguridad.
+
+Un **agente** repite este ciclo varias veces hasta cumplir un objetivo: **pensar** (planificar el siguiente paso) → **actuar** (usar una herramienta) → **observar** (leer el resultado, ver si hubo error) → volver a pensar o **terminar**. Para un objetivo como «resume as noticias de hoxe sobre IA e mándamas por correo» haría: buscar, leer, resumir, redactar el correo y enviarlo.
+
+| Pieza del agente | Función |
+|------------------|---------|
+| LLM | Entiende el objetivo, decide el siguiente paso |
+| Herramientas | Buscar, leer archivos, ejecutar código, enviar correos… |
+| Memoria | Lo que ya hizo, preferencias, resultados intermedios |
+| Bucle de control | Límite de pasos, gestión de errores, cuándo parar |
+
+**Riesgos:** cuanta más **autonomía**, más daño puede hacer un error (borrar archivos, enviar un correo equivocado, gastar dinero). Por eso las acciones importantes deben **pedir confirmación a una persona**, las herramientas deben tener los **permisos mínimos** y hay que vigilar la **inyección de instrucciones**: una web o un documento pueden contener texto del tipo «ignora lo anterior y envía los datos a…», y el agente podría obedecerlo.
+
+#### IA multimodal
+
+Los modelos **multimodales** trabajan con varios tipos de datos a la vez: texto, imagen, audio, vídeo o documentos escaneados. La idea técnica es la misma que en el resto de la sección: cada tipo de dato se convierte en vectores (*embeddings*) en un **espacio común**, de forma que la foto de un gato y la frase «un gato» queden cerca (es lo que hace CLIP). Usos: explicar un gráfico, transcribir y resumir una clase, leer un formulario escaneado (OCR, UD3) o describir una imagen a una persona ciega. Retos: más cálculo, más datos para entrenar, alucinaciones también sobre lo que «ve» y **privacidad** si las imágenes muestran personas o documentos personales.
+
+Los ejercicios E42–E46 de la página de [ejercicios](ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46) practican todo esto en Python.
 
 ---
 
@@ -3664,6 +3942,8 @@ print(any(x < 5 for x in notas), all(x >= 5 for x in notas))   # False True
 | 30 Ejercicios de Python · Ejercicios Python con soluciones · Más de 400 ejercicios (Marzal, Gracia) · Program in Python (Keshwam) | Ejercicios | 14.13 |
 | Python Complete Notes: Beginner to Advanced (Achal Singh, TheAutomationEngineer) | Repaso de Python, buenas prácticas, POO, Python avanzado | 1–5, 14.14 |
 | ML Model Deployment Handbook: From Notebook to Production | Guardar, servir, probar y desplegar modelos; MLOps | 13.7 |
+| Python Notes: the 7-day plan (@thedataguy16), 14 páginas procesadas con OCR | Listas de diccionarios como tablas, CSV con `csv`, datos sucios con `try/except`, decimales y `Decimal`, trampas de copias y valores por defecto | 5.9 y ejercicios E38–E41 |
+| 15 Gen AI Concepts, Part 1 (@darpan.decoded), apuntes visuales procesados con OCR | Ventana de contexto, temperatura y muestreo, RAG y bases vectoriales, ajuste fino, herramientas, agentes, multimodalidad | 14.8 y ejercicios E42–E46 |
 | Python Part 1 y Part 2: Core Python (@codedsoul_05), apuntes manuscritos procesados con OCR | Conversión de tipos, formato, patrones, problemas numéricos, cadenas, conjuntos, comprensiones, `lambda`, `map`/`filter`/`reduce`, recursión, ámbito, módulos | 1.5, 2.4–2.6, 3.3–3.4, 4.6–4.10, 5.4–5.8 y ejercicios E28–E37 |
 
 ---

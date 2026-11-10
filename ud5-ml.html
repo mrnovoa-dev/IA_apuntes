@@ -48,7 +48,12 @@ id="toc-ejercicio-11--anonimizar-una-encuesta--reto-188-del-libro">Ejercicio
 </ul></li>
 <li><a href="#2-tipos-de-aprendizaje-y-de-problemas"
 id="toc-2-tipos-de-aprendizaje-y-de-problemas">2. Tipos de aprendizaje y
-de problemas</a></li>
+de problemas</a>
+<ul>
+<li><a href="#preparar-los-datos-para-el-modelo"
+id="toc-preparar-los-datos-para-el-modelo">Preparar los datos para el
+modelo</a></li>
+</ul></li>
 <li><a href="#3-regresión-lineal" id="toc-3-regresión-lineal">3.
 Regresión lineal</a>
 <ul>
@@ -56,6 +61,9 @@ Regresión lineal</a>
 href="#ejercicio-31--datos-abiertos-de-galicia--retos-168169-tarea"
 id="toc-ejercicio-31--datos-abiertos-de-galicia--retos-168169-tarea">Ejercicio
 3.1 · Datos abiertos de Galicia 🟡 (retos 16.8–16.9, tarea)</a></li>
+<li><a href="#ejercicio-32--ridge-lasso-y-cuántas-columnas-sobran-"
+id="toc-ejercicio-32--ridge-lasso-y-cuántas-columnas-sobran-">Ejercicio
+3.2 · Ridge, Lasso y cuántas columnas sobran 🟡</a></li>
 </ul></li>
 <li><a href="#4-clasificación" id="toc-4-clasificación">4.
 Clasificación</a></li>
@@ -68,6 +76,9 @@ id="toc-ejercicio-51--el-detector-que-siempre-dice-sano--ca58">Ejercicio
 <li><a href="#ejercicio-52--calcular-métricas-a-partir-de-una-matriz-"
 id="toc-ejercicio-52--calcular-métricas-a-partir-de-una-matriz-">Ejercicio
 5.2 · Calcular métricas a partir de una matriz 🟡</a></li>
+<li><a href="#ejercicio-53--elegir-el-umbral-de-un-cribado--ca58"
+id="toc-ejercicio-53--elegir-el-umbral-de-un-cribado--ca58">Ejercicio
+5.3 · Elegir el umbral de un cribado 🟡 (CA5.8)</a></li>
 </ul></li>
 <li><a href="#6-sobreajuste-validación-cruzada-e-hiperparámetros"
 id="toc-6-sobreajuste-validación-cruzada-e-hiperparámetros">6.
@@ -76,6 +87,9 @@ Sobreajuste, validación cruzada e hiperparámetros</a>
 <li><a href="#ejercicio-61--curva-de-k-vecinos-"
 id="toc-ejercicio-61--curva-de-k-vecinos-">Ejercicio 6.1 · Curva de k
 vecinos 🔴</a></li>
+<li><a href="#ejercicio-62--hay-fuga-de-datos--ca55"
+id="toc-ejercicio-62--hay-fuga-de-datos--ca55">Ejercicio 6.2 · ¿Hay fuga
+de datos? 🔴 (CA5.5)</a></li>
 </ul></li>
 <li><a href="#7-ensembles-muchos-modelos-mejor-que-uno"
 id="toc-7-ensembles-muchos-modelos-mejor-que-uno">7. Ensembles: muchos
@@ -105,6 +119,9 @@ id="toc-ejercicio-101--clasificador-sesgado--ca58-tarea">Ejercicio 10.1
 <li><a href="#ejercicio-102--coded-bias--cap-18"
 id="toc-ejercicio-102--coded-bias--cap-18">Ejercicio 10.2 · <em>Coded
 Bias</em> 🟢 (cap. 18)</a></li>
+<li><a href="#plantilla-de-un-proyecto-de-principio-a-fin"
+id="toc-plantilla-de-un-proyecto-de-principio-a-fin">Plantilla de un
+proyecto de principio a fin</a></li>
 </ul></li>
 <li><a href="#proyecto-final-ca57" id="toc-proyecto-final-ca57">Proyecto
 final (CA5.7)</a></li>
@@ -116,7 +133,7 @@ más</a></li>
 </ul>
 </nav>
   </div>
-  <article class="content" data-salt="/4RGIavQxWRDMPG8q9DuzA==" data-iter="250000">
+  <article class="content" data-salt="orW/aiRXfvv8m5+7r4/zIQ==" data-iter="250000">
 <h1 id="ud5--aprendizaje-automático">UD5 · Aprendizaje automático</h1>
 <div class="ud-head" style="--c:var(--c-ml)">
 <span class="k">UD5 · 25 sesiones · 20 % · CA5.1–CA5.8</span>
@@ -262,7 +279,7 @@ id="ejercicio-11--anonimizar-una-encuesta--reto-188-del-libro">Ejercicio
 </tr>
 </tbody>
 </table>
-<div class="sol-lock" data-label="Solución" data-iv="CR6PiMjD2c4Uofp0" data-ct="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"></div>
+<div class="sol-lock" data-label="Solución" data-iv="sg3X/S1WC2FbMKYm" data-ct="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"></div>
 
 <hr />
 <h2 id="2-tipos-de-aprendizaje-y-de-problemas">2. Tipos de aprendizaje y
@@ -317,6 +334,91 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a hr
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>modelo.fit(X_entrenamiento, y_entrenamiento)   <span class="co"># 2. aprender</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> modelo.predict(X_nuevos)         <span class="co"># 3. predecir</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>modelo.score(X_prueba, y_prueba)        <span class="co"># 4. evaluar</span></span></code></pre></div>
+<h3 id="preparar-los-datos-para-el-modelo">Preparar los datos para el
+modelo</h3>
+<p>Los modelos solo entienden <strong>números</strong>, sin huecos y en
+escalas comparables. Antes de entrenar hay tres tareas:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Problema</th>
+<th>Solución</th>
+<th>Herramienta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Valores que faltan</strong></td>
+<td>Rellenar con la mediana (números) o el valor más frecuente
+(categorías); si son muy pocas filas, borrarlas</td>
+<td><code>SimpleImputer</code></td>
+</tr>
+<tr class="even">
+<td><strong>Categorías sin orden</strong> (concello, color)</td>
+<td>Una columna 0/1 por categoría (<em>one-hot</em>)</td>
+<td><code>OneHotEncoder</code>, <code>pd.get_dummies</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Categorías con orden</strong> (a reformar &lt; bueno &lt;
+nuevo)</td>
+<td>Números que respeten el orden</td>
+<td><code>OrdinalEncoder</code></td>
+</tr>
+<tr class="even">
+<td><strong>Escalas distintas</strong> (m² frente a número de
+baños)</td>
+<td>Estandarizar: media 0, desviación 1</td>
+<td><code>StandardScaler</code></td>
+</tr>
+</tbody>
+</table>
+<p>¿Por qué no numerar los concellos (Marín = 1, Pontevedra = 2, Vigo =
+3)? Porque un modelo lineal entendería que Vigo es «el triple» de Marín
+o que Pontevedra está «entre» los dos. Escalar es imprescindible en los
+modelos que miden <strong>distancias</strong> o usan
+<strong>coeficientes</strong> (regresión, k-NN, SVM, redes neuronales) y
+no hace falta en los <strong>árboles</strong>, que solo preguntan «¿es
+mayor que…?».</p>
+<p>Un <code>ColumnTransformer</code> aplica a cada columna su
+tratamiento, y un <code>Pipeline</code> lo une con el modelo:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline, make_pipeline</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, OneHotEncoder, OrdinalEncoder</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>pisos <span class="op">=</span> pd.DataFrame({                                     <span class="co"># datos inventados, precio en miles de €</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;concello&quot;</span>: [<span class="st">&quot;Marín&quot;</span>, <span class="st">&quot;Pontevedra&quot;</span>, <span class="st">&quot;Vigo&quot;</span>, <span class="st">&quot;Marín&quot;</span>, <span class="st">&quot;Vigo&quot;</span>, <span class="st">&quot;Pontevedra&quot;</span>, <span class="st">&quot;Vigo&quot;</span>, <span class="st">&quot;Marín&quot;</span>],</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;m2&quot;</span>:       [<span class="dv">70</span>, <span class="dv">90</span>, <span class="dv">85</span>, <span class="va">None</span>, <span class="dv">120</span>, <span class="dv">65</span>, <span class="dv">100</span>, <span class="dv">80</span>],</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;estado&quot;</span>:   [<span class="st">&quot;reformar&quot;</span>, <span class="st">&quot;bo&quot;</span>, <span class="st">&quot;novo&quot;</span>, <span class="st">&quot;bo&quot;</span>, <span class="st">&quot;novo&quot;</span>, <span class="va">None</span>, <span class="st">&quot;bo&quot;</span>, <span class="st">&quot;bo&quot;</span>],</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;precio&quot;</span>:   [<span class="dv">95</span>, <span class="dv">180</span>, <span class="dv">230</span>, <span class="dv">120</span>, <span class="dv">330</span>, <span class="dv">120</span>, <span class="dv">250</span>, <span class="dv">130</span>]})</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> pisos.drop(columns<span class="op">=</span><span class="st">&quot;precio&quot;</span>), pisos[<span class="st">&quot;precio&quot;</span>]</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>prep <span class="op">=</span> ColumnTransformer([</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;num&quot;</span>, make_pipeline(SimpleImputer(strategy<span class="op">=</span><span class="st">&quot;median&quot;</span>), StandardScaler()), [<span class="st">&quot;m2&quot;</span>]),</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;ord&quot;</span>, make_pipeline(SimpleImputer(strategy<span class="op">=</span><span class="st">&quot;most_frequent&quot;</span>),</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>                          OrdinalEncoder(categories<span class="op">=</span>[[<span class="st">&quot;reformar&quot;</span>, <span class="st">&quot;bo&quot;</span>, <span class="st">&quot;novo&quot;</span>]])), [<span class="st">&quot;estado&quot;</span>]),</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    (<span class="st">&quot;cat&quot;</span>, OneHotEncoder(handle_unknown<span class="op">=</span><span class="st">&quot;ignore&quot;</span>), [<span class="st">&quot;concello&quot;</span>]),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> Pipeline([(<span class="st">&quot;prep&quot;</span>, prep), (<span class="st">&quot;reg&quot;</span>, LinearRegression())]).fit(X, y)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(prep.get_feature_names_out())</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co"># [&#39;num__m2&#39; &#39;ord__estado&#39; &#39;cat__concello_Marín&#39; &#39;cat__concello_Pontevedra&#39; &#39;cat__concello_Vigo&#39;]</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>nuevos <span class="op">=</span> pd.DataFrame({<span class="st">&quot;concello&quot;</span>: [<span class="st">&quot;Vigo&quot;</span>, <span class="st">&quot;Lugo&quot;</span>], <span class="st">&quot;m2&quot;</span>: [<span class="dv">95</span>, <span class="dv">95</span>], <span class="st">&quot;estado&quot;</span>: [<span class="st">&quot;bo&quot;</span>, <span class="st">&quot;bo&quot;</span>]})</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(modelo.predict(nuevos).<span class="bu">round</span>(<span class="dv">0</span>))                     <span class="co"># [246. 200.]</span></span></code></pre></div>
+<p>Fíjate en «Lugo»: no estaba en los datos de entrenamiento. Con
+<code>handle_unknown="ignore"</code> sus tres columnas de concello valen
+0 y el modelo da una estimación «sin concello» en lugar de fallar. Es
+una decisión que hay que conocer: el modelo <strong>no sabe
+nada</strong> de Lugo.</p>
+<p><strong>Regla de oro:</strong> el imputador y el escalador aprenden
+(la mediana, la media…) <strong>solo de los datos de
+entrenamiento</strong> y después transforman los de prueba con lo
+aprendido. Si se ajustan con todos los datos, la prueba deja de ser una
+prueba (fuga de datos, sección 6). Meterlo todo en un
+<code>Pipeline</code> lo garantiza.</p>
 <hr />
 <h2 id="3-regresión-lineal">3. Regresión lineal</h2>
 <p>Busca la recta (o el plano, con varias características) que mejor se
@@ -325,22 +427,156 @@ minimiza la suma de los errores al cuadrado. El nombre «regresión» viene
 de Francis Galton, que observó que los hijos de padres muy altos tendían
 a «regresar» hacia la estatura media (reto 14.8: investígalo sin
 IA).</p>
-<div class="sourceCode" id="cb3"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>horas <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>]).reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)    <span class="co"># X debe ser una matriz</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>nota  <span class="op">=</span> np.array([<span class="fl">3.5</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">5.5</span>, <span class="fl">6.0</span>, <span class="fl">6.8</span>, <span class="fl">7.2</span>, <span class="fl">7.5</span>, <span class="fl">8.4</span>, <span class="fl">9.0</span>])</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> LinearRegression().fit(horas, nota)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;nota ≈ </span><span class="sc">{</span>modelo<span class="sc">.</span>intercept_<span class="sc">:.2f}</span><span class="ss"> + </span><span class="sc">{</span>modelo<span class="sc">.</span>coef_[<span class="dv">0</span>]<span class="sc">:.2f}</span><span class="ss"> · horas&quot;</span>)   <span class="co"># 2.95 + 0.78 · horas</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(modelo.predict([[<span class="fl">4.5</span>]]))                                          <span class="co"># [6.45]</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;R² = </span><span class="sc">{</span>modelo<span class="sc">.</span>score(horas, nota)<span class="sc">:.3f}</span><span class="ss">&quot;</span>)                          <span class="co"># 0.974</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>horas <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>]).reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)    <span class="co"># X debe ser una matriz</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>nota  <span class="op">=</span> np.array([<span class="fl">3.5</span>, <span class="fl">4.0</span>, <span class="fl">5.0</span>, <span class="fl">5.5</span>, <span class="fl">6.0</span>, <span class="fl">6.8</span>, <span class="fl">7.2</span>, <span class="fl">7.5</span>, <span class="fl">8.4</span>, <span class="fl">9.0</span>])</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> LinearRegression().fit(horas, nota)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;nota ≈ </span><span class="sc">{</span>modelo<span class="sc">.</span>intercept_<span class="sc">:.2f}</span><span class="ss"> + </span><span class="sc">{</span>modelo<span class="sc">.</span>coef_[<span class="dv">0</span>]<span class="sc">:.2f}</span><span class="ss"> · horas&quot;</span>)   <span class="co"># 2.95 + 0.78 · horas</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(modelo.predict([[<span class="fl">4.5</span>]]))                                          <span class="co"># [6.45]</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;R² = </span><span class="sc">{</span>modelo<span class="sc">.</span>score(horas, nota)<span class="sc">:.3f}</span><span class="ss">&quot;</span>)                          <span class="co"># 0.974</span></span></code></pre></div>
 <p><strong>Interpretación:</strong> cada hora de estudio suma, de media,
 0,78 puntos. <strong>R²</strong> mide qué parte de la variación de la
 nota explica el modelo (1 = toda). <strong>Cuidado:</strong> correlación
 no es causalidad, y extrapolar es peligroso: con 20 horas predeciría un
 18,5.</p>
+<p><strong>Métricas de regresión.</strong> R² no lo dice todo: también
+interesa <strong>cuánto se equivoca</strong> el modelo, en las unidades
+de lo que predice.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Métrica</th>
+<th>Cálculo</th>
+<th>Se lee como</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>MAE</strong> (error absoluto medio)</td>
+<td>Media de |real − predicho|</td>
+<td>«Se equivoca, de media, en 0,4 puntos»</td>
+</tr>
+<tr class="even">
+<td><strong>RMSE</strong> (raíz del error cuadrático medio)</td>
+<td>√ media de (real − predicho)²</td>
+<td>Igual, pero castiga más los errores grandes</td>
+</tr>
+<tr class="odd">
+<td><strong>R²</strong></td>
+<td>1 − error del modelo / error de predecir siempre la media</td>
+<td>1 = perfecto; 0 = no mejora a la media; puede ser negativo</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Curvas y regularización.</strong> Si la relación no es una
+recta, se pueden añadir columnas con los cuadrados y productos de las
+originales (<strong>regresión polinómica</strong>). Pero cuantas más
+columnas, más fácil memorizar. La <strong>regularización</strong>
+penaliza los coeficientes grandes, como un profesor que dice
+«resuélvelo, pero con una respuesta sencilla»:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th>Penalización</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ridge</strong> (L2)</td>
+<td>Suma de los coeficientes al cuadrado</td>
+<td>Encoge todos los coeficientes, no elimina ninguno</td>
+</tr>
+<tr class="even">
+<td><strong>Lasso</strong> (L1)</td>
+<td>Suma de los valores absolutos</td>
+<td>Pone algunos coeficientes <strong>exactamente a 0</strong>: elige
+características</td>
+</tr>
+<tr class="odd">
+<td><strong>ElasticNet</strong></td>
+<td>Mezcla de las dos</td>
+<td>Un punto intermedio</td>
+</tr>
+</tbody>
+</table>
+<p>El hiperparámetro <code>alpha</code> regula la fuerza: más alto,
+modelo más simple. Con el conjunto de datos de <strong>diabetes</strong>
+de scikit-learn (442 pacientes, 10 medidas, progresión de la enfermedad
+a un año):</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_diabetes</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression, Ridge, Lasso</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures, StandardScaler</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error, mean_squared_error</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_diabetes(return_X_y<span class="op">=</span><span class="va">True</span>, as_frame<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.25</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>modelos <span class="op">=</span> {</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lineal&quot;</span>:             LinearRegression(),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Polinómica grado 2&quot;</span>: make_pipeline(PolynomialFeatures(<span class="dv">2</span>), StandardScaler(), LinearRegression()),</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Polinómica + Ridge&quot;</span>: make_pipeline(PolynomialFeatures(<span class="dv">2</span>), StandardScaler(), Ridge(alpha<span class="op">=</span><span class="dv">10</span>)),</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Lasso&quot;</span>:              make_pipeline(StandardScaler(), Lasso(alpha<span class="op">=</span><span class="dv">1</span>)),</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nombre, m <span class="kw">in</span> modelos.items():</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> m.fit(X_tr, y_tr).predict(X_te)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>nombre<span class="sc">:&lt;20}</span><span class="ss"> R² entr. </span><span class="sc">{</span>m<span class="sc">.</span>score(X_tr, y_tr)<span class="sc">:.2f}</span><span class="ss"> · prueba </span><span class="sc">{</span>m<span class="sc">.</span>score(X_te, y_te)<span class="sc">:.2f}</span><span class="ss"> · &quot;</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f&quot;MAE </span><span class="sc">{</span>mean_absolute_error(y_te, p)<span class="sc">:.1f}</span><span class="ss"> · RMSE </span><span class="sc">{</span>mean_squared_error(y_te, p) <span class="op">**</span> <span class="fl">0.5</span><span class="sc">:.1f}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th>R² entrenamiento</th>
+<th>R² prueba</th>
+<th>MAE</th>
+<th>RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Lineal</td>
+<td>0,52</td>
+<td>0,48</td>
+<td>41,5</td>
+<td>53,4</td>
+</tr>
+<tr class="even">
+<td>Polinómica grado 2</td>
+<td><strong>0,60</strong></td>
+<td><strong>0,42</strong></td>
+<td>44,0</td>
+<td>56,4</td>
+</tr>
+<tr class="odd">
+<td>Polinómica + Ridge</td>
+<td>0,59</td>
+<td>0,49</td>
+<td>40,9</td>
+<td>53,1</td>
+</tr>
+<tr class="even">
+<td>Lasso</td>
+<td>0,51</td>
+<td><strong>0,50</strong></td>
+<td>41,4</td>
+<td>52,8</td>
+</tr>
+</tbody>
+</table>
+<p>La polinómica mejora en entrenamiento y <strong>empeora</strong> en
+prueba: sobreajusta (sección 6). Con Ridge recupera lo perdido. Lasso,
+con un modelo más sencillo, da el mejor resultado en prueba y además
+anula la columna <code>s2</code>. Un R² de 0,5 parece poco, pero es lo
+habitual con datos médicos reales: la progresión de una enfermedad
+depende de muchas cosas que no están en la tabla.</p>
 <h3
 id="ejercicio-31--datos-abiertos-de-galicia--retos-168169-tarea">Ejercicio
 3.1 · Datos abiertos de Galicia 🟡 (retos 16.8–16.9, tarea)</h3>
@@ -349,7 +585,17 @@ href="https://abertos.xunta.gal">abertos.xunta.gal</a> o de <a
 href="https://datos.gob.es">datos.gob.es</a> (temperaturas, consumo,
 población…), entrena una regresión lineal y dibuja predicción frente a
 valor real.</p>
-<div class="sol-lock" data-label="Esqueleto de solución" data-iv="Ubrt1+nDdPl9jlSj" data-ct="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"></div>
+<div class="sol-lock" data-label="Esqueleto de solución" data-iv="IKYqhTAloQYTCkab" data-ct="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"></div>
+
+<h3 id="ejercicio-32--ridge-lasso-y-cuántas-columnas-sobran-">Ejercicio
+3.2 · Ridge, Lasso y cuántas columnas sobran 🟡</h3>
+<p>Con el conjunto de diabetes y la misma división de la sección 3,
+entrena <code>Lasso</code> (con <code>StandardScaler</code> delante)
+para <code>alpha</code> = 0,1; 1; 5 y 10. Para cada valor anota el R² de
+prueba y <strong>cuántos coeficientes valen exactamente 0</strong>. ¿Qué
+<code>alpha</code> elegirías y por qué? ¿Qué ventaja tiene un modelo con
+menos columnas aunque acierte casi lo mismo?</p>
+<div class="sol-lock" data-label="Solución" data-iv="B5yKLkPnb2iRF3dk" data-ct="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"></div>
 
 <hr />
 <h2 id="4-clasificación">4. Clasificación</h2>
@@ -399,24 +645,24 @@ probabilidad</td>
 <p>Ejemplo con el dataset de <strong>cáncer de mama</strong> que usa el
 libro (569 casos, 30 medidas de las células; 0 = maligno, 1 =
 benigno):</p>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, classification_report</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_breast_cancer(return_X_y<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.25</span>, random_state<span class="op">=</span><span class="dv">42</span>, stratify<span class="op">=</span>y)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> make_pipeline(StandardScaler(), LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>))</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>modelo.fit(X_tr, y_tr)                       <span class="co"># el escalador se ajusta SOLO con entrenamiento</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> modelo.predict(X_te)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(confusion_matrix(y_te, pred))          <span class="co"># [[52  1]</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                                             <span class="co">#  [ 1 89]]</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_te, pred, target_names<span class="op">=</span>[<span class="st">&quot;maligno&quot;</span>, <span class="st">&quot;benigno&quot;</span>]))</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, classification_report</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_breast_cancer(return_X_y<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.25</span>, random_state<span class="op">=</span><span class="dv">42</span>, stratify<span class="op">=</span>y)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> make_pipeline(StandardScaler(), LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>modelo.fit(X_tr, y_tr)                       <span class="co"># el escalador se ajusta SOLO con entrenamiento</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> modelo.predict(X_te)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(confusion_matrix(y_te, pred))          <span class="co"># [[52  1]</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                                             <span class="co">#  [ 1 89]]</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_te, pred, target_names<span class="op">=</span>[<span class="st">&quot;maligno&quot;</span>, <span class="st">&quot;benigno&quot;</span>]))</span></code></pre></div>
 <p><code>make_pipeline</code> encadena el escalado y el modelo, y
 garantiza que el escalador aprende la media y la desviación
 <strong>solo</strong> de los datos de entrenamiento.
@@ -490,12 +736,105 @@ cribado de cáncer un <strong>falso negativo</strong> es gravísimo, así
 que se prioriza la exhaustividad aunque haya más falsas alarmas. En un
 filtro antispam un <strong>falso positivo</strong> (perder un correo
 importante) es peor, así que se prioriza la precisión.</p>
+<p><strong>Mover el umbral.</strong> Un clasificador como la regresión
+logística no da directamente «sí» o «no»: da una
+<strong>probabilidad</strong>, y <code>predict</code> dice «sí» a partir
+de 0,5. Ese umbral se puede mover. Si lo bajamos, el modelo marca más
+casos como positivos: detecta más (sube la exhaustividad) pero da más
+falsas alarmas (baja la precisión). La <strong>curva ROC</strong> dibuja
+este equilibrio para todos los umbrales, y el <strong>AUC</strong> es el
+área bajo ella (0,5 = azar, 1 = perfecto).</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, recall_score, precision_score, roc_auc_score</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_breast_cancer(return_X_y<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> y                                   <span class="co"># ahora 1 = maligno: la clase que queremos detectar</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.25</span>, random_state<span class="op">=</span><span class="dv">42</span>, stratify<span class="op">=</span>y)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> make_pipeline(StandardScaler(), LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>)).fit(X_tr, y_tr)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>prob <span class="op">=</span> m.predict_proba(X_te)[:, <span class="dv">1</span>]          <span class="co"># probabilidad de maligno</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;AUC:&quot;</span>, <span class="bu">round</span>(roc_auc_score(y_te, prob), <span class="dv">3</span>))              <span class="co"># AUC: 0.996</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> umbral <span class="kw">in</span> (<span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>, <span class="fl">0.05</span>):</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    pred <span class="op">=</span> (prob <span class="op">&gt;=</span> umbral).astype(<span class="bu">int</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    vn, fp, fn, vp <span class="op">=</span> confusion_matrix(y_te, pred).ravel()</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;umbral </span><span class="sc">{</span>umbral<span class="sc">}</span><span class="ss">: exhaustividad </span><span class="sc">{</span>recall_score(y_te, pred)<span class="sc">:.3f}</span><span class="ss"> · &quot;</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f&quot;precisión </span><span class="sc">{</span>precision_score(y_te, pred)<span class="sc">:.3f}</span><span class="ss"> · FN </span><span class="sc">{</span>fn<span class="sc">}</span><span class="ss"> · FP </span><span class="sc">{</span>fp<span class="sc">}</span><span class="ss">&quot;</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>Umbral</th>
+<th>Exhaustividad</th>
+<th>Precisión</th>
+<th>Tumores no detectados (FN)</th>
+<th>Falsas alarmas (FP)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0,5</td>
+<td>0,925</td>
+<td>0,980</td>
+<td>4</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>0,3</td>
+<td>0,962</td>
+<td>0,981</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>0,1</td>
+<td>0,981</td>
+<td>0,897</td>
+<td>1</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>0,05</td>
+<td>1,000</td>
+<td>0,828</td>
+<td>0</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<p>En un <strong>cribado</strong> se elegiría un umbral bajo: once
+falsas alarmas (que se descartan con otra prueba) son preferibles a un
+tumor sin detectar. El umbral <strong>no</strong> se elige mirando los
+datos de prueba, sino con validación cruzada sobre el entrenamiento;
+aquí se usan los de prueba solo para enseñar el efecto.</p>
+<p><strong>Clases desequilibradas.</strong> Si solo el 3 % de los casos
+son positivos (fraude, una enfermedad rara), un modelo que diga siempre
+«no» acierta el 97 % y no sirve para nada (ejercicio 5.1). Soluciones:
+medir con exhaustividad, precisión y F1 en lugar de exactitud; dar más
+peso a los errores de la clase rara
+(<code>class_weight="balanced"</code>); mover el umbral; o generar
+ejemplos sintéticos de la clase rara (SMOTE, librería
+<code>imbalanced-learn</code>), <strong>solo en el
+entrenamiento</strong>. En una prueba con un 3 % de positivos,
+<code>class_weight="balanced"</code> subió la exhaustividad de 0,33 a
+0,73, a cambio de bajar la exactitud del 98 % al 90 %: más casos
+detectados, más falsas alarmas.</p>
+<p><strong>Más de dos clases.</strong> Precisión, exhaustividad y F1 se
+calculan <strong>por clase</strong> y luego se promedian. El promedio
+<strong>macro</strong> trata a todas las clases por igual (una clase
+pequeña mal clasificada pesa tanto como una grande); el
+<strong>ponderado</strong> (<em>weighted</em>) pesa cada clase según
+cuántos casos tiene. Si las dos medias son muy distintas, hay clases
+pequeñas que el modelo trata mal. <code>classification_report</code>
+muestra las dos.</p>
 <h3 id="ejercicio-51--el-detector-que-siempre-dice-sano--ca58">Ejercicio
 5.1 · El detector que siempre dice «sano» 🟡 (CA5.8)</h3>
 <p>Una enfermedad afecta al 2 % de la población. Un «modelo» predice
 siempre «sano». Calcula su exactitud y su exhaustividad sobre 1000
 personas. ¿Es un buen modelo?</p>
-<div class="sol-lock" data-label="Solución" data-iv="BnqcgsrZHqCBxOIG" data-ct="CgzgKTDpr87/l0+5qKtgwwBTPeGQBAMHGYbhvI/jlgEuTKZKQcJMR/kyMI6vhah6TDx+lYt7L9olhF741hy4rTl11s4YQKwEMJVCUAETZ0/+RDiwtYWo1+ZCWx5EneLSFt3d/6iiNqTaAuolX/J+ywiVi6onbRyVDmZwpvKrsJL9TAoWUUgsZ5D9NEn0F3Pfu5L4TYtDrVyT/LERRs8TiMGKK1eDJfhtYTS/owBWAoJgk6bw8YSBcf/CoFcJMiiuyJdOIkucyPngpI2fuHgN1UbnaZxdUCWhmeaAAyg610mtJ2N12ziCN7FSIKnHnGKmgkopLT4LiwzNqwJ6F8oJ17xd3f8hB0aWkllC3gg2HufKouZjchnRVrJzkT5wdUl1VxEAZWzMia/2iTcSv6z3Y3TBHpDrxjiX1h2BisnQ5WWAUgLSZVXf3TvE0H/dTjCXzqTiblLfXUVDUipWkUeJ4VIagIYIkGCrRFeuoRmb4E+25of6EHbf2Z2B33ttfIGhdPok9ZTkRbKRgq9RG3NGxQF63vpJnPAprAjherLgdtS+27i6ibabsRbD88k="></div>
+<div class="sol-lock" data-label="Solución" data-iv="DkejOStlSuS9Gtws" data-ct="+C6MLnZu9kMDI0n1lka1gMnhY3HlUdQS0cG3GbB2yAmWMX7w8p0JnZkASJdBBpmWvdnm6e+VgKOUTF3y+PusdT35Pn2ItrFybSmf2vqpy1Wbjicwas3XJ4IWzt08vDZsSIMUrKfKIQFr1YMQ8xte9e2HJRQPoZMCsuR4Gud/6ziJyI6e6y5bhC2tiu/lVuxl6mHIglmYCEoBg9C2BkBFNyZDBEBcZ3ajtpSdiU7IFQedmoRrIQ4SAePmXwzhfeogroaNgGK3DUplA2ciWfdBA+pIwB7uVcJd84rbImku+7wlLGDEj1H9U+zFP05wVqzpy+DOwnETjxtnYQqvDWM8RPTFMsiYMHkEZCdbx81rBg66RDRVdwFpdxTvYfGM/0CRFVgjxeDEF50Kma1oHRK02Jnf9Ij06BdShgCfrEQCHMCWZSxX5kqOLHz+wQkplCvQpaXtS4M3Rt+4+gkkbBMhDsY6z0ine14R2MP0ZUcPoMxz5NSnto2Zce+R7z/EwKv6+BeJY2y8yxHyqZDDdRtqWizjz2eSDCf1s6vVMHJFFuhtPH8+r3YoJxyUWlw="></div>
 
 <h3
 id="ejercicio-52--calcular-métricas-a-partir-de-una-matriz-">Ejercicio
@@ -503,7 +842,17 @@ id="ejercicio-52--calcular-métricas-a-partir-de-una-matriz-">Ejercicio
 <p>Un modelo de detección de fraude en 1000 transacciones obtiene VP =
 40, FN = 10, FP = 60, VN = 890. Calcula exactitud, precisión,
 exhaustividad y F1.</p>
-<div class="sol-lock" data-label="Solución" data-iv="REENJMWS/t8HoLQs" data-ct="5MTmEQPTVmiOZD6MI4K4qWZFYskra9eQO7fRAxQMpICx4Gse/9yxVv5bgui2eGGFvDntO6Wj1vQ47z856NI69WWTBZZtCzSUYsWdQ4GkDBfwVwI1UuUkFlpTJFL/hWZD0VXoITsLaAsWmW/AO0OAlOBoMbzva9xVT1ICDJ7oza8XtrQbK7C/aMJZ6NyaI0JPaEE8f0rqV/OdNTx9S7awIcMIHNGAw0lc2lhtqT8y1BvNB1+pOllXQSWPr/ROgqwiCcJSQ8rmHxuGxGMOhru0p530qjM0znrxkWJI8HB7/9DR+j8ZmIIhnyhbZpInqQTDoIzgQCCTt9jnk3SO7nA8SV2WYw8U/1D5yNtVbmCYvkbSM7GpCVuIW8BX0yLj2a9StP1uvcVtw51LKdIVI/a1SaluSnWKgD/HOr8DA2gf6G9FBV2XR6lS9n/P32cZhGkcgMWMxhIcdEOB551zYaHIkUID5n4V7TeLurG6WzEtAR8ObvGZZf8seD3P+euzjt25Wf/VWF4dgGenfQCHrpCDkqdQhA/3uTaUHsVxTikxJx4L5EfIQYwCKYioNS9TVl/zdt7C30zlO1T/eXVx0jyvDOMgweipgmTgVs2f7kxt4MBMdY1aYQcdlC/PrniTDxvVIiaZaPWiJDCIVHiiK/KaZTMlHxmtvwy7ZU1/eAnkqGoV7mv/buypfUYBuwwNOuyE7Ff9PZUZCDXh2c9VzUTz/t3GHEg1GUqYK0HyRRwqk3ywLbRM"></div>
+<div class="sol-lock" data-label="Solución" data-iv="91gWwOQv7Kw9bnlt" data-ct="m6BtyO3A9RZtr4NUhrhJY6DYOWMweKFIA8QCFV9XGjjrMtAaf7ql0ahOkVT+mURIf0orZfJS+RUkT+DbcfSSYRApOHwIaCjj1J9Ap8mHhMeF6VPfEVeo3qEQlZH+OFgx+LDI18wWoCmtjSewj5ZDwv2R2faFeytPkZHUe8J8QLKplStEhtFdNtvU3fN2tGrrtZV705sO7UldjQ5D6xP+gVa2THmqz3xnx/OyGIqJh8paYHZ9sLrHMJn7Dg/84QYdDKRrBZwQ1LokcX6vt13XOt52IKyaGU9LYnPEgr76JO5aukZxMxlC+2LAKDLoemu4j+QlO0lDr3Dw8CzmievhDRIZGZKYEb/I51OLgCrLa9mMn0ZKygI2RvYuHSRr+9LJbhX1lWBAERf/DT8w+ckNuPF3NFq+zAZWU15QG1l2aTnvrcbeXceYHcCcpkZiBrjVLmG3KH+CE6z7T0Or6ly5X+xsyLiA2EVLY9fsmvGzqH/mAaFgplyAWuE1kIDdPvy37SF+th5XLfJKCzF0U5dda0xbmIJGwUzUbMIayYuLDThTySHSGx8xutoH72jIS4X7bOazTGW0qYGdjNNdMd9nGG7ZHH+WTFdw0hppW7Fm0fdGdcPXK1j56bGiPZl+IS2ttNDruDS/7Dqx05HYYxbOT6npt4YRvsX5PlRWE6VtOTS2LCadsu81H2E/nIx4+AxrxRfgtWWgxvzw8+/v2OkSwTcaU6mHBIOOnS+fjm5wivmrXoy1"></div>
+
+<h3 id="ejercicio-53--elegir-el-umbral-de-un-cribado--ca58">Ejercicio
+5.3 · Elegir el umbral de un cribado 🟡 (CA5.8)</h3>
+<p>Con la tabla de umbrales de la sección 5 (cáncer de mama), un
+hospital estima que <strong>no detectar un tumor cuesta 10 veces
+más</strong> que una falsa alarma (que se resuelve con otra prueba).
+Calcula el «coste» de cada umbral como 10·FN + FP. ¿Cuál elegirías? ¿Y
+si el coste fuera 1 a 1? ¿Por qué no se debería elegir el umbral mirando
+el conjunto de prueba?</p>
+<div class="sol-lock" data-label="Solución" data-iv="VHw7bER4DhrXwyGl" data-ct="iXCgpDCf33nrdoZHVW4GTwSeX8UfDXZtQ17UOVyCu6376bUrc92AaSROAjj8QccZVOGNJvwiDQuG07cPueJjm94/lM2dtD/rBL+KLIb7bh1T1KIQf/MsVFhrBxnuvQRthTBT5g3UmhdMSe5JEmkF6wOJf53GpcCbjmLRZRJhq9CWlB/LG1afNFy0tI/c4TM9OpddJ5QeO6Ricdv3eNMWYCXGhgRS0ovTkeIvc4bo7b/XRH74IdaLr5cdycU8D4zKpXqo61KYBMgSAECX/OgdhZwHzCcNhR3HtOzruI2h3I79oWD/SVhnosHhfPKCtbP6PigwdqS9s2H5AFD7DpuNhbgg2JE+RMD6gh/FfEn6dBNRsYGv66GVVC5yVQtUAbMlOM2HSyXp148ZNA65I/JoruiRk8hHlZm1u5J3N9J/1oKV30JVL/zJZNKAiW6snGhh3cQc1Kv2KUUC+9+5vDgnNjGAVJSxnps2sTmcIwUFy11U3cXufKWC/9CSxF+KbE0SCCzHnoAZhPQqDGPjAnGjRMx36Tm4QBuviqTObdzQIXs7PzWw0m94apHsoRQJEVh5QiWyR9SlqBkJfruBX4JluQLGChftGLNKmHkXyAh9Zuj+d4FkPKONtgytTCKr7aCwnt/mksq+xWBq7yaWEP+is95SWRUH50jQAJjhjKVs02I+Y06LHV659bs4IzGkKmBY9gangmUorL9hCD2iSk4dZl9OQOyax1aXwazBfDgaTWgWbpvCk9hwCFaE7Xmd6sv/2pQKVxddOB8O2qOsQPgLeTY2LEs7n8U80YYQpqc0tdpDhKGsOvKmK2b+2WEON8Rffj36FoAKvBTJ8Z3d8Sz8ZqbYcxRefXJMmdDL/YqQf7RlCivTSasziGGhhcgxOVKTa2S+Hq5WCh0I13Wh89DIjLOSx4TwVonrJXT2tAG4quVMLayszMmtO7haoC82ZBO5Mx3bKIWepoSpVTh7t1/JZytaXK5LNNu7OcHo74J8U+cTkWPjyJt8uSOjMTdGilUurdusv8Eyhd4NEjq2STGtw6yaN2P0mKsG0DDGi0Zp3MPEaGiupQBz7Rm6R/4+QlWm+vmVExuqoqdXeBWmumrQYqav1eosuY9+pCj53RK0uz1OWIvIvNpn6AizsaaWoRSgNCjadw9SFOWh03cH5f0yvwCwnTyzV4d+p12DKdHyc7kM/YXsSMs9lX1c9M7a+RsZ3fXUadQuoDYfWxvFGqE0QdcDThPZJu2+y2M2yEDQp3fH5Ik9tWSvyaroI63yOWAnLMbF/jQ6q274dwjo3nMkolSJ9PZAbzTrWEs3YW7zISnPaqZMK9+3V+ibQE7JkRRG8Bk8QS3FgD7ab8ylmkLIvbGiT8qJ91Z2l/OLcZqAv548fK1Qr21hSxAx4v/vlXmgHaAqaHYZOP0klCsjhDb34spflN4hSVFnlL3l20U3uTdWDHYRIlvE3OS5tp+lYCMz+/ySsl6s2f4/twuyiI2hfmsvMi6vvRB5DUliC+xe3lqxp1WN1RnFjapixxbcYYw0tdKL8i4sFide61CYwGeYn8eOG9DX6iY7r4QzMPRUsRSgd0UJAZrk6nMfxcWt7mFZ1RN95El5XUamxPkqk/gDthy/BSxahAAdvb6n+1Thv/PFrFnkPzrHpe+fdJjv5Qax3vbeSOcJgGD1YCilw7rkL0KvJTlTDM9AYo/Mbl9PrEiJ7Kkaz3AndrbnsO4zLBYo2i697BqrB/zd57kZ"></div>
 
 <hr />
 <h2 id="6-sobreajuste-validación-cruzada-e-hiperparámetros">6.
@@ -516,16 +865,16 @@ demasiado simple y falla incluso con los datos de entrenamiento.</li>
 falla con datos nuevos. Síntoma: mucho mejor en entrenamiento que en
 prueba.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_breast_cancer(return_X_y<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> prof <span class="kw">in</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="va">None</span>]:</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span>prof, random_state<span class="op">=</span><span class="dv">0</span>).fit(X_tr, y_tr)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(prof, <span class="bu">round</span>(a.score(X_tr, y_tr), <span class="dv">3</span>), <span class="bu">round</span>(a.score(X_te, y_te), <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_breast_cancer(return_X_y<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.3</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> prof <span class="kw">in</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="va">None</span>]:</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> DecisionTreeClassifier(max_depth<span class="op">=</span>prof, random_state<span class="op">=</span><span class="dv">0</span>).fit(X_tr, y_tr)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(prof, <span class="bu">round</span>(a.score(X_tr, y_tr), <span class="dv">3</span>), <span class="bu">round</span>(a.score(X_te, y_te), <span class="dv">3</span>))</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -567,39 +916,170 @@ entrenamiento en <em>k</em> partes; se entrena <em>k</em> veces dejando
 cada vez una parte para validar, y se promedian los resultados. Da una
 estimación más fiable que una sola división y permite comparar
 modelos:</p>
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>modelos <span class="op">=</span> {</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Regresión logística&quot;</span>: make_pipeline(StandardScaler(), LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>)),</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;k vecinos&quot;</span>:           make_pipeline(StandardScaler(), KNeighborsClassifier()),</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;SVM&quot;</span>:                 make_pipeline(StandardScaler(), SVC()),</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol&quot;</span>:               DecisionTreeClassifier(random_state<span class="op">=</span><span class="dv">0</span>),</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Random Forest&quot;</span>:       RandomForestClassifier(random_state<span class="op">=</span><span class="dv">0</span>),</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nombre, m <span class="kw">in</span> modelos.items():</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> cross_val_score(m, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;f1&quot;</span>)</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>nombre<span class="sc">:&lt;20}</span><span class="ss"> F1 = </span><span class="sc">{</span>s<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss"> ± </span><span class="sc">{</span>s<span class="sc">.</span>std()<span class="sc">:.3f}</span><span class="ss">&quot;</span>)</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Logística 0.985 · k-NN 0.972 · SVM 0.979 · Árbol 0.933 · Random Forest 0.971</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>modelos <span class="op">=</span> {</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Regresión logística&quot;</span>: make_pipeline(StandardScaler(), LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>)),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;k vecinos&quot;</span>:           make_pipeline(StandardScaler(), KNeighborsClassifier()),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;SVM&quot;</span>:                 make_pipeline(StandardScaler(), SVC()),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Árbol&quot;</span>:               DecisionTreeClassifier(random_state<span class="op">=</span><span class="dv">0</span>),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Random Forest&quot;</span>:       RandomForestClassifier(random_state<span class="op">=</span><span class="dv">0</span>),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nombre, m <span class="kw">in</span> modelos.items():</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> cross_val_score(m, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;f1&quot;</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>nombre<span class="sc">:&lt;20}</span><span class="ss"> F1 = </span><span class="sc">{</span>s<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss"> ± </span><span class="sc">{</span>s<span class="sc">.</span>std()<span class="sc">:.3f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Logística 0.985 · k-NN 0.972 · SVM 0.979 · Árbol 0.933 · Random Forest 0.971</span></span></code></pre></div>
 <p><strong>Búsqueda de hiperparámetros:</strong> probar combinaciones de
 forma sistemática con validación cruzada. <strong>Grid search</strong>
 prueba todas; <strong>random search</strong>, una muestra aleatoria (más
 rápida cuando hay muchas).</p>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(StandardScaler(), SVC())</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>rejilla <span class="op">=</span> {<span class="st">&quot;svc__C&quot;</span>: [<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>], <span class="st">&quot;svc__gamma&quot;</span>: [<span class="st">&quot;scale&quot;</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>]}</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>busqueda <span class="op">=</span> GridSearchCV(pipe, rejilla, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;f1&quot;</span>).fit(X, y)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(busqueda.best_params_, <span class="bu">round</span>(busqueda.best_score_, <span class="dv">3</span>))   <span class="co"># {&#39;svc__C&#39;: 10, &#39;svc__gamma&#39;: 0.01} 0.983</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> make_pipeline(StandardScaler(), SVC())</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>rejilla <span class="op">=</span> {<span class="st">&quot;svc__C&quot;</span>: [<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>], <span class="st">&quot;svc__gamma&quot;</span>: [<span class="st">&quot;scale&quot;</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>]}</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>busqueda <span class="op">=</span> GridSearchCV(pipe, rejilla, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;f1&quot;</span>).fit(X, y)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(busqueda.best_params_, <span class="bu">round</span>(busqueda.best_score_, <span class="dv">3</span>))   <span class="co"># {&#39;svc__C&#39;: 10, &#39;svc__gamma&#39;: 0.01} 0.983</span></span></code></pre></div>
+<p><strong>Sesgo y varianza.</strong> Un modelo puede fallar por ser
+<strong>demasiado rígido</strong> (alto <strong>sesgo</strong>:
+subajuste, como una recta para datos curvos) o <strong>demasiado
+sensible</strong> a los datos concretos con los que aprendió (alta
+<strong>varianza</strong>: sobreajuste). Hacer el modelo más complejo
+baja el sesgo y sube la varianza; el objetivo es el punto intermedio,
+que se busca con validación cruzada.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Síntoma</th>
+<th>Entrenamiento</th>
+<th>Prueba</th>
+<th>Qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Subajuste</td>
+<td>Bajo</td>
+<td>Bajo</td>
+<td>Modelo más complejo, mejores características, menos
+regularización</td>
+</tr>
+<tr class="even">
+<td>Sobreajuste</td>
+<td>Muy alto</td>
+<td>Bastante más bajo</td>
+<td>Más datos, modelo más simple, regularización, poda, parar antes</td>
+</tr>
+<tr class="odd">
+<td>Buen ajuste</td>
+<td>Alto</td>
+<td>Parecido al de entrenamiento</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fuga de datos (<em>data leakage</em>).</strong> El error más
+peligroso: el modelo ve, al entrenar, información que <strong>no
+tendrá</strong> cuando se use de verdad. Da resultados espectaculares
+que se hunden en la realidad. Esta demostración usa columnas de
+<strong>puro ruido</strong> y una etiqueta al azar, así que ningún
+modelo honesto puede pasar del 50 %:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_selection <span class="im">import</span> SelectKBest, f_classif</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> rng.normal(size<span class="op">=</span>(<span class="dv">100</span>, <span class="dv">5000</span>))           <span class="co"># 100 alumnos, 5 000 columnas de ruido</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> rng.integers(<span class="dv">0</span>, <span class="dv">2</span>, size<span class="op">=</span><span class="dv">100</span>)           <span class="co"># «aprobado» al azar</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>X_mal <span class="op">=</span> SelectKBest(f_classif, k<span class="op">=</span><span class="dv">20</span>).fit_transform(X, y)      <span class="co"># elige columnas mirando TODOS los datos</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Con fuga:&quot;</span>, cross_val_score(LogisticRegression(), X_mal, y, cv<span class="op">=</span><span class="dv">5</span>).mean().<span class="bu">round</span>(<span class="dv">2</span>))   <span class="co"># 0.85</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>bien <span class="op">=</span> make_pipeline(SelectKBest(f_classif, k<span class="op">=</span><span class="dv">20</span>), LogisticRegression())</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Sin fuga:&quot;</span>, cross_val_score(bien, X, y, cv<span class="op">=</span><span class="dv">5</span>).mean().<span class="bu">round</span>(<span class="dv">2</span>))                       <span class="co"># 0.48</span></span></code></pre></div>
+<p>Con fuga parece que el modelo acierta un 85 % sobre datos que son
+ruido. Pasó porque, entre 5 000 columnas al azar, siempre hay alguna que
+por casualidad se parece a la etiqueta, y se eligieron mirando también
+los datos de validación. Dentro del <code>Pipeline</code>, la selección
+se repite en cada partición solo con su entrenamiento, y el resultado
+vuelve a ser el del azar.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Fuga típica</th>
+<th>Ejemplo</th>
+<th>Cómo evitarla</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Preparar con todos los datos</td>
+<td>Escalar, rellenar huecos o elegir columnas antes de separar</td>
+<td>Separar primero; todo dentro de un <code>Pipeline</code></td>
+</tr>
+<tr class="even">
+<td>Una columna que es consecuencia de lo que se predice</td>
+<td>Predecir si alguien suspende usando «fue a la recuperación»</td>
+<td>Preguntarse: «¿sabré esto en el momento de predecir?»</td>
+</tr>
+<tr class="odd">
+<td>Mezclar el tiempo</td>
+<td>Datos de 2025 en el entrenamiento para predecir 2024</td>
+<td>En series temporales, entrenar con el pasado y probar con el futuro
+(<code>TimeSeriesSplit</code>)</td>
+</tr>
+<tr class="even">
+<td>Duplicados</td>
+<td>La misma persona, o la misma foto, en entrenamiento y en prueba</td>
+<td>Quitar duplicados; separar por persona</td>
+</tr>
+<tr class="odd">
+<td>Ajustar con la prueba</td>
+<td>Probar 50 configuraciones y quedarse con la que mejor da en la
+prueba</td>
+<td>Ajustar con validación cruzada; la prueba se usa <strong>una
+vez</strong>, al final</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Búsqueda aleatoria.</strong> Además de
+<code>GridSearchCV</code>, <code>RandomizedSearchCV</code> prueba un
+número fijo de combinaciones al azar: con muchos hiperparámetros suele
+encontrar una muy buena en mucho menos tiempo. Herramientas como Optuna
+van más allá y eligen la siguiente combinación según cómo fueron las
+anteriores.</p>
 <h3 id="ejercicio-61--curva-de-k-vecinos-">Ejercicio 6.1 · Curva de k
 vecinos 🔴</h3>
 <p>Con el dataset de cáncer, calcula con validación cruzada el F1 de
 k-NN para k = 1, 3, 5, …, 31. Dibuja la curva y explica qué pasa con k
 muy pequeño y muy grande.</p>
-<div class="sol-lock" data-label="Solución" data-iv="Cf5SYlVltrdwK9ce" data-ct="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"></div>
+<div class="sol-lock" data-label="Solución" data-iv="4lQr5Dscb2TKX9AT" data-ct="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"></div>
+
+<h3 id="ejercicio-62--hay-fuga-de-datos--ca55">Ejercicio 6.2 · ¿Hay fuga
+de datos? 🔴 (CA5.5)</h3>
+<p>Para cada proyecto, di si hay fuga de datos, por qué y cómo lo
+arreglarías.</p>
+<ol type="1">
+<li>Para predecir si un alumno aprobará Física en junio, se usa como
+columna «nota de la recuperación de septiembre».</li>
+<li>Se rellenan los huecos con la media de <strong>todo</strong> el
+conjunto y después se separa en entrenamiento y prueba.</li>
+<li>Para predecir la demanda del comedor, se mezclan al azar los días de
+2023 a 2026 y se hace validación cruzada normal.</li>
+<li>En un clasificador de fotos de hojas enfermas, hay varias fotos de
+la <strong>misma hoja</strong> desde distintos ángulos, y se reparten al
+azar.</li>
+<li>Se prueban 40 combinaciones de hiperparámetros y se informa del
+mejor resultado obtenido <strong>en el conjunto de prueba</strong>.</li>
+<li>Se escalan los datos con un <code>StandardScaler</code> dentro de un
+<code>Pipeline</code> y se evalúa con <code>cross_val_score</code>.</li>
+</ol>
+<div class="sol-lock" data-label="Solución" data-iv="5/9WxfMdrJoKnSMf" data-ct="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"></div>
 
 <hr />
 <h2 id="7-ensembles-muchos-modelos-mejor-que-uno">7. Ensembles: muchos
@@ -622,15 +1102,71 @@ seguro.</li>
 indican qué columnas usaron más para decidir. Es una primera forma de
 <strong>explicar</strong> un modelo.</li>
 </ul>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>datos <span class="op">=</span> load_breast_cancer()</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">300</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(datos.data, datos.target)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>importancia <span class="op">=</span> pd.Series(rf.feature_importances_, index<span class="op">=</span>datos.feature_names).sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(importancia.head(<span class="dv">5</span>).<span class="bu">round</span>(<span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>datos <span class="op">=</span> load_breast_cancer()</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> RandomForestClassifier(n_estimators<span class="op">=</span><span class="dv">300</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(datos.data, datos.target)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>importancia <span class="op">=</span> pd.Series(rf.feature_importances_, index<span class="op">=</span>datos.feature_names).sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(importancia.head(<span class="dv">5</span>).<span class="bu">round</span>(<span class="dv">3</span>))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Bagging</strong> (random forest)</th>
+<th><strong>Boosting</strong> (Gradient Boosting, XGBoost,
+LightGBM)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cómo se entrenan</td>
+<td>En paralelo, cada árbol con una muestra distinta</td>
+<td>En serie, cada árbol corrige al anterior</td>
+</tr>
+<tr class="even">
+<td>Qué reduce</td>
+<td>La varianza (sobreajuste)</td>
+<td>El sesgo (errores sistemáticos)</td>
+</tr>
+<tr class="odd">
+<td>Riesgo</td>
+<td>Poco</td>
+<td>Sobreajusta si se usan demasiados árboles</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Votación y apilamiento.</strong> También se pueden combinar
+modelos <strong>distintos</strong>. En la <strong>votación</strong> cada
+modelo da su probabilidad y se promedian; en el
+<strong>apilamiento</strong> (<em>stacking</em>) un modelo final aprende
+a combinar las predicciones de los demás.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> VotingClassifier, StackingClassifier, GradientBoostingClassifier</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> datos.data, datos.target</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> [(<span class="st">&quot;log&quot;</span>, make_pipeline(StandardScaler(), LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>))),</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        (<span class="st">&quot;knn&quot;</span>, make_pipeline(StandardScaler(), KNeighborsClassifier())),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        (<span class="st">&quot;rf&quot;</span>,  RandomForestClassifier(random_state<span class="op">=</span><span class="dv">0</span>))]</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>combinados <span class="op">=</span> {<span class="st">&quot;votación&quot;</span>: VotingClassifier(base, voting<span class="op">=</span><span class="st">&quot;soft&quot;</span>),</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;apilamiento&quot;</span>: StackingClassifier(base, final_estimator<span class="op">=</span>LogisticRegression()),</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;boosting&quot;</span>: GradientBoostingClassifier(random_state<span class="op">=</span><span class="dv">0</span>)}</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nombre, m <span class="kw">in</span> [<span class="op">*</span>base, <span class="op">*</span>combinados.items()]:</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>nombre<span class="sc">:&lt;12}</span><span class="ss"> F1 = </span><span class="sc">{</span>cross_val_score(m, X, y, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&#39;f1&#39;</span>)<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co"># log 0.985 · knn 0.972 · rf 0.971 · votación 0.982 · apilamiento 0.983 · boosting 0.971</span></span></code></pre></div>
+<p>Lección honesta: aquí <strong>ninguna combinación supera a la
+regresión logística sola</strong>. Los ensembles ayudan cuando los
+modelos se equivocan en casos distintos y hay muchos datos; con un
+problema fácil y bien separado, el modelo sencillo ya está cerca del
+máximo. Por eso se empieza siempre por un modelo base sencillo y se
+compara con él.</p>
 <hr />
 <h2 id="8-aprendizaje-no-supervisado-agrupar-y-reducir">8. Aprendizaje
 no supervisado: agrupar y reducir</h2>
@@ -642,18 +1178,18 @@ no cambian.</p>
 <strong>reduce la dimensionalidad</strong>: resume muchas columnas en
 unas pocas nuevas que conservan la mayor parte de la información. Sirve
 para dibujar en 2D datos con muchas dimensiones (CA5.3).</p>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>km <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, n_init<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(iris.data)     <span class="co"># ¡sin mirar la especie!</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.crosstab(iris.target_names[iris.target], km.labels_,</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                  rownames<span class="op">=</span>[<span class="st">&quot;especie real&quot;</span>], colnames<span class="op">=</span>[<span class="st">&quot;grupo&quot;</span>]))</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>).fit(iris.data)</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pca.explained_variance_ratio_.<span class="bu">sum</span>().<span class="bu">round</span>(<span class="dv">3</span>))                      <span class="co"># 0.978</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>km <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, n_init<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(iris.data)     <span class="co"># ¡sin mirar la especie!</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.crosstab(iris.target_names[iris.target], km.labels_,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                  rownames<span class="op">=</span>[<span class="st">&quot;especie real&quot;</span>], colnames<span class="op">=</span>[<span class="st">&quot;grupo&quot;</span>]))</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>).fit(iris.data)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pca.explained_variance_ratio_.<span class="bu">sum</span>().<span class="bu">round</span>(<span class="dv">3</span>))                      <span class="co"># 0.978</span></span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -689,7 +1225,7 @@ ciegas 🟡 (tarea)</h3>
 <p>Interpreta la tabla anterior: ¿qué especie separa perfectamente
 k-means? ¿Cuáles confunde? ¿Por qué los números de grupo no coinciden
 con los de las especies? ¿Qué significa el 0,978 de PCA?</p>
-<div class="sol-lock" data-label="Solución" data-iv="OMyGGg63DxiWfS64" data-ct="VuYv0cue2BoiVXOrK2G++eC9+p92WQVVVP72dO2YEmonUEpIesGMzkp5sdfFHd2ttSIxperOwsSqd4/lfPn8mMuLn+YYrkOYBEF220ZJ/M1vsTjRSfNPe2M9vz/D9E9OZldQ8bX3gOi/lJ2zy+yCxkiLScvHu6Jm15TkCKlZk4ePtdK046VkIvH0ox2mrtsvn5rGlXOgVvE8t+dVatPXI4DxFFIqWBmf/3827G4l8JTPY/8XXaj8b1S7j5dARow/ENCr2u6cphcIJyT0R3nFVK65UFzVM27fY6rplb2HbBeafPA01KoFYSIUBNWndyZs78J/VrDsyvyUDjDuixbwXJ65xn9xU8h29dwQwRMcLwsHr8m7HamSvSrAMcyhM0y7Qq/q919gSBM+t8QLiqBRlxEQxkk1db97eMHXHdrjsa5NZS1sP5ZWqX1SWlO5bxM1lh3pfBXBLzWQJ/ZxsiH5PPoKihGsMSRzQO8K+IcrpTf96+y8gbaXKWcIfP6eXzdNJ2ttbir4txAkSdur0cqv7mwCUXlBHyvXhs7g28ew3+xNw9Ustb4U7HG9e4mXBoBstbmr05eIPHf9D5TKWcNotMWT09UtGF3PsWEMNEzmih1z5IV/qD8dafQrntPQf7bdZiwRfQ304N+TJtiuq5BNouhdmAw4T3eaDqnvKpyE39brtXDNI+vwizVPZcJzWffCZmbFJKLZS4UjlfFwuaeur/cBTk3KFuwDCIAokd+Hr6q4+SQdtjufb4jdp3I5tN6zNsGVGZAmEug25UeIEO1EAt2iRf+tprbaht/hXbZigjH/gCXzUhror7VRswEo/zQgqcpf2rKH0H7OBEFf5caNYrmu"></div>
+<div class="sol-lock" data-label="Solución" data-iv="WtaropfqRBV4MCtp" data-ct="rxuyBcirQdWhYusmWANqvwKd0ogoShu5KJ57r034DWwvyD0hthxJy8N/nTpmMXgAgihiB5NhY3czX9Eh/9g/FB7vwxwtYlq9Ze/Gd+d/kOUXi9CUuGIslZ8kiKOYSbi+2sbjpZZgLzBroe3dGtfWO9I9+Epmo5pQRBvqQ1TOjW1VU956PRRy02nvxzpll0nLqV/VIn94TYZMddvVJuMIUDKCNyyCeA/AqgviFAzKFxt5I/hdEG6uwrwzVD37kjI9jYGNqPUqhqk1NITsUpXP9nrxJoetOTF3Ul6PiAoEti4ntLZYURKxmOzoiyu8PUOTFpSpL6uo440OVQwtHwwGG79qTbE2wIRgx/4kYpzKyears/pe7SCMkxNNR/JS9kA+iPY9UhDdDV+1nDNcm//zBbNgJO8zb7MDXAZYwmsM2qs0MrrVoefSLtC6wIz1M68wX1JozZJ3z4muLEHAQLj94vZrvgerhEjkSqPw7kOJ47eid+iX3Jj8zckiHarZJqgySCV2+udGn46MSgpKLlIXpG/ZmPvPZ/ueDnSBkaAfUCYunbt8l4ENxCRglJKDeVeyqVy36B+xGtTgdsFj3+i11mli7SaG8vzQlIbeYTAZuimBqmah8s/7mV/SU6+y/TzAYtDZw4+a2rKzQXblQKOU+bKwFluE1TAytazlf7kgoHdDAVBqny9T9Ma6JPDFueTaZ+P12H5JvdtK1UWBb+4nIGtxt9mAO0DcjDzObxAyUNJSM71WSwWUhEAJNcOZ+7gm9S3FboPW8I2qOes5wSWuglsRunrAPXpPMgEef/jtStbZpfMPSkGIPnHv4MfyVnEGNzKH4SSTZ/AnQzi27JBm4Cxa"></div>
 
 <hr />
 <h2 id="9-redes-neuronales">9. Redes neuronales</h2>
@@ -714,40 +1250,40 @@ temporales); hoy sustituidas en gran parte por
 intenta pillarlo, compitiendo) y modelos <strong>texto a imagen</strong>
 (Stable Diffusion, DALL·E, Midjourney).</li>
 </ul>
-<div class="sourceCode" id="cb12"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perceptrón que aprende la puerta lógica AND</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.array([[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">1</span>]])</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.array([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>])</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>w, b, tasa <span class="op">=</span> np.zeros(<span class="dv">2</span>), <span class="fl">0.0</span>, <span class="fl">0.1</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoca <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">21</span>):</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    errores <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> xi, objetivo <span class="kw">in</span> <span class="bu">zip</span>(X, y):</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        salida <span class="op">=</span> <span class="bu">int</span>(w <span class="op">@</span> xi <span class="op">+</span> b <span class="op">&gt;</span> <span class="dv">0</span>)        <span class="co"># suma ponderada + escalón</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>        error <span class="op">=</span> objetivo <span class="op">-</span> salida</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        w <span class="op">+=</span> tasa <span class="op">*</span> error <span class="op">*</span> xi              <span class="co"># regla del perceptrón</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>        b <span class="op">+=</span> tasa <span class="op">*</span> error</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>        errores <span class="op">+=</span> <span class="bu">abs</span>(error)</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> errores <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Aprendido en la época </span><span class="sc">{</span>epoca<span class="sc">}</span><span class="ss">: w = </span><span class="sc">{</span>w<span class="sc">}</span><span class="ss">, b = </span><span class="sc">{</span>b<span class="sc">:.1f}</span><span class="ss">&quot;</span>)   <span class="co"># época 6</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Perceptrón que aprende la puerta lógica AND</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.array([[<span class="dv">0</span>, <span class="dv">0</span>], [<span class="dv">0</span>, <span class="dv">1</span>], [<span class="dv">1</span>, <span class="dv">0</span>], [<span class="dv">1</span>, <span class="dv">1</span>]])</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.array([<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>w, b, tasa <span class="op">=</span> np.zeros(<span class="dv">2</span>), <span class="fl">0.0</span>, <span class="fl">0.1</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoca <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">21</span>):</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    errores <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> xi, objetivo <span class="kw">in</span> <span class="bu">zip</span>(X, y):</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        salida <span class="op">=</span> <span class="bu">int</span>(w <span class="op">@</span> xi <span class="op">+</span> b <span class="op">&gt;</span> <span class="dv">0</span>)        <span class="co"># suma ponderada + escalón</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        error <span class="op">=</span> objetivo <span class="op">-</span> salida</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        w <span class="op">+=</span> tasa <span class="op">*</span> error <span class="op">*</span> xi              <span class="co"># regla del perceptrón</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>        b <span class="op">+=</span> tasa <span class="op">*</span> error</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        errores <span class="op">+=</span> <span class="bu">abs</span>(error)</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> errores <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Aprendido en la época </span><span class="sc">{</span>epoca<span class="sc">}</span><span class="ss">: w = </span><span class="sc">{</span>w<span class="sc">}</span><span class="ss">, b = </span><span class="sc">{</span>b<span class="sc">:.1f}</span><span class="ss">&quot;</span>)   <span class="co"># época 6</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span></code></pre></div>
 <p>Una MLP con scikit-learn, sobre los dígitos de la UD3:</p>
-<div class="sourceCode" id="cb13"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_digits</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neural_network <span class="im">import</span> MLPClassifier</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_digits(return_X_y<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X <span class="op">/</span> <span class="dv">16</span>, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>red <span class="op">=</span> MLPClassifier(hidden_layer_sizes<span class="op">=</span>(<span class="dv">64</span>, <span class="dv">32</span>), max_iter<span class="op">=</span><span class="dv">500</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(X_tr, y_tr)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(red.score(X_te, y_te), <span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_digits</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neural_network <span class="im">import</span> MLPClassifier</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_digits(return_X_y<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X <span class="op">/</span> <span class="dv">16</span>, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>red <span class="op">=</span> MLPClassifier(hidden_layer_sizes<span class="op">=</span>(<span class="dv">64</span>, <span class="dv">32</span>), max_iter<span class="op">=</span><span class="dv">500</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(X_tr, y_tr)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(red.score(X_te, y_te), <span class="dv">3</span>))</span></code></pre></div>
 <h3 id="ejercicio-91--el-perceptrón-y-la-xor-">Ejercicio 9.1 · El
 perceptrón y la XOR 🔴</h3>
 <p>Cambia <code>y</code> a <code>[0, 1, 1, 0]</code> (puerta XOR) y
 ejecuta el perceptrón. ¿Aprende? ¿Por qué? ¿Cómo se soluciona?</p>
-<div class="sol-lock" data-label="Solución" data-iv="UPGSxixuwFVl4rlk" data-ct="xn5BIrFjvEXkN97arbg3QpeV9guhjB+450wGQC8Gewg/qzL3+k7dg3M9KAD/6gzpu4Z32/c6itoo8uA3dDDIdp77FRXUya9wnXFB/mPrEdusjbtUltTTHg4ayZ1/BKoqO0/DoLOW3ndARkPR8nQtTSF3cpUCP9JrAowB1G9ph3d1pVunbMAXaAqDBMxhXJ0mDO1768Vb5r27i2lw0Kc8EiHuPUMNsgmym8oSCPOtMjq/XASpti6Iri4GQvxXWPhdkV+qfaVt074obJPT0z0nsyds8euFZlo7x4QecZBj2sTe2AdMM61ahP4TchM3gDvXQKMcPq5vq3jgUQzw30qaayj51c9JV7mT4vVWtHon29lFD9xc+FXwK5n1ZKaVNBBRfUCtGWg9IEbRypmopxG0/gdnaWgGmHX5YXEoD7G9lWTztYeF7X7FJzbbomFbBv4PPmMXVOn7H8AXlGI4xwJI9rMSsZOT07ABLW308RRyBOlJK4YgKcQMqQdXDtQ0lBSMosrlX5dhTv7pB1TVEAmUTWiRuc1LnoXR91/4qfPHMGYjLGNkLHdMWWT++UUOnGickoNSeZLMvdVfZ4cEIzSMPM00+KZaPrOP/DmZbs0adKMC7sNzSMjPeVPrgAP1uaJn0JUgog1AdiW96onisrSbdgmpTEFNLfLCEyK0ol6mmHsTFDayc+SLnWEx6BAMTgBnZKxdpzv/DypEqbYqv8zGEmdKqrOGTX0scMHEi6W22vFrC3y3n58b6z8CvZZheMaj6Ks0U06+4CYQPPnYmTmRt8ncyx8JNMAus3sMKK3hpIYNAhhTZSWHP0ZkSsahelHzkqQov6NJeFTvZE0daXGiwqCB0vsWbHRvNgphxOfkAD16COEb3PKs1wOJmLxqxaA0EHTY1270lbQtip9k0WvH1w=="></div>
+<div class="sol-lock" data-label="Solución" data-iv="HcCWfkhdNxTmMe9r" data-ct="09BWkWEQaTLk00IYqWoFEmlLJ4tHw4Tgbvmo8IxMKvhLSMlNYJLPJPyFc0JvPxC+XJs6vBorwNEFh5oj/4JR/zwzWdCxQnxtYNjaLYJM3TUE3L6utX7+HKTNqPbe3Ku0Rdx23jjMrr9zegeVyOQrm+admYJB6C7YACq/WyLma+MkrfzhfWF5HycCPRGJt8m6Vg2XhcM0Fse92bKGGHUrw+1Vi5E/vCcj4PWZPoPCEq6ZWL57CQKfH7cHBE6awRLcX2AKpAa9Mms1KnGnlvDiB8qjGx6eeJN9B+MkWFgQasXMh3LIDUrH4MimGjFo/NzCsgrvcglIs9xMsPob97r1G9dPdl+NbfFvmtOrT8Qp1B1eZNQgE2WXyuc04TaVJGWXl84ptYTg5P4OxyxyluxptFe78oJAVH46cuPq98x7KmTXDMCK0cpY7kP/do9Dv85AiABZHmcsow9ZCP1lScjCe+PDeFThqqMZ3EzCEASFcY5BduYRve60NzXmkS63tyEX0sN0CXoS73Y2oCDbvWrHdG3hp5wT3kE0BKKXy4HFxJSmVSaw1rTdfuOYzqfBSO/ycerL4SttVpL3b0IHohJW6WcMUqual0TFzt+OyX1LJsBAparRgbx003LRgI5ebkGa0w9Knlv0lyaH48dm1kxaqCR+NIokdDlSMojbTs22cfDptK7d5XXqafI4P6RS0kCw0p04LMjoGikLNv2eZ7uoPgUr3yyrUtat5ECHbt/shFsout89rVYVN4UY3zivd3EPDH+MEv7gpzIQckpvDJ0pMuhjwZHY1+5oDT+L5pq8XUSNsysGpqsj1XsuWngIh/nyPiwHfU3d8PaFWA1ho8xBzIrcYsaLxaDIgCKmcgVD9j7ASe00kbweY5O4qUtcKdlZI5n8HGEQY6mga1UNHWrsnw=="></div>
 
 <hr />
 <h2 id="10-sesgos-ética-y-explicabilidad">10. Sesgos, ética y
@@ -764,21 +1300,21 @@ entrenado con contrataciones antiguas que penaliza a las mujeres).</li>
 importa (usar el gasto sanitario como indicador de «necesidad médica»
 infravalora a quien tiene menos acceso a la sanidad).</li>
 </ul>
-<div class="sourceCode" id="cb14"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">1</span>)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>n_a, n_b <span class="op">=</span> <span class="dv">900</span>, <span class="dv">100</span>                               <span class="co"># grupo B infrarrepresentado</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>nota  <span class="op">=</span> rng.normal(<span class="fl">6.5</span>, <span class="fl">1.5</span>, n_a <span class="op">+</span> n_b)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>extra <span class="op">=</span> rng.normal(<span class="dv">5</span>, <span class="dv">2</span>, n_a <span class="op">+</span> n_b)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>es_b  <span class="op">=</span> np.r_[np.zeros(n_a), np.ones(n_b)]</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>apto <span class="op">=</span> (nota <span class="op">+</span> <span class="fl">0.3</span> <span class="op">*</span> extra <span class="op">&gt;</span> np.where(es_b <span class="op">==</span> <span class="dv">1</span>, <span class="fl">8.5</span>, <span class="fl">7.5</span>)).astype(<span class="bu">int</span>)   <span class="co"># al grupo B se le exigía más</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack([nota, extra, es_b])</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> LogisticRegression().fit(X, apto)</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>gemelos <span class="op">=</span> np.array([[<span class="fl">7.0</span>, <span class="fl">4.0</span>, <span class="dv">0</span>], [<span class="fl">7.0</span>, <span class="fl">4.0</span>, <span class="dv">1</span>]])        <span class="co"># mismo expediente, distinto grupo</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(modelo.predict_proba(gemelos)[:, <span class="dv">1</span>].<span class="bu">round</span>(<span class="dv">2</span>))        <span class="co"># [0.99 0.49]</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">1</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>n_a, n_b <span class="op">=</span> <span class="dv">900</span>, <span class="dv">100</span>                               <span class="co"># grupo B infrarrepresentado</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>nota  <span class="op">=</span> rng.normal(<span class="fl">6.5</span>, <span class="fl">1.5</span>, n_a <span class="op">+</span> n_b)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>extra <span class="op">=</span> rng.normal(<span class="dv">5</span>, <span class="dv">2</span>, n_a <span class="op">+</span> n_b)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>es_b  <span class="op">=</span> np.r_[np.zeros(n_a), np.ones(n_b)]</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>apto <span class="op">=</span> (nota <span class="op">+</span> <span class="fl">0.3</span> <span class="op">*</span> extra <span class="op">&gt;</span> np.where(es_b <span class="op">==</span> <span class="dv">1</span>, <span class="fl">8.5</span>, <span class="fl">7.5</span>)).astype(<span class="bu">int</span>)   <span class="co"># al grupo B se le exigía más</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack([nota, extra, es_b])</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>modelo <span class="op">=</span> LogisticRegression().fit(X, apto)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>gemelos <span class="op">=</span> np.array([[<span class="fl">7.0</span>, <span class="fl">4.0</span>, <span class="dv">0</span>], [<span class="fl">7.0</span>, <span class="fl">4.0</span>, <span class="dv">1</span>]])        <span class="co"># mismo expediente, distinto grupo</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(modelo.predict_proba(gemelos)[:, <span class="dv">1</span>].<span class="bu">round</span>(<span class="dv">2</span>))        <span class="co"># [0.99 0.49]</span></span></code></pre></div>
 <p>Dos personas con el <strong>mismo expediente</strong> reciben
 probabilidades muy distintas solo por su grupo: el modelo ha aprendido
 la injusticia de los datos históricos. Quitar la columna del grupo ayuda
@@ -789,13 +1325,70 @@ sustitutas</strong> del grupo.</p>
 grupos</strong>; revisar la procedencia de los datos; explicar las
 decisiones (importancia de características, <strong>SHAP</strong>);
 supervisión humana en decisiones importantes; derecho a reclamar.</p>
+<p><strong>Explicar un modelo.</strong> Hay explicaciones
+<strong>globales</strong> (qué columnas importan en general) y
+<strong>locales</strong> (por qué se decidió esto para esta
+persona):</p>
+<table>
+<thead>
+<tr class="header">
+<th>Método</th>
+<th>Tipo</th>
+<th>Idea</th>
+<th>Sirve para</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Coeficientes</td>
+<td>Global</td>
+<td>Signo y tamaño de cada coeficiente (con datos escalados)</td>
+<td>Regresión lineal y logística</td>
+</tr>
+<tr class="even">
+<td>Importancia de los árboles</td>
+<td>Global</td>
+<td>Cuánto usa el árbol cada columna para dividir</td>
+<td>Árboles, random forest, boosting</td>
+</tr>
+<tr class="odd">
+<td><strong>Importancia por permutación</strong></td>
+<td>Global</td>
+<td>Se <strong>barajan</strong> los valores de una columna: si el modelo
+empeora mucho, esa columna importaba</td>
+<td>Cualquier modelo</td>
+</tr>
+<tr class="even">
+<td><strong>SHAP</strong></td>
+<td>Local y global</td>
+<td>Reparte la predicción de <strong>cada caso</strong> entre sus
+columnas: «denegado sobre todo por ingresos bajos (−0,4) y deuda alta
+(−0,3)»</td>
+<td>Cualquier modelo (librería <code>shap</code>)</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.inspection <span class="im">import</span> permutation_importance</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> permutation_importance(modelo_final, X_te, y_te, n_repeats<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>, scoring<span class="op">=</span><span class="st">&quot;recall&quot;</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.Series(r.importances_mean, index<span class="op">=</span>X_te.columns).sort_values(ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">3</span>).<span class="bu">round</span>(<span class="dv">3</span>))</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># worst texture 0.067 · worst concavity 0.038 · worst symmetry 0.024</span></span></code></pre></div>
+<p>(<code>modelo_final</code>, <code>X_te</code> e <code>y_te</code> son
+los de la plantilla del proyecto final, más abajo.) La importancia por
+permutación se mide en los datos de <strong>prueba</strong>, así que
+dice qué columnas ayudan a generalizar, no cuáles memorizó el modelo.
+Cuidado con las columnas muy correlacionadas: si dos miden casi lo
+mismo, al barajar una el modelo usa la otra y las dos parecen poco
+importantes.</p>
 <h3 id="ejercicio-101--clasificador-sesgado--ca58-tarea">Ejercicio 10.1
 · Clasificador sesgado 🔴 (CA5.8, tarea)</h3>
 <p>Con el dataset de cáncer de mama, quita el 80 % de los casos malignos
 del entrenamiento. Entrena, evalúa con un conjunto de prueba
 <strong>completo</strong> y compara la matriz de confusión con la del
 modelo original. Explica el coste de cada tipo de error.</p>
-<div class="sol-lock" data-label="Solución" data-iv="lP+pzLH9Yl7OYg5c" data-ct="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"></div>
+<div class="sol-lock" data-label="Solución" data-iv="m/Ds4KGfghzyWXiA" data-ct="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"></div>
 
 <h3 id="ejercicio-102--coded-bias--cap-18">Ejercicio 10.2 · <em>Coded
 Bias</em> 🟢 (cap. 18)</h3>
@@ -803,9 +1396,169 @@ Bias</em> 🟢 (cap. 18)</h3>
 codificado</em>), responde: ¿qué tipo de sesgo descubre Joy Buolamwini?,
 ¿por qué se produce?, ¿quién debería responder de los errores de un
 algoritmo?</p>
-<div class="sol-lock" data-label="Respuesta orientativa" data-iv="CUJU7kZrtj9dq9a5" data-ct="jfjZXO+iSPzGGbSEJ2QztvR3Do10QrhBwBpZUdRMHtL3AJzMjE6rnmkb3Vx+6isq3DLVyC2kKVAM5R+6SSv6w+XLCC8of2YC9SH21u0dZhjXLwOhaW7we2IJqnOUAa9GIhlkCQNvP3OqK38vs9yyYU1Gcp+sJHVW6dV4PgijynxGixaM2XwHVmy10+JdqvArfYxlR4WEi0ljfO3bdPvvnbdPxsIYt5G4R6FIhI0YDck6DFXWwbrryrub2lv1MYGRxyO0f7xF3/24nMm8f0sl/dIaun2zw6yKXLyCE65B3JK8KpsnzyEjY1XssYF7gnqIvU08GtjIHOLVOuUmcvSQ4oPYt+ExpUS58zN8B9CsLuvqtPUFW7W0xBJmdn2UgNomScILH2ubkbEOf/NlOY2J6Uvbkr3MHkaTt+0yImTs8gOJblDFpqzvCZo8qkJ3wcYdrXWSbnlaoFhmjnsmp++3xeeX38hg4GhjXQ2jcHlCvy6+kMUAc6Jfn5NT2Er/yXB6inTgQ9dRXf2OGvwkrGPDnhQjaHUan68HfMFCQEovw8ZzFhf5qmgXuHvQJpsHKaxFsUMJAj1xSvJTnHkR3CgIxpoXMGE6EvMJd4JZ0rRdwzOAoYhig+TardkMLbtH/PjkuFA9Vz2wJV0xDouGY37QTLau1W6XxrCS2HVRbYIg+HU4UNFVr6VEjXPELyWW2G6+NlVo2+JcXIv9ap9wMOxm6VDB5cAfXM+l5k3Hy4GtaIYUfPepyH5zPz8yLqI2zIPNzVPyE8ALwgGGhfFqZeesyZec8/CeDbec1dl/NkBDzQ=="></div>
+<div class="sol-lock" data-label="Respuesta orientativa" data-iv="rsie3xM05pEn5FXS" data-ct="27lnliddXCguk0hUfZE9qOas3junUWrkrJdJ8qCiVQKf6fAY2xhAgCxbrw4ki7E6Dnums5Rx9HIS3zw6V8ljFJaTZQYu+qESkif28B1U1adTPqlf8Fn/B60q89hWoAoK+O6M+l3aSIZnghxkjQ/Tf2GQHwNNEVyQWNnkfjh4UnlYu6aa/fzEaSssAkVWT4gf3q4b0vXX6vOJ6chJfHuglxH2SCJO8Q37vnW4lBpN9WSf0mMErI8Hs4aRhMEsFw+bvzqTzpFRdZ3Xg8vkssCS4M6rOeKKE6KikUfOGT5ZN3MpuMGRFaiENWrQ7p4xUuDXWlVsSZ128q/CdhhrkG5xdkOozvDa9k/qPLq0Y8ESjGgLnFHjJVppYBe/FrE/ZVgU9gfPTEuqDq/w5whdihp1voVbQFMM1FHwlLf7SGrJrdsQYUaC/P0s6ME6USloT6s6cffXIhdLTgaiL2OsWpb0MxD94QHZR65SGxrEdjcwbcjy4fUoe44NivYLo7Pfx+P2JEZFgyQHgTiXWRURHy/IVcaXLOkCnRd6Mm6NGs+8iJn4GxfwUIMyor7UlF5jb32Cg7r8ETjT0goxeIderOUVOeyktgXwYP6CDPE6Jxq5gACHHY/6M2fht+nK3gin1vp9yPfdnoeMw7YG9xz7q6pJeYlNP/id2OFSOW1mFHoCi/GPIjs3BzoXma1W1js1f2dRX3hkqCb/htaHq+R9HWre6SDlBj5vGGWrdk/CtEpnDIZV0YCkt8a0IcutdztTlulxvmXed+Ipu4Kz6YWQWoePgXqCcXHQloFN/i6np422MA=="></div>
 
 <hr />
+<h3 id="plantilla-de-un-proyecto-de-principio-a-fin">Plantilla de un
+proyecto de principio a fin</h3>
+<p>El esqueleto que debería tener cualquier proyecto, con todo lo de la
+unidad. Ejemplo con el cáncer de mama, eligiendo entre dos modelos y
+priorizando la exhaustividad:</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> joblib</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_breast_cancer</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, GridSearchCV</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Datos (1 = maligno, la clase que hay que detectar)</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> load_breast_cancer(return_X_y<span class="op">=</span><span class="va">True</span>, as_frame<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> y</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Separar ANTES de nada; la prueba no se toca hasta el final</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>X_tr, X_te, y_tr, y_te <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, stratify<span class="op">=</span>y, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Pipeline: la preparación va dentro (sin fuga)</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>pipe <span class="op">=</span> Pipeline([(<span class="st">&quot;escala&quot;</span>, StandardScaler()), (<span class="st">&quot;modelo&quot;</span>, LogisticRegression(max_iter<span class="op">=</span><span class="dv">5000</span>))])</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Elegir modelo e hiperparámetros con validación cruzada, solo en entrenamiento</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>rejilla <span class="op">=</span> [</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    {<span class="st">&quot;modelo&quot;</span>: [LogisticRegression(max_iter<span class="op">=</span><span class="dv">5000</span>)], <span class="st">&quot;modelo__C&quot;</span>: [<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>]},</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>    {<span class="st">&quot;escala&quot;</span>: [<span class="st">&quot;passthrough&quot;</span>],                      <span class="co"># los árboles no necesitan escalar</span></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>     <span class="st">&quot;modelo&quot;</span>: [RandomForestClassifier(random_state<span class="op">=</span><span class="dv">42</span>)], <span class="st">&quot;modelo__max_depth&quot;</span>: [<span class="va">None</span>, <span class="dv">5</span>]},</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>busqueda <span class="op">=</span> GridSearchCV(pipe, rejilla, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">&quot;recall&quot;</span>).fit(X_tr, y_tr)</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>modelo_final <span class="op">=</span> busqueda.best_estimator_</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(busqueda.best_params_[<span class="st">&quot;modelo&quot;</span>].__class__.<span class="va">__name__</span>, busqueda.best_params_.get(<span class="st">&quot;modelo__C&quot;</span>),</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>      <span class="bu">round</span>(busqueda.best_score_, <span class="dv">3</span>))                 <span class="co"># LogisticRegression 1 0.947</span></span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Evaluación final: la prueba se usa UNA vez</span></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_te, modelo_final.predict(X_te), target_names<span class="op">=</span>[<span class="st">&quot;benigno&quot;</span>, <span class="st">&quot;maligno&quot;</span>]))</span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a><span class="co">#               precision    recall  f1-score   support</span></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a><span class="co">#      benigno       0.96      0.99      0.97        72</span></span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a><span class="co">#      maligno       0.97      0.93      0.95        42</span></span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Guardar el pipeline completo (preparación + modelo) y reutilizarlo</span></span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>joblib.dump(modelo_final, <span class="st">&quot;modelo_mama.joblib&quot;</span>)</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>cargado <span class="op">=</span> joblib.load(<span class="st">&quot;modelo_mama.joblib&quot;</span>)</span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cargado.predict(X_te.iloc[[<span class="dv">0</span>]]))                <span class="co"># [0]: igual que antes de guardar</span></span></code></pre></div>
+<p>Se guarda el <strong>pipeline entero</strong>, no solo el modelo: así
+quien lo use en una aplicación (Streamlit o FastAPI, teoría 13.7) no
+tiene que acordarse de escalar los datos igual. Si los datos cambian con
+el tiempo (otro hospital, otro curso), el modelo empeora en silencio:
+hay que <strong>vigilarlo</strong> y reentrenarlo.</p>
+<p><strong>¿Qué algoritmo pruebo primero?</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Algoritmo</th>
+<th>Tipo</th>
+<th>¿Escalar?</th>
+<th>Relaciones no lineales</th>
+<th>Interpretable</th>
+<th>Cuándo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Regresión lineal / logística</td>
+<td>Regresión / clasificación</td>
+<td>Sí</td>
+<td>No</td>
+<td>Mucho</td>
+<td><strong>Siempre como modelo base</strong></td>
+</tr>
+<tr class="even">
+<td>Ridge / Lasso</td>
+<td>Regresión</td>
+<td>Sí</td>
+<td>No</td>
+<td>Bastante</td>
+<td>Muchas columnas, riesgo de sobreajuste</td>
+</tr>
+<tr class="odd">
+<td>k vecinos</td>
+<td>Las dos</td>
+<td>Sí</td>
+<td>Sí</td>
+<td>Medio</td>
+<td>Pocos datos y pocas columnas</td>
+</tr>
+<tr class="even">
+<td>Naive Bayes</td>
+<td>Clasificación</td>
+<td>No</td>
+<td>Limitadas</td>
+<td>Medio</td>
+<td>Texto (UD4), base muy rápida</td>
+</tr>
+<tr class="odd">
+<td>SVM</td>
+<td>Las dos</td>
+<td>Sí</td>
+<td>Sí (con núcleo)</td>
+<td>Poco</td>
+<td>Datos pequeños o medianos con muchas columnas</td>
+</tr>
+<tr class="even">
+<td>Árbol de decisión</td>
+<td>Las dos</td>
+<td>No</td>
+<td>Sí</td>
+<td><strong>Mucho</strong></td>
+<td>Cuando hay que explicar las reglas</td>
+</tr>
+<tr class="odd">
+<td>Random forest</td>
+<td>Las dos</td>
+<td>No</td>
+<td>Sí</td>
+<td>Medio</td>
+<td>Buen punto de partida con datos en tabla</td>
+</tr>
+<tr class="even">
+<td>Gradient Boosting, XGBoost, LightGBM</td>
+<td>Las dos</td>
+<td>No</td>
+<td>Sí</td>
+<td>Poco</td>
+<td>Suele dar el mejor resultado en tablas, ajustándolo</td>
+</tr>
+<tr class="odd">
+<td>Redes neuronales</td>
+<td>Las dos</td>
+<td>Sí</td>
+<td>Sí</td>
+<td>Poco</td>
+<td>Imágenes, texto, sonido (UD3, UD4) o muchísimos datos</td>
+</tr>
+</tbody>
+</table>
+<p>Estrategia: (1) modelo base sencillo; (2) random forest; (3)
+boosting; (4) ajustar el mejor; (5) explicarlo. Si el complejo apenas
+mejora al sencillo, se queda el sencillo.</p>
+<p><strong>Diez errores que arruinan un proyecto</strong> (revísalos
+antes de fiarte de un resultado):</p>
+<ol type="1">
+<li>Escalar, rellenar huecos o elegir columnas <strong>antes</strong> de
+separar entrenamiento y prueba.</li>
+<li>Usar la exactitud con clases desequilibradas.</li>
+<li>Ajustar hiperparámetros mirando la prueba.</li>
+<li>Saltarse el EDA y no revisar la calidad de los datos.</li>
+<li>Numerar categorías sin orden (concellos 1, 2, 3) en un modelo
+lineal.</li>
+<li>No fijar <code>random_state</code>, de modo que cada ejecución da un
+resultado distinto.</li>
+<li>Fiarse de una sola división en vez de la validación cruzada.</li>
+<li>Empezar por el modelo más complejo sin un modelo base para
+comparar.</li>
+<li>No preguntarse si el modelo <strong>sirve</strong> para el problema
+real (¿qué error es aceptable?, ¿a quién perjudica?).</li>
+<li>No volver a entrenar cuando los datos cambian.</li>
+</ol>
 <h2 id="proyecto-final-ca57">Proyecto final (CA5.7)</h2>
 <p>Un problema real de clasificación o regresión con un dataset público
 (o la encuesta anonimizada de la clase), siguiendo todo el pipeline:</p>
@@ -867,8 +1620,14 @@ exhaustividad.</li>
 árbol?</li>
 <li>¿Por qué un perceptrón no puede aprender la XOR?</li>
 <li>Cita dos tipos de sesgo y una medida para reducir cada uno.</li>
+<li>¿Qué es la fuga de datos? Pon dos ejemplos y explica cómo se
+evita.</li>
+<li>Diferencia entre Ridge y Lasso. ¿Cuál usarías para quedarte con
+menos columnas?</li>
+<li>¿Qué pasa con la exhaustividad y la precisión al bajar el umbral de
+un clasificador?</li>
 </ol>
-<div class="sol-lock" data-label="Respuestas modelo" data-iv="6GOiUj11tGbbxJ2Y" data-ct="T0ugt7qCh2QCx/Cyqno3+pIfqgKbfUm2AyRD6foO9lYJ76XmvKeYYLajtYocX5Id7XGipOx13VPAxqNO2kYm3JQ43Y9yLZUnGFFvhEcI7nCbywZfX+BVNYDRJx3r8VEZuGOPl1zFCMFtm3MPXEVPrYrTudBph9eyIVn75mxUqzpsKgwtbcDJx8TCWEktEgjSQ+b9fzi7wa1KyL71fkBFOksOWDq1SKXG8vuK9Z3oBaQ7touCiUYpuiZ+ZraR3bn/1dS1wz6EFp+8SWTBAIw8EO5IzORRq5VwR1UJV3a8L77vMG7mIUg8J5goazPx7jIvP1D/+28HEkUDZ94d0b36H8gsr+3VYCiekqQ6bYltcPe6WL+kcDaAoJxVo9w87hr9B3LL03uRmskZiu88BMkmEz9JBp0zBQRwMY24SPe2HM+BcgA6ku6bR/wiHqq7WSqKaJlMuzl/CLCTBFTx+mZ74eSET5z3XVt5k+3k4iOIYZc8EtYNuvHDO5vAFRsXmDyRec+/afNxRxQn8oMIbRDnEIn/OhEGAJXIz+3Fo7lhdyXXZLmvfdUAvDpkkgIcZEnnJMlIwx3x1yN9D6gSSXcBQKIE0p5LgOdePI6ZAU7hyX+f6Slro2DpTrNm6IToff6+gIr5LSjEhIUMnw5N48+uDC72LPNBNRATB3nbGMYvFDlXqbmFfzqgClpUI+Es1yN/oMjY95628jFgQpRNO2Q0ryiyQeKL2AEwtVL2htCgjSFF1sBUBoDb3MmemYAgxqPTlLfyUrHs5XB3HK3SQchBFBH/WTucuyA8SSywdCMzcJbErZUgf7mMEVpowAKCsXW7YMXpVr+yoPj7+Ajt/ZZmCx88ug2p9TYZewEGxMkq/n4pfDS+M669guxLFJ+MgQVKp22BhBz7PAkNQxnl+woCJRyNHRAkJEXhGmcuZ3yYwX5CITBB6gqYHk1d+hLXMPi5YT6sMI4ibOGc1SlylKXdw8mrV6azkIFYOesvG49gSBgHZbsVeJc20KeRCY8NncvQkYdPTFcjhx4VeYWelO6XlZ1eIDVnjFeC3eX0WUWecwBtI8q1x3Ce+Dej6v2eDKC0v3p/oIKKflwTxN2kxMIzI5DGNR92GIJgoel1eGNmNCL04h/xya9DslcUyEzoEX0tIVB5W06LkeDtjRm8t8LY0RUEouwa+ITLqsXCbzLBK8mKZJ+Jw7xZMg93OMXy4EwFHjUThpLxAbmbDSQXKLI+uwChO/vdediIWeguBlzOM31O4/8o0E55199FIuHovJm0wMtlL4bNGXBidzbxh116SWMi7kmtW2/oK4zucDMQzRpxnlyQ+Ay8kfDBHOP26viAe8mVxeoouOuitZ/KTTkfWd4le6VXk/yPKf2ddeJ4zmg1pUYEtgY7VGfdY482vBsC0MYFuPonTWDWzWVwUWtHLgj3zzZ7Do4YnWcIWKgpmtqWQ7ZpOtZMEcUE0x7gz1Ns0ZxBbrFQfR1Q9eYBP85oNTVcLjD5r4JPn5/0P8sM10ukPtpHlzVSr8xLB7LmXv9Sr2eU4ifz1US6C/z537Cn5S2rVLGwNbgQdjcrPaEfeEtCfxqo/ES7RK1zHoe0Q16gNReQ92HdtviKErXS5haZN/QmyOcZlQIL3kV2qkJEFdB8UA0pcXpKurK/EPTAN5s0k7E1QEijsk7CnTaQpXAVW8jfRB/x6Jco+SfHZfbO8JMyrtTMqHZmYGu/PFROcunoQ5IFdPI="></div>
+<div class="sol-lock" data-label="Respuestas modelo" data-iv="LNL7+U5o09dY3mfw" data-ct="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"></div>
 
 <h2 id="para-saber-más">Para saber más</h2>
 <ul>

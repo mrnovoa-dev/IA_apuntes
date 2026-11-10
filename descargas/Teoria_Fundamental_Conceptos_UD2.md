@@ -1,5 +1,5 @@
 # Teoría Fundamental y Referencias Externas
-## Conceptos para Resolver Ejercicios Python UD2 (E1-E46)
+## Conceptos para Resolver Ejercicios Python UD2 (E1-E52)
 
 ---
 
@@ -201,7 +201,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E46 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E52 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -3878,6 +3878,138 @@ print(leer_edad("hola"))                     # Escribe un número entero · Lect
 
 Las librerías de IA usan estos pilares constantemente. Todos los modelos de scikit-learn heredan de una clase base y comparten `fit()` y `predict()`: es **polimorfismo**. Por eso se puede cambiar un modelo por otro sin cambiar el resto del código (14.4). El agente aspirador de 0.9 es otro ejemplo de clase.
 
+#### POO con código: de una clase a un mini scikit-learn
+
+Una **clase** es un molde; un **objeto** (o instancia) es una pieza hecha con ese molde. Este ejemplo recorre todo lo esencial con una ficha de alumnado:
+
+```python
+class Alumno:
+    centro = "IES Chan do Monte"             # variable de CLASE: compartida por todos
+
+    def __init__(self, nombre, nota):         # constructor: se ejecuta al crear el objeto
+        self.nombre = nombre                  # variables de INSTANCIA: propias de cada objeto
+        self.nota = nota                      # pasa por el setter de abajo (validación)
+
+    @property
+    def nota(self):                           # se lee como un atributo: a.nota
+        return self._nota
+
+    @nota.setter
+    def nota(self, valor):                    # se ejecuta al hacer a.nota = ...
+        if not 0 <= valor <= 10:
+            raise ValueError(f"Nota fuera de rango: {valor}")
+        self._nota = valor
+
+    def aprobado(self):                       # método de instancia: usa self
+        return self.nota >= 5
+
+    @classmethod
+    def desde_texto(cls, linea):              # método de clase: otra forma de construir
+        nombre, nota = linea.split(";")
+        return cls(nombre, float(nota))
+
+    @staticmethod
+    def redondear(nota):                      # método estático: utilidad, no usa self ni cls
+        return round(nota * 2) / 2
+
+    def __str__(self):                        # lo que muestra print()
+        return f"{self.nombre} ({self.nota})"
+
+    def __repr__(self):                       # lo que se ve en la consola o dentro de listas
+        return f"Alumno({self.nombre!r}, {self.nota})"
+
+    def __lt__(self, otro):                   # «menor que»: permite sorted()
+        return self.nota < otro.nota
+
+uxia = Alumno("Uxía", 8.5)
+brais = Alumno.desde_texto("Brais;6.25")
+print(uxia, uxia.aprobado(), Alumno.centro)    # Uxía (8.5) True IES Chan do Monte
+print(sorted([uxia, brais]))                    # [Alumno('Brais', 6.25), Alumno('Uxía', 8.5)]
+print(Alumno.redondear(6.3))                    # 6.5
+try:
+    brais.nota = 12
+except ValueError as e:
+    print(e)                                    # Nota fuera de rango: 12
+```
+
+| Tipo de método | Primer parámetro | Para qué | Se llama con |
+|----------------|------------------|----------|--------------|
+| De instancia | `self` (el objeto) | Trabajar con los datos de **ese** objeto | `uxia.aprobado()` |
+| De clase (`@classmethod`) | `cls` (la clase) | Constructores alternativos, datos comunes | `Alumno.desde_texto(...)` |
+| Estático (`@staticmethod`) | Ninguno | Utilidades relacionadas con la clase | `Alumno.redondear(6.3)` |
+
+**Encapsulación en Python: convenios, no candados.** Python no tiene `private` como Java. Hay dos convenios:
+
+| Nombre | Significado | ¿Se puede acceder desde fuera? |
+|--------|-------------|-------------------------------|
+| `nota` | Público | Sí |
+| `_nota` | «Interno: no lo toques» (convenio entre programadores) | Sí, Python no lo impide |
+| `__nota` | Python le cambia el nombre (*name mangling*) a `_Alumno__nota` para evitar choques con clases hijas | Sí, como `obj._Alumno__nota`; solo es más incómodo |
+
+Por eso, en Python la forma idiomática de **proteger** un dato no es esconderlo, sino **validarlo** con `@property`, como la nota de arriba. Muchos apuntes dicen que `_x` «solo es accesible desde la clase y sus hijas» y `__x` «solo desde la clase»: eso es así en Java o C++, pero en Python son convenios.
+
+**Métodos especiales (*dunder*)**: los que empiezan y acaban por doble guion bajo hacen que tus objetos funcionen con la sintaxis de Python: `__len__` con `len()`, `__eq__` con `==`, `__add__` con `+`, `__getitem__` con `obj[i]`, `__iter__` con `for`. Por eso un `DataFrame` responde a `len(df)` y `df["col"]`.
+
+**Herencia, polimorfismo y abstracción**: así están hechos los modelos de scikit-learn. Una clase base abstracta obliga a que todos los modelos tengan `fit` y `predict`, y el código que los usa no necesita saber cuál es:
+
+```python
+from abc import ABC, abstractmethod
+
+class Modelo(ABC):                                  # clase abstracta: no se puede instanciar
+    @abstractmethod
+    def fit(self, X, y): ...
+    @abstractmethod
+    def predict(self, X): ...
+
+    def score(self, X, y):                          # método común: lo heredan todas
+        aciertos = sum(p == r for p, r in zip(self.predict(X), y))
+        return aciertos / len(y)
+
+class Mayoria(Modelo):                              # predice siempre la clase más frecuente
+    def fit(self, X, y):
+        self.clase_ = max(set(y), key=y.count)
+        return self
+    def predict(self, X):
+        return [self.clase_ for _ in X]
+
+class Umbral(Modelo):                               # aprueba si las horas de estudio superan un umbral
+    def __init__(self, umbral=4):
+        self.umbral = umbral
+    def fit(self, X, y):
+        return self                                 # no aprende nada: regla fija
+    def predict(self, X):
+        return ["apto" if horas >= self.umbral else "no apto" for horas in X]
+
+class UmbralAprendido(Umbral):                      # herencia: reutiliza predict de Umbral
+    def fit(self, X, y):                            # sobrescribe fit (overriding)
+        mejores = max(sorted(set(X)), key=lambda u: Umbral(u).score(X, y))
+        self.umbral = mejores
+        return super().fit(X, y)                    # llama al método de la clase madre
+
+horas = [1, 2, 3, 4, 5, 6, 7, 8]
+notas = ["no apto", "no apto", "no apto", "apto", "no apto", "apto", "apto", "apto"]
+for m in [Mayoria(), Umbral(5), UmbralAprendido()]:              # polimorfismo
+    m.fit(horas, notas)
+    print(f"{type(m).__name__:<16} {m.score(horas, notas):.2f}")
+# Mayoria          0.50
+# Umbral           0.75
+# UmbralAprendido  0.88
+try:
+    Modelo()
+except TypeError as e:
+    print("No se puede crear un Modelo abstracto")
+```
+
+| Concepto | En el ejemplo |
+|----------|---------------|
+| **Herencia** | `UmbralAprendido(Umbral)` reutiliza `predict` y `__init__` |
+| **Sobrescritura** (*overriding*) | `UmbralAprendido.fit` sustituye al `fit` de `Umbral`; `super()` llama al original |
+| **Polimorfismo** | El mismo bucle llama a `fit` y `score` sin saber qué modelo es |
+| **Abstracción** | `Modelo(ABC)` define el contrato; no se puede instanciar |
+| **Sobrecarga** (*overloading*) | Python **no** tiene varias funciones con el mismo nombre y distintos parámetros; se simula con valores por defecto (`umbral=4`) o `*args` |
+
+En Python, una **interfaz** es una clase abstracta en la que todos los métodos son abstractos. A diferencia de Java, un método abstracto **puede** tener código, que las hijas aprovechan con `super()`. Para clases que solo guardan datos, `@dataclass` (módulo `dataclasses`) escribe solo `__init__`, `__repr__` y `__eq__`.
+
 #### Conceptos avanzados
 
 ```python
@@ -3923,6 +4055,122 @@ print(any(x < 5 for x in notas), all(x >= 5 for x in notas))   # False True
 
 **Rendimiento**: las comprensiones suelen ser más rápidas que los bucles con `append`. Se debe preferir las funciones integradas y usar `set` para comprobar si un elemento está en una colección (O(1), 14.9). Para medir tiempos, `timeit`.
 
+#### Iteradores y generadores por dentro
+
+Un **iterable** es algo que se puede recorrer (lista, texto, archivo); un **iterador** es el objeto que lleva la cuenta de por dónde va. `for` hace esto por debajo:
+
+```python
+it = iter(["Vigo", "Lugo"])     # pide un iterador al iterable
+print(next(it))                  # Vigo
+print(next(it))                  # Lugo
+# next(it) otra vez → StopIteration: el for la captura y termina
+```
+
+Un **generador** es la forma fácil de crear un iterador: una función con `yield`, que **se pausa** en cada valor y continúa donde lo dejó. No guarda todo en memoria, por eso es la forma de recorrer datos enormes. El caso típico en IA es repartir los datos en **lotes** (*batches*) para entrenar:
+
+```python
+import sys
+
+def lotes(datos, tamaño):
+    for i in range(0, len(datos), tamaño):
+        yield datos[i:i + tamaño]
+
+for lote in lotes(list(range(10)), 4):
+    print(lote)                  # [0, 1, 2, 3] · [4, 5, 6, 7] · [8, 9]
+
+lista = [x * x for x in range(1_000_000)]
+gen = (x * x for x in range(1_000_000))       # expresión generadora: paréntesis
+print(sys.getsizeof(lista) > 8_000_000, sys.getsizeof(gen) < 500)   # True True
+print(sum(gen) == sum(lista))                  # True, pero gen ya se ha gastado
+```
+
+La lista ocupa unos 8 MB; el generador, unos 200 bytes, porque calcula cada valor cuando se le pide. A cambio, **solo se puede recorrer una vez**.
+
+#### Concurrencia: hilos, procesos y `asyncio`
+
+Un programa normal hace las cosas **de una en una**. Hay tres formas de hacer varias a la vez, y elegir bien depende de **qué hace esperar** al programa:
+
+| Tipo de tarea | Qué la frena | Ejemplo | Herramienta |
+|---------------|--------------|---------|-------------|
+| **De entrada/salida** (*I/O-bound*) | Esperar: red, disco, una API | Descargar 50 imágenes, llamar a una API de un LLM | Hilos (`threading`) o `asyncio` |
+| **De cálculo** (*CPU-bound*) | El procesador | Procesar miles de imágenes, buscar primos | Procesos (`multiprocessing`) |
+
+**El GIL.** En la versión habitual de Python, un candado interno (*Global Interpreter Lock*) deja que **solo un hilo ejecute código Python a la vez**. Mientras un hilo espera la red, otro avanza, así que los hilos aceleran las esperas, **pero no los cálculos**. Los procesos tienen cada uno su intérprete y su memoria, así que sí usan varios núcleos de verdad, a cambio de tardar más en arrancar y de no compartir variables. Desde Python 3.13 existe una versión opcional sin GIL, pero no es todavía la que se instala por defecto.
+
+```python
+import time, asyncio
+from concurrent.futures import ThreadPoolExecutor
+
+def descargar(n):                     # simula esperar a la red medio segundo
+    time.sleep(0.5)
+    return f"imagen_{n}.jpg"
+
+t = time.perf_counter()
+seguidas = [descargar(n) for n in range(8)]
+print(f"De una en una: {time.perf_counter() - t:.1f} s")      # De una en una: 4.0 s
+
+t = time.perf_counter()
+with ThreadPoolExecutor(max_workers=8) as ex:                 # 8 hilos
+    con_hilos = list(ex.map(descargar, range(8)))
+print(f"Con hilos:     {time.perf_counter() - t:.1f} s")      # Con hilos:     0.5 s
+
+async def descargar_async(n):         # corrutina: se puede pausar mientras espera
+    await asyncio.sleep(0.5)
+    return f"imagen_{n}.jpg"
+
+async def principal():
+    return await asyncio.gather(*(descargar_async(n) for n in range(8)))
+
+t = time.perf_counter()
+con_async = asyncio.run(principal())  # en Jupyter/Colab: await principal()
+print(f"Con asyncio:   {time.perf_counter() - t:.1f} s")      # Con asyncio:   0.5 s
+```
+
+Para el cálculo, procesos. En un archivo `.py` (en Jupyter y Colab `multiprocessing` da problemas con funciones definidas en el cuaderno):
+
+```python
+from multiprocessing import Pool
+
+def es_primo(n):
+    return n > 1 and all(n % d for d in range(2, int(n ** 0.5) + 1))
+
+if __name__ == "__main__":            # obligatorio: evita que cada proceso vuelva a lanzar procesos
+    numeros = range(5_000_000, 5_200_000)
+    with Pool() as pool:              # tantos procesos como núcleos
+        print(sum(pool.map(es_primo, numeros, chunksize=10_000)))   # 12894 primos
+```
+
+En un ordenador de dos núcleos, este cálculo pasa de 1,5 s (un solo proceso) a 0,8 s: casi la mitad, nunca menos, porque el reparto también cuesta. Con cuatro hilos no mejora: en la misma prueba tardó **más** (3,2 s), por el GIL y el coste de cambiar de un hilo a otro.
+
+**Condiciones de carrera.** Si varios hilos modifican la misma variable, pueden pisarse: los dos leen 10, los dos suman 1 y los dos guardan 11. Se evita con un candado (`threading.Lock`) que deja pasar a un hilo cada vez:
+
+```python
+import threading
+saldo, candado = 0, threading.Lock()
+
+def ingresar(n):
+    global saldo
+    for _ in range(n):
+        with candado:                 # sin estas dos líneas, el resultado sale mucho menor
+            actual = saldo
+            time.sleep(0)             # cede el turno: hace visible el problema
+            saldo = actual + 1
+
+hilos = [threading.Thread(target=ingresar, args=(1000,)) for _ in range(4)]
+for h in hilos: h.start()
+for h in hilos: h.join()             # esperar a que terminen
+print(saldo)                          # 4000 (sin candado salía unos 1000)
+```
+
+| | Hilos | Procesos | `asyncio` |
+|-|-------|----------|-----------|
+| Memoria | Compartida (cuidado con las carreras) | Separada | Compartida, un solo hilo |
+| Coste de arrancar | Bajo | Alto | Muy bajo |
+| Bueno para | Esperas (red, disco) | Cálculo | Muchísimas esperas a la vez (servidores, APIs) |
+| En IA | Descargar datos, llamar a varias APIs | Preprocesar imágenes en paralelo | Servir un modelo con FastAPI (13.7), pedir respuestas a un LLM en paralelo |
+
+`asyncio` solo acelera lo que está escrito para ser asíncrono (`await` sobre algo que espera). Una función normal que bloquea, como `time.sleep` o leer un archivo con `open`, **bloquea todo** aunque esté dentro de `async def`. Las expresiones regulares (`re`) están en la UD4 (sección 10) y los archivos JSON y CSV, en 5.9 y 14.10.
+
 ### 14.15 Materiales complementarios utilizados
 
 | Material | Tema | Secciones |
@@ -3944,6 +4192,7 @@ print(any(x < 5 for x in notas), all(x >= 5 for x in notas))   # False True
 | ML Model Deployment Handbook: From Notebook to Production | Guardar, servir, probar y desplegar modelos; MLOps | 13.7 |
 | Python Notes: the 7-day plan (@thedataguy16), 14 páginas procesadas con OCR | Listas de diccionarios como tablas, CSV con `csv`, datos sucios con `try/except`, decimales y `Decimal`, trampas de copias y valores por defecto | 5.9 y ejercicios E38–E41 |
 | 15 Gen AI Concepts, Part 1 (@darpan.decoded), apuntes visuales procesados con OCR | Ventana de contexto, temperatura y muestreo, RAG y bases vectoriales, ajuste fino, herramientas, agentes, multimodalidad | 14.8 y ejercicios E42–E46 |
+| Python Part 3 (POO) y Part 4 (Python avanzado), Coded Soul (@codedsoul_05), procesados con OCR y MarkItDown | Clases, `@property`, métodos de clase y estáticos, métodos especiales, herencia, polimorfismo, clases abstractas; iteradores, generadores, hilos, procesos y `asyncio` | 14.14 y ejercicios E47–E52 |
 | Python Part 1 y Part 2: Core Python (@codedsoul_05), apuntes manuscritos procesados con OCR | Conversión de tipos, formato, patrones, problemas numéricos, cadenas, conjuntos, comprensiones, `lambda`, `map`/`filter`/`reduce`, recursión, ámbito, módulos | 1.5, 2.4–2.6, 3.3–3.4, 4.6–4.10, 5.4–5.8 y ejercicios E28–E37 |
 
 ---

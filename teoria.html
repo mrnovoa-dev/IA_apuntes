@@ -20,7 +20,7 @@ librerías, apps y ampliación.">
     <a href="asignatura.html" title="Programación, criterios y evaluación">Asignatura</a>
     <a href="ud1.html" title="Conceptos clave de la IA">UD1</a>
     <a href="teoria.html" title="Programación en Python: teoría" aria-current="page">UD2 Teoría</a>
-    <a href="ejercicios.html" title="Ejercicios de Python E1–E46">UD2 Ejercicios</a>
+    <a href="ejercicios.html" title="Ejercicios de Python E1–E52">UD2 Ejercicios</a>
     <a href="ud3-vision.html" title="Visión artificial">UD3 Visión</a>
     <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural">UD4 Lenguaje</a>
     <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
@@ -38,9 +38,9 @@ librerías, apps y ampliación.">
 id="toc-teoría-fundamental-y-referencias-externas">Teoría Fundamental y
 Referencias Externas</a>
 <ul>
-<li><a href="#conceptos-para-resolver-ejercicios-python-ud2-e1-e46"
-id="toc-conceptos-para-resolver-ejercicios-python-ud2-e1-e46">Conceptos
-para Resolver Ejercicios Python UD2 (E1-E46)</a></li>
+<li><a href="#conceptos-para-resolver-ejercicios-python-ud2-e1-e52"
+id="toc-conceptos-para-resolver-ejercicios-python-ud2-e1-e52">Conceptos
+para Resolver Ejercicios Python UD2 (E1-E52)</a></li>
 <li><a href="#-tabla-de-contenidos" id="toc--tabla-de-contenidos">📚
 Tabla de Contenidos</a></li>
 <li><a href="#0️⃣-punto-de-partida-conceptos-fundamentales-de-ia-ud1"
@@ -432,8 +432,8 @@ PASOS</a></li>
   <article class="content">
 <h1 id="teoría-fundamental-y-referencias-externas">Teoría Fundamental y
 Referencias Externas</h1>
-<h2 id="conceptos-para-resolver-ejercicios-python-ud2-e1-e46">Conceptos
-para Resolver Ejercicios Python UD2 (E1-E46)</h2>
+<h2 id="conceptos-para-resolver-ejercicios-python-ud2-e1-e52">Conceptos
+para Resolver Ejercicios Python UD2 (E1-E52)</h2>
 <hr />
 <h2 id="-tabla-de-contenidos">📚 Tabla de Contenidos</h2>
 <ol start="0" type="1">
@@ -890,7 +890,7 @@ modelo</td>
 </tbody>
 </table>
 <p><strong>Conexión con UD2</strong>: casi todo lo que programamos en
-E1–E46 es <strong>programación determinista</strong> (no IA). Es la base
+E1–E52 es <strong>programación determinista</strong> (no IA). Es la base
 imprescindible: los modelos de IA (sección 10, UD5) se construyen encima
 de ella.</p>
 <h3 id="06-tipos-de-ia-ia-clásica-machine-learning-y-deep-learning">0.6
@@ -6808,39 +6808,257 @@ modelos de scikit-learn heredan de una clase base y comparten
 <strong>polimorfismo</strong>. Por eso se puede cambiar un modelo por
 otro sin cambiar el resto del código (14.4). El agente aspirador de 0.9
 es otro ejemplo de clase.</p>
-<h4 id="conceptos-avanzados">Conceptos avanzados</h4>
+<h4 id="poo-con-código-de-una-clase-a-un-mini-scikit-learn">POO con
+código: de una clase a un mini scikit-learn</h4>
+<p>Una <strong>clase</strong> es un molde; un <strong>objeto</strong> (o
+instancia) es una pieza hecha con ese molde. Este ejemplo recorre todo
+lo esencial con una ficha de alumnado:</p>
 <div class="sourceCode" id="cb171"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb171-1"><a href="#cb171-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generador: produce valores de uno en uno (no guarda toda la lista en memoria)</span></span>
-<span id="cb171-2"><a href="#cb171-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pares(n):</span>
-<span id="cb171-3"><a href="#cb171-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, n, <span class="dv">2</span>):</span>
-<span id="cb171-4"><a href="#cb171-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> i</span>
-<span id="cb171-5"><a href="#cb171-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">list</span>(pares(<span class="dv">10</span>)))                       <span class="co"># [0, 2, 4, 6, 8]</span></span>
-<span id="cb171-6"><a href="#cb171-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb171-7"><a href="#cb171-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Decorador: añade comportamiento a una función sin modificarla</span></span>
-<span id="cb171-8"><a href="#cb171-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
-<span id="cb171-9"><a href="#cb171-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cronometrar(func):</span>
-<span id="cb171-10"><a href="#cb171-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> envoltura(<span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
-<span id="cb171-11"><a href="#cb171-11" aria-hidden="true" tabindex="-1"></a>        inicio <span class="op">=</span> time.perf_counter()</span>
-<span id="cb171-12"><a href="#cb171-12" aria-hidden="true" tabindex="-1"></a>        resultado <span class="op">=</span> func(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
-<span id="cb171-13"><a href="#cb171-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>func<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss"> tardó </span><span class="sc">{</span>time<span class="sc">.</span>perf_counter() <span class="op">-</span> inicio<span class="sc">:.4f}</span><span class="ss"> s&quot;</span>)</span>
-<span id="cb171-14"><a href="#cb171-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> resultado</span>
-<span id="cb171-15"><a href="#cb171-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> envoltura</span>
-<span id="cb171-16"><a href="#cb171-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb171-17"><a href="#cb171-17" aria-hidden="true" tabindex="-1"></a><span class="at">@cronometrar</span></span>
-<span id="cb171-18"><a href="#cb171-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> suma_cuadrados(n):</span>
-<span id="cb171-19"><a href="#cb171-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(i <span class="op">*</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n))      <span class="co"># generador dentro de sum()</span></span>
-<span id="cb171-20"><a href="#cb171-20" aria-hidden="true" tabindex="-1"></a>suma_cuadrados(<span class="dv">1_000_000</span>)</span>
-<span id="cb171-21"><a href="#cb171-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb171-22"><a href="#cb171-22" aria-hidden="true" tabindex="-1"></a><span class="co"># *args y **kwargs: número variable de argumentos</span></span>
-<span id="cb171-23"><a href="#cb171-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> resumen(<span class="op">*</span>notas, <span class="op">**</span>datos):</span>
-<span id="cb171-24"><a href="#cb171-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f&quot;</span><span class="sc">{</span>datos<span class="sc">.</span>get(<span class="st">&#39;nombre&#39;</span>, <span class="st">&#39;?&#39;</span>)<span class="sc">}</span><span class="ss">: media </span><span class="sc">{</span><span class="bu">sum</span>(notas) <span class="op">/</span> <span class="bu">len</span>(notas)<span class="sc">:.1f}</span><span class="ss">&quot;</span></span>
-<span id="cb171-25"><a href="#cb171-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(resumen(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, nombre<span class="op">=</span><span class="st">&quot;Uxía&quot;</span>))       <span class="co"># Uxía: media 8.0</span></span>
-<span id="cb171-26"><a href="#cb171-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb171-27"><a href="#cb171-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Funciones integradas muy útiles</span></span>
-<span id="cb171-28"><a href="#cb171-28" aria-hidden="true" tabindex="-1"></a>nombres, notas <span class="op">=</span> [<span class="st">&quot;Ana&quot;</span>, <span class="st">&quot;Brais&quot;</span>], [<span class="fl">8.5</span>, <span class="fl">6.0</span>]</span>
-<span id="cb171-29"><a href="#cb171-29" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (n, x) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(nombres, notas), start<span class="op">=</span><span class="dv">1</span>):</span>
-<span id="cb171-30"><a href="#cb171-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(i, n, x)                           <span class="co"># 1 Ana 8.5 · 2 Brais 6.0</span></span>
-<span id="cb171-31"><a href="#cb171-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">any</span>(x <span class="op">&lt;</span> <span class="dv">5</span> <span class="cf">for</span> x <span class="kw">in</span> notas), <span class="bu">all</span>(x <span class="op">&gt;=</span> <span class="dv">5</span> <span class="cf">for</span> x <span class="kw">in</span> notas))   <span class="co"># False True</span></span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb171-1"><a href="#cb171-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Alumno:</span>
+<span id="cb171-2"><a href="#cb171-2" aria-hidden="true" tabindex="-1"></a>    centro <span class="op">=</span> <span class="st">&quot;IES Chan do Monte&quot;</span>             <span class="co"># variable de CLASE: compartida por todos</span></span>
+<span id="cb171-3"><a href="#cb171-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-4"><a href="#cb171-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, nombre, nota):         <span class="co"># constructor: se ejecuta al crear el objeto</span></span>
+<span id="cb171-5"><a href="#cb171-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.nombre <span class="op">=</span> nombre                  <span class="co"># variables de INSTANCIA: propias de cada objeto</span></span>
+<span id="cb171-6"><a href="#cb171-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.nota <span class="op">=</span> nota                      <span class="co"># pasa por el setter de abajo (validación)</span></span>
+<span id="cb171-7"><a href="#cb171-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-8"><a href="#cb171-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">@property</span></span>
+<span id="cb171-9"><a href="#cb171-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> nota(<span class="va">self</span>):                           <span class="co"># se lee como un atributo: a.nota</span></span>
+<span id="cb171-10"><a href="#cb171-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>._nota</span>
+<span id="cb171-11"><a href="#cb171-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-12"><a href="#cb171-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">@nota.setter</span></span>
+<span id="cb171-13"><a href="#cb171-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> nota(<span class="va">self</span>, valor):                    <span class="co"># se ejecuta al hacer a.nota = ...</span></span>
+<span id="cb171-14"><a href="#cb171-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="dv">0</span> <span class="op">&lt;=</span> valor <span class="op">&lt;=</span> <span class="dv">10</span>:</span>
+<span id="cb171-15"><a href="#cb171-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f&quot;Nota fuera de rango: </span><span class="sc">{</span>valor<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb171-16"><a href="#cb171-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._nota <span class="op">=</span> valor</span>
+<span id="cb171-17"><a href="#cb171-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-18"><a href="#cb171-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> aprobado(<span class="va">self</span>):                       <span class="co"># método de instancia: usa self</span></span>
+<span id="cb171-19"><a href="#cb171-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.nota <span class="op">&gt;=</span> <span class="dv">5</span></span>
+<span id="cb171-20"><a href="#cb171-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-21"><a href="#cb171-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">@classmethod</span></span>
+<span id="cb171-22"><a href="#cb171-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> desde_texto(cls, linea):              <span class="co"># método de clase: otra forma de construir</span></span>
+<span id="cb171-23"><a href="#cb171-23" aria-hidden="true" tabindex="-1"></a>        nombre, nota <span class="op">=</span> linea.split(<span class="st">&quot;;&quot;</span>)</span>
+<span id="cb171-24"><a href="#cb171-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> cls(nombre, <span class="bu">float</span>(nota))</span>
+<span id="cb171-25"><a href="#cb171-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-26"><a href="#cb171-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">@staticmethod</span></span>
+<span id="cb171-27"><a href="#cb171-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> redondear(nota):                      <span class="co"># método estático: utilidad, no usa self ni cls</span></span>
+<span id="cb171-28"><a href="#cb171-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">round</span>(nota <span class="op">*</span> <span class="dv">2</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb171-29"><a href="#cb171-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-30"><a href="#cb171-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__str__</span>(<span class="va">self</span>):                        <span class="co"># lo que muestra print()</span></span>
+<span id="cb171-31"><a href="#cb171-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f&quot;</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>nombre<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>nota<span class="sc">}</span><span class="ss">)&quot;</span></span>
+<span id="cb171-32"><a href="#cb171-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-33"><a href="#cb171-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__repr__</span>(<span class="va">self</span>):                       <span class="co"># lo que se ve en la consola o dentro de listas</span></span>
+<span id="cb171-34"><a href="#cb171-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f&quot;Alumno(</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>nombre<span class="sc">!r}</span><span class="ss">, </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>nota<span class="sc">}</span><span class="ss">)&quot;</span></span>
+<span id="cb171-35"><a href="#cb171-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-36"><a href="#cb171-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__lt__</span>(<span class="va">self</span>, otro):                   <span class="co"># «menor que»: permite sorted()</span></span>
+<span id="cb171-37"><a href="#cb171-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.nota <span class="op">&lt;</span> otro.nota</span>
+<span id="cb171-38"><a href="#cb171-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-39"><a href="#cb171-39" aria-hidden="true" tabindex="-1"></a>uxia <span class="op">=</span> Alumno(<span class="st">&quot;Uxía&quot;</span>, <span class="fl">8.5</span>)</span>
+<span id="cb171-40"><a href="#cb171-40" aria-hidden="true" tabindex="-1"></a>brais <span class="op">=</span> Alumno.desde_texto(<span class="st">&quot;Brais;6.25&quot;</span>)</span>
+<span id="cb171-41"><a href="#cb171-41" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(uxia, uxia.aprobado(), Alumno.centro)    <span class="co"># Uxía (8.5) True IES Chan do Monte</span></span>
+<span id="cb171-42"><a href="#cb171-42" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">sorted</span>([uxia, brais]))                    <span class="co"># [Alumno(&#39;Brais&#39;, 6.25), Alumno(&#39;Uxía&#39;, 8.5)]</span></span>
+<span id="cb171-43"><a href="#cb171-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Alumno.redondear(<span class="fl">6.3</span>))                    <span class="co"># 6.5</span></span>
+<span id="cb171-44"><a href="#cb171-44" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb171-45"><a href="#cb171-45" aria-hidden="true" tabindex="-1"></a>    brais.nota <span class="op">=</span> <span class="dv">12</span></span>
+<span id="cb171-46"><a href="#cb171-46" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">ValueError</span> <span class="im">as</span> e:</span>
+<span id="cb171-47"><a href="#cb171-47" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(e)                                    <span class="co"># Nota fuera de rango: 12</span></span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>Tipo de método</th>
+<th>Primer parámetro</th>
+<th>Para qué</th>
+<th>Se llama con</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>De instancia</td>
+<td><code>self</code> (el objeto)</td>
+<td>Trabajar con los datos de <strong>ese</strong> objeto</td>
+<td><code>uxia.aprobado()</code></td>
+</tr>
+<tr class="even">
+<td>De clase (<code>@classmethod</code>)</td>
+<td><code>cls</code> (la clase)</td>
+<td>Constructores alternativos, datos comunes</td>
+<td><code>Alumno.desde_texto(...)</code></td>
+</tr>
+<tr class="odd">
+<td>Estático (<code>@staticmethod</code>)</td>
+<td>Ninguno</td>
+<td>Utilidades relacionadas con la clase</td>
+<td><code>Alumno.redondear(6.3)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Encapsulación en Python: convenios, no candados.</strong>
+Python no tiene <code>private</code> como Java. Hay dos convenios:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Nombre</th>
+<th>Significado</th>
+<th>¿Se puede acceder desde fuera?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>nota</code></td>
+<td>Público</td>
+<td>Sí</td>
+</tr>
+<tr class="even">
+<td><code>_nota</code></td>
+<td>«Interno: no lo toques» (convenio entre programadores)</td>
+<td>Sí, Python no lo impide</td>
+</tr>
+<tr class="odd">
+<td><code>__nota</code></td>
+<td>Python le cambia el nombre (<em>name mangling</em>) a
+<code>_Alumno__nota</code> para evitar choques con clases hijas</td>
+<td>Sí, como <code>obj._Alumno__nota</code>; solo es más incómodo</td>
+</tr>
+</tbody>
+</table>
+<p>Por eso, en Python la forma idiomática de <strong>proteger</strong>
+un dato no es esconderlo, sino <strong>validarlo</strong> con
+<code>@property</code>, como la nota de arriba. Muchos apuntes dicen que
+<code>_x</code> «solo es accesible desde la clase y sus hijas» y
+<code>__x</code> «solo desde la clase»: eso es así en Java o C++, pero
+en Python son convenios.</p>
+<p><strong>Métodos especiales (<em>dunder</em>)</strong>: los que
+empiezan y acaban por doble guion bajo hacen que tus objetos funcionen
+con la sintaxis de Python: <code>__len__</code> con <code>len()</code>,
+<code>__eq__</code> con <code>==</code>, <code>__add__</code> con
+<code>+</code>, <code>__getitem__</code> con <code>obj[i]</code>,
+<code>__iter__</code> con <code>for</code>. Por eso un
+<code>DataFrame</code> responde a <code>len(df)</code> y
+<code>df["col"]</code>.</p>
+<p><strong>Herencia, polimorfismo y abstracción</strong>: así están
+hechos los modelos de scikit-learn. Una clase base abstracta obliga a
+que todos los modelos tengan <code>fit</code> y <code>predict</code>, y
+el código que los usa no necesita saber cuál es:</p>
+<div class="sourceCode" id="cb172"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> abc <span class="im">import</span> ABC, abstractmethod</span>
+<span id="cb172-2"><a href="#cb172-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-3"><a href="#cb172-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Modelo(ABC):                                  <span class="co"># clase abstracta: no se puede instanciar</span></span>
+<span id="cb172-4"><a href="#cb172-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">@abstractmethod</span></span>
+<span id="cb172-5"><a href="#cb172-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit(<span class="va">self</span>, X, y): ...</span>
+<span id="cb172-6"><a href="#cb172-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">@abstractmethod</span></span>
+<span id="cb172-7"><a href="#cb172-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> predict(<span class="va">self</span>, X): ...</span>
+<span id="cb172-8"><a href="#cb172-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-9"><a href="#cb172-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> score(<span class="va">self</span>, X, y):                          <span class="co"># método común: lo heredan todas</span></span>
+<span id="cb172-10"><a href="#cb172-10" aria-hidden="true" tabindex="-1"></a>        aciertos <span class="op">=</span> <span class="bu">sum</span>(p <span class="op">==</span> r <span class="cf">for</span> p, r <span class="kw">in</span> <span class="bu">zip</span>(<span class="va">self</span>.predict(X), y))</span>
+<span id="cb172-11"><a href="#cb172-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> aciertos <span class="op">/</span> <span class="bu">len</span>(y)</span>
+<span id="cb172-12"><a href="#cb172-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-13"><a href="#cb172-13" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Mayoria(Modelo):                              <span class="co"># predice siempre la clase más frecuente</span></span>
+<span id="cb172-14"><a href="#cb172-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit(<span class="va">self</span>, X, y):</span>
+<span id="cb172-15"><a href="#cb172-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.clase_ <span class="op">=</span> <span class="bu">max</span>(<span class="bu">set</span>(y), key<span class="op">=</span>y.count)</span>
+<span id="cb172-16"><a href="#cb172-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span></span>
+<span id="cb172-17"><a href="#cb172-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> predict(<span class="va">self</span>, X):</span>
+<span id="cb172-18"><a href="#cb172-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [<span class="va">self</span>.clase_ <span class="cf">for</span> _ <span class="kw">in</span> X]</span>
+<span id="cb172-19"><a href="#cb172-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-20"><a href="#cb172-20" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Umbral(Modelo):                               <span class="co"># aprueba si las horas de estudio superan un umbral</span></span>
+<span id="cb172-21"><a href="#cb172-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, umbral<span class="op">=</span><span class="dv">4</span>):</span>
+<span id="cb172-22"><a href="#cb172-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.umbral <span class="op">=</span> umbral</span>
+<span id="cb172-23"><a href="#cb172-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit(<span class="va">self</span>, X, y):</span>
+<span id="cb172-24"><a href="#cb172-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>                                 <span class="co"># no aprende nada: regla fija</span></span>
+<span id="cb172-25"><a href="#cb172-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> predict(<span class="va">self</span>, X):</span>
+<span id="cb172-26"><a href="#cb172-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [<span class="st">&quot;apto&quot;</span> <span class="cf">if</span> horas <span class="op">&gt;=</span> <span class="va">self</span>.umbral <span class="cf">else</span> <span class="st">&quot;no apto&quot;</span> <span class="cf">for</span> horas <span class="kw">in</span> X]</span>
+<span id="cb172-27"><a href="#cb172-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-28"><a href="#cb172-28" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> UmbralAprendido(Umbral):                      <span class="co"># herencia: reutiliza predict de Umbral</span></span>
+<span id="cb172-29"><a href="#cb172-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit(<span class="va">self</span>, X, y):                            <span class="co"># sobrescribe fit (overriding)</span></span>
+<span id="cb172-30"><a href="#cb172-30" aria-hidden="true" tabindex="-1"></a>        mejores <span class="op">=</span> <span class="bu">max</span>(<span class="bu">sorted</span>(<span class="bu">set</span>(X)), key<span class="op">=</span><span class="kw">lambda</span> u: Umbral(u).score(X, y))</span>
+<span id="cb172-31"><a href="#cb172-31" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.umbral <span class="op">=</span> mejores</span>
+<span id="cb172-32"><a href="#cb172-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">super</span>().fit(X, y)                    <span class="co"># llama al método de la clase madre</span></span>
+<span id="cb172-33"><a href="#cb172-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-34"><a href="#cb172-34" aria-hidden="true" tabindex="-1"></a>horas <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>]</span>
+<span id="cb172-35"><a href="#cb172-35" aria-hidden="true" tabindex="-1"></a>notas <span class="op">=</span> [<span class="st">&quot;no apto&quot;</span>, <span class="st">&quot;no apto&quot;</span>, <span class="st">&quot;no apto&quot;</span>, <span class="st">&quot;apto&quot;</span>, <span class="st">&quot;no apto&quot;</span>, <span class="st">&quot;apto&quot;</span>, <span class="st">&quot;apto&quot;</span>, <span class="st">&quot;apto&quot;</span>]</span>
+<span id="cb172-36"><a href="#cb172-36" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> m <span class="kw">in</span> [Mayoria(), Umbral(<span class="dv">5</span>), UmbralAprendido()]:              <span class="co"># polimorfismo</span></span>
+<span id="cb172-37"><a href="#cb172-37" aria-hidden="true" tabindex="-1"></a>    m.fit(horas, notas)</span>
+<span id="cb172-38"><a href="#cb172-38" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span><span class="bu">type</span>(m)<span class="sc">.</span><span class="va">__name__</span><span class="sc">:&lt;16}</span><span class="ss"> </span><span class="sc">{</span>m<span class="sc">.</span>score(horas, notas)<span class="sc">:.2f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb172-39"><a href="#cb172-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Mayoria          0.50</span></span>
+<span id="cb172-40"><a href="#cb172-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Umbral           0.75</span></span>
+<span id="cb172-41"><a href="#cb172-41" aria-hidden="true" tabindex="-1"></a><span class="co"># UmbralAprendido  0.88</span></span>
+<span id="cb172-42"><a href="#cb172-42" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb172-43"><a href="#cb172-43" aria-hidden="true" tabindex="-1"></a>    Modelo()</span>
+<span id="cb172-44"><a href="#cb172-44" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">TypeError</span> <span class="im">as</span> e:</span>
+<span id="cb172-45"><a href="#cb172-45" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;No se puede crear un Modelo abstracto&quot;</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>Concepto</th>
+<th>En el ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Herencia</strong></td>
+<td><code>UmbralAprendido(Umbral)</code> reutiliza <code>predict</code>
+y <code>__init__</code></td>
+</tr>
+<tr class="even">
+<td><strong>Sobrescritura</strong> (<em>overriding</em>)</td>
+<td><code>UmbralAprendido.fit</code> sustituye al <code>fit</code> de
+<code>Umbral</code>; <code>super()</code> llama al original</td>
+</tr>
+<tr class="odd">
+<td><strong>Polimorfismo</strong></td>
+<td>El mismo bucle llama a <code>fit</code> y <code>score</code> sin
+saber qué modelo es</td>
+</tr>
+<tr class="even">
+<td><strong>Abstracción</strong></td>
+<td><code>Modelo(ABC)</code> define el contrato; no se puede
+instanciar</td>
+</tr>
+<tr class="odd">
+<td><strong>Sobrecarga</strong> (<em>overloading</em>)</td>
+<td>Python <strong>no</strong> tiene varias funciones con el mismo
+nombre y distintos parámetros; se simula con valores por defecto
+(<code>umbral=4</code>) o <code>*args</code></td>
+</tr>
+</tbody>
+</table>
+<p>En Python, una <strong>interfaz</strong> es una clase abstracta en la
+que todos los métodos son abstractos. A diferencia de Java, un método
+abstracto <strong>puede</strong> tener código, que las hijas aprovechan
+con <code>super()</code>. Para clases que solo guardan datos,
+<code>@dataclass</code> (módulo <code>dataclasses</code>) escribe solo
+<code>__init__</code>, <code>__repr__</code> y <code>__eq__</code>.</p>
+<h4 id="conceptos-avanzados">Conceptos avanzados</h4>
+<div class="sourceCode" id="cb173"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb173-1"><a href="#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generador: produce valores de uno en uno (no guarda toda la lista en memoria)</span></span>
+<span id="cb173-2"><a href="#cb173-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pares(n):</span>
+<span id="cb173-3"><a href="#cb173-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, n, <span class="dv">2</span>):</span>
+<span id="cb173-4"><a href="#cb173-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> i</span>
+<span id="cb173-5"><a href="#cb173-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">list</span>(pares(<span class="dv">10</span>)))                       <span class="co"># [0, 2, 4, 6, 8]</span></span>
+<span id="cb173-6"><a href="#cb173-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb173-7"><a href="#cb173-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Decorador: añade comportamiento a una función sin modificarla</span></span>
+<span id="cb173-8"><a href="#cb173-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb173-9"><a href="#cb173-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cronometrar(func):</span>
+<span id="cb173-10"><a href="#cb173-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> envoltura(<span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb173-11"><a href="#cb173-11" aria-hidden="true" tabindex="-1"></a>        inicio <span class="op">=</span> time.perf_counter()</span>
+<span id="cb173-12"><a href="#cb173-12" aria-hidden="true" tabindex="-1"></a>        resultado <span class="op">=</span> func(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
+<span id="cb173-13"><a href="#cb173-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>func<span class="sc">.</span><span class="va">__name__</span><span class="sc">}</span><span class="ss"> tardó </span><span class="sc">{</span>time<span class="sc">.</span>perf_counter() <span class="op">-</span> inicio<span class="sc">:.4f}</span><span class="ss"> s&quot;</span>)</span>
+<span id="cb173-14"><a href="#cb173-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> resultado</span>
+<span id="cb173-15"><a href="#cb173-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> envoltura</span>
+<span id="cb173-16"><a href="#cb173-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb173-17"><a href="#cb173-17" aria-hidden="true" tabindex="-1"></a><span class="at">@cronometrar</span></span>
+<span id="cb173-18"><a href="#cb173-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> suma_cuadrados(n):</span>
+<span id="cb173-19"><a href="#cb173-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(i <span class="op">*</span> i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n))      <span class="co"># generador dentro de sum()</span></span>
+<span id="cb173-20"><a href="#cb173-20" aria-hidden="true" tabindex="-1"></a>suma_cuadrados(<span class="dv">1_000_000</span>)</span>
+<span id="cb173-21"><a href="#cb173-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb173-22"><a href="#cb173-22" aria-hidden="true" tabindex="-1"></a><span class="co"># *args y **kwargs: número variable de argumentos</span></span>
+<span id="cb173-23"><a href="#cb173-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> resumen(<span class="op">*</span>notas, <span class="op">**</span>datos):</span>
+<span id="cb173-24"><a href="#cb173-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f&quot;</span><span class="sc">{</span>datos<span class="sc">.</span>get(<span class="st">&#39;nombre&#39;</span>, <span class="st">&#39;?&#39;</span>)<span class="sc">}</span><span class="ss">: media </span><span class="sc">{</span><span class="bu">sum</span>(notas) <span class="op">/</span> <span class="bu">len</span>(notas)<span class="sc">:.1f}</span><span class="ss">&quot;</span></span>
+<span id="cb173-25"><a href="#cb173-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(resumen(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, nombre<span class="op">=</span><span class="st">&quot;Uxía&quot;</span>))       <span class="co"># Uxía: media 8.0</span></span>
+<span id="cb173-26"><a href="#cb173-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb173-27"><a href="#cb173-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Funciones integradas muy útiles</span></span>
+<span id="cb173-28"><a href="#cb173-28" aria-hidden="true" tabindex="-1"></a>nombres, notas <span class="op">=</span> [<span class="st">&quot;Ana&quot;</span>, <span class="st">&quot;Brais&quot;</span>], [<span class="fl">8.5</span>, <span class="fl">6.0</span>]</span>
+<span id="cb173-29"><a href="#cb173-29" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (n, x) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(nombres, notas), start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb173-30"><a href="#cb173-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(i, n, x)                           <span class="co"># 1 Ana 8.5 · 2 Brais 6.0</span></span>
+<span id="cb173-31"><a href="#cb173-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">any</span>(x <span class="op">&lt;</span> <span class="dv">5</span> <span class="cf">for</span> x <span class="kw">in</span> notas), <span class="bu">all</span>(x <span class="op">&gt;=</span> <span class="dv">5</span> <span class="cf">for</span> x <span class="kw">in</span> notas))   <span class="co"># False True</span></span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -6882,6 +7100,186 @@ rápidas que los bucles con <code>append</code>. Se debe preferir las
 funciones integradas y usar <code>set</code> para comprobar si un
 elemento está en una colección (O(1), 14.9). Para medir tiempos,
 <code>timeit</code>.</p>
+<h4 id="iteradores-y-generadores-por-dentro">Iteradores y generadores
+por dentro</h4>
+<p>Un <strong>iterable</strong> es algo que se puede recorrer (lista,
+texto, archivo); un <strong>iterador</strong> es el objeto que lleva la
+cuenta de por dónde va. <code>for</code> hace esto por debajo:</p>
+<div class="sourceCode" id="cb174"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a>it <span class="op">=</span> <span class="bu">iter</span>([<span class="st">&quot;Vigo&quot;</span>, <span class="st">&quot;Lugo&quot;</span>])     <span class="co"># pide un iterador al iterable</span></span>
+<span id="cb174-2"><a href="#cb174-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">next</span>(it))                  <span class="co"># Vigo</span></span>
+<span id="cb174-3"><a href="#cb174-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">next</span>(it))                  <span class="co"># Lugo</span></span>
+<span id="cb174-4"><a href="#cb174-4" aria-hidden="true" tabindex="-1"></a><span class="co"># next(it) otra vez → StopIteration: el for la captura y termina</span></span></code></pre></div>
+<p>Un <strong>generador</strong> es la forma fácil de crear un iterador:
+una función con <code>yield</code>, que <strong>se pausa</strong> en
+cada valor y continúa donde lo dejó. No guarda todo en memoria, por eso
+es la forma de recorrer datos enormes. El caso típico en IA es repartir
+los datos en <strong>lotes</strong> (<em>batches</em>) para
+entrenar:</p>
+<div class="sourceCode" id="cb175"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb175-2"><a href="#cb175-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb175-3"><a href="#cb175-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lotes(datos, tamaño):</span>
+<span id="cb175-4"><a href="#cb175-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(datos), tamaño):</span>
+<span id="cb175-5"><a href="#cb175-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> datos[i:i <span class="op">+</span> tamaño]</span>
+<span id="cb175-6"><a href="#cb175-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb175-7"><a href="#cb175-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> lote <span class="kw">in</span> lotes(<span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">10</span>)), <span class="dv">4</span>):</span>
+<span id="cb175-8"><a href="#cb175-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(lote)                  <span class="co"># [0, 1, 2, 3] · [4, 5, 6, 7] · [8, 9]</span></span>
+<span id="cb175-9"><a href="#cb175-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb175-10"><a href="#cb175-10" aria-hidden="true" tabindex="-1"></a>lista <span class="op">=</span> [x <span class="op">*</span> x <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1_000_000</span>)]</span>
+<span id="cb175-11"><a href="#cb175-11" aria-hidden="true" tabindex="-1"></a>gen <span class="op">=</span> (x <span class="op">*</span> x <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1_000_000</span>))       <span class="co"># expresión generadora: paréntesis</span></span>
+<span id="cb175-12"><a href="#cb175-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sys.getsizeof(lista) <span class="op">&gt;</span> <span class="dv">8_000_000</span>, sys.getsizeof(gen) <span class="op">&lt;</span> <span class="dv">500</span>)   <span class="co"># True True</span></span>
+<span id="cb175-13"><a href="#cb175-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">sum</span>(gen) <span class="op">==</span> <span class="bu">sum</span>(lista))                  <span class="co"># True, pero gen ya se ha gastado</span></span></code></pre></div>
+<p>La lista ocupa unos 8 MB; el generador, unos 200 bytes, porque
+calcula cada valor cuando se le pide. A cambio, <strong>solo se puede
+recorrer una vez</strong>.</p>
+<h4 id="concurrencia-hilos-procesos-y-asyncio">Concurrencia: hilos,
+procesos y <code>asyncio</code></h4>
+<p>Un programa normal hace las cosas <strong>de una en una</strong>. Hay
+tres formas de hacer varias a la vez, y elegir bien depende de
+<strong>qué hace esperar</strong> al programa:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Tipo de tarea</th>
+<th>Qué la frena</th>
+<th>Ejemplo</th>
+<th>Herramienta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>De entrada/salida</strong> (<em>I/O-bound</em>)</td>
+<td>Esperar: red, disco, una API</td>
+<td>Descargar 50 imágenes, llamar a una API de un LLM</td>
+<td>Hilos (<code>threading</code>) o <code>asyncio</code></td>
+</tr>
+<tr class="even">
+<td><strong>De cálculo</strong> (<em>CPU-bound</em>)</td>
+<td>El procesador</td>
+<td>Procesar miles de imágenes, buscar primos</td>
+<td>Procesos (<code>multiprocessing</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>El GIL.</strong> En la versión habitual de Python, un candado
+interno (<em>Global Interpreter Lock</em>) deja que <strong>solo un hilo
+ejecute código Python a la vez</strong>. Mientras un hilo espera la red,
+otro avanza, así que los hilos aceleran las esperas, <strong>pero no los
+cálculos</strong>. Los procesos tienen cada uno su intérprete y su
+memoria, así que sí usan varios núcleos de verdad, a cambio de tardar
+más en arrancar y de no compartir variables. Desde Python 3.13 existe
+una versión opcional sin GIL, pero no es todavía la que se instala por
+defecto.</p>
+<div class="sourceCode" id="cb176"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time, asyncio</span>
+<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> concurrent.futures <span class="im">import</span> ThreadPoolExecutor</span>
+<span id="cb176-3"><a href="#cb176-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-4"><a href="#cb176-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> descargar(n):                     <span class="co"># simula esperar a la red medio segundo</span></span>
+<span id="cb176-5"><a href="#cb176-5" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="fl">0.5</span>)</span>
+<span id="cb176-6"><a href="#cb176-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f&quot;imagen_</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">.jpg&quot;</span></span>
+<span id="cb176-7"><a href="#cb176-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-8"><a href="#cb176-8" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> time.perf_counter()</span>
+<span id="cb176-9"><a href="#cb176-9" aria-hidden="true" tabindex="-1"></a>seguidas <span class="op">=</span> [descargar(n) <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">8</span>)]</span>
+<span id="cb176-10"><a href="#cb176-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;De una en una: </span><span class="sc">{</span>time<span class="sc">.</span>perf_counter() <span class="op">-</span> t<span class="sc">:.1f}</span><span class="ss"> s&quot;</span>)      <span class="co"># De una en una: 4.0 s</span></span>
+<span id="cb176-11"><a href="#cb176-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-12"><a href="#cb176-12" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> time.perf_counter()</span>
+<span id="cb176-13"><a href="#cb176-13" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> ThreadPoolExecutor(max_workers<span class="op">=</span><span class="dv">8</span>) <span class="im">as</span> ex:                 <span class="co"># 8 hilos</span></span>
+<span id="cb176-14"><a href="#cb176-14" aria-hidden="true" tabindex="-1"></a>    con_hilos <span class="op">=</span> <span class="bu">list</span>(ex.<span class="bu">map</span>(descargar, <span class="bu">range</span>(<span class="dv">8</span>)))</span>
+<span id="cb176-15"><a href="#cb176-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Con hilos:     </span><span class="sc">{</span>time<span class="sc">.</span>perf_counter() <span class="op">-</span> t<span class="sc">:.1f}</span><span class="ss"> s&quot;</span>)      <span class="co"># Con hilos:     0.5 s</span></span>
+<span id="cb176-16"><a href="#cb176-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-17"><a href="#cb176-17" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> descargar_async(n):         <span class="co"># corrutina: se puede pausar mientras espera</span></span>
+<span id="cb176-18"><a href="#cb176-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> asyncio.sleep(<span class="fl">0.5</span>)</span>
+<span id="cb176-19"><a href="#cb176-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f&quot;imagen_</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">.jpg&quot;</span></span>
+<span id="cb176-20"><a href="#cb176-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-21"><a href="#cb176-21" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> principal():</span>
+<span id="cb176-22"><a href="#cb176-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="cf">await</span> asyncio.gather(<span class="op">*</span>(descargar_async(n) <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">8</span>)))</span>
+<span id="cb176-23"><a href="#cb176-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-24"><a href="#cb176-24" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> time.perf_counter()</span>
+<span id="cb176-25"><a href="#cb176-25" aria-hidden="true" tabindex="-1"></a>con_async <span class="op">=</span> asyncio.run(principal())  <span class="co"># en Jupyter/Colab: await principal()</span></span>
+<span id="cb176-26"><a href="#cb176-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Con asyncio:   </span><span class="sc">{</span>time<span class="sc">.</span>perf_counter() <span class="op">-</span> t<span class="sc">:.1f}</span><span class="ss"> s&quot;</span>)      <span class="co"># Con asyncio:   0.5 s</span></span></code></pre></div>
+<p>Para el cálculo, procesos. En un archivo <code>.py</code> (en Jupyter
+y Colab <code>multiprocessing</code> da problemas con funciones
+definidas en el cuaderno):</p>
+<div class="sourceCode" id="cb177"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Pool</span>
+<span id="cb177-2"><a href="#cb177-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-3"><a href="#cb177-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> es_primo(n):</span>
+<span id="cb177-4"><a href="#cb177-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> n <span class="op">&gt;</span> <span class="dv">1</span> <span class="kw">and</span> <span class="bu">all</span>(n <span class="op">%</span> d <span class="cf">for</span> d <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, <span class="bu">int</span>(n <span class="op">**</span> <span class="fl">0.5</span>) <span class="op">+</span> <span class="dv">1</span>))</span>
+<span id="cb177-5"><a href="#cb177-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb177-6"><a href="#cb177-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:            <span class="co"># obligatorio: evita que cada proceso vuelva a lanzar procesos</span></span>
+<span id="cb177-7"><a href="#cb177-7" aria-hidden="true" tabindex="-1"></a>    numeros <span class="op">=</span> <span class="bu">range</span>(<span class="dv">5_000_000</span>, <span class="dv">5_200_000</span>)</span>
+<span id="cb177-8"><a href="#cb177-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool() <span class="im">as</span> pool:              <span class="co"># tantos procesos como núcleos</span></span>
+<span id="cb177-9"><a href="#cb177-9" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="bu">sum</span>(pool.<span class="bu">map</span>(es_primo, numeros, chunksize<span class="op">=</span><span class="dv">10_000</span>)))   <span class="co"># 12894 primos</span></span></code></pre></div>
+<p>En un ordenador de dos núcleos, este cálculo pasa de 1,5 s (un solo
+proceso) a 0,8 s: casi la mitad, nunca menos, porque el reparto también
+cuesta. Con cuatro hilos no mejora: en la misma prueba tardó
+<strong>más</strong> (3,2 s), por el GIL y el coste de cambiar de un
+hilo a otro.</p>
+<p><strong>Condiciones de carrera.</strong> Si varios hilos modifican la
+misma variable, pueden pisarse: los dos leen 10, los dos suman 1 y los
+dos guardan 11. Se evita con un candado (<code>threading.Lock</code>)
+que deja pasar a un hilo cada vez:</p>
+<div class="sourceCode" id="cb178"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> threading</span>
+<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a>saldo, candado <span class="op">=</span> <span class="dv">0</span>, threading.Lock()</span>
+<span id="cb178-3"><a href="#cb178-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-4"><a href="#cb178-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingresar(n):</span>
+<span id="cb178-5"><a href="#cb178-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> saldo</span>
+<span id="cb178-6"><a href="#cb178-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n):</span>
+<span id="cb178-7"><a href="#cb178-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> candado:                 <span class="co"># sin estas dos líneas, el resultado sale mucho menor</span></span>
+<span id="cb178-8"><a href="#cb178-8" aria-hidden="true" tabindex="-1"></a>            actual <span class="op">=</span> saldo</span>
+<span id="cb178-9"><a href="#cb178-9" aria-hidden="true" tabindex="-1"></a>            time.sleep(<span class="dv">0</span>)             <span class="co"># cede el turno: hace visible el problema</span></span>
+<span id="cb178-10"><a href="#cb178-10" aria-hidden="true" tabindex="-1"></a>            saldo <span class="op">=</span> actual <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb178-11"><a href="#cb178-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-12"><a href="#cb178-12" aria-hidden="true" tabindex="-1"></a>hilos <span class="op">=</span> [threading.Thread(target<span class="op">=</span>ingresar, args<span class="op">=</span>(<span class="dv">1000</span>,)) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)]</span>
+<span id="cb178-13"><a href="#cb178-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> h <span class="kw">in</span> hilos: h.start()</span>
+<span id="cb178-14"><a href="#cb178-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> h <span class="kw">in</span> hilos: h.join()             <span class="co"># esperar a que terminen</span></span>
+<span id="cb178-15"><a href="#cb178-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(saldo)                          <span class="co"># 4000 (sin candado salía unos 1000)</span></span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Hilos</th>
+<th>Procesos</th>
+<th><code>asyncio</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Memoria</td>
+<td>Compartida (cuidado con las carreras)</td>
+<td>Separada</td>
+<td>Compartida, un solo hilo</td>
+</tr>
+<tr class="even">
+<td>Coste de arrancar</td>
+<td>Bajo</td>
+<td>Alto</td>
+<td>Muy bajo</td>
+</tr>
+<tr class="odd">
+<td>Bueno para</td>
+<td>Esperas (red, disco)</td>
+<td>Cálculo</td>
+<td>Muchísimas esperas a la vez (servidores, APIs)</td>
+</tr>
+<tr class="even">
+<td>En IA</td>
+<td>Descargar datos, llamar a varias APIs</td>
+<td>Preprocesar imágenes en paralelo</td>
+<td>Servir un modelo con FastAPI (13.7), pedir respuestas a un LLM en
+paralelo</td>
+</tr>
+</tbody>
+</table>
+<p><code>asyncio</code> solo acelera lo que está escrito para ser
+asíncrono (<code>await</code> sobre algo que espera). Una función normal
+que bloquea, como <code>time.sleep</code> o leer un archivo con
+<code>open</code>, <strong>bloquea todo</strong> aunque esté dentro de
+<code>async def</code>. Las expresiones regulares (<code>re</code>)
+están en la UD4 (sección 10) y los archivos JSON y CSV, en 5.9 y
+14.10.</p>
 <h3 id="1415-materiales-complementarios-utilizados">14.15 Materiales
 complementarios utilizados</h3>
 <table>
@@ -6988,6 +7386,14 @@ vectoriales, ajuste fino, herramientas, agentes, multimodalidad</td>
 <td>14.8 y ejercicios E42–E46</td>
 </tr>
 <tr class="even">
+<td>Python Part 3 (POO) y Part 4 (Python avanzado), Coded Soul
+(@codedsoul_05), procesados con OCR y MarkItDown</td>
+<td>Clases, <code>@property</code>, métodos de clase y estáticos,
+métodos especiales, herencia, polimorfismo, clases abstractas;
+iteradores, generadores, hilos, procesos y <code>asyncio</code></td>
+<td>14.14 y ejercicios E47–E52</td>
+</tr>
+<tr class="odd">
 <td>Python Part 1 y Part 2: Core Python (@codedsoul_05), apuntes
 manuscritos procesados con OCR</td>
 <td>Conversión de tipos, formato, patrones, problemas numéricos,
@@ -7241,28 +7647,28 @@ Code)</h4>
 <li>⚙️ Requiere más configuración manual</li>
 </ul>
 <p><strong>Instalación</strong>:</p>
-<div class="sourceCode" id="cb172"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar VS Code: https://code.visualstudio.com/</span></span>
-<span id="cb172-2"><a href="#cb172-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar extensión Python (Microsoft)</span></span>
-<span id="cb172-3"><a href="#cb172-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Instalar extensión Pylance (ayudas de código)</span></span></code></pre></div>
+<div class="sourceCode" id="cb179"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb179-1"><a href="#cb179-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar VS Code: https://code.visualstudio.com/</span></span>
+<span id="cb179-2"><a href="#cb179-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar extensión Python (Microsoft)</span></span>
+<span id="cb179-3"><a href="#cb179-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Instalar extensión Pylance (ayudas de código)</span></span></code></pre></div>
 <p><strong>Cómo usarlo para UD2</strong>:</p>
-<div class="sourceCode" id="cb173"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb173-1"><a href="#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear archivo: ejercicio1.py</span></span>
-<span id="cb173-2"><a href="#cb173-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Hola, Python&quot;</span>)</span>
-<span id="cb173-3"><a href="#cb173-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb173-4"><a href="#cb173-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Para ejecutar:</span></span>
-<span id="cb173-5"><a href="#cb173-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 1: Click derecho → Run Python File</span></span>
-<span id="cb173-6"><a href="#cb173-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 2: Terminal → python ejercicio1.py</span></span></code></pre></div>
+<div class="sourceCode" id="cb180"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb180-1"><a href="#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear archivo: ejercicio1.py</span></span>
+<span id="cb180-2"><a href="#cb180-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Hola, Python&quot;</span>)</span>
+<span id="cb180-3"><a href="#cb180-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb180-4"><a href="#cb180-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Para ejecutar:</span></span>
+<span id="cb180-5"><a href="#cb180-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 1: Click derecho → Run Python File</span></span>
+<span id="cb180-6"><a href="#cb180-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 2: Terminal → python ejercicio1.py</span></span></code></pre></div>
 <p><strong>Configuración recomendada</strong>:</p>
-<div class="sourceCode" id="cb174"><pre
-class="sourceCode json"><code class="sourceCode json"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">settings.json</span> <span class="er">(Ctrl+Shift+P</span> <span class="er">→</span> <span class="er">&quot;Preferences:</span> <span class="er">Open</span> <span class="er">User</span> <span class="er">Settings</span> <span class="er">(JSON)&quot;)</span></span>
-<span id="cb174-2"><a href="#cb174-2" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">Requiere</span> <span class="er">instalar</span> <span class="er">las</span> <span class="er">extensiones</span> <span class="er">&quot;Black</span> <span class="er">Formatter&quot;</span> <span class="er">y</span> <span class="er">&quot;Pylint&quot;</span> <span class="er">(Microsoft)</span></span>
-<span id="cb174-3"><a href="#cb174-3" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb174-4"><a href="#cb174-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;editor.formatOnSave&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
-<span id="cb174-5"><a href="#cb174-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;[python]&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb174-6"><a href="#cb174-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;editor.defaultFormatter&quot;</span><span class="fu">:</span> <span class="st">&quot;ms-python.black-formatter&quot;</span></span>
-<span id="cb174-7"><a href="#cb174-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb174-8"><a href="#cb174-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb181"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb181-1"><a href="#cb181-1" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">settings.json</span> <span class="er">(Ctrl+Shift+P</span> <span class="er">→</span> <span class="er">&quot;Preferences:</span> <span class="er">Open</span> <span class="er">User</span> <span class="er">Settings</span> <span class="er">(JSON)&quot;)</span></span>
+<span id="cb181-2"><a href="#cb181-2" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">Requiere</span> <span class="er">instalar</span> <span class="er">las</span> <span class="er">extensiones</span> <span class="er">&quot;Black</span> <span class="er">Formatter&quot;</span> <span class="er">y</span> <span class="er">&quot;Pylint&quot;</span> <span class="er">(Microsoft)</span></span>
+<span id="cb181-3"><a href="#cb181-3" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb181-4"><a href="#cb181-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;editor.formatOnSave&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb181-5"><a href="#cb181-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;[python]&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb181-6"><a href="#cb181-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;editor.defaultFormatter&quot;</span><span class="fu">:</span> <span class="st">&quot;ms-python.black-formatter&quot;</span></span>
+<span id="cb181-7"><a href="#cb181-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb181-8"><a href="#cb181-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <hr />
 <h4 id="2️⃣-pycharm-community-edition">2️⃣ PyCharm Community Edition</h4>
 <p><strong>¿Qué es?</strong></p>
@@ -7287,10 +7693,10 @@ class="sourceCode json"><code class="sourceCode json"><span id="cb174-1"><a href
 <li>⏳ Tiempo de inicio más lento</li>
 </ul>
 <p><strong>Instalación</strong>:</p>
-<div class="sourceCode" id="cb175"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar Community Edition: https://www.jetbrains.com/pycharm/download/</span></span>
-<span id="cb175-2"><a href="#cb175-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar (el Community es gratis permanentemente)</span></span>
-<span id="cb175-3"><a href="#cb175-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Crear nuevo proyecto</span></span></code></pre></div>
+<div class="sourceCode" id="cb182"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb182-1"><a href="#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar Community Edition: https://www.jetbrains.com/pycharm/download/</span></span>
+<span id="cb182-2"><a href="#cb182-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar (el Community es gratis permanentemente)</span></span>
+<span id="cb182-3"><a href="#cb182-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Crear nuevo proyecto</span></span></code></pre></div>
 <p><strong>Estructura de Proyecto PyCharm</strong>:</p>
 <pre><code>mi_proyecto/
 ├── venv/              # Entorno virtual (automático)
@@ -7300,25 +7706,25 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb175-1"><a href
 │   └── datos.csv
 └── main.py</code></pre>
 <p><strong>Características útiles</strong>:</p>
-<div class="sourceCode" id="cb177"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+Space: Autocompletado</span></span>
-<span id="cb177-2"><a href="#cb177-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+/: Comentar línea</span></span>
-<span id="cb177-3"><a href="#cb177-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Shift+F6: Renombrar variable en todas partes</span></span>
-<span id="cb177-4"><a href="#cb177-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alt+Enter: &quot;Bombilla&quot; - sugerencias automáticas</span></span>
-<span id="cb177-5"><a href="#cb177-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb177-6"><a href="#cb177-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo: PyCharm detecta:</span></span>
-<span id="cb177-7"><a href="#cb177-7" aria-hidden="true" tabindex="-1"></a>lista <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
-<span id="cb177-8"><a href="#cb177-8" aria-hidden="true" tabindex="-1"></a>lista.appnd(<span class="dv">4</span>)  <span class="co"># ⚠️ Error: &quot;appnd&quot; debería ser &quot;append&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb184"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+Space: Autocompletado</span></span>
+<span id="cb184-2"><a href="#cb184-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+/: Comentar línea</span></span>
+<span id="cb184-3"><a href="#cb184-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Shift+F6: Renombrar variable en todas partes</span></span>
+<span id="cb184-4"><a href="#cb184-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alt+Enter: &quot;Bombilla&quot; - sugerencias automáticas</span></span>
+<span id="cb184-5"><a href="#cb184-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb184-6"><a href="#cb184-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo: PyCharm detecta:</span></span>
+<span id="cb184-7"><a href="#cb184-7" aria-hidden="true" tabindex="-1"></a>lista <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb184-8"><a href="#cb184-8" aria-hidden="true" tabindex="-1"></a>lista.appnd(<span class="dv">4</span>)  <span class="co"># ⚠️ Error: &quot;appnd&quot; debería ser &quot;append&quot;</span></span></code></pre></div>
 <p><strong>Debugging en PyCharm</strong>:</p>
-<div class="sourceCode" id="cb178"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en la línea número para añadir breakpoint</span></span>
-<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego: Shift+F9 para ejecutar en debug</span></span>
-<span id="cb178-3"><a href="#cb178-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Paso a paso: F10 (siguiente línea), F11 (dentro función)</span></span>
-<span id="cb178-4"><a href="#cb178-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb178-5"><a href="#cb178-5" aria-hidden="true" tabindex="-1"></a>numero <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb178-6"><a href="#cb178-6" aria-hidden="true" tabindex="-1"></a><span class="co"># &gt;&gt;&gt; Breakpoint aquí</span></span>
-<span id="cb178-7"><a href="#cb178-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> numero <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb178-8"><a href="#cb178-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Es par&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb185"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en la línea número para añadir breakpoint</span></span>
+<span id="cb185-2"><a href="#cb185-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego: Shift+F9 para ejecutar en debug</span></span>
+<span id="cb185-3"><a href="#cb185-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Paso a paso: F10 (siguiente línea), F11 (dentro función)</span></span>
+<span id="cb185-4"><a href="#cb185-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb185-5"><a href="#cb185-5" aria-hidden="true" tabindex="-1"></a>numero <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb185-6"><a href="#cb185-6" aria-hidden="true" tabindex="-1"></a><span class="co"># &gt;&gt;&gt; Breakpoint aquí</span></span>
+<span id="cb185-7"><a href="#cb185-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> numero <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb185-8"><a href="#cb185-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Es par&quot;</span>)</span></code></pre></div>
 <hr />
 <h4 id="3️⃣-jupyter-notebook">3️⃣ Jupyter Notebook</h4>
 <p><strong>¿Qué es?</strong></p>
@@ -7341,11 +7747,11 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb178-1"><a 
 <li>🐛 Debugging más complicado</li>
 </ul>
 <p><strong>Instalación</strong>:</p>
-<div class="sourceCode" id="cb179"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb179-1"><a href="#cb179-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install jupyter notebook</span>
-<span id="cb179-2"><a href="#cb179-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego ejecutar:</span></span>
-<span id="cb179-3"><a href="#cb179-3" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> notebook</span>
-<span id="cb179-4"><a href="#cb179-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Se abre en: http://localhost:8888</span></span></code></pre></div>
+<div class="sourceCode" id="cb186"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install jupyter notebook</span>
+<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego ejecutar:</span></span>
+<span id="cb186-3"><a href="#cb186-3" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> notebook</span>
+<span id="cb186-4"><a href="#cb186-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Se abre en: http://localhost:8888</span></span></code></pre></div>
 <p><strong>Estructura de Jupyter</strong>:</p>
 <pre><code>Celda 1: [Código] - Importar librerías
 import pandas as pd
@@ -7372,27 +7778,27 @@ M: Convertir a Markdown
 Y: Convertir a código
 DD: Eliminar celda</code></pre>
 <p><strong>Ejemplo completo en Jupyter</strong>:</p>
-<div class="sourceCode" id="cb182"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb182-1"><a href="#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 1</span></span>
-<span id="cb182-2"><a href="#cb182-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb182-3"><a href="#cb182-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb182-4"><a href="#cb182-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb182-5"><a href="#cb182-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 2</span></span>
-<span id="cb182-6"><a href="#cb182-6" aria-hidden="true" tabindex="-1"></a>datos <span class="op">=</span> {</span>
-<span id="cb182-7"><a href="#cb182-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;nombre&#39;</span>: [<span class="st">&#39;Ana&#39;</span>, <span class="st">&#39;Bruno&#39;</span>, <span class="st">&#39;Carlos&#39;</span>],</span>
-<span id="cb182-8"><a href="#cb182-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;edad&#39;</span>: [<span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">28</span>],</span>
-<span id="cb182-9"><a href="#cb182-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;ciudad&#39;</span>: [<span class="st">&#39;Madrid&#39;</span>, <span class="st">&#39;Barcelona&#39;</span>, <span class="st">&#39;Valencia&#39;</span>]</span>
-<span id="cb182-10"><a href="#cb182-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb182-11"><a href="#cb182-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(datos)</span>
-<span id="cb182-12"><a href="#cb182-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span>
-<span id="cb182-13"><a href="#cb182-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb182-14"><a href="#cb182-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 3</span></span>
-<span id="cb182-15"><a href="#cb182-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculo de edad promedio</span></span>
-<span id="cb182-16"><a href="#cb182-16" aria-hidden="true" tabindex="-1"></a>edad_promedio <span class="op">=</span> df[<span class="st">&#39;edad&#39;</span>].mean()</span>
-<span id="cb182-17"><a href="#cb182-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Edad promedio: </span><span class="sc">{</span>edad_promedio<span class="sc">:.1f}</span><span class="ss">&quot;</span>)</span>
-<span id="cb182-18"><a href="#cb182-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb182-19"><a href="#cb182-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultado aparece automáticamente:</span></span>
-<span id="cb182-20"><a href="#cb182-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Edad promedio: 27.7</span></span></code></pre></div>
+<div class="sourceCode" id="cb189"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 1</span></span>
+<span id="cb189-2"><a href="#cb189-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb189-3"><a href="#cb189-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb189-4"><a href="#cb189-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb189-5"><a href="#cb189-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 2</span></span>
+<span id="cb189-6"><a href="#cb189-6" aria-hidden="true" tabindex="-1"></a>datos <span class="op">=</span> {</span>
+<span id="cb189-7"><a href="#cb189-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;nombre&#39;</span>: [<span class="st">&#39;Ana&#39;</span>, <span class="st">&#39;Bruno&#39;</span>, <span class="st">&#39;Carlos&#39;</span>],</span>
+<span id="cb189-8"><a href="#cb189-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;edad&#39;</span>: [<span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">28</span>],</span>
+<span id="cb189-9"><a href="#cb189-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;ciudad&#39;</span>: [<span class="st">&#39;Madrid&#39;</span>, <span class="st">&#39;Barcelona&#39;</span>, <span class="st">&#39;Valencia&#39;</span>]</span>
+<span id="cb189-10"><a href="#cb189-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb189-11"><a href="#cb189-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(datos)</span>
+<span id="cb189-12"><a href="#cb189-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span>
+<span id="cb189-13"><a href="#cb189-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb189-14"><a href="#cb189-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 3</span></span>
+<span id="cb189-15"><a href="#cb189-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculo de edad promedio</span></span>
+<span id="cb189-16"><a href="#cb189-16" aria-hidden="true" tabindex="-1"></a>edad_promedio <span class="op">=</span> df[<span class="st">&#39;edad&#39;</span>].mean()</span>
+<span id="cb189-17"><a href="#cb189-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Edad promedio: </span><span class="sc">{</span>edad_promedio<span class="sc">:.1f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb189-18"><a href="#cb189-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb189-19"><a href="#cb189-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultado aparece automáticamente:</span></span>
+<span id="cb189-20"><a href="#cb189-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Edad promedio: 27.7</span></span></code></pre></div>
 <hr />
 <h3 id="comparación-cuál-usar">Comparación: ¿Cuál usar?</h3>
 <table>
@@ -7482,24 +7888,24 @@ pétalo</li>
 <li>Perfecto para <strong>principiantes</strong></li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb183"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
-<span id="cb183-2"><a href="#cb183-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb183-3"><a href="#cb183-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-4"><a href="#cb183-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar</span></span>
-<span id="cb183-5"><a href="#cb183-5" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
-<span id="cb183-6"><a href="#cb183-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(iris.data, columns<span class="op">=</span>iris.feature_names)</span>
-<span id="cb183-7"><a href="#cb183-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;species&#39;</span>] <span class="op">=</span> iris.target_names[iris.target]</span>
-<span id="cb183-8"><a href="#cb183-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-9"><a href="#cb183-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
-<span id="cb183-10"><a href="#cb183-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span>
-<span id="cb183-11"><a href="#cb183-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.describe())</span>
-<span id="cb183-12"><a href="#cb183-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;species&#39;</span>].value_counts())</span>
-<span id="cb183-13"><a href="#cb183-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb183-14"><a href="#cb183-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficos</span></span>
-<span id="cb183-15"><a href="#cb183-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb183-16"><a href="#cb183-16" aria-hidden="true" tabindex="-1"></a>df.plot(subplots<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
-<span id="cb183-17"><a href="#cb183-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb190"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
+<span id="cb190-2"><a href="#cb190-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb190-3"><a href="#cb190-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-4"><a href="#cb190-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar</span></span>
+<span id="cb190-5"><a href="#cb190-5" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb190-6"><a href="#cb190-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(iris.data, columns<span class="op">=</span>iris.feature_names)</span>
+<span id="cb190-7"><a href="#cb190-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;species&#39;</span>] <span class="op">=</span> iris.target_names[iris.target]</span>
+<span id="cb190-8"><a href="#cb190-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-9"><a href="#cb190-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
+<span id="cb190-10"><a href="#cb190-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span>
+<span id="cb190-11"><a href="#cb190-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.describe())</span>
+<span id="cb190-12"><a href="#cb190-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;species&#39;</span>].value_counts())</span>
+<span id="cb190-13"><a href="#cb190-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb190-14"><a href="#cb190-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficos</span></span>
+<span id="cb190-15"><a href="#cb190-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb190-16"><a href="#cb190-16" aria-hidden="true" tabindex="-1"></a>df.plot(subplots<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb190-17"><a href="#cb190-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E15: Calcular estadísticas de cada especie</li>
@@ -7508,9 +7914,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb183-1"><a 
 <li>E26: EDA completo</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb184"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ya está incluido en sklearn, o:</span></span>
-<span id="cb184-2"><a href="#cb184-2" aria-hidden="true" tabindex="-1"></a><span class="co"># https://archive.ics.uci.edu/ml/datasets/iris</span></span></code></pre></div>
+<div class="sourceCode" id="cb191"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ya está incluido en sklearn, o:</span></span>
+<span id="cb191-2"><a href="#cb191-2" aria-hidden="true" tabindex="-1"></a><span class="co"># https://archive.ics.uci.edu/ml/datasets/iris</span></span></code></pre></div>
 <hr />
 <h4 id="2️⃣-titanic-dataset-kaggle">2️⃣ Titanic Dataset (Kaggle)</h4>
 <p><strong>Descripción</strong>:</p>
@@ -7527,26 +7933,26 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb184-1"><a href
 <li>Ideal para aprender limpieza de datos</li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb185"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb185-2"><a href="#cb185-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-3"><a href="#cb185-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar de Kaggle o local</span></span>
-<span id="cb185-4"><a href="#cb185-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;titanic.csv&#39;</span>)</span>
-<span id="cb185-5"><a href="#cb185-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-6"><a href="#cb185-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (891, 12)</span></span>
-<span id="cb185-7"><a href="#cb185-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos y NaN</span></span>
-<span id="cb185-8"><a href="#cb185-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.isnull().<span class="bu">sum</span>())  <span class="co"># Contar faltantes</span></span>
-<span id="cb185-9"><a href="#cb185-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-10"><a href="#cb185-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Limpieza</span></span>
-<span id="cb185-11"><a href="#cb185-11" aria-hidden="true" tabindex="-1"></a>df_clean <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">&#39;Age&#39;</span>, <span class="st">&#39;Embarked&#39;</span>]).copy()</span>
-<span id="cb185-12"><a href="#cb185-12" aria-hidden="true" tabindex="-1"></a>df_clean[<span class="st">&#39;Age&#39;</span>] <span class="op">=</span> df_clean[<span class="st">&#39;Age&#39;</span>].astype(<span class="bu">int</span>)</span>
-<span id="cb185-13"><a href="#cb185-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-14"><a href="#cb185-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis</span></span>
-<span id="cb185-15"><a href="#cb185-15" aria-hidden="true" tabindex="-1"></a>supervivencia <span class="op">=</span> df_clean[<span class="st">&#39;Survived&#39;</span>].mean()</span>
-<span id="cb185-16"><a href="#cb185-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Tasa supervivencia: </span><span class="sc">{</span>supervivencia<span class="sc">:.1%}</span><span class="ss">&quot;</span>)</span>
-<span id="cb185-17"><a href="#cb185-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb185-18"><a href="#cb185-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Por género</span></span>
-<span id="cb185-19"><a href="#cb185-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_clean.groupby(<span class="st">&#39;Sex&#39;</span>)[<span class="st">&#39;Survived&#39;</span>].mean())</span></code></pre></div>
+<div class="sourceCode" id="cb192"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar de Kaggle o local</span></span>
+<span id="cb192-4"><a href="#cb192-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;titanic.csv&#39;</span>)</span>
+<span id="cb192-5"><a href="#cb192-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-6"><a href="#cb192-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (891, 12)</span></span>
+<span id="cb192-7"><a href="#cb192-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos y NaN</span></span>
+<span id="cb192-8"><a href="#cb192-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.isnull().<span class="bu">sum</span>())  <span class="co"># Contar faltantes</span></span>
+<span id="cb192-9"><a href="#cb192-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-10"><a href="#cb192-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Limpieza</span></span>
+<span id="cb192-11"><a href="#cb192-11" aria-hidden="true" tabindex="-1"></a>df_clean <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">&#39;Age&#39;</span>, <span class="st">&#39;Embarked&#39;</span>]).copy()</span>
+<span id="cb192-12"><a href="#cb192-12" aria-hidden="true" tabindex="-1"></a>df_clean[<span class="st">&#39;Age&#39;</span>] <span class="op">=</span> df_clean[<span class="st">&#39;Age&#39;</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb192-13"><a href="#cb192-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-14"><a href="#cb192-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis</span></span>
+<span id="cb192-15"><a href="#cb192-15" aria-hidden="true" tabindex="-1"></a>supervivencia <span class="op">=</span> df_clean[<span class="st">&#39;Survived&#39;</span>].mean()</span>
+<span id="cb192-16"><a href="#cb192-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Tasa supervivencia: </span><span class="sc">{</span>supervivencia<span class="sc">:.1%}</span><span class="ss">&quot;</span>)</span>
+<span id="cb192-17"><a href="#cb192-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb192-18"><a href="#cb192-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Por género</span></span>
+<span id="cb192-19"><a href="#cb192-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_clean.groupby(<span class="st">&#39;Sex&#39;</span>)[<span class="st">&#39;Survived&#39;</span>].mean())</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E14: Validación de datos</li>
@@ -7555,9 +7961,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb185-1"><a 
 <li>E27: Normalización para ML</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb186"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/titanic</span></span>
-<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O directo: https://raw.githubusercontent.com/pandas-dev/pandas/main/doc/data/titanic.csv</span></span></code></pre></div>
+<div class="sourceCode" id="cb193"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/titanic</span></span>
+<span id="cb193-2"><a href="#cb193-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O directo: https://raw.githubusercontent.com/pandas-dev/pandas/main/doc/data/titanic.csv</span></span></code></pre></div>
 <hr />
 <h4 id="3️⃣-world-happiness-report">3️⃣ World Happiness Report</h4>
 <p><strong>Descripción</strong>:</p>
@@ -7574,35 +7980,35 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb186-1"><a href
 <li>Ideal para análisis temporal</li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb187"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb187-1"><a href="#cb187-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb187-2"><a href="#cb187-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-3"><a href="#cb187-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;world-happiness-report.csv&#39;</span>)</span>
-<span id="cb187-4"><a href="#cb187-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ⚠️ Los nombres de columnas cambian según el año/versión del fichero</span></span>
-<span id="cb187-5"><a href="#cb187-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (p. ej. &#39;Life Ladder&#39; o &#39;Ladder score&#39;; &#39;Country&#39; o &#39;Country name&#39;).</span></span>
-<span id="cb187-6"><a href="#cb187-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compruébalos siempre con df.columns y adapta el código.</span></span>
-<span id="cb187-7"><a href="#cb187-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-8"><a href="#cb187-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
-<span id="cb187-9"><a href="#cb187-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.columns)</span>
-<span id="cb187-10"><a href="#cb187-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head(<span class="dv">10</span>))</span>
-<span id="cb187-11"><a href="#cb187-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-12"><a href="#cb187-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas</span></span>
-<span id="cb187-13"><a href="#cb187-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;Life Ladder&#39;</span>].describe())  <span class="co"># Score felicidad</span></span>
-<span id="cb187-14"><a href="#cb187-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-15"><a href="#cb187-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Comparar países</span></span>
-<span id="cb187-16"><a href="#cb187-16" aria-hidden="true" tabindex="-1"></a>top5 <span class="op">=</span> df.nlargest(<span class="dv">5</span>, <span class="st">&#39;Life Ladder&#39;</span>)[[<span class="st">&#39;Country name&#39;</span>, <span class="st">&#39;Life Ladder&#39;</span>]]</span>
-<span id="cb187-17"><a href="#cb187-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(top5)</span>
-<span id="cb187-18"><a href="#cb187-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-19"><a href="#cb187-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis por región</span></span>
-<span id="cb187-20"><a href="#cb187-20" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">&#39;Region&#39;</span> <span class="kw">in</span> df.columns:</span>
-<span id="cb187-21"><a href="#cb187-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df.groupby(<span class="st">&#39;Region&#39;</span>)[<span class="st">&#39;Life Ladder&#39;</span>].mean())</span>
-<span id="cb187-22"><a href="#cb187-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb187-23"><a href="#cb187-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar</span></span>
-<span id="cb187-24"><a href="#cb187-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb187-25"><a href="#cb187-25" aria-hidden="true" tabindex="-1"></a>df.sort_values(<span class="st">&#39;Life Ladder&#39;</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>).plot(</span>
-<span id="cb187-26"><a href="#cb187-26" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">&#39;Country name&#39;</span>, y<span class="op">=</span><span class="st">&#39;Life Ladder&#39;</span>, kind<span class="op">=</span><span class="st">&#39;barh&#39;</span></span>
-<span id="cb187-27"><a href="#cb187-27" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb187-28"><a href="#cb187-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb194"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb194-1"><a href="#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb194-2"><a href="#cb194-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb194-3"><a href="#cb194-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;world-happiness-report.csv&#39;</span>)</span>
+<span id="cb194-4"><a href="#cb194-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ⚠️ Los nombres de columnas cambian según el año/versión del fichero</span></span>
+<span id="cb194-5"><a href="#cb194-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (p. ej. &#39;Life Ladder&#39; o &#39;Ladder score&#39;; &#39;Country&#39; o &#39;Country name&#39;).</span></span>
+<span id="cb194-6"><a href="#cb194-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compruébalos siempre con df.columns y adapta el código.</span></span>
+<span id="cb194-7"><a href="#cb194-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb194-8"><a href="#cb194-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
+<span id="cb194-9"><a href="#cb194-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.columns)</span>
+<span id="cb194-10"><a href="#cb194-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head(<span class="dv">10</span>))</span>
+<span id="cb194-11"><a href="#cb194-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb194-12"><a href="#cb194-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas</span></span>
+<span id="cb194-13"><a href="#cb194-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;Life Ladder&#39;</span>].describe())  <span class="co"># Score felicidad</span></span>
+<span id="cb194-14"><a href="#cb194-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb194-15"><a href="#cb194-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Comparar países</span></span>
+<span id="cb194-16"><a href="#cb194-16" aria-hidden="true" tabindex="-1"></a>top5 <span class="op">=</span> df.nlargest(<span class="dv">5</span>, <span class="st">&#39;Life Ladder&#39;</span>)[[<span class="st">&#39;Country name&#39;</span>, <span class="st">&#39;Life Ladder&#39;</span>]]</span>
+<span id="cb194-17"><a href="#cb194-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(top5)</span>
+<span id="cb194-18"><a href="#cb194-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb194-19"><a href="#cb194-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis por región</span></span>
+<span id="cb194-20"><a href="#cb194-20" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">&#39;Region&#39;</span> <span class="kw">in</span> df.columns:</span>
+<span id="cb194-21"><a href="#cb194-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df.groupby(<span class="st">&#39;Region&#39;</span>)[<span class="st">&#39;Life Ladder&#39;</span>].mean())</span>
+<span id="cb194-22"><a href="#cb194-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb194-23"><a href="#cb194-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar</span></span>
+<span id="cb194-24"><a href="#cb194-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb194-25"><a href="#cb194-25" aria-hidden="true" tabindex="-1"></a>df.sort_values(<span class="st">&#39;Life Ladder&#39;</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>).plot(</span>
+<span id="cb194-26"><a href="#cb194-26" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">&#39;Country name&#39;</span>, y<span class="op">=</span><span class="st">&#39;Life Ladder&#39;</span>, kind<span class="op">=</span><span class="st">&#39;barh&#39;</span></span>
+<span id="cb194-27"><a href="#cb194-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb194-28"><a href="#cb194-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E16: Agrupar por región/año</li>
@@ -7611,9 +8017,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb187-1"><a 
 <li>E26: Correlación entre variables</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb188"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb188-1"><a href="#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2023</span></span>
-<span id="cb188-2"><a href="#cb188-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O: https://worldhappiness.report/</span></span></code></pre></div>
+<div class="sourceCode" id="cb195"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb195-1"><a href="#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2023</span></span>
+<span id="cb195-2"><a href="#cb195-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O: https://worldhappiness.report/</span></span></code></pre></div>
 <hr />
 <h4 id="4️⃣-house-prices-dataset-kaggle">4️⃣ House Prices Dataset
 (Kaggle)</h4>
@@ -7631,36 +8037,36 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb188-1"><a href
 <li>Perfecto para aprender <strong>feature engineering</strong></li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb189"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb189-2"><a href="#cb189-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb189-3"><a href="#cb189-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb189-4"><a href="#cb189-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;house-prices-advanced-regression-techniques/train.csv&#39;</span>)</span>
-<span id="cb189-5"><a href="#cb189-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb189-6"><a href="#cb189-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (1460, 81)</span></span>
-<span id="cb189-7"><a href="#cb189-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos</span></span>
-<span id="cb189-8"><a href="#cb189-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb189-9"><a href="#cb189-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar precio</span></span>
-<span id="cb189-10"><a href="#cb189-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;SalePrice&#39;</span>].describe())</span>
-<span id="cb189-11"><a href="#cb189-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb189-12"><a href="#cb189-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Encontrar correlación con precio</span></span>
-<span id="cb189-13"><a href="#cb189-13" aria-hidden="true" tabindex="-1"></a>correlaciones <span class="op">=</span> df.corr(numeric_only<span class="op">=</span><span class="va">True</span>)[<span class="st">&#39;SalePrice&#39;</span>].sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb189-14"><a href="#cb189-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(correlaciones.head(<span class="dv">10</span>))</span>
-<span id="cb189-15"><a href="#cb189-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb189-16"><a href="#cb189-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico: Tamaño vs Precio</span></span>
-<span id="cb189-17"><a href="#cb189-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb189-18"><a href="#cb189-18" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">&#39;GrLivArea&#39;</span>], df[<span class="st">&#39;SalePrice&#39;</span>])</span>
-<span id="cb189-19"><a href="#cb189-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;Área&#39;</span>)</span>
-<span id="cb189-20"><a href="#cb189-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Precio&#39;</span>)</span>
-<span id="cb189-21"><a href="#cb189-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb189-22"><a href="#cb189-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb189-23"><a href="#cb189-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejercicio: Normalizar características</span></span>
-<span id="cb189-24"><a href="#cb189-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb189-25"><a href="#cb189-25" aria-hidden="true" tabindex="-1"></a>caracteristicas_numericas <span class="op">=</span> df.select_dtypes(include<span class="op">=</span>[np.number]).columns</span>
-<span id="cb189-26"><a href="#cb189-26" aria-hidden="true" tabindex="-1"></a>df_normalizado <span class="op">=</span> df.copy()</span>
-<span id="cb189-27"><a href="#cb189-27" aria-hidden="true" tabindex="-1"></a>df_normalizado[caracteristicas_numericas] <span class="op">=</span> StandardScaler().fit_transform(</span>
-<span id="cb189-28"><a href="#cb189-28" aria-hidden="true" tabindex="-1"></a>    df[caracteristicas_numericas]</span>
-<span id="cb189-29"><a href="#cb189-29" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb196"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb196-2"><a href="#cb196-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb196-3"><a href="#cb196-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-4"><a href="#cb196-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;house-prices-advanced-regression-techniques/train.csv&#39;</span>)</span>
+<span id="cb196-5"><a href="#cb196-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-6"><a href="#cb196-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (1460, 81)</span></span>
+<span id="cb196-7"><a href="#cb196-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos</span></span>
+<span id="cb196-8"><a href="#cb196-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-9"><a href="#cb196-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar precio</span></span>
+<span id="cb196-10"><a href="#cb196-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;SalePrice&#39;</span>].describe())</span>
+<span id="cb196-11"><a href="#cb196-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-12"><a href="#cb196-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Encontrar correlación con precio</span></span>
+<span id="cb196-13"><a href="#cb196-13" aria-hidden="true" tabindex="-1"></a>correlaciones <span class="op">=</span> df.corr(numeric_only<span class="op">=</span><span class="va">True</span>)[<span class="st">&#39;SalePrice&#39;</span>].sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb196-14"><a href="#cb196-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(correlaciones.head(<span class="dv">10</span>))</span>
+<span id="cb196-15"><a href="#cb196-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-16"><a href="#cb196-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico: Tamaño vs Precio</span></span>
+<span id="cb196-17"><a href="#cb196-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb196-18"><a href="#cb196-18" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">&#39;GrLivArea&#39;</span>], df[<span class="st">&#39;SalePrice&#39;</span>])</span>
+<span id="cb196-19"><a href="#cb196-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;Área&#39;</span>)</span>
+<span id="cb196-20"><a href="#cb196-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Precio&#39;</span>)</span>
+<span id="cb196-21"><a href="#cb196-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb196-22"><a href="#cb196-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb196-23"><a href="#cb196-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejercicio: Normalizar características</span></span>
+<span id="cb196-24"><a href="#cb196-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb196-25"><a href="#cb196-25" aria-hidden="true" tabindex="-1"></a>caracteristicas_numericas <span class="op">=</span> df.select_dtypes(include<span class="op">=</span>[np.number]).columns</span>
+<span id="cb196-26"><a href="#cb196-26" aria-hidden="true" tabindex="-1"></a>df_normalizado <span class="op">=</span> df.copy()</span>
+<span id="cb196-27"><a href="#cb196-27" aria-hidden="true" tabindex="-1"></a>df_normalizado[caracteristicas_numericas] <span class="op">=</span> StandardScaler().fit_transform(</span>
+<span id="cb196-28"><a href="#cb196-28" aria-hidden="true" tabindex="-1"></a>    df[caracteristicas_numericas]</span>
+<span id="cb196-29"><a href="#cb196-29" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E22: Análisis y agregación</li>
@@ -7669,9 +8075,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb189-1"><a 
 <li>E27: Normalización necesaria para ML</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb190"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/house-prices-advanced-regression-techniques</span></span>
-<span id="cb190-2"><a href="#cb190-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: train.csv</span></span></code></pre></div>
+<div class="sourceCode" id="cb197"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb197-1"><a href="#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/house-prices-advanced-regression-techniques</span></span>
+<span id="cb197-2"><a href="#cb197-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: train.csv</span></span></code></pre></div>
 <hr />
 <h3 id="matriz-de-datasets-por-ejercicio">Matriz de Datasets por
 Ejercicio</h3>
@@ -7739,31 +8145,31 @@ enfoques)</li>
 <h3 id="cómo-descargar-y-usar-datasets">Cómo Descargar y Usar
 Datasets</h3>
 <p><strong>Opción 1: Desde Kaggle (Recomendado)</strong></p>
-<div class="sourceCode" id="cb191"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar kaggle CLI</span></span>
-<span id="cb191-2"><a href="#cb191-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install kaggle</span>
-<span id="cb191-3"><a href="#cb191-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb191-4"><a href="#cb191-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar: https://www.kaggle.com/settings/account</span></span>
-<span id="cb191-5"><a href="#cb191-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: cp kaggle.json ~/.kaggle/</span></span>
-<span id="cb191-6"><a href="#cb191-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb191-7"><a href="#cb191-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar dataset</span></span>
-<span id="cb191-8"><a href="#cb191-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kaggle</span> datasets download <span class="at">-d</span> ajaypalsinghlo/world-happiness-report-2023</span>
-<span id="cb191-9"><a href="#cb191-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb191-10"><a href="#cb191-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer</span></span>
-<span id="cb191-11"><a href="#cb191-11" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> world-happiness-report-2023.zip</span></code></pre></div>
+<div class="sourceCode" id="cb198"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb198-1"><a href="#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar kaggle CLI</span></span>
+<span id="cb198-2"><a href="#cb198-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install kaggle</span>
+<span id="cb198-3"><a href="#cb198-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-4"><a href="#cb198-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar: https://www.kaggle.com/settings/account</span></span>
+<span id="cb198-5"><a href="#cb198-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: cp kaggle.json ~/.kaggle/</span></span>
+<span id="cb198-6"><a href="#cb198-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-7"><a href="#cb198-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar dataset</span></span>
+<span id="cb198-8"><a href="#cb198-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kaggle</span> datasets download <span class="at">-d</span> ajaypalsinghlo/world-happiness-report-2023</span>
+<span id="cb198-9"><a href="#cb198-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb198-10"><a href="#cb198-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer</span></span>
+<span id="cb198-11"><a href="#cb198-11" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> world-happiness-report-2023.zip</span></code></pre></div>
 <p><strong>Opción 2: Descarga manual</strong></p>
-<div class="sourceCode" id="cb192"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ir a Kaggle, buscar dataset</span></span>
-<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en &quot;Download&quot;</span></span>
-<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Guardar en carpeta del proyecto</span></span></code></pre></div>
+<div class="sourceCode" id="cb199"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb199-1"><a href="#cb199-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ir a Kaggle, buscar dataset</span></span>
+<span id="cb199-2"><a href="#cb199-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en &quot;Download&quot;</span></span>
+<span id="cb199-3"><a href="#cb199-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Guardar en carpeta del proyecto</span></span></code></pre></div>
 <p><strong>Opción 3: Desde sklearn (solo Iris)</strong></p>
-<div class="sourceCode" id="cb193"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
-<span id="cb193-2"><a href="#cb193-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb193-3"><a href="#cb193-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb193-4"><a href="#cb193-4" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris(as_frame<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb193-5"><a href="#cb193-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> iris.frame          <span class="co"># DataFrame listo con columna &#39;target&#39;</span></span>
-<span id="cb193-6"><a href="#cb193-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code></pre></div>
+<div class="sourceCode" id="cb200"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb200-1"><a href="#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
+<span id="cb200-2"><a href="#cb200-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb200-3"><a href="#cb200-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb200-4"><a href="#cb200-4" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris(as_frame<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb200-5"><a href="#cb200-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> iris.frame          <span class="co"># DataFrame listo con columna &#39;target&#39;</span></span>
+<span id="cb200-6"><a href="#cb200-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code></pre></div>
 <hr />
 <h2 id="-guía-práctica-cómo-usar-estos-conceptos">📝 GUÍA PRÁCTICA: CÓMO
 USAR ESTOS CONCEPTOS</h2>

@@ -1,5 +1,5 @@
 # Teoría Fundamental y Referencias Externas
-## Conceptos para Resolver Ejercicios Python UD2 (E1-E61)
+## Conceptos para Resolver Ejercicios Python UD2 (E1-E69)
 
 ---
 
@@ -201,7 +201,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E61 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E69 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -3465,6 +3465,191 @@ print("Épocas de entrenamiento:", red.n_iter_)
 
 > `MLPClassifier` también admite `early_stopping=True`, pero con datasets pequeños puede parar demasiado pronto: compruébalo siempre comparando la accuracy con y sin él.
 
+#### Por qué hace falta la función de activación
+
+Sin activación, cada capa calcula `W·x + b`, que es una operación **lineal**. Y dos operaciones lineales seguidas equivalen a una sola: `W₂(W₁x + b₁) + b₂ = (W₂W₁)x + (W₂b₁ + b₂)`. Por muchas capas que se apilen, la red no podría aprender nada que no aprenda una regresión lineal.
+
+```python
+import numpy as np
+np.set_printoptions(precision=3)      # mostrar 3 decimales
+rng = np.random.default_rng(0)
+W1, b1 = rng.normal(size=(3, 2)), rng.normal(size=3)
+W2, b2 = rng.normal(size=(1, 3)), rng.normal(size=1)
+x = np.array([0.5, 1.2])
+
+dos_capas = W2 @ (W1 @ x + b1) + b2
+una_capa = (W2 @ W1) @ x + (W2 @ b1 + b2)
+print(dos_capas, una_capa)            # [-4.745] [-4.745]: dan lo mismo
+```
+
+Además de las de la tabla anterior hay otras dos que conviene conocer:
+
+| Función | Fórmula | Cuándo |
+|---------|---------|--------|
+| **Escalón** | 1 si z ≥ 0; 0 si no | El perceptrón original (1958). No se usa en redes profundas: su derivada es 0 en todas partes y el descenso de gradiente no puede aprender |
+| **Leaky ReLU** | z si z > 0; 0,01·z si no | Como ReLU, pero con una pequeña pendiente en los negativos. Evita las «neuronas muertas»: una neurona ReLU que siempre recibe valores negativos da 0, su gradiente es 0 y deja de aprender |
+
+Con `z = [−2, −0,5, 0, 0,5, 2]`: sigmoide → `[0,119 0,378 0,5 0,622 0,881]`, tanh → `[−0,964 −0,462 0 0,462 0,964]`, ReLU → `[0 0 0 0,5 2]` y Leaky ReLU → `[−0,02 −0,005 0 0,5 2]`.
+
+**Softmax en la práctica.** Con números grandes, `np.exp(1000)` desborda y la división da `nan`. Las librerías restan antes el máximo, que no cambia el resultado:
+
+```python
+def softmax(v):
+    e = np.exp(v - np.max(v))       # estable: el exponente mayor pasa a ser 0
+    return e / e.sum()
+
+print(softmax(np.array([2.0, 1.0, 0.1])))      # [0.659 0.242 0.099]
+print(softmax(np.array([1000.0, 999.0])))      # [0.731 0.269]  (sin restar: [nan nan])
+```
+
+#### Propagación hacia delante con matrices
+
+Con varias neuronas, las sumas ponderadas de una capa entera se hacen de una vez con un **producto de matrices**. Para cada capa:
+
+```
+Z = W · A_anterior + b        A = f(Z)
+```
+
+`W` tiene una fila por neurona de la capa y una columna por entrada. Ejemplo con 2 entradas, 2 neuronas ocultas con ReLU y 1 salida con sigmoide:
+
+```python
+X  = np.array([0.5, 1.2])
+W1 = np.array([[0.4, -0.3],
+               [0.8,  0.1]]);   b1 = np.array([0.1, -0.2])
+W2 = np.array([0.7, -1.2]);     b2 = 0.3
+
+Z1 = W1 @ X + b1                # [0.4·0.5 − 0.3·1.2 + 0.1, 0.8·0.5 + 0.1·1.2 − 0.2] = [-0.06, 0.32]
+A1 = np.maximum(0, Z1)          # ReLU: [0, 0.32]
+Z2 = W2 @ A1 + b2               # 0.7·0 − 1.2·0.32 + 0.3 = -0.084
+y_hat = 1 / (1 + np.exp(-Z2))   # 0.479
+```
+
+La red da una probabilidad de 0,479. La primera neurona oculta ha quedado «apagada» (ReLU de un negativo): para este ejemplo no aporta nada. Hacer una vez este cálculo a mano es la mejor forma de entender qué hace `model.predict`.
+
+#### Las funciones de pérdida, con números
+
+```python
+y_real = np.array([3.0, 5.0, 4.0, 6.0])
+y_pred = np.array([2.5, 5.5, 4.0, 7.0])
+mse = np.mean((y_real - y_pred) ** 2)    # 0.375
+mae = np.mean(np.abs(y_real - y_pred))   # 0.5
+```
+
+Si la última predicción fuera 16 en vez de 7 (un error grande), el MSE salta a **25,1** y el MAE solo a **2,75**: al elevar al cuadrado, el MSE castiga mucho los errores grandes. Por eso el MAE es más robusto cuando hay valores atípicos.
+
+La **entropía cruzada** castiga sobre todo equivocarse **con seguridad**. Si la respuesta correcta es 1 y la red dice:
+
+| Probabilidad para la clase correcta | 0,9 | 0,6 | 0,1 | 0,01 |
+|---|---|---|---|---|
+| Pérdida −log(p) | 0,105 | 0,511 | 2,303 | 4,605 |
+
+En multiclase solo cuenta la probabilidad de la clase correcta: con etiqueta `[0, 1, 0]` y predicción `[0,2, 0,7, 0,1]`, la pérdida es −log(0,7) = 0,357.
+
+#### Descenso de gradiente: lotes y tasa de aprendizaje
+
+Cada paso mueve los pesos en contra del gradiente: `w ← w − η · ∂L/∂w`, donde **η** es la **tasa de aprendizaje** (*learning rate*). Según cuántos ejemplos se usan para calcular el gradiente:
+
+| Variante | Ejemplos por paso | Comportamiento |
+|----------|-------------------|----------------|
+| **Por lotes** (*batch*) | Todos | Estable, pero lento y necesita mucha memoria |
+| **Estocástico** (SGD) | 1 | Rápido y ruidoso: los pasos zigzaguean |
+| **Minilotes** (*mini-batch*) | 32, 64, 128… | El equilibrio habitual; es lo que hace Keras con `batch_size` |
+
+Una **época** es una pasada completa por todos los datos de entrenamiento. Con 10 000 ejemplos y lotes de 32 hay ⌈10 000 / 32⌉ = **313 pasos por época** (el último lote tiene solo 16 ejemplos).
+
+La tasa de aprendizaje decide si se llega al mínimo. Minimizando `L(w) = (w − 3)²` desde `w = 0`, 10 pasos:
+
+```python
+def descenso(eta, pasos=10, w=0.0):
+    for _ in range(pasos):
+        w = w - eta * 2 * (w - 3)      # la derivada de (w − 3)² es 2(w − 3)
+    return w
+
+for eta in (0.01, 0.1, 0.5, 0.9, 1.1):
+    print(eta, round(descenso(eta), 2))
+# 0.01 → 0.55   demasiado pequeña: avanza muy despacio
+# 0.1  → 2.68   bien: se acerca a 3
+# 0.5  → 3.0    en este caso concreto, llega en un paso
+# 0.9  → 2.68   se pasa de largo y oscila: 5.4, 1.08, 4.54, 1.77…
+# 1.1  → -15.58 diverge: cada paso empeora
+```
+
+El valor «bueno» depende del problema: 0,001 es el punto de partida habitual con Adam, pero no una ley.
+
+#### Optimizadores: momento y Adam
+
+El descenso de gradiente básico (SGD) tiene dos problemas: avanza despacio por zonas casi planas y un mismo `η` puede ser pequeño para unos pesos y enorme para otros. Los optimizadores modernos lo corrigen:
+
+- **Momento** (*momentum*): acumula una «velocidad» con la media de los gradientes anteriores (`v ← β·v + g; w ← w − η·v`). Como una bola que rueda, atraviesa las zonas planas y amortigua los zigzags, aunque puede pasarse del mínimo.
+- **RMSprop y Adagrad**: adaptan el tamaño del paso de **cada peso** según lo grandes que hayan sido sus gradientes.
+- **Adam** combina las dos ideas: media de los gradientes (`m`) y media de sus cuadrados (`v`), con una corrección para los primeros pasos. El paso es `η · m̂ / (√v̂ + ε)`.
+
+La ventaja práctica de Adam se ve multiplicando la función por 100 (`L = 100·(w − 3)²`), como si los datos vinieran en otra escala:
+
+```python
+def adam(escala, eta=0.3, pasos=200, b1=0.9, b2=0.999, eps=1e-8):
+    w = m = v = 0.0
+    for t in range(1, pasos + 1):
+        g = escala * 2 * (w - 3)
+        m = b1 * m + (1 - b1) * g
+        v = b2 * v + (1 - b2) * g * g
+        m_hat, v_hat = m / (1 - b1 ** t), v / (1 - b2 ** t)
+        w -= eta * m_hat / (np.sqrt(v_hat) + eps)
+    return w
+
+print(round(adam(1), 3), round(adam(100), 3))      # 3.0 3.0
+```
+
+Adam llega a 3 en los dos casos, porque divide el gradiente por su propio tamaño. SGD con `η = 0,01` funciona con la escala 1, pero con la escala 100 oscila para siempre entre 0 y 6. Adam es la opción por defecto razonable, no «la mejor siempre»: en algunos problemas (sobre todo de imágenes) SGD con momento generaliza mejor.
+
+#### Inicialización de los pesos
+
+Los pesos no pueden empezar todos en 0: todas las neuronas de una capa calcularían lo mismo, recibirían el mismo gradiente y seguirían siendo iguales (problema de **simetría**). Se empiezan con números aleatorios pequeños, pero **cuánto** de pequeños importa. Pasando datos aleatorios por 20 capas ReLU de 256 neuronas, la desviación típica de la salida es:
+
+| Pesos iniciales | Desviación de la salida tras 20 capas |
+|-----------------|---------------------------------------|
+| Desviación 0,01 (demasiado pequeños) | ≈ 10⁻¹⁹: la señal se apaga |
+| **He**: varianza 2 / n_entradas | ≈ 0,84: la señal se mantiene |
+| Desviación 0,2 (demasiado grandes) | ≈ 10⁷: la señal explota |
+
+- **He** (varianza 2 / n_entradas) es la adecuada con ReLU.
+- **Glorot o Xavier** (varianza 2 / (n_entradas + n_salidas)) es la adecuada con sigmoide o tanh, y la que usa Keras por defecto en las capas `Dense`.
+
+#### Entrenar en Keras: épocas, validación, *dropout* y *early stopping*
+
+```python
+from tensorflow import keras
+
+modelo = keras.Sequential([
+    keras.Input(shape=(20,)),
+    keras.layers.Dense(64, activation="relu"),
+    keras.layers.Dropout(0.3),                     # apaga el 30 % de las neuronas en cada paso
+    keras.layers.Dense(32, activation="relu"),
+    keras.layers.Dense(1, activation="sigmoid"),
+])
+modelo.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001),
+               loss="binary_crossentropy", metrics=["accuracy"])
+
+parar = keras.callbacks.EarlyStopping(monitor="val_loss", patience=5, restore_best_weights=True)
+historia = modelo.fit(X_train, y_train, epochs=100, batch_size=32,
+                      validation_split=0.2, callbacks=[parar])
+modelo.evaluate(X_test, y_test)                    # el conjunto de prueba, solo al final
+```
+
+- `validation_split=0.2` aparta el 20 % del entrenamiento para vigilar el sobreajuste. El conjunto de **prueba** no se usa para decidir nada durante el entrenamiento: si se usa como validación (por ejemplo con `validation_data=(X_test, y_test)` y *early stopping*), su resultado deja de ser una estimación honesta (fuga de datos, [UD5 sección 6](ud5-ml.html)).
+- **Dropout** solo actúa al entrenar. Keras multiplica las neuronas que quedan por 1/(1 − p) durante el entrenamiento, así que al predecir están todas activas y no hay que reescalar nada.
+- **EarlyStopping** para cuando `val_loss` lleva `patience` épocas sin mejorar y, con `restore_best_weights=True`, se queda con los pesos de la mejor época.
+
+Cómo leer las curvas de `historia.history`:
+
+| Entrenamiento | Validación | Diagnóstico | Qué probar |
+|---------------|------------|-------------|------------|
+| Error alto | Error alto | **Subajuste**: el modelo es demasiado simple o ha entrenado poco | Más capas o neuronas, más épocas, mejores variables |
+| Error bajo | Error bajo y parecido | **Buen ajuste** | Nada |
+| Error bajo y bajando | Baja y luego **sube** | **Sobreajuste**: memoriza | Dropout, regularización L2, más datos, aumento de datos, *early stopping* |
+
+Los ejercicios [E62–E69](ejercicios.html#bloque-l--deep-learning-con-números-e62e69) practican todo esto con números. Las redes convolucionales, con el cálculo de tamaños y parámetros, están en la [UD3](ud3-vision.html#5-clasificar-imágenes), y las recurrentes y los Transformers, en la [UD4](ud4-lenguaje.html#108-redes-para-secuencias-rnn-lstm-gru-y-atención).
+
 #### Arquitecturas: cuál se usa para qué
 
 | Arquitectura | Idea | Datos | Dónde se ve |
@@ -4479,6 +4664,7 @@ print(saldo)                          # 4000 (sin candado salía unos 1000)
 | *Python Module 6: Strings* (@Mastercode.sagar, 11 págs.), procesado con OCR y MarkItDown | Formatos `%`, `format` y f-string, métodos de cadenas, programas típicos | 2.5, 2.6 y ejercicios E59–E61 |
 | Listas de redes sociales: «10 great Python packages for Data Science» y «8 awesome GitHub repos» | Librerías y repositorios revisados uno a uno | 12.4 y repositorios de 14.15 |
 | «The 25 Best Free Resources for Learning AI in 2026» (H. Sheikho, Substack, oct-2026) | Cursos, libros y vídeos gratuitos revisados uno a uno | 14.16; retropropagación a mano en 14.7 |
+| Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
 
 #### Repositorios para practicar con proyectos
 

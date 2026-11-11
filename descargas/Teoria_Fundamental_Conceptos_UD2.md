@@ -1,5 +1,5 @@
 # Teoría Fundamental y Referencias Externas
-## Conceptos para Resolver Ejercicios Python UD2 (E1-E52)
+## Conceptos para Resolver Ejercicios Python UD2 (E1-E61)
 
 ---
 
@@ -201,7 +201,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E52 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E61 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -857,6 +857,18 @@ print(f"{media=}")                   # media=7.4567   (útil para depurar)
 
 Con estas marcas se hacen tablas alineadas en la consola, como las de los informes de E15.
 
+**Otras dos formas de formatear** que aparecen en código antiguo y en muchos apuntes. Las tres dan el mismo resultado:
+
+```python
+nombre, nota = "Iria", 7
+print(f"{nombre}: {nota:.2f}")                 # f-string (Python 3.6+): la recomendada
+print("{}: {:.2f}".format(nombre, nota))       # str.format()
+print("%s: %.2f" % (nombre, nota))             # operador %: el más antiguo (%s texto, %d entero, %f decimal)
+print(f"|{nombre:^10}|", f"|{nombre:*^10}|")   # |   Iria   | |***Iria***|  (centrar y rellenar)
+```
+
+Con `%` y varios valores, los paréntesis son obligatorios: `"%s: %.2f" % nombre, nota` da `TypeError` (ejercicio E61).
+
 ### 2.6 Cadenas a fondo: índices, *slicing* e inmutabilidad
 
 Una cadena es una **secuencia de caracteres**: cada uno tiene una posición que empieza en 0, y las posiciones negativas cuentan desde el final.
@@ -888,6 +900,20 @@ Las cadenas son **inmutables**: `palabra[0] = "p"` da `TypeError`. Los métodos 
 "Hola mundo".index("mundo")          # 5  (como find, pero da error si no está)
 "Hola mundo".find("Vigo")            # -1
 ```
+
+**Más métodos útiles**:
+
+```python
+s = "  o can de Marín  "
+s.strip(), s.lstrip(), s.rstrip()   # quitar espacios: por los dos lados, la izquierda, la derecha
+"o can de marín".capitalize()       # 'O can de marín'   (solo la primera letra)
+"o can de marín".title()            # 'O Can De Marín'   (cada palabra)
+"banana".count("a")                 # 3
+"I love Python".find("Python")      # 7
+" ".join("Python é xenial".split()) # normalizar espacios: 'Python é xenial'
+```
+
+**Cuidado con las tildes.** Muchos programas de ejemplo cuentan vocales con `ch in "aeiou"`: en gallego o castellano se dejan fuera «á», «é», «ó»… Antes de comparar letras, conviene quitar las tildes con `unicodedata` (E32, E59).
 
 **Recorrer una cadena**: `for letra in palabra:` da cada carácter; `for i, letra in enumerate(palabra):` da también la posición. Con `ord("A")` (65) y `chr(65)` ("A") se pasa de carácter a número Unicode y al revés (UD4, sección de texto como números).
 
@@ -1821,6 +1847,177 @@ df['edad'] = df['edad'].astype(int)  # Cambiar tipo
 
 [Referencia: Pandas documentation](https://pandas.pydata.org/docs/)
 
+### 7.3 Pandas a fondo
+
+La sección 7.2 da lo mínimo. Esta recorre las operaciones que se usan en casi cualquier análisis, con un mismo ejemplo: las notas (inventadas) de un grupo de 1º BAC.
+
+```python
+import pandas as pd
+import numpy as np
+
+notas = pd.DataFrame({
+    "alumno":  ["Uxía", "Brais", "Antía", "Xoán", "Iria", "Martín"],
+    "grupo":   ["A", "B", "A", "B", "A", "B"],
+    "mates":   [8.5, 4.0, 9.25, np.nan, 6.5, 5.75],
+    "fisica":  [7.0, 5.5, 8.0, 4.5, np.nan, 6.0],
+    "faltas":  [2, 11, 0, 7, 3, 5],
+})
+```
+
+**Series e índice.** Cada columna es una **Series**: una lista de valores con un **índice** (las etiquetas de las filas). Por defecto el índice es 0, 1, 2…, pero puede ser cualquier cosa:
+
+```python
+s = pd.Series([10, 20, 30, 40], index=["a", "b", "c", "d"])
+s["b"]            # 20   por etiqueta
+s.iloc[-1]        # 40   por posición (también negativa)
+s["a":"c"]        # a, b, c: con etiquetas el final SÍ se incluye
+s.iloc[0:2]       # a, b:    con posiciones, el final NO se incluye (como en Python)
+```
+
+**`loc` frente a `iloc`.** Es la fuente de errores más común:
+
+| | `df.loc[filas, columnas]` | `df.iloc[filas, columnas]` |
+|-|---------------------------|----------------------------|
+| Usa | **Etiquetas** (nombres del índice y de columnas) y condiciones | **Posiciones** (0, 1, 2…) |
+| Rango `a:b` | Incluye el final | No incluye el final |
+| Ejemplo | `notas.loc[notas["grupo"] == "A", ["alumno", "mates"]]` | `notas.iloc[:3, 0:3]` |
+
+En Pandas actual, `s[-1]` con el índice por defecto **da error** (`KeyError`: busca la etiqueta −1, que no existe). Para posiciones, siempre `iloc`. Muchos apuntes antiguos usan `s[-1]` y en su versión funcionaba.
+
+**Filtrar.** Las condiciones se combinan con `&` (y), `|` (o) y `~` (no), **cada una entre paréntesis**:
+
+```python
+notas[(notas["grupo"] == "A") & (notas["mates"] >= 7)]          # Uxía y Antía
+notas[notas["alumno"].isin(["Brais", "Xoán"])]
+notas[notas["faltas"].between(3, 7)]                            # incluye 3 y 7
+notas.query("faltas > 5 and grupo == 'B'")                      # lo mismo, escrito como texto
+```
+
+Con `and` / `or` de Python da error (`ValueError: The truth value of a Series is ambiguous`): una columna tiene muchos valores, no uno.
+
+**Crear, cambiar y borrar columnas.**
+
+```python
+notas["media"] = notas[["mates", "fisica"]].mean(axis=1)        # media de cada fila (ignora NaN)
+notas["estado"] = np.where(notas["media"] >= 5, "apto", "no apto")
+notas["nivel"] = pd.cut(notas["media"], bins=[0, 5, 7, 9, 10],
+                        labels=["IN", "SU/BI", "NT", "SB"], right=False)
+notas.loc[notas["faltas"] > 10, "aviso"] = "absentismo"         # cambiar solo algunas filas
+notas = notas.rename(columns={"fisica": "física"})
+notas = notas.drop(columns=["aviso"])
+```
+
+`np.where` es un `if` para columnas enteras y `pd.cut` reparte números en tramos. Ojo con `mean(axis=1)`: ignora los huecos, así que a Xoán, sin nota de mates, le calcula la media solo con física (4,5). Para cambiar **algunas filas** de una columna, siempre `df.loc[condición, "columna"] = valor`, en un solo paso. La forma encadenada `df[condición]["columna"] = valor` **no cambia nada** en Pandas 3 (y en Pandas 2 daba un aviso): modifica una copia temporal.
+
+**Valores que faltan.** `NaN` significa «no hay dato».
+
+```python
+notas.isna().sum()                                  # cuántos faltan por columna
+notas["mates"].fillna(notas["mates"].median())      # rellenar con la mediana
+notas.dropna(subset=["física"])                     # quitar filas sin nota de física
+notas.dropna(subset=["mates", "física"])            # quitar a quien le falte alguna de las dos
+```
+
+Antes de rellenar, conviene preguntarse **por qué falta**: si Xoán no tiene nota de mates porque no se presentó, rellenar con la mediana le inventa una nota de 6,5. A veces es mejor dejarlo como `NaN` o crear una columna «no presentado».
+
+**Ordenar y quedarse con los primeros.**
+
+```python
+notas.sort_values(["grupo", "media"], ascending=[True, False])   # por grupo y, dentro, de mayor a menor
+notas.nlargest(3, "media")                                       # los tres mejores
+```
+
+**Agrupar con varias funciones a la vez** (agregación con nombre):
+
+```python
+resumen = notas.groupby("grupo").agg(
+    alumnos=("alumno", "count"),
+    media_mates=("mates", "mean"),
+    max_faltas=("faltas", "max"),
+)
+print(resumen.round(2))
+#        alumnos  media_mates  max_faltas
+# grupo
+# A            3         8.08           3
+# B            3         4.88          11
+```
+
+`count` cuenta los valores **no vacíos**: si se usara con `mates`, el grupo B daría 2, porque a Xoán le falta la nota. Para una tabla de doble entrada: `pd.pivot_table(notas, index="grupo", columns="estado", values="alumno", aggfunc="count")`.
+
+**Unir tablas: `merge` y `concat`.**
+
+```python
+optativas = pd.DataFrame({"alumno": ["Uxía", "Brais", "Antía", "Lucía"],
+                          "optativa": ["TIC", "Francés", "TIC", "Música"]})
+
+pd.merge(notas, optativas, on="alumno")                  # inner: solo los que están en las dos (3)
+pd.merge(notas, optativas, on="alumno", how="left")      # todas las notas; NaN si no hay optativa (6)
+pd.merge(notas, optativas, on="alumno", how="outer", indicator=True)   # todos, y de dónde viene cada fila (7)
+
+grupo_c = pd.DataFrame({"alumno": ["Noa"], "grupo": ["C"], "mates": [7.0]})
+pd.concat([notas, grupo_c], ignore_index=True)           # apilar filas (columnas que faltan → NaN)
+```
+
+| Operación | Une por | Como en SQL |
+|-----------|---------|-------------|
+| `merge(..., how="inner")` | Una columna común; solo coincidencias | `INNER JOIN` |
+| `merge(..., how="left")` | Todas las filas de la izquierda | `LEFT JOIN` |
+| `merge(..., how="outer")` | Todas las filas de las dos | `FULL OUTER JOIN` |
+| `concat([a, b])` | Pone una tabla **debajo** de otra (o al lado, con `axis=1`) | `UNION` |
+
+`indicator=True` añade la columna `_merge` (`both`, `left_only`, `right_only`) y es la forma más rápida de ver qué no ha casado: aquí, Lucía tiene optativa pero no notas. Si la columna de unión tiene repetidos por error, `merge` **multiplica filas**; `validate="one_to_one"` lo detecta.
+
+**Aplicar funciones.**
+
+| Método | Se aplica a | Ejemplo |
+|--------|-------------|---------|
+| `Series.map(f o dict)` | Cada valor de una columna | `notas["grupo"].map({"A": "mañana", "B": "tarde"})` |
+| `Series.apply(f)` | Cada valor de una columna | `notas["alumno"].apply(len)` |
+| `DataFrame.apply(f, axis=1)` | Cada **fila** | `notas.apply(lambda f: f["mates"] - f["física"], axis=1)` |
+| `DataFrame.map(f)` | Cada celda de la tabla | `notas[["mates", "física"]].map(round, na_action="ignore")` |
+| `.str.…` | Textos de una columna | `notas["alumno"].str.upper()`, `.str.contains("ia")` |
+
+`na_action="ignore"` salta los huecos: sin él, `round(NaN)` daría error. `applymap`, que aparece en muchos apuntes, se llama `DataFrame.map` desde Pandas 2.1 y **ya no existe** en Pandas 3. Y antes de usar `apply`, busca la versión **vectorizada**: `notas["mates"] - notas["física"]` hace lo mismo que el `apply` de la tabla y es decenas de veces más rápido con tablas grandes.
+
+**Fechas.**
+
+```python
+entregas = pd.DataFrame({"fecha": ["10/01/2026", "12/01/2026", "15/01/2026", "02/02/2026"],
+                         "tarea": ["T1", "T2", "T3", "T4"]})
+entregas["fecha"] = pd.to_datetime(entregas["fecha"], dayfirst=True)    # día/mes/año español
+entregas["dia_semana"] = entregas["fecha"].dt.day_name()
+entregas["dias_desde_anterior"] = entregas["fecha"].diff().dt.days
+print(entregas.set_index("fecha").resample("MS")["tarea"].count())      # entregas por mes
+```
+
+Sin `dayfirst=True`, «02/02/2026» no da problemas, pero «10/01/2026» podría leerse como 1 de octubre. Con `.dt` se sacan el año, el mes, el día o el nombre del día, y `resample` agrupa por periodos de tiempo (días, semanas `"W"`, meses `"MS"`).
+
+**Leer y escribir archivos.**
+
+| Formato | Leer | Escribir | Detalles |
+|---------|------|----------|----------|
+| CSV | `pd.read_csv("f.csv", sep=";", decimal=",", encoding="utf-8")` | `df.to_csv("f.csv", index=False)` | Los CSV españoles suelen usar `;` y coma decimal |
+| Excel | `pd.read_excel("f.xlsx", sheet_name="Hoja1")` | `df.to_excel("f.xlsx", index=False)` | Necesita `openpyxl` (en Colab ya está) |
+| JSON | `pd.read_json("f.json")` | `df.to_json("f.json", orient="records")` | Habitual en APIs |
+
+`index=False` evita guardar el índice como una columna sin nombre que aparece al volver a leer el archivo.
+
+**Gráficos directos.** Todo DataFrame tiene `.plot()` (usa Matplotlib por debajo, sección 8): `resumen["media_mates"].plot(kind="bar")`, `notas.plot(kind="scatter", x="faltas", y="media")`, `notas["media"].plot(kind="hist", bins=5)`.
+
+**Pandas 2 y Pandas 3.** Colab y los ordenadores del aula pueden tener versiones distintas (`pd.__version__`). Lo que más cambia al pasar a Pandas 3: la asignación encadenada deja de funcionar, `applymap` desaparece y las columnas de texto tienen un tipo propio (`str` en lugar de `object`). El código de esta sección funciona en las dos.
+
+| Error típico | Qué pasa | Forma correcta |
+|--------------|----------|----------------|
+| `s[-1]` con el índice por defecto | `KeyError` | `s.iloc[-1]` |
+| `df[cond]["col"] = valor` | No cambia el original | `df.loc[cond, "col"] = valor` |
+| `cond1 and cond2` | `ValueError` | `(cond1) & (cond2)` |
+| `df.dropna()` sin guardar | El original sigue igual | `df = df.dropna()` |
+| `inplace=True` | Funciona, pero se desaconseja y no ahorra memoria | Asignar el resultado: `df = df.rename(...)` |
+| `merge` con claves repetidas | Filas multiplicadas sin aviso | `validate="one_to_one"` |
+| Guardar sin `index=False` | Aparece una columna «Unnamed: 0» al volver a leer | `to_csv(..., index=False)` |
+
+Los ejercicios E53–E58 de la página de [ejercicios](ejercicios.html#bloque-j--pandas-a-fondo-e53e58) practican todo esto.
+
 ---
 
 ## 8️⃣ VISUALIZACIÓN CON MATPLOTLIB
@@ -2398,6 +2595,31 @@ pip install seaborn scikit-learn
 [Referencia: Seaborn tutorial](https://seaborn.pydata.org/tutorial.html)
 [Referencia: scikit-learn: Getting Started](https://scikit-learn.org/stable/getting_started.html)
 [Referencia: scikit-learn: elegir el estimador adecuado](https://scikit-learn.org/stable/machine_learning_map.html)
+
+### 12.4 Librerías «poco conocidas»: cuáles merecen la pena
+
+En redes circulan listas de librerías «que nadie conoce» y que lo hacen todo con una línea. Algunas son muy útiles; otras ahorran trabajo a costa de **esconder justo lo que hay que aprender**, o llevan años sin actualizarse. Revisión de diez muy compartidas (estado a noviembre de 2026):
+
+| Librería | Qué hace | Veredicto para el curso |
+|----------|----------|-------------------------|
+| **cleanlab** | Detecta **etiquetas probablemente erróneas** y datos raros a partir de las probabilidades de un modelo (*confident learning*) | ✅ **Útil** en la UD5 y en Análisis de datos: muchos conjuntos reales tienen etiquetas mal puestas. No es magia: señala candidatos que una persona debe revisar |
+| **drawdata** | Dibujar con el ratón puntos de dos clases dentro de Jupyter y obtener un DataFrame | ✅ **Muy didáctica**: dibujar datos «difíciles» y ver cómo responden k-NN, un árbol o k-medias (UD5) |
+| **black** | Formatea el código automáticamente con un estilo fijo | ✅ **Recomendable**. Hoy también se usa `ruff format`, compatible y mucho más rápido. Enlaza con el estilo de 14.14 |
+| **PivotTableJS** (`pivottablejs`) | Tabla dinámica interactiva, arrastrando columnas, en Jupyter | 🟡 Bien para **explorar**, pero no deja código: para el informe, `pd.pivot_table` (7.3) |
+| **LazyPredict** | Entrena unos 40 modelos de scikit-learn con su configuración por defecto y los ordena por resultado | 🟡 Solo como **vistazo inicial**. Usa una única división entrenamiento/prueba y no ajusta hiperparámetros; elegir el «ganador» por esa tabla es ajustar con la prueba (fuga de datos, UD5 sección 6). Mantenimiento irregular |
+| **PyCaret** | *AutoML* de «poco código»: preparación, comparación, ajuste y despliegue con pocas funciones | 🟡 Interesante para ver un flujo completo, **después** de haberlo hecho a mano. La versión estable no siempre admite la última versión de Python: comprobar antes de instalar |
+| **PyTorch Lightning** | Organiza el bucle de entrenamiento de PyTorch (GPU, registros, puntos de control) | 🟡 Ampliación: solo tiene sentido si ya se usa PyTorch (12.2). En el curso basta con Keras |
+| **Reflex** | Aplicaciones web completas (interfaz y servidor) escritas solo en Python | 🟡 Alternativa a Streamlit (sección 13) para aplicaciones más grandes; más compleja de aprender |
+| **Lux** | Propone gráficos automáticamente al mostrar un DataFrame | ❌ **Abandonada**: la última versión (0.5.1) es de febrero de 2022 y puede no funcionar con Pandas actual. Para un EDA automático, mejor `ydata-profiling` o hacer los gráficos (sección 8) |
+| **pyforest** | Importa «por arte de magia» `pd`, `np`, `plt`… cuando se usan, sin escribir los `import` | ❌ **Evitar**: esconde de dónde sale cada nombre, el cuaderno deja de funcionar en otro ordenador sin pyforest y va contra «explícito mejor que implícito» (14.14) |
+
+**Criterios para decidir si usar una librería nueva** (sirven para cualquier lista de este tipo):
+
+1. ¿Cuándo fue la **última versión** (en PyPI) y hay actividad en su repositorio?
+2. ¿Funciona con **mi** versión de Python y de Pandas? (`pip install` en un entorno de prueba antes de usarla en clase).
+3. ¿Me ahorra trabajo **repetitivo** o me ahorra **entender** algo? Lo primero, bien; lo segundo, solo cuando ya se sabe hacer a mano.
+4. ¿Qué pasa con mis datos? Algunas herramientas «gratuitas» suben los datos a un servidor.
+5. ¿La recomienda la documentación oficial o solo una publicación con un enlace acortado?
 
 ---
 
@@ -4196,6 +4418,25 @@ print(saldo)                          # 4000 (sin candado salía unos 1000)
 | *Transformer – Complete Handwritten Study Handbook* (@abhi_techhub), procesado con OCR | Codificación de posición, atención multicabeza, residual y normalización, máscara causal, atención cruzada, entrenamiento y coste | [UD4](ud4-lenguaje.html), sección 10.10 y ejercicios 10.8–10.9 |
 | Python Part 3 (POO) y Part 4 (Python avanzado), Coded Soul (@codedsoul_05), procesados con OCR y MarkItDown | Clases, `@property`, métodos de clase y estáticos, métodos especiales, herencia, polimorfismo, clases abstractas; iteradores, generadores, hilos, procesos y `asyncio` | 14.14 y ejercicios E47–E52 |
 | Python Part 1 y Part 2: Core Python (@codedsoul_05), apuntes manuscritos procesados con OCR | Conversión de tipos, formato, patrones, problemas numéricos, cadenas, conjuntos, comprensiones, `lambda`, `map`/`filter`/`reduce`, recursión, ámbito, módulos | 1.5, 2.4–2.6, 3.3–3.4, 4.6–4.10, 5.4–5.8 y ejercicios E28–E37 |
+| *Pandas Library* (@Mastercode.sagar, 21 págs.), procesado con OCR y MarkItDown | Series, `loc`/`iloc`, filtros, valores que faltan, `merge`/`concat`, `groupby`, `apply`/`map`, fechas, Excel, gráficos | 7.3 y ejercicios E53–E58 |
+| *Python Module 6: Strings* (@Mastercode.sagar, 11 págs.), procesado con OCR y MarkItDown | Formatos `%`, `format` y f-string, métodos de cadenas, programas típicos | 2.5, 2.6 y ejercicios E59–E61 |
+| Listas de redes sociales: «10 great Python packages for Data Science» y «8 awesome GitHub repos» | Librerías y repositorios revisados uno a uno | 12.4 y repositorios de 14.15 |
+
+#### Repositorios para practicar con proyectos
+
+Revisión de una lista muy compartida de «repos para aprender Python con proyectos» (estado a noviembre de 2026; las estrellas cambian cada día):
+
+| Repositorio | Qué es en realidad | Para el curso |
+|-------------|--------------------|---------------|
+| [practical-tutorials/project-based-learning](https://github.com/practical-tutorials/project-based-learning) (≈ 290 000 ★) | Una **lista de enlaces** a tutoriales de proyectos, en muchos lenguajes; no contiene código propio | ✅ Buscar en la sección de Python ideas de proyecto final. Algunos enlaces llevan años sin revisarse |
+| [realpython/materials](https://github.com/realpython/materials) | El código de los tutoriales de Real Python, carpeta por carpeta | ✅ Muy fiable; cada carpeta tiene un artículo que la explica (en inglés) |
+| [markusschanta/awesome-jupyter](https://github.com/markusschanta/awesome-jupyter) | Lista de herramientas, extensiones y cuadernos de Jupyter | 🟡 Para el profesorado: buscar extensiones y cuadernos de ejemplo |
+| [Python-World/python-mini-projects](https://github.com/Python-World/python-mini-projects) | Cientos de miniproyectos (juegos, utilidades) | 🟡 Ideas para practicar, pero el repositorio está **archivado desde 2022**: el código puede no funcionar con versiones actuales |
+| [arpit-omprakash/100ProjectsOfCode](https://github.com/arpit-omprakash/100ProjectsOfCode) | Una **lista de 100 enunciados** de proyectos para cualquier lenguaje, sin soluciones | ✅ Buen banco de retos para quien termina antes; sin soluciones, obliga a pensar |
+| [larymak/Python-project-Scripts](https://github.com/larymak/Python-project-Scripts) | Scripts de proyectos de todos los niveles, aportados por la comunidad | 🟡 Útil, pero la calidad varía mucho: revisar el código antes de usarlo |
+| «Learn By Doing» y «Data Science Projects» | La lista no da el enlace y hay **varios repositorios** con esos nombres | ❌ No se puede recomendar sin saber cuál es: un nombre genérico sin enlace no es una fuente |
+
+La lista no menciona ningún repositorio en castellano ni en gallego, y casi ninguno trata de **ciencia** con datos reales, aunque el título lo prometa. Para proyectos con datos de aquí, las fuentes de [Análisis de datos 1.6](datos.html#16-dónde-encontrar-datos-más-allá-de-kaggle) y los cuadernos del libro de la asignatura ([github.com/FranPuentes/iTI2025](https://github.com/FranPuentes/iTI2025)) encajan mejor. Los mismos criterios de 12.4 (actividad, versión, calidad, procedencia) sirven para elegir repositorios.
 
 ---
 

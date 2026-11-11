@@ -9335,6 +9335,12 @@ específicas, consulta las referencias externas proporcionadas</em></p>
   window.addEventListener("resize", function () { medir(); activo = null; marcar(); });
   (movil.addEventListener ? movil.addEventListener.bind(movil, "change") : movil.addListener.bind(movil))(function () { cerrar(false); medir(); });
   medir(); marcar();
+  window.addEventListener("load", function () {
+    medir();
+    var id = decodeURIComponent(location.hash.slice(1)), t = id && document.getElementById(id);
+    if (t) t.scrollIntoView({ behavior: "instant", block: "start" });
+    activo = null; marcar();
+  });
 })();
 </script>
 <script>

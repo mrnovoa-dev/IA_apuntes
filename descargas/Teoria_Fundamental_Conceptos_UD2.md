@@ -3377,6 +3377,63 @@ for paso in range(1, 6):
     print(f"paso {paso}: w = {w:.3f}")      # 0.800, 1.280, 1.568, 1.741, 1.844 → se acerca a 2
 ```
 
+**Retropropagación a mano: una neurona completa.** Con un solo peso, la derivada es inmediata. Con varios, la **regla de la cadena** reparte la culpa del error entre todos ellos: se calcula de atrás hacia delante, de la pérdida a la salida, de la salida a la suma y de la suma a cada peso. Es lo mismo que hacen PyTorch o Keras, solo que ellos lo automatizan para millones de pesos (la idea se inspira en *micrograd*, de A. Karpathy; el código es propio).
+
+```python
+import math
+
+x1, x2 = 2.0, -1.0          # entradas
+w1, w2, b = 0.5, 1.0, 0.0   # pesos y sesgo iniciales
+y_real = 1.0                # respuesta correcta
+
+def sigmoide(z):
+    return 1 / (1 + math.exp(-z))
+
+def perdida(w1, w2, b):
+    p = sigmoide(w1 * x1 + w2 * x2 + b)
+    return (p - y_real) ** 2
+
+# Hacia delante (forward)
+z = w1 * x1 + w2 * x2 + b    # 0.0
+p = sigmoide(z)              # 0.5
+L = (p - y_real) ** 2        # 0.25
+
+# Hacia atrás (backward): cada paso multiplica por la derivada local
+dL_dp = 2 * (p - y_real)     # -1.0
+dp_dz = p * (1 - p)          # 0.25   derivada de la sigmoide
+dL_dz = dL_dp * dp_dz        # -0.25
+dL_dw1 = dL_dz * x1          # -0.5
+dL_dw2 = dL_dz * x2          #  0.25
+dL_db  = dL_dz * 1           # -0.25
+
+# Comprobación numérica: mover un poco el peso y medir cuánto cambia la pérdida
+h = 1e-6
+print(round((perdida(w1 + h, w2, b) - perdida(w1 - h, w2, b)) / (2 * h), 4))   # -0.5
+print(round((perdida(w1, w2 + h, b) - perdida(w1, w2 - h, b)) / (2 * h), 4))   #  0.25
+
+# Entrenar: repetir forward, backward y actualizar
+lr = 1.0
+for paso in range(1, 31):
+    p = sigmoide(w1 * x1 + w2 * x2 + b)
+    dL_dz = 2 * (p - y_real) * p * (1 - p)
+    w1 -= lr * dL_dz * x1
+    w2 -= lr * dL_dz * x2
+    b  -= lr * dL_dz
+    if paso in (1, 10, 30):
+        print(f"paso {paso:2}: predicción {p:.3f}, pérdida {(p - y_real) ** 2:.4f}")
+# paso  1: predicción 0.500, pérdida 0.2500
+# paso 10: predicción 0.930, pérdida 0.0049
+# paso 30: predicción 0.961, pérdida 0.0015
+```
+
+Tres cosas que se ven en este ejemplo:
+
+- **El signo dice hacia dónde mover.** `dL_dw1` es negativo: subir `w1` baja el error, así que la actualización `w1 -= lr * dL_dw1` lo sube. `dL_dw2` es positivo porque `x2` es negativo: ese peso tiene que bajar.
+- **La comprobación numérica** es la forma de saber si una derivada calculada a mano está bien. Si los dos números no coinciden, hay un error en el *backward*.
+- **El aprendizaje se frena.** De 0,93 a 0,96 cuesta 20 pasos, porque cuando la sigmoide se acerca a 1 su derivada `p·(1−p)` se hace muy pequeña. Ese mismo efecto, repetido capa tras capa, es el **desvanecimiento del gradiente** que dificulta entrenar redes profundas con sigmoides, y una de las razones por las que hoy se usa ReLU en las capas ocultas.
+
+> **Prueba tú:** cambia `y_real` a `0.0` y predice antes de ejecutar el signo de cada derivada. Después añade una tercera entrada `x3` con su peso `w3`: ¿qué línea nueva hace falta en el *backward*?
+
 **Contar parámetros**: una capa densa con `n_entrada` entradas y `n_salida` neuronas tiene `n_entrada × n_salida` pesos + `n_salida` sesgos. Una red 3 → 4 → 4 → 2 tiene (12+4) + (16+4) + (8+2) = **46 parámetros**.
 
 #### Sobreajuste y cómo evitarlo
@@ -4421,6 +4478,7 @@ print(saldo)                          # 4000 (sin candado salía unos 1000)
 | *Pandas Library* (@Mastercode.sagar, 21 págs.), procesado con OCR y MarkItDown | Series, `loc`/`iloc`, filtros, valores que faltan, `merge`/`concat`, `groupby`, `apply`/`map`, fechas, Excel, gráficos | 7.3 y ejercicios E53–E58 |
 | *Python Module 6: Strings* (@Mastercode.sagar, 11 págs.), procesado con OCR y MarkItDown | Formatos `%`, `format` y f-string, métodos de cadenas, programas típicos | 2.5, 2.6 y ejercicios E59–E61 |
 | Listas de redes sociales: «10 great Python packages for Data Science» y «8 awesome GitHub repos» | Librerías y repositorios revisados uno a uno | 12.4 y repositorios de 14.15 |
+| «The 25 Best Free Resources for Learning AI in 2026» (H. Sheikho, Substack, oct-2026) | Cursos, libros y vídeos gratuitos revisados uno a uno | 14.16; retropropagación a mano en 14.7 |
 
 #### Repositorios para practicar con proyectos
 
@@ -4437,6 +4495,47 @@ Revisión de una lista muy compartida de «repos para aprender Python con proyec
 | «Learn By Doing» y «Data Science Projects» | La lista no da el enlace y hay **varios repositorios** con esos nombres | ❌ No se puede recomendar sin saber cuál es: un nombre genérico sin enlace no es una fuente |
 
 La lista no menciona ningún repositorio en castellano ni en gallego, y casi ninguno trata de **ciencia** con datos reales, aunque el título lo prometa. Para proyectos con datos de aquí, las fuentes de [Análisis de datos 1.6](datos.html#16-dónde-encontrar-datos-más-allá-de-kaggle) y los cuadernos del libro de la asignatura ([github.com/FranPuentes/iTI2025](https://github.com/FranPuentes/iTI2025)) encajan mejor. Los mismos criterios de 12.4 (actividad, versión, calidad, procedencia) sirven para elegir repositorios.
+
+### 14.16 Recursos gratuitos para seguir aprendiendo IA
+
+Revisión de la lista «The 25 Best Free Resources for Learning AI in 2026» (H. Sheikho, octubre de 2026). Todos son buenos, pero casi todos están pensados para la universidad o para profesionales. Aquí se ordenan según lo que sirve en 1º de Bachillerato (estado a noviembre de 2026).
+
+**Para usar durante el curso.** Nivel adecuado, muy visuales y sin matemáticas universitarias. Están en inglés, pero los vídeos tienen subtítulos automáticos en castellano.
+
+| Recurso | Qué es | Dónde encaja |
+|---------|--------|--------------|
+| [3Blue1Brown: *Neural Networks*](https://www.3blue1brown.com/topics/neural-networks) | Vídeos con animaciones: qué es una red, descenso de gradiente, retropropagación y, en los últimos capítulos, cómo funcionan los Transformers y la atención | 14.7, [UD4](ud4-lenguaje.html) 10.10 |
+| [StatQuest (Josh Starmer)](https://www.youtube.com/@statquest) | Vídeos cortos que explican paso a paso un algoritmo o una idea de estadística | [UD5](ud5-ml.html): árboles, regresión logística, validación cruzada, *bias-variance* |
+| [Google *Machine Learning Crash Course*](https://developers.google.com/machine-learning/crash-course) | Curso corto de Google con visualizaciones interactivas y ejercicios | UD5, para repasar vocabulario y métricas |
+| [Kaggle Learn](https://www.kaggle.com/learn) | Microcursos en el navegador: Python, Pandas, *Intro to Machine Learning*, *Computer Vision*… | UD2, [UD3](ud3-vision.html), UD5 |
+| [Jay Alammar: *The Illustrated Transformer*](https://jalammar.github.io/illustrated-transformer/) | Explicación del Transformer con dibujos, paso a paso | UD4 10.10, antes de leer cualquier artículo |
+| [Hugging Face Learn](https://huggingface.co/learn) | Cursos prácticos de LLM, agentes, visión y difusión con las librerías de Hugging Face. El curso de LLM tiene [traducción parcial al castellano](https://huggingface.co/docs/course/es/chapter1/1) | Proyectos de UD3 y UD4 |
+
+**Para quien quiera ir más lejos.** Alumnado muy motivado o profesorado. Requieren más tiempo, más inglés y, a veces, derivadas.
+
+| Recurso | Qué es | Antes de empezar |
+|---------|--------|------------------|
+| [A. Karpathy: *Neural Networks: Zero to Hero*](https://karpathy.ai/zero-to-hero.html) | Construye desde cero una red, luego un modelo de lenguaje y un GPT pequeño, sin librerías que escondan nada | La retropropagación a mano de 14.7 es una versión mínima del primer vídeo |
+| [fast.ai: *Practical Deep Learning for Coders*](https://course.fast.ai/) | Entrena modelos que funcionan desde la primera clase; la teoría llega después | Funciona en Colab |
+| [MIT 6.S191: *Introduction to Deep Learning*](http://introtodeeplearning.com/) | Curso intensivo que se renueva cada año, con prácticas en Python | Buena panorámica de lo más reciente |
+| [*Dive into Deep Learning*](https://d2l.ai/) | Libro interactivo con código ejecutable en cada capítulo | Necesita PyTorch |
+| [mlcourse.ai](https://mlcourse.ai/) | Curso práctico con tareas y soluciones sobre datos reales | Alternativa al curso de Coursera |
+| [M. Labonne: *LLM Course*](https://github.com/mlabonne/llm-course) | Hoja de ruta y cuadernos de Colab sobre ajuste fino, cuantización, RAG y despliegue | Profesorado: ideas para ampliar 14.8 |
+| [Lil'Log (Lilian Weng)](https://lilianweng.github.io/) y [Hugging Face Papers](https://huggingface.co/papers) | Artículos de repaso muy documentados y selección diaria de artículos de investigación | Profesorado: estar al día |
+
+**Para después del Bachillerato.** Son material universitario. Exigen álgebra lineal, cálculo de varias variables y probabilidad.
+
+- *Mathematics for Machine Learning* ([mml-book.github.io](https://mml-book.github.io/)): las matemáticas que hay debajo de todo lo anterior.
+- *Understanding Deep Learning* de S. Prince ([udlbook](https://udlbook.github.io/udlbook/)) y *Deep Learning* de Goodfellow, Bengio y Courville ([deeplearningbook.org](https://www.deeplearningbook.org/)). Este último es de 2016: sus capítulos de arquitecturas se han quedado antiguos y no trata los Transformers.
+- Cursos de Stanford: [CS229](https://cs229.stanford.edu/) (ML), [CS231n](https://cs231n.stanford.edu/) (visión), [CS224n](https://web.stanford.edu/class/cs224n/) (lenguaje) y [CS336](https://stanford-cs336.github.io/) (entrenar un modelo de lenguaje desde cero, muy exigente).
+- Aprendizaje por refuerzo: el libro de [Sutton y Barto](http://incompleteideas.net/book/the-book-2nd.html) y la guía [*Spinning Up*](https://spinningup.openai.com/) de OpenAI.
+
+**Lo que no conviene recomendar.**
+
+- *Machine Learning Handbook* de Yandex y *Deep Learning School* del MIPT: están **en ruso**.
+- *Machine Learning Specialization* de Andrew Ng (Coursera): la lista dice que se puede seguir gratis como oyente, pero desde agosto de 2025 Coursera **retiró ese modo** en muchos cursos y en los de DeepLearning.AI solo deja ver gratis la primera semana. Antes de recomendarlo, comprueba cómo está el acceso.
+
+**Lo que falta en la lista.** No incluye nada en castellano ni en gallego. Como primer curso de IA en castellano, sin programar, está [*Elements of AI*](https://www.elementsofai.com/) (Universidad de Helsinki; la versión en castellano, «Elementos de la IA», es de la UNED). Y para cualquier recurso sirven las mismas preguntas de 12.4: si está actualizado, qué nivel exige y quién lo publica.
 
 ---
 
@@ -4475,7 +4574,7 @@ La lista no menciona ningún repositorio en castellano ni en gallego, y casi nin
 
 **Estadística**:
 - [Khan Academy Statistics](https://www.khanacademy.org/math/statistics-probability)
-- [StatQuest with Josh Starmer](https://www.youtube.com/c/joshstarmer) - YouTube
+- [StatQuest with Josh Starmer](https://www.youtube.com/@statquest) - YouTube
 
 ### Libros Recomendados
 

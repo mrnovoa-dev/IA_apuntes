@@ -1,27 +1,30 @@
 # Teoría Fundamental y Referencias Externas
-## Conceptos para Resolver Ejercicios Python UD2 (E1-E69)
+## Teoría del curso: de la UD1 a la UD5
+
+Esta teoría es común a **todo el curso**. Empezó como el apoyo de la UD2 (Python para IA) y ha crecido con la UD1 y con la base de la UD3, la UD4 y la UD5. Cada sección lleva una etiqueta con su unidad, en el índice y junto al título: al pulsarla se abre la página de esa unidad. La UD2 no tiene página propia: su desarrollo es esta teoría y los [ejercicios](ejercicios.html).
 
 ---
 
 ## 📚 Tabla de Contenidos
-0. Punto de partida: conceptos fundamentales de IA (UD1)
-1. Fundamentos de Programación (nombres, constantes, operadores)
-2. Tipos de Datos en Python (conversión, entrada/salida y formato, cadenas a fondo)
-3. Estructuras de Control (bucles anidados, patrones, problemas numéricos)
-4. Funciones (argumentos, lambda, map/filter/reduce, recursión, ámbito)
-5. Estructuras de Datos Complejas (listas a fondo, conjuntos, comprensiones, módulos, chuleta, tablas y CSV sin Pandas)
-6. Conceptos Estadísticos
-7. Librerías Científicas (NumPy, Pandas)
-8. Visualización (Matplotlib)
-9. Conceptos ETL y Análisis de Datos
-10. Introducción a Machine Learning
-11. Introducción a Big Data
-12. Ecosistema de Librerías: PyTorch, scikit-learn y Seaborn
-13. Crear Aplicaciones: Escritorio y Web (tkinter, Streamlit, Gradio...) y desplegar un modelo
-14. Ampliación con materiales complementarios (IA vs ML vs DL vs GenAI, Pandas, pipeline ML, Seaborn, EDA, redes neuronales, IA generativa, hashing, automatización, testing y SQLite, algoritmia, banco de ejercicios, buenas prácticas y Python avanzado)
-15. Referencias Externas (incluye IDEs locales y datasets recomendados)
 
----
+| Sección | Unidad |
+|---------|--------|
+| 0. Punto de partida: conceptos fundamentales de IA | [UD1](ud1.html) |
+| 1. Fundamentos de programación (nombres, constantes, operadores) | UD2 |
+| 2. Tipos de datos en Python (conversión, entrada/salida y formato, cadenas a fondo) | UD2 |
+| 3. Estructuras de control (bucles anidados, patrones, problemas numéricos) | UD2 |
+| 4. Funciones (argumentos, lambda, map/filter/reduce, recursión, ámbito) | UD2 |
+| 5. Estructuras de datos complejas (listas, conjuntos, comprensiones, módulos, tablas y CSV sin Pandas) | UD2 |
+| 6. Conceptos estadísticos | UD2 |
+| 7. Librerías científicas (NumPy, Pandas) | UD2 |
+| 8. Visualización (Matplotlib) | UD2 |
+| 9. ETL y análisis de datos | UD2 |
+| 10. Introducción a Machine Learning | [UD5](ud5-ml.html) |
+| 11. Introducción a Big Data | UD2 · [UD5](ud5-ml.html) |
+| 12. Ecosistema de librerías: PyTorch, scikit-learn y Seaborn | UD2 · [UD3](ud3-vision.html) · [UD5](ud5-ml.html) |
+| 13. Crear aplicaciones: escritorio y web, y desplegar un modelo | UD2 · [UD5](ud5-ml.html) |
+| 14. Ampliación: IA, ML, DL y GenAI, pipeline de ML, EDA, redes neuronales, IA generativa, hashing, automatización, testing, algoritmia, buenas prácticas, recursos | [UD1](ud1.html) a [UD5](ud5-ml.html), según el apartado |
+| 15. Referencias externas, IDEs, datasets y guía práctica | General |
 
 ## 0️⃣ PUNTO DE PARTIDA: CONCEPTOS FUNDAMENTALES DE IA (UD1)
 

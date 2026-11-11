@@ -47,6 +47,83 @@ PAGINAS = [
 SOL = re.compile(r'<details class="sol">\s*<summary>(.*?)</summary>.*?</details>', re.S)
 
 
+# --- Unidad de cada sección (teoría y ejercicios son comunes a todo el curso) ---
+UNIDADES = {
+    "UD1": "ud1.html",
+    "UD2": "asignatura.html#las-cinco-unidades",   # la UD2 no tiene página propia
+    "UD3": "ud3-vision.html",
+    "UD4": "ud4-lenguaje.html",
+    "UD5": "ud5-ml.html",
+    "Todas": "asignatura.html#las-cinco-unidades",
+}
+# Teoría: por número de sección (h2) o de apartado (h3, solo si cambia respecto a su sección)
+UD_TEORIA = {
+    "0": ["UD1"], "1": ["UD2"], "2": ["UD2"], "3": ["UD2"], "4": ["UD2"], "5": ["UD2"],
+    "6": ["UD2"], "7": ["UD2"], "8": ["UD2"], "9": ["UD2"], "10": ["UD5"],
+    "11": ["UD2", "UD5"], "12": ["UD2", "UD3", "UD5"], "13": ["UD2", "UD5"], "14": ["Todas"],
+    "12.1": ["UD2"], "12.2": ["UD3", "UD5"], "12.3": ["UD2", "UD5"], "12.4": ["UD2"],
+    "13.7": ["UD5"],
+    "14.1": ["UD1"], "14.2": ["UD1"], "14.3": ["UD2"], "14.4": ["UD5"], "14.5": ["UD2"],
+    "14.6": ["UD2"], "14.7": ["UD3", "UD5"], "14.8": ["UD4"], "14.9": ["UD2"],
+    "14.10": ["UD2"], "14.11": ["UD2"], "14.12": ["UD1", "UD2"], "14.13": ["UD2"],
+    "14.14": ["UD2"],
+}
+# Ejercicios: por letra de bloque
+UD_EJERCICIOS = {
+    "A": ["UD2"], "B": ["UD2"], "C": ["UD2"], "D": ["UD2"], "E": ["UD2", "UD5"], "F": ["UD2"],
+    "G": ["UD2"], "H": ["UD4"], "I": ["UD2"], "J": ["UD2"], "K": ["UD2"], "L": ["UD3", "UD5"],
+    "prompt": ["UD2"],
+}
+CABECERA = re.compile(r'<(h[23]) id="([^"]+)">(.*?)</\1>', re.S)
+
+
+def clave_teoria(nivel, texto):
+    t = texto.replace("🔟", "10")
+    t = re.sub(r"(\d)\ufe0f\u20e3", r"\1", t)
+    m = re.match(r"\s*(\d+(?:\.\d+)?)", t)
+    if not m:
+        return None
+    return m.group(1) if (nivel == "h2" or "." in m.group(1)) else None
+
+
+def clave_ejercicios(nivel, texto):
+    if nivel != "h2":
+        return None
+    m = re.match(r"\s*Bloque ([A-Z]) ", texto)
+    if m:
+        return m.group(1)
+    return "prompt" if "prompt" in texto else None
+
+
+def etiquetas(uds):
+    enlaces = "".join(f'<a class="ud-tag" data-ud="{u}" href="{UNIDADES[u]}" title="{'Todas las unidades' if u == 'Todas' else 'Ir a la ' + u}">{u}</a>' for u in uds)
+    return f'<span class="ud-tags">{enlaces}</span>'
+
+
+def marcar_unidades(html, nav):
+    if nav == "teoria":
+        tabla, clave = UD_TEORIA, clave_teoria
+    elif nav == "ejercicios":
+        tabla, clave = UD_EJERCICIOS, clave_ejercicios
+    else:
+        return html
+    marcadas = {}
+
+    def cabecera(m):
+        nivel, ident, texto = m.groups()
+        k = clave(nivel, re.sub(r"<[^>]+>", "", texto))
+        if k is None or k not in tabla:
+            return m.group(0)
+        marcadas[ident] = tabla[k]
+        return f'<{nivel} id="{ident}">{texto}{etiquetas(tabla[k])}</{nivel}>'
+
+    html = CABECERA.sub(cabecera, html)
+    for ident, uds in marcadas.items():
+        patron = re.compile(r'(<a\s+href="#' + re.escape(ident) + r'"\s+id="toc-[^"]*">.*?</a>)', re.S)
+        html = patron.sub(lambda m: m.group(1) + etiquetas(uds), html, count=1)
+    return html
+
+
 def b64(b: bytes) -> str:
     return base64.b64encode(b).decode()
 
@@ -74,13 +151,14 @@ def main():
         sys.exit("Faltan fuentes: " + ", ".join(faltan) + "\n(las de contenidos/ están en el Proyecto de Claude, no en GitHub)")
     password = os.environ.get("IA_SOL_PASS") or getpass.getpass("Contraseña de las soluciones: ")
     for fuente, salida, nav in PAGINAS:
-        extra = ["--metadata", "title=Teoría UD2",
-                 "--metadata", "description=Teoría fundamental de Python para IA (UD2): fundamentos, NumPy, Pandas, visualización, ETL, ML, Big Data, librerías, apps y ampliación."] if nav == "teoria" else []
+        extra = ["--metadata", "title=Teoría",
+                 "--metadata", "description=Teoría de todo el curso de Tecnoloxías Intelixentes, de la UD1 a la UD5: conceptos de IA, Python, NumPy, Pandas, visualización, ETL, ML, Big Data, librerías, apps, redes neuronales e IA generativa."] if nav == "teoria" else []
         html = subprocess.run(
             ["pandoc", fuente, "-f", "gfm+yaml_metadata_block", "-t", "html5", "-s",
              "--template", str(PLANTILLA), "--toc", "--toc-depth=3",
              "--highlight-style=pygments", f"-V", f"cur-{nav}=1", *extra],
             cwd=RAIZ, check=True, capture_output=True, text=True).stdout
+        html = marcar_unidades(html, nav)
         html, sal, n = cifrar_soluciones(html, password)
         if n:
             html = html.replace('<article class="content">',

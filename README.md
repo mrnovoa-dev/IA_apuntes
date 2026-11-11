@@ -7,8 +7,8 @@ Web de apuntes de **Inteligencia Artificial con Python** para *Tecnoloxías Inte
 | `index.html` | Portada: acceso a las cinco unidades, ejercicios y descargas |
 | `asignatura.html` | La asignatura: objetivos, unidades, criterios, evaluación y metodología (programación 2026/27) |
 | `ud1.html` | UD1 · Conceptos clave de la IA: desarrollo, ejemplos y ejercicios |
-| `teoria.html` | UD2 · Teoría de Python para IA (secciones 0–15) con índice navegable |
-| `ejercicios.html` | UD2 · Ejercicios E1–E69 con pistas y soluciones, y ejercicios «prompt → código» |
+| `teoria.html` | Teoría de todo el curso (secciones 0–15, de la UD1 a la UD5) con índice navegable y la unidad de cada sección |
+| `ejercicios.html` | Ejercicios E1–E69 de todas las unidades (cada bloque indica la suya) con pistas y soluciones, y ejercicios «prompt → código» |
 | `ud3-vision.html` | UD3 · Visión artificial |
 | `ud4-lenguaje.html` | UD4 · Procesamiento del lenguaje natural |
 | `ud5-ml.html` | UD5 · Aprendizaje automático |
@@ -17,7 +17,7 @@ Web de apuntes de **Inteligencia Artificial con Python** para *Tecnoloxías Inte
 | `apps.html` | Apps y juegos: diez proyectos de Python (P1–P10) y una revisión crítica (P11), con rúbrica y soluciones cifradas |
 | `chuletas.html` | Chuletas visuales (imágenes en `assets/chuletas/`) de Python, NumPy, Pandas, Polars, Matplotlib, scikit-learn, TensorFlow y PyTorch, con notas «Ojo» |
 | `mapa.html` | Mapa visual: conceptos, 43 librerías filtrables, chuletas y autoevaluación |
-| `descargas/` | Teoría UD2 en `.odt` (editable) y en Markdown (fuente) |
+| `descargas/` | Teoría en `.odt` (editable) y en Markdown (fuente) |
 
 Las unidades siguen la programación oficial 2026/27 (UD3 Visión, UD4 Lenguaje) y el libro de J. F. Puentes Calvo, *Tecnologías Inteligentes* (2025, CC BY-NC-ND 4.0). Los textos son propios: el libro se cita por capítulos, no se copia.
 

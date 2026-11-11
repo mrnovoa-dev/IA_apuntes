@@ -189,3 +189,22 @@ article.content details.sol > summary::after { content: " 🔓"; font-weight: 40
 figure.chuleta { margin: 1em 0; max-width: 760px; }
 figure.chuleta a { display: block; }
 figure.chuleta img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--r); background: #fff; }
+
+/* Etiquetas de unidad en la teoría y los ejercicios */
+.ud-tags { display: inline-flex; flex-wrap: wrap; gap: 4px; vertical-align: middle; }
+article.content h2 .ud-tags, article.content h3 .ud-tags { margin-left: .5em; }
+.ud-tag { --u: var(--muted); display: inline-block; padding: 1px 7px; border-radius: 999px; font: 700 .68rem/1.5 var(--font-body);
+  letter-spacing: .02em; text-decoration: none; color: var(--ink); background: color-mix(in srgb, var(--u) 18%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--u) 55%, transparent); white-space: nowrap; }
+article.content h2 .ud-tag { font-size: .72rem; }
+.ud-tag:hover { background: color-mix(in srgb, var(--u) 32%, var(--surface)); }
+.ud-tag[data-ud="UD1"] { --u: var(--c-datos); }
+.ud-tag[data-ud="UD2"] { --u: var(--c-auto); }
+.ud-tag[data-ud="UD3"] { --u: var(--c-visual); }
+.ud-tag[data-ud="UD4"] { --u: var(--c-texto); }
+.ud-tag[data-ud="UD5"] { --u: var(--c-ml); }
+.ud-tag[data-ud="Todas"] { --u: var(--accent); }
+#TOC .ud-tags { display: flex; padding: 0 8px 4px 8px; margin-top: -2px; }
+#TOC li.has-sub > .ud-tags { padding-right: 34px; }
+#TOC .ud-tags a.ud-tag { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: .68rem; line-height: 1.5; color: var(--ink); }
+#TOC .ud-tags a.ud-tag:hover { background: color-mix(in srgb, var(--u) 32%, var(--surface)); }

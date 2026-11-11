@@ -14,6 +14,7 @@ Web de apuntes de **Inteligencia Artificial con Python** para *Tecnoloxías Inte
 | `ud5-ml.html` | UD5 · Aprendizaje automático |
 | `datos.html` | Itinerario de análisis de datos (UD2 → UD5): adquirir, explorar, limpiar y modelar. Estructura inspirada en el módulo «Análisis de datos (AD)» ([mp5101-ad.vercel.app](https://mp5101-ad.vercel.app/)) |
 | `libro.html` | El libro de J. F. Puentes, capítulo a capítulo, con notebooks y banco de prompts |
+| `apps.html` | Apps y juegos: diez proyectos de Python (P1–P10) y una revisión crítica (P11), con rúbrica y soluciones cifradas |
 | `chuletas.html` | Chuletas visuales (imágenes en `assets/chuletas/`) de Python, NumPy, Pandas, Polars, Matplotlib, scikit-learn, TensorFlow y PyTorch, con notas «Ojo» |
 | `mapa.html` | Mapa visual: conceptos, 43 librerías filtrables, chuletas y autoevaluación |
 | `descargas/` | Teoría UD2 en `.odt` (editable) y en Markdown (fuente) |

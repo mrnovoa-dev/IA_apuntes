@@ -79,16 +79,26 @@ footer.site .in { max-width: 1180px; margin: 0 auto; padding: 20px 16px 40px; co
 
 /* Documento de teoría */
 .doc { max-width: 1180px; margin: 0 auto; padding: 24px 16px 48px; display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 40px; align-items: start; }
-.doc > div:first-child { position: sticky; top: 72px; min-width: 0; }
-#TOC { max-height: calc(100vh - 90px); overflow: auto; font-size: 0.86rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 10px 14px 0; }
-#TOC::before { content: "Índice"; display: block; font-family: var(--font-display); font-weight: 800; font-size: 1rem; padding: 0 0 8px 16px; }
-#TOC ul { list-style: none; margin: 0; padding-left: 16px; }
-#TOC ul ul { padding-left: 12px; border-left: 1px solid var(--line); margin: 2px 0 4px 4px; }
-#TOC a { display: block; padding: 3px 0; color: var(--muted); text-decoration: none; line-height: 1.35; }
-#TOC a:hover, #TOC a.on { color: var(--ink); }
-#TOC a.on { font-weight: 700; }
+.toc-side { position: sticky; top: calc(var(--top-h, 54px) + 16px); min-width: 0; }
+#TOC { max-height: calc(100vh - var(--top-h, 54px) - 34px); overflow: auto; overscroll-behavior: contain; scroll-padding-top: 64px; font-size: 0.86rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 0 8px 14px 0; }
+.toc-head { position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 8px; background: var(--surface); padding: 12px 4px 8px 16px; font-family: var(--font-display); font-weight: 800; font-size: 1rem; }
+.toc-close { display: none; }
+#TOC ul { list-style: none; margin: 0; padding-left: 8px; }
+#TOC ul ul { padding-left: 10px; border-left: 1px solid var(--line); margin: 2px 0 4px 12px; }
+#TOC a { display: block; padding: 4px 8px; border-radius: 6px; color: var(--muted); text-decoration: none; line-height: 1.35; }
+#TOC a:hover { color: var(--ink); background: var(--sunk); }
+#TOC a.on-parent { color: var(--ink); font-weight: 700; }
+#TOC a.on { color: var(--ink); font-weight: 700; background: color-mix(in srgb, var(--accent) 22%, var(--surface)); box-shadow: inset 3px 0 0 var(--accent); }
 #TOC > ul > li > ul ul { display: none; }
-.toc-toggle { display: none; }
+#TOC li.open > ul, #TOC li.exp > ul { display: block; }
+#TOC li.cerrado:not(.exp) > ul { display: none; }
+#TOC li.has-sub { position: relative; }
+#TOC li.has-sub > a { padding-right: 34px; }
+.toc-exp { position: absolute; top: 1px; right: 2px; width: 28px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); cursor: pointer; font-size: .8rem; }
+.toc-exp::before { content: "▸"; display: inline-block; transition: transform .15s; }
+.toc-exp[aria-expanded="true"]::before { transform: rotate(90deg); }
+.toc-exp:hover { background: var(--sunk); color: var(--ink); }
+.toc-toggle, .toc-backdrop { display: none; }
 article.content { min-width: 0; }
 article.content h1 { font-size: clamp(2rem, 5vw, 2.8rem); margin: 0 0 8px; }
 article.content h2 { font-size: 1.7rem; margin: 2.4em 0 0.6em; padding-top: 0.6em; border-top: 1px solid var(--line); }
@@ -115,13 +125,39 @@ code span.im { color: var(--c-dl); }
 .up { position: fixed; right: 14px; bottom: 14px; background: var(--ink); color: var(--paper); border-radius: 999px; padding: 8px 14px; font-weight: 700; font-size: .85rem; text-decoration: none; }
 
 @media (max-width: 900px) {
-  .doc { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .doc > div:first-child { position: static; }
-  #TOC { max-height: none; display: none; margin-top: 10px; }
-  #TOC.open { display: block; }
-  .toc-toggle { display: inline-block; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font: 700 .9rem var(--font-body); color: var(--ink); cursor: pointer; }
   body { font-size: 16px; }
+  body.toc-open { overflow: hidden; }
+  body.toc-open .toc-side { z-index: 50; }
+  /* Barra superior en una sola fila; el menú se desliza en horizontal */
+  .top .in { flex-wrap: nowrap; gap: 10px; padding: 6px 0 6px 14px; }
+  .top .brand { flex: none; font-size: 1.05rem; }
+  .top nav { flex-wrap: nowrap; gap: 2px; overflow-x: auto; scrollbar-width: none; padding-right: 24px;
+    -webkit-mask-image: linear-gradient(to right, #000 82%, transparent); mask-image: linear-gradient(to right, #000 82%, transparent); }
+  .top nav::-webkit-scrollbar { display: none; }
+  .top nav a { white-space: nowrap; padding: 7px 10px; border-radius: 999px; }
+  .top nav a[aria-current] { background: var(--sunk); }
+  .doc { grid-template-columns: minmax(0, 1fr); gap: 14px; padding-top: 0; }
+  /* Índice siempre a mano: barra fija con la sección actual */
+  .toc-side { top: var(--top-h, 48px); z-index: 15; margin: 0 -16px; padding: 8px 16px; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .toc-toggle { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 42px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font: 700 .92rem var(--font-body); color: var(--ink); cursor: pointer; text-align: left; }
+  .toc-ico { color: var(--accent-ink); font-size: 1.05rem; }
+  .toc-cur { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 400; color: var(--muted); }
+  .toc-cur:not(:empty)::before { content: "· "; }
+  /* El índice se abre como panel lateral izquierdo */
+  #TOC { position: fixed; top: 0; left: 0; bottom: 0; z-index: 40; width: min(86vw, 360px); max-height: none; font-size: .95rem;
+    border-radius: 0 var(--r) var(--r) 0; border-left: 0; padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    transform: translateX(-102%); visibility: hidden; transition: transform .22s ease, visibility .22s; box-shadow: 0 10px 40px rgb(0 0 0 / .25); }
+  #TOC.open { transform: none; visibility: visible; }
+  #TOC a { padding: 8px 10px; }
+  #TOC li.has-sub > a { padding-right: 46px; }
+  .toc-exp { width: 40px; height: 38px; top: 0; font-size: .9rem; }
+  .toc-head { padding: 14px 8px 10px 16px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+  .toc-close { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 999px; background: var(--sunk); color: var(--ink); font-size: 1rem; cursor: pointer; }
+  .toc-backdrop { display: block; position: fixed; inset: 0; z-index: 35; background: rgb(0 0 0 / .45); }
+  .toc-backdrop[hidden] { display: none; }
+  .up { padding: 7px 12px; }
 }
+@media (prefers-reduced-motion: reduce) { #TOC { transition: none; } html { scroll-behavior: auto; } }
 
 /* Páginas de unidad y ejercicios */
 .ud-head { border-left: 5px solid var(--c); background: var(--surface); border-radius: 0 var(--r) var(--r) 0; padding: 12px 18px; margin: 0 0 18px; }

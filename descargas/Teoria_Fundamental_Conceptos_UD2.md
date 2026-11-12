@@ -15,7 +15,7 @@ Esta teoría es común a **todo el curso**. Empezó como el apoyo de la UD2 (Pyt
 | 3. Estructuras de control (bucles anidados, patrones, problemas numéricos) | UD2 |
 | 4. Funciones (argumentos, lambda, map/filter/reduce, recursión, ámbito) | UD2 |
 | 5. Estructuras de datos complejas (listas, conjuntos, comprensiones, módulos, tablas y CSV sin Pandas) | UD2 |
-| 6. Conceptos estadísticos | UD2 |
+| 6. Conceptos estadísticos (descriptiva, cuartiles, puntuación z, correlación, contraste de hipótesis) | UD2 |
 | 7. Librerías científicas (NumPy, Pandas) | UD2 |
 | 8. Visualización (Matplotlib) | UD2 |
 | 9. ETL y análisis de datos | UD2 |
@@ -23,7 +23,7 @@ Esta teoría es común a **todo el curso**. Empezó como el apoyo de la UD2 (Pyt
 | 11. Introducción a Big Data | UD2 · [UD5](ud5-ml.html) |
 | 12. Ecosistema de librerías: PyTorch, scikit-learn y Seaborn | UD2 · [UD3](ud3-vision.html) · [UD5](ud5-ml.html) |
 | 13. Crear aplicaciones: escritorio y web, y desplegar un modelo | UD2 · [UD5](ud5-ml.html) |
-| 14. Ampliación: IA, ML, DL y GenAI, pipeline de ML, EDA, redes neuronales, IA generativa, hashing, automatización, testing, algoritmia, buenas prácticas, recursos | [UD1](ud1.html) a [UD5](ud5-ml.html), según el apartado |
+| 14. Ampliación: IA, ML, DL y GenAI, pipeline de ML, EDA, redes neuronales, IA generativa, hashing, automatización, testing, algoritmia, buenas prácticas, recursos, redes y grafos | [UD1](ud1.html) a [UD5](ud5-ml.html), según el apartado |
 | 15. Referencias externas, IDEs, datasets y guía práctica | General |
 
 ## 0️⃣ PUNTO DE PARTIDA: CONCEPTOS FUNDAMENTALES DE IA (UD1)
@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E74 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E82 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -1829,6 +1829,109 @@ Mide **cuánto varían** los datos respecto a la media.
 Datos con poca variación: σ pequeña
 Datos con mucha variación: σ grande
 ```
+
+### 6.5 Varianza y desviación: población o muestra
+
+La **varianza** es la media de los cuadrados de las distancias a la media; la **desviación típica** es su raíz cuadrada, y se mide en las mismas unidades que los datos. Hay dos versiones, y cada librería usa una por defecto:
+
+| | Divide entre | NumPy | Pandas | `statistics` |
+|---|---|---|---|---|
+| **De la población** (todos los datos que existen) | n | `np.std(x)` (por defecto) | `s.std(ddof=0)` | `pstdev(x)` |
+| **De una muestra** (una parte, para estimar la de todos) | n − 1 | `np.std(x, ddof=1)` | `s.std()` (por defecto) | `stdev(x)` |
+
+```python
+import numpy as np, pandas as pd
+A = [10, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+np.std(A)              # 2.728  (población)
+pd.Series(A).std()     # 2.875  (muestra)
+```
+
+Los dos resultados son correctos; solo responden a preguntas distintas. Si el mismo cálculo da cifras diferentes en NumPy y en Pandas, casi siempre es por esto. Con muchos datos, la diferencia es despreciable.
+
+Para la **moda**, `statistics.multimode([1, 1, 2, 2, 3])` devuelve todas las modas (`[1, 2]`); `Counter` o `scipy.stats.mode` dan solo una.
+
+### 6.6 Cuartiles, percentiles y valores atípicos
+
+Los **cuartiles** parten los datos ordenados en cuatro partes iguales: Q1 (25 %), la mediana (50 %) y Q3 (75 %). Un **percentil** es lo mismo con cualquier porcentaje: estar en el percentil 90 significa superar al 90 % de los datos. No hace falta ordenar antes: las funciones lo hacen solas.
+
+```python
+tiempos = [12, 14, 13, 15, 14, 16, 13, 41, 15, 14]    # minutos para llegar al instituto
+q1, q3 = np.quantile(tiempos, [0.25, 0.75])           # 13.25 y 15.0
+iqr = q3 - q1                                         # rango intercuartílico: 1.75
+atipicos = [t for t in tiempos if t < q1 - 1.5 * iqr or t > q3 + 1.5 * iqr]   # [41]
+np.mean(tiempos), np.median(tiempos)                  # 16.7 y 14.0
+```
+
+El **rango intercuartílico** (IQR = Q3 − Q1) mide la dispersión del 50 % central, y la regla de 1,5·IQR es la que dibuja los puntos sueltos de un diagrama de caja. Un solo día de 41 minutos sube la media a 16,7 pero apenas mueve la mediana (14): con valores atípicos, la mediana describe mejor el caso típico. Qué hacer con un atípico (¿error o dato real?) se decide en el [EDA](#146-checklist-de-análisis-exploratorio-de-datos-eda).
+
+### 6.7 Estandarizar: la puntuación z
+
+Para comparar datos en escalas distintas se **estandariza**: `z = (x − media) / desviación`. La z dice a cuántas desviaciones típicas está un valor de la media.
+
+```python
+mates = np.array([4, 6, 7, 8, 5])
+fisica = np.array([3, 4, 5, 9, 4])
+z = lambda x: (x - x.mean()) / x.std()
+z(mates)     # [-1.41  0.    0.71  1.41 -0.71]
+z(fisica)    # [-0.95 -0.48  0.    1.91 -0.48]
+```
+
+El cuarto alumno tiene un 8 en Mates y un 9 en Física, pero el 9 es más destacado (z = 1,91 frente a 1,41) porque en Física el grupo sacó notas más bajas. Un valor con |z| > 3 suele considerarse atípico.
+
+`StandardScaler` de scikit-learn hace exactamente esto con cada columna ([UD5](ud5-ml.html)). Ojo con una idea muy repetida: estandarizar **no convierte los datos en una distribución normal**. Solo los desplaza y cambia de escala; si la distribución era asimétrica (como los ingresos), sigue igual de asimétrica, con media 0 y desviación 1.
+
+### 6.8 Correlación y recta de regresión
+
+La **correlación de Pearson** (`r`) mide si dos variables numéricas suben o bajan juntas **en línea recta**: va de −1 a 1; cerca de 0 significa que no hay relación lineal (puede haber otra).
+
+```python
+from scipy import stats
+horas = [1, 2, 2, 3, 4, 5, 6, 7]                     # horas de estudio
+nota = [3.5, 4.0, 5.5, 5.0, 6.5, 7.0, 8.5, 8.0]
+r = np.corrcoef(horas, nota)[0, 1]                   # 0.947
+recta = stats.linregress(horas, nota)
+recta.slope, recta.intercept                         # 0.81 y 2.964
+recta.slope * 4.5 + recta.intercept                  # 6.61: predicción para 4,5 h
+```
+
+La **pendiente** (0,81) es lo que sube la nota por cada hora más; la **ordenada en el origen** (2,964), la nota estimada con 0 horas. Para predecir se usan las dos: algunos apuntes escriben la ordenada a mano o la olvidan, y la recta queda desplazada. Y siempre: **correlación no es causalidad**, y la recta solo vale dentro del rango de los datos (con 20 horas predeciría un 19,2).
+
+### 6.9 ¿Diferencia real o casualidad? Contraste de hipótesis
+
+Un grupo que repasó con cuestionarios sacó de media 7,08 y otro sin cuestionarios, 5,92. ¿Funcionan los cuestionarios o es casualidad? Un **contraste de hipótesis** responde a esta pregunta: si en realidad no hubiera ninguna diferencia (**hipótesis nula**), ¿sería raro ver una diferencia tan grande como esta solo por azar?
+
+La forma más intuitiva de responder es **simularlo**: mezclar las notas de los dos grupos, repartirlas al azar muchas veces y contar cuántas veces sale una diferencia igual o mayor.
+
+```python
+a = np.array([6.5, 7.0, 5.5, 8.0, 7.5, 6.0, 7.0, 8.5, 6.5, 7.5, 9.0, 6.0])   # con cuestionarios
+b = np.array([5.5, 6.0, 7.0, 5.0, 6.5, 6.0, 4.5, 7.5, 5.5, 6.5, 6.0, 5.0])   # sin cuestionarios
+dif_real = a.mean() - b.mean()                       # 1.17
+
+rng = np.random.default_rng(42)
+todas, extremas = np.concatenate([a, b]), 0
+for _ in range(10_000):
+    rng.shuffle(todas)                               # repartir al azar entre los dos grupos
+    if abs(todas[:12].mean() - todas[12:].mean()) >= abs(dif_real):
+        extremas += 1
+print(extremas / 10_000)                             # 0.0108: el p-valor
+```
+
+Solo en un 1 % de los repartos al azar sale una diferencia tan grande. Ese porcentaje es el **p-valor**. Por convenio, si es menor que 0,05 se dice que la diferencia es **estadísticamente significativa**: es poco probable que se deba solo al azar.
+
+La **prueba t** llega a casi lo mismo con una fórmula, suponiendo que los datos son aproximadamente normales:
+
+```python
+t, p = stats.ttest_ind(a, b, equal_var=False)        # t = 2.94, p = 0.0078
+```
+
+`equal_var=False` es la **prueba de Welch**, que no supone que los dos grupos tengan la misma dispersión; es la opción recomendable por defecto. Basta con mirar el p-valor: no hace falta buscar valores críticos en tablas.
+
+**Cómo no interpretarlo:**
+
+- Con **pocos datos**, casi nada sale significativo: con solo los 4 primeros alumnos de cada grupo, p = 0,24. «No significativo» no significa «no hay diferencia», sino «no hay pruebas suficientes».
+- Con **muchos datos**, cualquier diferencia minúscula sale significativa: con 20 000 alumnos por grupo, una diferencia de 0,04 puntos da p = 0,004. Significativo no es lo mismo que **importante**: hay que mirar también el tamaño de la diferencia.
+- El p-valor **no** es la probabilidad de que la hipótesis nula sea cierta.
+- Este estudio no demuestra que los cuestionarios causen la mejora: si los grupos no se formaron al azar, puede haber otras diferencias entre ellos.
 
 [Referencia: Estadística](https://es.wikipedia.org/wiki/Estad%C3%ADstica_descriptiva)
 
@@ -3757,6 +3860,99 @@ Cómo leer las curvas de `historia.history`:
 
 Los ejercicios [E62–E69](ejercicios.html#bloque-l--deep-learning-con-números-e62e69) practican todo esto con números. Las redes convolucionales, con el cálculo de tamaños y parámetros, están en la [UD3](ud3-vision.html#5-clasificar-imágenes), y las recurrentes y los Transformers, en la [UD4](ud4-lenguaje.html#108-redes-para-secuencias-rnn-lstm-gru-y-atención).
 
+#### La XOR: por qué hacen falta capas ocultas
+
+Un perceptrón (una sola neurona con función escalón) aprende las puertas AND y OR, pero nunca la **XOR** (verdadero si las dos entradas son distintas): los casos (0,1) y (1,0) quedan en una diagonal y los casos (0,0) y (1,1) en la otra, y ninguna línea recta los separa ([UD5, ejercicio 9.1](ud5-ml.html)). Con una capa oculta sí se puede, porque XOR(a, b) = AND(OR(a, b), NAND(a, b)). Se puede construir a mano, sin entrenar:
+
+```python
+import numpy as np
+paso = lambda z: (z >= 0).astype(int)                # neurona escalón
+X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+h_or   = paso(X @ np.array([1, 1]) - 0.5)            # [0 1 1 1]
+h_nand = paso(X @ np.array([-1, -1]) + 1.5)          # [1 1 1 0]
+xor    = paso(h_or + h_nand - 1.5)                   # AND de las dos: [0 1 1 0]
+```
+
+La capa oculta **transforma** las entradas en dos nuevas características (OR y NAND) con las que el problema sí se separa con una recta. Esa es la idea central del aprendizaje profundo: cada capa aprende una representación más útil que la anterior.
+
+**La misma red, aprendiendo sola.** Con la retropropagación en forma de matrices (un lote de ejemplos a la vez), una red 2-4-1 con tanh y sigmoide aprende la XOR en unas líneas de NumPy:
+
+```python
+rng = np.random.default_rng(1)
+X = X.astype(float)
+y = np.array([[0], [1], [1], [0]], float)
+W1, b1 = rng.normal(0, 1, (2, 4)), np.zeros((1, 4))
+W2, b2 = rng.normal(0, 1, (4, 1)), np.zeros((1, 1))
+sigmoide = lambda z: 1 / (1 + np.exp(-z))
+
+for epoca in range(5001):
+    h = np.tanh(X @ W1 + b1)                         # hacia delante
+    p = sigmoide(h @ W2 + b2)
+    dz2 = (p - y) / len(X)                           # hacia atrás (sigmoide + entropía cruzada)
+    dW2, db2 = h.T @ dz2, dz2.sum(0, keepdims=True)
+    dz1 = (dz2 @ W2.T) * (1 - h ** 2)                # regla de la cadena; tanh' = 1 − tanh²
+    dW1, db1 = X.T @ dz1, dz1.sum(0, keepdims=True)
+    W1 -= 0.5 * dW1; b1 -= 0.5 * db1; W2 -= 0.5 * dW2; b2 -= 0.5 * db2
+print(p.round(3).ravel())                            # [0.    0.999 0.999 0.002]
+```
+
+La pérdida baja de 0,67 a 0,0009. Dos detalles que simplifican el cálculo: con sigmoide en la salida y entropía cruzada, el gradiente de la salida es simplemente `p − y`; y cada `dW` es la entrada de la capa (traspuesta) por el error de la capa. Es lo mismo que la neurona de antes, repetido capa a capa.
+
+#### Normalización por lotes y por capa
+
+Si las entradas de una capa cambian mucho de escala durante el entrenamiento, aprender es más lento e inestable. Las capas de **normalización** lo corrigen: restan la media y dividen entre la desviación, y después dejan que la red reescale con dos parámetros aprendidos (γ y β).
+
+```python
+lote = np.array([[1., 2.], [3., 4.], [5., 6.]])     # 3 ejemplos, 2 características
+media, var = lote.mean(0), lote.var(0)              # [3. 4.] y [2.667 2.667]
+normalizado = (lote - media) / np.sqrt(var + 1e-5)  # [[-1.225 -1.225] [0. 0.] [1.225 1.225]]
+```
+
+| Tipo | Normaliza usando | Dónde se usa |
+|------|------------------|--------------|
+| **Por lotes** (*BatchNorm*) | La media y la varianza de cada característica **en el lote** | CNN |
+| **Por capa** (*LayerNorm*) | Todas las características de **un solo ejemplo** | Transformers y RNN ([UD4](ud4-lenguaje.html)) |
+
+La normalización por lotes depende de los demás ejemplos del lote, así que al **predecir** no puede usarlos: con un lote de un solo ejemplo, todo daría 0. Por eso guarda durante el entrenamiento una media y una varianza acumuladas y usa esas al predecir. Si en PyTorch se olvida `model.eval()`, la red sigue en modo entrenamiento y las predicciones cambian según el lote: un error muy típico.
+
+#### Calendarios de la tasa de aprendizaje
+
+Al principio interesa avanzar rápido y al final, afinar. Por eso se suele **cambiar η durante el entrenamiento**:
+
+| Calendario | Qué hace |
+|------------|----------|
+| Por escalones | Multiplica η por 0,1 cada cierto número de épocas |
+| Coseno | Baja η suavemente hasta casi 0, con forma de coseno |
+| Calentamiento (*warm-up*) | Empieza con η muy pequeña y la sube en los primeros pasos; habitual en Transformers |
+| Al estancarse | Reduce η cuando la pérdida de validación deja de mejorar: `keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=3)` |
+
+#### Cuando la red no aprende: lista de comprobación
+
+1. **Mira la pérdida antes de entrenar.** Con C clases equilibradas, softmax y entropía cruzada, una red sin entrenar debe dar unos **ln C** (con 10 clases, ln 10 ≈ 2,30): es lo que sale si reparte la probabilidad por igual. Si sale 15 o 23, algo está mal (pesos iniciales enormes, pérdida equivocada, etiquetas mal codificadas).
+2. **Sobreajusta un lote diminuto.** Con 10 o 20 ejemplos, la red tiene que llegar a pérdida casi 0. Si no lo consigue, hay un error en el código (modelo, pérdida, etiquetas u optimizador), no falta de datos.
+3. **Mira los datos y las etiquetas**: que cada imagen tenga su etiqueta, que se mezclen en cada época y que se normalicen igual en entrenamiento y en prueba.
+4. **Prueba varias tasas de aprendizaje** en escala logarítmica (10⁻⁴, 10⁻³, 10⁻²): demasiado alta da `nan` u oscilaciones; demasiado baja, una curva plana.
+5. **Compara con algo trivial**: predecir siempre la clase mayoritaria o la media. Si la red no lo supera, no está aprendiendo nada.
+
+| Error típico | Síntoma |
+|--------------|---------|
+| Aplicar softmax antes de `CrossEntropyLoss` en PyTorch (ya la incluye) o usar `from_logits=True` en Keras con una salida softmax | Aprende mal o muy despacio |
+| Olvidar `optimizer.zero_grad()` en PyTorch | Los gradientes se acumulan entre pasos; entrenamiento errático |
+| Olvidar `model.eval()` al validar | *Dropout* y BatchNorm siguen activos: validación ruidosa |
+| No mezclar los datos (ordenados por clase) | Cada lote tiene una sola clase; la pérdida sube y baja |
+| Fuga de datos entre entrenamiento y prueba | Resultados demasiado buenos que desaparecen con datos nuevos |
+
+#### Otras arquitecturas
+
+| Arquitectura | Idea | Para qué |
+|--------------|------|----------|
+| **Autoencoder** | Comprime la entrada en pocos números (código latente) y la reconstruye | Reducir dimensiones, quitar ruido, detectar anomalías (lo que reconstruye mal es «raro») |
+| **GAN** | Un generador crea falsificaciones y un discriminador intenta descubrirlas; mejoran compitiendo | Generar imágenes realistas, *deepfakes* ([UD3](ud3-vision.html)) |
+| **Difusión** | Aprende a quitar ruido paso a paso; para generar, parte de ruido puro | Generadores de imágenes a partir de texto; más estables que las GAN, pero más lentos |
+| **Redes de grafos (GNN)** | Cada nodo actualiza su información con la de sus vecinos ([14.17](#1417-redes-y-grafos-con-networkx)) | Moléculas, redes sociales, recomendaciones, tráfico |
+
+Los ejercicios [E80–E82](ejercicios.html#bloque-o--redes-neuronales-desde-cero-e80e82) practican la XOR, la normalización y la depuración.
+
 #### Arquitecturas: cuál se usa para qué
 
 | Arquitectura | Idea | Datos | Dónde se ve |
@@ -4773,6 +4969,8 @@ print(saldo)                          # 4000 (sin candado salía unos 1000)
 | «The 25 Best Free Resources for Learning AI in 2026» (H. Sheikho, Substack, oct-2026) | Cursos, libros y vídeos gratuitos revisados uno a uno | 14.16; retropropagación a mano en 14.7 |
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
 | *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
+| *Introduction to Data Science Using Python* (A. Agah, OER, licencia CC BY-NC 4.0) | Estadística descriptiva e inferencial, estandarizar, regresión, grafos y NetworkX; errores usados en E79 | 6.5–6.9, 14.17, ejercicios E75–E79 |
+| *Neural Networks – Complete Study Guide* (codingwithmee_18, 49 págs.) | XOR con capa oculta, red desde cero en NumPy, normalización, calendarios de η, depuración, otras arquitecturas | 14.7 y ejercicios E80–E82 |
 
 #### Repositorios para practicar con proyectos
 
@@ -4830,6 +5028,66 @@ Revisión de la lista «The 25 Best Free Resources for Learning AI in 2026» (H.
 - *Machine Learning Specialization* de Andrew Ng (Coursera): la lista dice que se puede seguir gratis como oyente, pero desde agosto de 2025 Coursera **retiró ese modo** en muchos cursos y en los de DeepLearning.AI solo deja ver gratis la primera semana. Antes de recomendarlo, comprueba cómo está el acceso.
 
 **Lo que falta en la lista.** No incluye nada en castellano ni en gallego. Como primer curso de IA en castellano, sin programar, está [*Elements of AI*](https://www.elementsofai.com/) (Universidad de Helsinki; la versión en castellano, «Elementos de la IA», es de la UNED). Y para cualquier recurso sirven las mismas preguntas de 12.4: si está actualizado, qué nivel exige y quién lo publica.
+
+### 14.17 Redes y grafos con NetworkX
+
+Un **grafo** es un conjunto de **nodos** unidos por **aristas** (sección [0.7](#07-algoritmos-y-resolución-de-problemas-por-búsqueda)). Sirve para cualquier cosa hecha de conexiones: carreteras entre ciudades, amistades, seguidores en una red social, enlaces entre páginas web o rutas de autobús.
+
+| Concepto | Qué es | Ejemplo |
+|----------|--------|---------|
+| **No dirigido** | La relación va en los dos sentidos | Amistad, carretera de doble sentido |
+| **Dirigido** | Cada arista tiene sentido | Seguir a alguien en una red social |
+| **Ponderado** | Cada arista tiene un valor | Kilómetros, minutos, número de mensajes |
+| **Grado** | Número de aristas de un nodo (en dirigidos: de **entrada** y de **salida**) | Cuántos amigos tiene; cuántos seguidores |
+| **Camino más corto** | El de menos aristas o, si hay pesos, el de menor suma | Ruta del GPS |
+| **Componente conexa** | Grupo de nodos conectados entre sí, pero no con el resto | Dos grupos de amigos que no se conocen |
+
+[NetworkX](https://networkx.org/) es la librería de Python para crear y analizar grafos. El grafo de carreteras de Galicia de la sección 0, con NetworkX:
+
+```python
+import networkx as nx
+
+G = nx.Graph()
+for ciudad, vecinas in galicia.items():          # el diccionario de la sección 0.7
+    for vecina, km in vecinas.items():
+        G.add_edge(ciudad, vecina, km=km)
+
+G.number_of_nodes(), G.number_of_edges()         # 7 9
+dict(G.degree())["Santiago"]                     # 4: la ciudad con más conexiones
+nx.shortest_path(G, "Ferrol", "Ourense", weight="km")
+# ['Ferrol', 'A Coruña', 'Santiago', 'Ourense']
+nx.shortest_path_length(G, "Ferrol", "Ourense", weight="km")   # 238
+```
+
+Sin `weight="km"`, NetworkX busca el camino con **menos aristas**, y aquí hay dos empatados a tres tramos: por Santiago (238 km) y por Lugo (248 km). Con el peso, calcula el de **menos kilómetros** con el algoritmo de Dijkstra, el mismo que se programó a mano en la sección 0.
+
+**¿Quién es importante en una red?** La **centralidad** lo mide, y hay varias formas de entender «importante». Con una red de amistades inventada de una clase:
+
+```python
+amistades = [("Uxía", "Brais"), ("Uxía", "Antía"), ("Brais", "Antía"), ("Antía", "Xoán"),
+             ("Xoán", "Iria"), ("Iria", "Martín"), ("Martín", "Noa"), ("Iria", "Noa"),
+             ("Xoán", "Noa"), ("Lucía", "Sabela"), ("Sabela", "Hugo")]
+R = nx.Graph(amistades)
+nx.degree_centrality(R)        # Antía, Xoán, Iria y Noa: 3 amistades cada una (0.333)
+nx.betweenness_centrality(R)   # Xoán 0.25, Antía 0.22, el resto mucho menos
+nx.closeness_centrality(R)     # Xoán 0.44, Antía 0.40
+[sorted(c) for c in nx.connected_components(R)]
+# [['Antía', 'Brais', 'Iria', 'Martín', 'Noa', 'Uxía', 'Xoán'], ['Hugo', 'Lucía', 'Sabela']]
+```
+
+| Centralidad | Pregunta que responde | En el ejemplo |
+|-------------|-----------------------|---------------|
+| **De grado** | ¿Quién tiene más conexiones directas? | Empate entre cuatro personas |
+| **De intermediación** (*betweenness*) | ¿Por quién pasan más caminos más cortos entre otros? Son los **puentes** | Xoán y Antía unen los dos subgrupos de la clase |
+| **De cercanía** (*closeness*) | ¿Quién está, de media, más cerca de todos? (inversa de la distancia media) | Xoán |
+
+Que alguien tenga muchas conexiones no lo convierte en puente: Iria y Noa tienen tantas amistades como Xoán, pero si Xoán faltara, el grupo de Uxía y el de Martín quedarían menos conectados. Y Lucía, Sabela y Hugo forman una componente aparte: no hay ningún camino entre ellos y el resto.
+
+Para dibujarlo: `nx.draw_networkx(R)` y `plt.show()`. En redes dirigidas se usa `nx.DiGraph()`, y `in_degree` / `out_degree` dan los seguidores y los seguidos.
+
+**Sobre datos de personas reales:** analizar las relaciones de gente concreta (quién habla con quién, quién sigue a quién) es tratar datos personales. En clase se usan datos inventados o redes de ejemplo, como `nx.karate_club_graph()`.
+
+Los ejercicios [E75–E79](ejercicios.html#bloque-n--estadística-y-redes-e75e79) practican la estadística de la sección 6 y estas redes.
 
 ---
 

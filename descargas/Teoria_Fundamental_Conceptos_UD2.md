@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E69 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E74 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -1467,6 +1467,110 @@ print(c)         # [1, 2, 3]
 ```
 
 Con listas de listas, `copy()` solo copia el primer nivel; para copiarlo todo, `copy.deepcopy()`. El mismo problema aparece en Pandas: `df2 = df` es un alias y `df2 = df.copy()` una copia.
+
+**Quitar elementos: cuatro formas.**
+
+| Forma | Qué quita | Si no existe |
+|-------|-----------|--------------|
+| `lista.remove(x)` | La **primera** aparición del **valor** `x` | `ValueError: list.remove(x): x not in list` |
+| `lista.pop(i)` | El elemento de la **posición** `i` (sin `i`, el último) y lo **devuelve** | `IndexError` (también con la lista vacía) |
+| `del lista[i]` o `del lista[i:j]` | Una posición o un trozo | `IndexError` |
+| `lista.clear()` | Todo; la variable sigue existiendo, vacía | — |
+
+```python
+frutas = ["mazá", "pera", "uva", "pera"]
+frutas.remove("pera")              # ['mazá', 'uva', 'pera']: solo la primera
+if "kiwi" in frutas:               # comprobar antes evita el ValueError
+    frutas.remove("kiwi")
+```
+
+Lo mismo pasa con `index(x)`: si `x` no está, da `ValueError`. Se comprueba antes con `x in lista`.
+
+**Cambiar un trozo con *slicing*.** Asignar a un trozo puede cambiar el tamaño de la lista:
+
+```python
+n = [1, 2, 3, 4, 5]
+n[1:4] = [10, 20]     # 3 elementos por 2:   [1, 10, 20, 5]
+n[1:1] = [7, 8]       # trozo vacío = insertar: [1, 7, 8, 10, 20, 5]
+n[3:5] = []           # lista vacía = borrar:  [1, 7, 8, 5]
+```
+
+**`+` y `*` con listas.** `a + b` une dos listas en una **nueva** y `a * 3` repite la lista tres veces. `lista + 10` da `TypeError`: solo se pueden sumar listas con listas (`lista + [10]`).
+
+**Cinco trampas habituales con listas**
+
+```python
+# 1. sort() ordena la lista y devuelve None
+a = [3, 1, 2]
+a = a.sort()               # a vale None: la lista se ha perdido
+a = sorted([3, 1, 2])      # bien: sorted devuelve una lista nueva
+
+# 2. += modifica la lista; + crea otra (importa si hay un alias)
+x = [1, 2]; y = x
+x = x + [3]                # x: [1, 2, 3]   y: [1, 2]
+x = [1, 2]; y = x
+x += [3]                   # x: [1, 2, 3]   y: [1, 2, 3]  (la misma lista)
+
+# 3. Repetir una lista de listas repite la MISMA fila
+mal = [[0] * 3] * 3
+mal[0][0] = 9              # [[9, 0, 0], [9, 0, 0], [9, 0, 0]]
+bien = [[0] * 3 for _ in range(3)]
+bien[0][0] = 9             # [[9, 0, 0], [0, 0, 0], [0, 0, 0]]
+
+# 4. Borrar mientras se recorre la lista se salta elementos
+nums = [1, 2, 2, 3, 2, 4]
+for v in nums:
+    if v == 2:
+        nums.remove(v)
+print(nums)                # [1, 3, 2, 4]: ¡queda un 2!
+nums = [v for v in nums if v != 2]     # bien: crear una lista nueva
+
+# 5. copy() no copia las sublistas
+import copy
+orig = [[1, 2], [3, 4]]
+sup, prof = orig.copy(), copy.deepcopy(orig)
+orig[0].append(99)
+print(sup, prof)           # [[1, 2, 99], [3, 4]] [[1, 2], [3, 4]]
+```
+
+**Listas de listas (matrices).** Una tabla se guarda como una lista de filas y se accede con dos índices: `m[fila][columna]`.
+
+```python
+m = [[1, 2, 3],
+     [4, 5, 6]]
+m[1][2]                                   # 6: fila 1, columna 2
+for fila in m:                            # recorrer fila a fila
+    print(*fila)                          # 1 2 3 / 4 5 6
+traspuesta = [list(c) for c in zip(*m)]   # [[1, 4], [2, 5], [3, 6]]
+suma_filas = [sum(f) for f in m]          # [6, 15]
+suma_columnas = [sum(c) for c in zip(*m)] # [5, 7, 9]
+```
+
+`zip(*m)` reparte las filas como argumentos de `zip`, que las recorre a la vez y devuelve las columnas. Para matrices grandes o cálculo numérico se usa NumPy ([7.1](#71-numpy-computación-numérica)).
+
+**Recetas útiles**
+
+```python
+list(dict.fromkeys([3, 1, 3, 2, 1]))      # [3, 1, 2]: sin repetidos y manteniendo el orden
+alumnado = [{"nome": "Brais", "nota": 7.5}, {"nome": "Uxía", "nota": 9},
+            {"nome": "Antía", "nota": 7.5}]
+sorted(alumnado, key=lambda a: (-a["nota"], a["nome"]))
+# Uxía 9, Antía 7.5, Brais 7.5: nota de mayor a menor y, si empatan, por nombre
+```
+
+`set(lista)` también quita repetidos, pero **pierde el orden**.
+
+**Errores típicos con listas**
+
+| Error | Ejemplo | Causa | Solución |
+|-------|---------|-------|----------|
+| `IndexError: list index out of range` | `[10, 20, 30][5]` | Posición que no existe | Comprobar con `len()`; recordar que el último es `len(lista) − 1` |
+| `TypeError: 'int' object is not iterable` | `for x in 10:` | Recorrer algo que no es una secuencia | `for x in range(10)` o una lista |
+| `AttributeError: 'list' object has no attribute 'add'` | `nums.add(4)` | Método que no existe (`add` es de los conjuntos) | `nums.append(4)` |
+| `ValueError: ... x not in list` | `nums.remove(5)` | El valor no está | Comprobar antes con `in` |
+| `TypeError: can only concatenate list (not "int") to list` | `nums + 10` | Sumar una lista y un número | `nums + [10]` o `nums.append(10)` |
+
+Los ejercicios [E70–E74](ejercicios.html#bloque-m--listas-a-fondo-e70e74) practican todo esto.
 
 ### 5.5 Conjuntos (`set`)
 
@@ -4668,6 +4772,7 @@ print(saldo)                          # 4000 (sin candado salía unos 1000)
 | Listas de redes sociales: «10 great Python packages for Data Science» y «8 awesome GitHub repos» | Librerías y repositorios revisados uno a uno | 12.4 y repositorios de 14.15 |
 | «The 25 Best Free Resources for Learning AI in 2026» (H. Sheikho, Substack, oct-2026) | Cursos, libros y vídeos gratuitos revisados uno a uno | 14.16; retropropagación a mano en 14.7 |
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
+| *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
 
 #### Repositorios para practicar con proyectos
 

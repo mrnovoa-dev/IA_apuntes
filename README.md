@@ -8,7 +8,7 @@ Web de apuntes de **Inteligencia Artificial con Python** para *Tecnoloxías Inte
 | `asignatura.html` | La asignatura: objetivos, unidades, criterios, evaluación y metodología (programación 2026/27) |
 | `ud1.html` | UD1 · Conceptos clave de la IA: desarrollo, ejemplos y ejercicios |
 | `teoria.html` | Teoría de todo el curso (secciones 0–15, de la UD1 a la UD5) con índice navegable y la unidad de cada sección |
-| `ejercicios.html` | Ejercicios E1–E82 de todas las unidades (cada bloque indica la suya) con pistas y soluciones, y ejercicios «prompt → código» |
+| `ejercicios.html` | Ejercicios E1–E86 de todas las unidades (cada bloque indica la suya) con pistas y soluciones, y ejercicios «prompt → código» |
 | `ud3-vision.html` | UD3 · Visión artificial |
 | `ud4-lenguaje.html` | UD4 · Procesamiento del lenguaje natural |
 | `ud5-ml.html` | UD5 · Aprendizaje automático |

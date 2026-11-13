@@ -14,7 +14,7 @@ Esta teoría es común a **todo el curso**. Empezó como el apoyo de la UD2 (Pyt
 | 2. Tipos de datos en Python (conversión, entrada/salida y formato, cadenas a fondo) | UD2 |
 | 3. Estructuras de control (bucles anidados, patrones, problemas numéricos) | UD2 |
 | 4. Funciones (argumentos, lambda, map/filter/reduce, recursión, ámbito) | UD2 |
-| 5. Estructuras de datos complejas (listas, conjuntos, comprensiones, módulos, tablas y CSV sin Pandas) | UD2 |
+| 5. Estructuras de datos complejas (listas, tuplas, conjuntos, comprensiones, módulos, tablas y CSV sin Pandas) | UD2 |
 | 6. Conceptos estadísticos (descriptiva, cuartiles, puntuación z, correlación, contraste de hipótesis) | UD2 |
 | 7. Librerías científicas (NumPy, Pandas) | UD2 |
 | 8. Visualización (Matplotlib) | UD2 |
@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E82 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E86 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -1423,20 +1423,150 @@ for clave, valor in persona.items():
 
 [Referencia: Diccionarios](https://docs.python.org/3/tutorial/datastructures.html#dictionaries)
 
-### 5.3 Tuplas
+### 5.3 Tuplas a fondo: registros que no cambian
 
-Listas **inmutables** (no se pueden cambiar):
+Una **tupla** es una secuencia **ordenada** e **inmutable**: como una lista, pero una vez creada no se puede cambiar. Admite repetidos y datos de tipos distintos. Se usa para datos que van juntos y no deben modificarse: unas coordenadas, una fecha, una fila de una tabla o los valores que devuelve una función.
+
+**Crear una tupla.** Lo que crea la tupla es la **coma**, no los paréntesis:
+
 ```python
-coordenadas = (10, 20)
-coordenadas[0]          # 10
-coordenadas[0] = 15     # ERROR! No se puede
-
-# Útil para retornar múltiples valores
-def obtener_coordenadas():
-    return (10, 20)
-
-x, y = obtener_coordenadas()
+coordenadas = (42.39, -8.70)      # latitud y longitud de Marín
+t = 10, 20, 30                    # también es una tupla (sin paréntesis)
+vacia = ()
+una = (5,)                        # una sola: hace falta la coma
+no_es = (5)                       # ¡es el número 5!
+print(type(una), type(no_es))     # <class 'tuple'> <class 'int'>
+print(tuple("IA"), tuple([1, 2])) # ('I', 'A') (1, 2): convertir desde otra secuencia
 ```
+
+**Leer y recorrer.** Igual que en las listas: índices desde 0, índices negativos y *slicing* (que devuelve otra tupla).
+
+```python
+t = (10, 20, 30, 40, 50)
+print(t[0], t[-1])        # 10 50
+print(t[1:4], t[::-1])    # (20, 30, 40) (50, 40, 30, 20, 10)
+for x in t:
+    print(x)
+```
+
+**Solo dos métodos**, porque no se puede añadir ni quitar nada:
+
+```python
+t = (1, 2, 2, 3, 2, 4)
+print(t.count(2))         # 3: cuántas veces aparece
+print(t.index(2))         # 1: posición de la primera aparición
+print(t.index(2, 3))      # 4: la primera a partir de la posición 3
+t.index(9)                # ValueError: tuple.index(x): x not in tuple
+```
+
+**Operaciones** (todas crean una tupla nueva o devuelven un valor):
+
+| Operación | Ejemplo | Resultado |
+|-----------|---------|-----------|
+| Longitud | `len((1, 2, 2))` | `3` |
+| Unir | `(1, 2) + (3,)` | `(1, 2, 3)` |
+| Repetir | `("A",) * 3` | `('A', 'A', 'A')` |
+| Pertenencia | `3 in (1, 2, 3)` | `True` |
+| Mínimo, máximo, suma | `min(t)`, `max(t)`, `sum(t)` | como en las listas |
+| Ordenar | `sorted((3, 1, 2))` | `[1, 2, 3]` (¡una **lista**!) |
+
+**Inmutable, pero con matices.**
+
+```python
+t = (1, 2)
+t[0] = 9                  # TypeError: 'tuple' object does not support item assignment
+
+a = (1, 2)
+b = a
+a += (3,)                 # no cambia la tupla: crea otra nueva y la asigna a «a»
+print(a, b)               # (1, 2, 3) (1, 2)   b sigue igual (con listas cambiarían las dos, 5.4)
+
+ficha = ("Uxía", [7, 8])  # la tupla guarda una referencia a la lista...
+ficha[1].append(9)        # ...y la lista sí se puede cambiar
+print(ficha)              # ('Uxía', [7, 8, 9])
+```
+
+La tupla no deja cambiar **qué objetos** guarda, pero si uno de ellos es mutable (una lista), su **contenido** sí puede cambiar. Por eso una tupla que contiene listas no es del todo «segura» ni sirve como clave de diccionario.
+
+> **Trampa curiosa:** `ficha[1] += [10]` da `TypeError`... y aun así la lista **sí** cambia. `+=` primero amplía la lista (que se deja) y después intenta volver a guardarla en la tupla (que no se deja). Moraleja: no metas listas dentro de tuplas si quieres datos fijos.
+
+**Desempaquetar** es repartir los elementos en variables. Es lo más útil de las tuplas:
+
+```python
+nome, idade = ("Brais", 16)
+
+a, b = 5, 10
+a, b = b, a                       # intercambiar sin variable auxiliar: (b, a) se crea antes de asignar
+
+primeiro, *resto = [7, 5, 9, 6]   # 7 y [5, 9, 6]: el * recoge «lo que sobre» en una lista
+*_, ultimo = [7, 5, 9, 6]         # 6   (_ indica «no me interesa»)
+
+x, y = (1, 2, 3)                  # ValueError: too many values to unpack (expected 2)
+```
+
+Muchas funciones de Python devuelven tuplas para desempaquetarlas: `divmod(135, 60)` da `(2, 15)` (2 h 15 min), `enumerate` da parejas `(posición, elemento)`, `zip` junta elementos de varias secuencias, y `dict.items()` da parejas `(clave, valor)`:
+
+```python
+for i, (nome, nota) in enumerate([("Iria", 7), ("Noa", 9)], start=1):
+    print(i, nome, nota)          # 1 Iria 7 / 2 Noa 9
+```
+
+Una función que «devuelve varios valores» devuelve en realidad **una tupla** (4.6):
+
+```python
+def resumen(notas):
+    return min(notas), max(notas), sum(notas) / len(notas)
+
+minima, maxima, media = resumen([6, 9, 7.5])
+print(minima, maxima, media)      # 6 9 7.5
+```
+
+**Comparar y ordenar.** Las tuplas se comparan **elemento a elemento**, como las palabras en un diccionario: si el primero empata, decide el segundo. Por eso una tupla sirve de clave para ordenar por varios criterios:
+
+```python
+print((8, "Xoán") < (8, "Zaira"))   # True: empatan en 8 y decide el nombre
+notas = [("Noa", 8), ("Iria", 6.5), ("Xoán", 8)]
+print(sorted(notas, key=lambda p: (-p[1], p[0])))   # nota de mayor a menor y, si empatan, por nombre
+# [('Noa', 8), ('Xoán', 8), ('Iria', 6.5)]
+```
+
+**Tuplas como claves de diccionario y en conjuntos.** Una tupla de valores inmutables se puede usar como clave (es *hashable*, 14.9); una lista no:
+
+```python
+distancias = {("Vigo", "Pontevedra"): 27, ("Pontevedra", "Santiago"): 61}
+print(distancias[("Vigo", "Pontevedra")])   # 27
+
+tablero = {(0, 0): "X", (1, 1): "O"}        # casillas de un tres en raya por (fila, columna)
+{("Uxía", [7, 8]): 1}                       # TypeError: unhashable type: 'list'
+```
+
+**Tuplas con nombre** (`namedtuple`): una tupla cuyos campos tienen nombre. Se lee mejor que `alumno[2]` y sigue siendo inmutable y ligera; es un paso intermedio antes de las clases (14.14):
+
+```python
+from collections import namedtuple
+
+Alumno = namedtuple("Alumno", ["nome", "idade", "curso"])
+a = Alumno("Antía", 16, "1BAC")
+print(a.nome, a[1])               # Antía 16
+print(a._replace(curso="2BAC"))   # Alumno(nome='Antía', idade=16, curso='2BAC'): crea otra
+```
+
+**¿Tupla o lista?**
+
+| | Tupla | Lista |
+|-|-------|-------|
+| Sintaxis | `(1, 2, 3)` | `[1, 2, 3]` |
+| Se puede cambiar | No | Sí |
+| Métodos | `count`, `index` | muchos: `append`, `remove`, `sort`... |
+| Clave de diccionario o elemento de conjunto | Sí, si todo lo que contiene es inmutable | No |
+| Memoria | algo menos (80 bytes frente a 104 con 5 números, `sys.getsizeof`) | algo más, para poder crecer |
+| Uso típico | registro fijo: coordenadas, fechas, filas, varios valores devueltos | colección que cambia: añadir, quitar, ordenar |
+
+> **Ojo con «las tuplas son mucho más rápidas»**: crear una tupla de constantes sí es más rápido, pero recorrer o sumar una tupla o una lista tarda prácticamente lo mismo (compruébalo con `timeit`). La razón para elegir tupla es **la intención**: el dato no debe cambiar, y Python te avisará si alguien lo intenta.
+
+**En IA y datos:** la forma de un array de NumPy o de un DataFrame es una tupla (`df.shape` → `(filas, columnas)`, sección 7); `df.itertuples()` recorre las filas como tuplas con nombre; un píxel RGB es una tupla `(r, g, b)` (UD3), y los bigramas de un texto se cuentan como tuplas de palabras: `zip(palabras, palabras[1:])` (UD4).
+
+Para practicar: [Bloque P · Tuplas](ejercicios.html#bloque-p--tuplas-e83e86).
 
 ### 5.4 Listas a fondo: más métodos, copias y alias
 
@@ -4969,6 +5099,7 @@ print(saldo)                          # 4000 (sin candado salía unos 1000)
 | «The 25 Best Free Resources for Learning AI in 2026» (H. Sheikho, Substack, oct-2026) | Cursos, libros y vídeos gratuitos revisados uno a uno | 14.16; retropropagación a mano en 14.7 |
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
 | *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
+| *Python Module 8: Tuples* (@Mastercode.sagar, 15 págs.), procesado con OCR y MarkItDown | Crear tuplas, `count` e `index`, operaciones, tuplas anidadas, tupla frente a lista, desempaquetado, proyecto de registro | 5.3 y ejercicios E83–E86 |
 | *Introduction to Data Science Using Python* (A. Agah, OER, licencia CC BY-NC 4.0) | Estadística descriptiva e inferencial, estandarizar, regresión, grafos y NetworkX; errores usados en E79 | 6.5–6.9, 14.17, ejercicios E75–E79 |
 | *Neural Networks – Complete Study Guide* (codingwithmee_18, 49 págs.) | XOR con capa oculta, red desde cero en NumPy, normalización, calendarios de η, depuración, otras arquitecturas | 14.7 y ejercicios E80–E82 |
 

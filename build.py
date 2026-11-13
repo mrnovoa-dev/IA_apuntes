@@ -71,7 +71,7 @@ UD_TEORIA = {
 # Ejercicios: por letra de bloque
 UD_EJERCICIOS = {
     "A": ["UD2"], "B": ["UD2"], "C": ["UD2"], "D": ["UD2"], "E": ["UD2", "UD5"], "F": ["UD2"],
-    "G": ["UD2"], "H": ["UD4"], "I": ["UD2"], "J": ["UD2"], "K": ["UD2"], "L": ["UD3", "UD5"], "M": ["UD2"], "N": ["UD1", "UD2"], "O": ["UD3", "UD5"],
+    "G": ["UD2"], "H": ["UD4"], "I": ["UD2"], "J": ["UD2"], "K": ["UD2"], "L": ["UD3", "UD5"], "M": ["UD2"], "N": ["UD1", "UD2"], "O": ["UD3", "UD5"], "P": ["UD2"],
     "prompt": ["UD2"],
 }
 CABECERA = re.compile(r'<(h[23]) id="([^"]+)">(.*?)</\1>', re.S)

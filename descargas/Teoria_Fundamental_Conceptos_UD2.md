@@ -23,7 +23,7 @@ Esta teoría es común a **todo el curso**. Empezó como el apoyo de la UD2 (Pyt
 | 11. Introducción a Big Data | UD2 · [UD5](ud5-ml.html) |
 | 12. Ecosistema de librerías: PyTorch, scikit-learn y Seaborn | UD2 · [UD3](ud3-vision.html) · [UD5](ud5-ml.html) |
 | 13. Crear aplicaciones: escritorio y web, desplegar un modelo e infraestructura como código (Terraform) | UD2 · [UD5](ud5-ml.html) |
-| 14. Ampliación: IA, ML, DL y GenAI, pipeline de ML, EDA, redes neuronales, IA generativa, hashing, automatización, testing, algoritmia, buenas prácticas, recursos, redes y grafos | [UD1](ud1.html) a [UD5](ud5-ml.html), según el apartado |
+| 14. Ampliación: IA, ML, DL y GenAI, pipeline de ML, EDA, redes neuronales, IA generativa, hashing, automatización, testing, algoritmia, buenas prácticas, recursos, redes y grafos, preguntas de repaso tipo entrevista | [UD1](ud1.html) a [UD5](ud5-ml.html), según el apartado |
 | 15. Referencias externas, IDEs, datasets y guía práctica | General |
 
 ## 0️⃣ PUNTO DE PARTIDA: CONCEPTOS FUNDAMENTALES DE IA (UD1)
@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E94 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E98 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -1173,6 +1173,8 @@ def saludar(nombre, idioma="español"):
 saludar("Ana")              # Usa defecto: "¡Hola, Ana!"
 saludar("Ana", "inglés")    # "Hello, Ana!"
 ```
+
+> **Ojo:** el valor por defecto se crea **una sola vez**, al definir la función. Si es una lista o un diccionario (`def engadir(nota, lista=[])`), todas las llamadas comparten el mismo objeto y se va llenando. Se usa `None` y se crea dentro: `if lista is None: lista = []` (ver [14.18](#1418-preguntas-de-repaso-de-python-tipo-entrevista)).
 
 ### 4.5 Docstrings
 
@@ -5067,6 +5069,78 @@ print(leer_edad("hola"))                     # Escribe un número entero · Lect
 
 **Leer un *traceback***: se lee **de abajo arriba**. La última línea dice el tipo de error (`ZeroDivisionError`) y la anterior, el archivo y la línea donde ocurrió.
 
+#### Gestores de contexto y excepciones propias
+
+**`with` por dentro.** Un **gestor de contexto** es un objeto con dos métodos especiales: `__enter__`, que se ejecuta al entrar en el bloque `with`, y `__exit__`, que se ejecuta **siempre** al salir, haya error o no. Así funcionan `open()` (cierra el archivo), un candado de hilos o `torch.no_grad()`. Uno propio:
+
+```python
+import time
+
+class Cronometro:
+    def __enter__(self):
+        self.inicio = time.perf_counter()
+        return self                        # lo que recibe la variable de «as»
+    def __exit__(self, tipo, valor, traza):
+        self.segundos = time.perf_counter() - self.inicio
+        print(f"Tardou {self.segundos:.2f} s")
+        return False                       # False: si hubo un error, sigue su camino
+
+with Cronometro() as c:
+    sum(range(5_000_000))                  # Tardou 0.11 s (depende del ordenador)
+```
+
+Si dentro del bloque hay un `1 / 0`, el cronómetro también imprime su tiempo y después el `ZeroDivisionError` continúa. Si `__exit__` devolviera `True`, el error **desaparecería**: casi nunca es lo que se quiere.
+
+La forma corta, con un generador y el decorador `@contextmanager`: lo que va antes del `yield` es la entrada, y lo que va en el `finally`, la salida.
+
+```python
+from contextlib import contextmanager
+
+@contextmanager
+def cronometro(nome):
+    inicio = time.perf_counter()
+    try:
+        yield
+    finally:
+        print(f"{nome}: {time.perf_counter() - inicio:.2f} s")
+
+with cronometro("suma"):
+    sum(range(5_000_000))                  # suma: 0.11 s
+```
+
+**Una familia de excepciones propias.** Si un programa tiene varios errores relacionados, conviene una excepción **base** de la que hereden las demás. Así se pueden capturar todas juntas o cada una por separado:
+
+```python
+class ErroNota(Exception):
+    """Error base de las notas."""
+
+class NotaForaDeRango(ErroNota):
+    def __init__(self, nota):
+        super().__init__(f"A nota {nota} non está entre 0 e 10")
+        self.nota = nota                   # el dato queda guardado para quien lo capture
+
+class NotaNonNumerica(ErroNota):
+    pass
+
+def ler_nota(texto):
+    try:
+        nota = float(texto.replace(",", "."))
+    except ValueError:
+        raise NotaNonNumerica(f"«{texto}» non é un número") from None   # from None: oculta el error original
+    if not 0 <= nota <= 10:
+        raise NotaForaDeRango(nota)
+    return nota
+
+for t in ["7,5", "11", "sete"]:
+    try:
+        print(ler_nota(t))
+    except ErroNota as e:                  # captura las dos
+        print(type(e).__name__, "→", e)
+# 7.5 · NotaForaDeRango → A nota 11.0 non está entre 0 e 10 · NotaNonNumerica → «sete» non é un número
+```
+
+**`assert` no sirve para validar datos.** `assert condición, "mensaje"` lanza `AssertionError` si la condición es falsa, y es útil para comprobar **suposiciones del propio programador** y en los tests (`pytest`, 14.11). Pero si Python se ejecuta con la opción `-O` (optimizar), los `assert` **se eliminan**: `assert 1 == 2` deja pasar el programa sin decir nada. Para comprobar lo que escribe el usuario o lo que llega de un archivo, `if` y `raise ValueError(...)`.
+
 #### Programación orientada a objetos: los cuatro pilares
 
 | Pilar | Idea | Ejemplo |
@@ -5209,6 +5283,28 @@ except TypeError as e:
 | **Sobrecarga** (*overloading*) | Python **no** tiene varias funciones con el mismo nombre y distintos parámetros; se simula con valores por defecto (`umbral=4`) o `*args` |
 
 En Python, una **interfaz** es una clase abstracta en la que todos los métodos son abstractos. A diferencia de Java, un método abstracto **puede** tener código, que las hijas aprovechan con `super()`. Para clases que solo guardan datos, `@dataclass` (módulo `dataclasses`) escribe solo `__init__`, `__repr__` y `__eq__`.
+
+#### Herencia múltiple y orden de búsqueda (MRO)
+
+Una clase puede heredar de varias. Cuando se llama a un método, Python lo busca en un orden fijo, el **MRO** (*Method Resolution Order*), que se calcula con un algoritmo llamado **linealización C3**: primero la propia clase, después sus padres de izquierda a derecha, sin repetir ninguna y sin que un padre aparezca antes que sus hijas.
+
+```python
+class A:
+    def ola(self): return "A"
+class B(A):
+    def ola(self): return "B→" + super().ola()
+class C(A):
+    def ola(self): return "C→" + super().ola()
+class D(B, C):
+    def ola(self): return "D→" + super().ola()
+
+print(D().ola())                              # D→B→C→A
+print([k.__name__ for k in D.__mro__])        # ['D', 'B', 'C', 'A', 'object']
+```
+
+Fíjate: el `super()` de **B** llama a **C**, no a A. `super()` no significa «mi padre», sino «la siguiente clase del MRO del objeto». Por eso A solo se ejecuta una vez aunque D la herede por dos caminos (el problema del «diamante»). `D.mro()` devuelve lo mismo en forma de lista.
+
+**Sobrecarga de métodos.** Python no permite dos métodos con el mismo nombre y distintos parámetros (como Java): el segundo sustituye al primero. Se consigue lo mismo con valores por defecto (`def suma(self, a, b=0, c=0)`) o con `*args`. Para elegir el código según el **tipo** del argumento existe `functools.singledispatch`.
 
 #### Conceptos avanzados
 
@@ -5474,6 +5570,87 @@ print(saldo)                          # 4000 (sin candado salía unos 1000)
 
 `asyncio` solo acelera lo que está escrito para ser asíncrono (`await` sobre algo que espera). Una función normal que bloquea, como `time.sleep` o leer un archivo con `open`, **bloquea todo** aunque esté dentro de `async def`. Las expresiones regulares (`re`) están en la UD4 (sección 10) y los archivos JSON y CSV, en 5.9 y 14.10.
 
+#### Cómo ejecuta Python tu programa y cómo gestiona la memoria
+
+**¿Interpretado o compilado?** Las dos cosas. Python (la versión habitual, CPython) primero **compila** todo el archivo a *bytecode*, unas instrucciones sencillas para su máquina virtual, y después las **interpreta**. Por eso un error de sintaxis al final del archivo impide ejecutar **cualquier** línea, aunque la primera sea correcta:
+
+```python
+print("Ola")
+print("Adeus"          # SyntaxError: '(' was never closed... ¡y no se imprime «Ola»!
+```
+
+El *bytecode* de los módulos importados se guarda en la carpeta `__pycache__` (archivos `.pyc`) para no repetir la compilación. Se puede ver con el módulo `dis`:
+
+```python
+import dis
+def media(a, b):
+    return (a + b) / 2
+dis.dis(media)          # LOAD_FAST_LOAD_FAST (a, b) · BINARY_OP (+) · LOAD_CONST 2 · BINARY_OP (/) · RETURN_VALUE
+```
+
+| | Compilado a código máquina (C, Go) | Python (CPython) |
+|-|------------------------------------|------------------|
+| Cuándo se traduce | Una vez, antes de ejecutar, a instrucciones del procesador | Cada vez que se ejecuta (o se reutiliza el `.pyc`), a *bytecode* |
+| Errores de sintaxis | Al compilar | También antes de ejecutar nada |
+| Errores de tipos (`"a" + 1`) | Normalmente al compilar | Solo cuando se ejecuta esa línea |
+| Velocidad | Más rápido | Más lento; por eso NumPy y PyTorch hacen las cuentas en C (7.1) |
+
+**Variables, objetos y `is`.** Una variable no es una caja: es una **etiqueta** pegada a un objeto. `==` pregunta si dos objetos **valen** lo mismo; `is`, si son **el mismo objeto**:
+
+```python
+l1, l2 = [1, 2], [1, 2]
+print(l1 == l2, l1 is l2)            # True False: iguales, pero son dos listas
+a, b = int("1000"), int("1000")
+print(a == b, a is b)                # True False
+x = None
+print(x is None)                     # True: con None, True y False sí se usa «is»
+```
+
+Python reutiliza algunos objetos pequeños (los enteros de −5 a 256, algunas cadenas cortas), así que `256 is 256` puede dar `True` y `1000 is 1000`, `False`. Es un detalle interno que puede cambiar: para comparar valores, **siempre `==`**.
+
+**Recuento de referencias y recolector de basura.** Cada objeto lleva la cuenta de cuántas etiquetas apuntan a él. Cuando llega a 0, se libera en ese momento. `del x` no borra el objeto: quita una etiqueta.
+
+```python
+import sys, gc
+a = [1, 2, 3]
+print(sys.getrefcount(a))     # 2 (a + la referencia temporal de la propia llamada)
+b = a
+print(sys.getrefcount(a))     # 3
+del b
+print(sys.getrefcount(a))     # 2   (los números exactos cambian entre versiones de Python)
+
+class Nodo:
+    def __init__(self):
+        self.outro = None
+x, y = Nodo(), Nodo()
+x.outro, y.outro = y, x       # se apuntan entre sí: un ciclo
+del x, y                      # nadie más los usa, pero cada uno sigue con 1 referencia
+print(gc.collect())           # 2 (o más, si había otra basura pendiente): encuentra el ciclo y lo libera
+```
+
+El recuento no puede liberar los **ciclos**. Para eso está el **recolector de basura** (`gc`), que se ejecuta de vez en cuando y separa los objetos en tres **generaciones**: los nuevos se revisan a menudo y los que sobreviven, cada vez menos (casi todos los objetos mueren jóvenes). Para los objetos pequeños, Python usa además su propio reservador de memoria (*pymalloc*), que pide memoria al sistema en bloques grandes y la reparte, más rápido que pedirla objeto a objeto.
+
+**Copias.** `b = a` no copia nada (otra etiqueta); `a.copy()` o `copy.copy(a)` copian solo el primer nivel (las listas de dentro se comparten), y `copy.deepcopy(a)` lo copia todo (ver 5.4).
+
+**El GIL no protege tus datos.** Como se vio en *Concurrencia*, el GIL deja que solo un hilo ejecute *bytecode* a la vez, pero puede cambiar de hilo **entre dos instrucciones**. Una operación como «leer el contador y guardar el contador + 1» puede quedar partida:
+
+```python
+import threading, time
+contador = 0
+def sumar(n):
+    global contador
+    for _ in range(n):
+        valor = contador        # leer
+        time.sleep(0)           # cede el turno, como haría una operación real (leer un archivo, la red...)
+        contador = valor + 1    # escribir
+fios = [threading.Thread(target=sumar, args=(1000,)) for _ in range(4)]
+for f in fios: f.start()
+for f in fios: f.join()
+print(contador)                 # ¡1000 o 1001 en lugar de 4000!
+```
+
+Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer y escribir) sale siempre 4000. Desde Python 3.13 existe además una versión **sin GIL** (*free-threaded*), opcional y todavía minoritaria, donde los hilos sí trabajan a la vez en varios núcleos; con ella, los candados son todavía más necesarios.
+
 ### 14.15 Materiales complementarios utilizados
 
 | Material | Tema | Secciones |
@@ -5508,6 +5685,7 @@ print(saldo)                          # 4000 (sin candado salía unos 1000)
 | *Python Module 8: Tuples* (@Mastercode.sagar, 15 págs.), procesado con OCR y MarkItDown | Crear tuplas, `count` e `index`, operaciones, tuplas anidadas, tupla frente a lista, desempaquetado, proyecto de registro | 5.3 y ejercicios E83–E86 |
 | Seis chuletas dibujadas a mano (Python, NumPy, Pandas, PyTorch, TensorFlow y Terraform; sin autor indicado), publicadas tal cual en [Chuletas](chuletas.html) | Decoradores; `linspace`, `eye`, unir, dividir y guardar arrays; dispositivo, *autograd*, `DataLoader`, evaluación y `state_dict` en PyTorch; `tf.data`, TensorBoard y exportar en Keras; infraestructura como código | 7.1, 12.2, 13.8, 14.7, 14.14 y ejercicios E87–E90 |
 | *200 Machine Learning Commands* (41 págs., sin autor indicado), procesado con MarkItDown | Línea base (`DummyClassifier`), exactitud equilibrada, MCC, curva precisión-exhaustividad, *log loss*, MAPE; curvas de validación y aprendizaje, `cross_validate`, estrategias de partición; silueta, DBSCAN, jerárquico, `GaussianMixture`, anomalías; `RobustScaler`, asimetría, `TargetEncoder`; variables de fecha, retrasos y medias móviles | [UD5](ud5-ml.html), secciones 2, 3, 5, 6, 7 y 8, y ejercicios E91–E94 |
+| *Python Important Questions* (@abhi_techhub, 15 págs., sin capa de texto: Tesseract + MarkItDown) | Preguntas tipo entrevista: compilación a *bytecode*, memoria y recolector de basura, `is` frente a `==`, gestores de contexto, excepciones propias, MRO, trampas clásicas, programas típicos | 4.4, 14.14, 14.18 y ejercicios E95–E98 |
 | *Introduction to Data Science Using Python* (A. Agah, OER, licencia CC BY-NC 4.0) | Estadística descriptiva e inferencial, estandarizar, regresión, grafos y NetworkX; errores usados en E79 | 6.5–6.9, 14.17, ejercicios E75–E79 |
 | *Neural Networks – Complete Study Guide* (codingwithmee_18, 49 págs.) | XOR con capa oculta, red desde cero en NumPy, normalización, calendarios de η, depuración, otras arquitecturas | 14.7 y ejercicios E80–E82 |
 
@@ -5627,6 +5805,72 @@ Para dibujarlo: `nx.draw_networkx(R)` y `plt.show()`. En redes dirigidas se usa 
 **Sobre datos de personas reales:** analizar las relaciones de gente concreta (quién habla con quién, quién sigue a quién) es tratar datos personales. En clase se usan datos inventados o redes de ejemplo, como `nx.karate_club_graph()`.
 
 Los ejercicios [E75–E79](ejercicios.html#bloque-n--estadística-y-redes-e75e79) practican la estadística de la sección 6 y estas redes.
+
+### 14.18 Preguntas de repaso de Python (tipo entrevista)
+
+Las mismas preguntas aparecen una y otra vez en exámenes, entrevistas de prácticas y listas de «preguntas importantes de Python». Esta tabla da la respuesta corta y el lugar de estos apuntes donde se explica con calma. Sirve para **repasar**: tapa la columna de la respuesta e intenta contestar.
+
+| Pregunta | Respuesta corta | Dónde |
+|----------|-----------------|-------|
+| ¿Python es interpretado o compilado? | Las dos cosas: compila a *bytecode* y lo interpreta. Por eso un error de sintaxis impide ejecutar todo el archivo | [14.14, Cómo ejecuta Python...](#cómo-ejecuta-python-tu-programa-y-cómo-gestiona-la-memoria) |
+| ¿Qué es el tipado dinámico? | El tipo va con el **valor**, no con la variable: `x = 5` y después `x = "cinco"` es válido. No significa «sin tipos»: `"5" + 5` da `TypeError` | [2](#2️⃣-tipos-de-datos-en-python), [2.4](#24-conversión-de-tipos-casting) |
+| `type()` o `isinstance()` | `isinstance(x, int)` también acepta las clases hijas, y es lo que se usa para comprobar | [2.4](#24-conversión-de-tipos-casting) |
+| Mutables e inmutables | Mutables: `list`, `dict`, `set`. Inmutables: `int`, `float`, `str`, `tuple`, `bool`. Un inmutable «cambia» creando otro objeto | [5.3](#53-tuplas-a-fondo-registros-que-no-cambian), [5.4](#54-listas-a-fondo-más-métodos-copias-y-alias) |
+| ¿Por qué las cadenas son inmutables? | Para poder usarlas como claves de diccionario (su *hash* no puede cambiar), para compartirlas sin peligro entre variables y para que Python reutilice las repetidas | [2.6](#26-cadenas-a-fondo-índices-slicing-e-inmutabilidad), [14.9](#149-hashing-por-qué-los-diccionarios-son-tan-rápidos) |
+| Lista, tupla, conjunto o diccionario | Lista: ordenada y cambiante. Tupla: registro fijo. Conjunto: sin repetidos, «¿está?» muy rápido. Diccionario: buscar por clave | [5](#5️⃣-estructuras-de-datos-complejas) |
+| ¿Cuánto tarda buscar en un diccionario? | Un tiempo constante **de media**, O(1), gracias al *hash*; en una lista, O(n) | [14.9](#149-hashing-por-qué-los-diccionarios-son-tan-rápidos) |
+| `/` frente a `//` | `7 / 2` = 3.5 siempre decimal; `7 // 2` = 3, división entera **hacia abajo** (`-7 // 2` = −4) | [1](#1️⃣-fundamentos-de-programación) |
+| `is` frente a `==` | `==` compara valores; `is`, si es el mismo objeto. `is` solo para `None`, `True` y `False` | [14.14, Cómo ejecuta Python...](#cómo-ejecuta-python-tu-programa-y-cómo-gestiona-la-memoria) |
+| `break`, `continue`, `pass` | Salir del bucle; saltar a la siguiente vuelta; no hacer nada (hueco que se rellenará) | [3.2](#32-bucles-for-y-while) |
+| `*args` y `**kwargs` | Argumentos de más, en una tupla y en un diccionario | [4.6](#46-argumentos-y-valores-de-retorno) |
+| Regla LEGB | Orden de búsqueda de un nombre: Local, Envolvente, Global, Integrado (*Built-in*) | [4.10](#410-ámbito-de-las-variables-regla-legb) |
+| Cierre (*closure*) | Una función interna que recuerda variables de la función que la creó, aunque esa ya haya terminado | [Decoradores paso a paso](#decoradores-paso-a-paso) |
+| Decorador | Función que envuelve a otra para añadirle algo sin cambiar su código | [Decoradores paso a paso](#decoradores-paso-a-paso) |
+| Iterable, iterador y generador | Iterable: se puede recorrer (`iter()`). Iterador: da el siguiente con `next()` y se agota. Generador: un iterador escrito con `yield` | [Iteradores y generadores por dentro](#iteradores-y-generadores-por-dentro) |
+| Gestor de contexto | Un objeto con `__enter__` y `__exit__` que se usa con `with` y garantiza la limpieza | [Gestores de contexto...](#gestores-de-contexto-y-excepciones-propias) |
+| `else` y `finally` en un `try` | `else`: si **no** hubo error. `finally`: siempre, incluso tras un `return` | [Excepciones completas](#excepciones-completas-try--except--else--finally-y-raise) |
+| Excepciones propias | Clases que heredan de `Exception`, mejor con una base común | [Gestores de contexto...](#gestores-de-contexto-y-excepciones-propias) |
+| Los cuatro pilares de la POO | Encapsulación, herencia, polimorfismo y abstracción | [POO](#programación-orientada-a-objetos-los-cuatro-pilares) |
+| `@classmethod` y `@staticmethod` | El primero recibe la clase (`cls`) y sirve para crear objetos de otras formas; el segundo no recibe nada: una utilidad dentro de la clase | [POO con código](#poo-con-código-de-una-clase-a-un-mini-scikit-learn) |
+| ¿Hay sobrecarga de métodos? | No como en Java: valores por defecto o `*args` | [Herencia múltiple y MRO](#herencia-múltiple-y-orden-de-búsqueda-mro) |
+| MRO y `super()` | Orden de búsqueda en herencia múltiple (C3); `super()` llama a la **siguiente** clase de ese orden | [Herencia múltiple y MRO](#herencia-múltiple-y-orden-de-búsqueda-mro) |
+| Copia superficial y profunda | `copy()` comparte lo de dentro; `deepcopy()` lo duplica todo | [5.4](#54-listas-a-fondo-más-métodos-copias-y-alias) |
+| ¿Cómo gestiona Python la memoria? | Recuento de referencias + recolector de basura para los ciclos | [Cómo ejecuta Python...](#cómo-ejecuta-python-tu-programa-y-cómo-gestiona-la-memoria) |
+| GIL; hilos, procesos o `asyncio` | Un solo hilo ejecuta Python a la vez. Hilos o `asyncio` para esperar (red, archivos); procesos para calcular | [Concurrencia](#concurrencia-hilos-procesos-y-asyncio) |
+| Módulo y paquete | Módulo: un archivo `.py`. Paquete: una carpeta de módulos (con `__init__.py`) | [5.7](#57-funciones-integradas-y-módulos-útiles) |
+| Entorno virtual | Una carpeta con su propio Python y sus librerías para cada proyecto: `python -m venv venv` y activarlo | [Estilo y organización](#estilo-y-organización-de-un-proyecto) |
+| Modos de `open()` | `"r"` leer, `"w"` escribir (¡borra lo que había!), `"a"` añadir al final, `"x"` crear (error si ya existe), `"b"` binario | [5.9](#59-de-python-puro-a-una-tabla-de-datos), [14.10](#1410-automatización-con-python) |
+
+**Trampas clásicas («¿qué imprime?»).** Son las preguntas favoritas de los exámenes porque obligan a entender qué pasa por dentro:
+
+```python
+def engadir(nota, lista=[]):      # 1. el valor por defecto se crea UNA vez, al definir la función
+    lista.append(nota)
+    return lista
+print(engadir(5), engadir(7))     # [5, 7] [5, 7]: ¡las dos llamadas comparten la misma lista!
+# Solución: def engadir(nota, lista=None): if lista is None: lista = []
+
+funcs = [lambda: i for i in range(3)]
+print([f() for f in funcs])       # 2. [2, 2, 2]: las lambdas leen «i» al llamarlas, cuando ya vale 2
+funcs = [lambda i=i: i for i in range(3)]
+print([f() for f in funcs])       #    [0, 1, 2]: el valor por defecto guarda el de cada vuelta
+
+g = (x * x for x in range(3))
+print(sum(g), sum(g))             # 3. 5 0: un generador se agota la primera vez
+
+def f():
+    try:
+        return "try"
+    finally:
+        print("finally")          # 4. imprime «finally» y después «try»: finally va antes de salir
+print(f())
+
+print(1 < 2 < 3, (3 > 2) > 1)     # 5. True False: 1 < 2 < 3 es «1 < 2 and 2 < 3»; (3 > 2) es True, que vale 1
+print(0.1 + 0.2 == 0.3)           # 6. False: los decimales no son exactos (2.2); usar math.isclose
+print({True: "a", 1: "b", 1.0: "c"})   # 7. {True: 'c'}: True == 1 == 1.0 tienen el mismo hash: es la misma clave
+```
+
+Los ejercicios [E95–E98](ejercicios.html#bloque-s--python-a-fondo-preguntas-tipo-entrevista-e95e98) practican estas preguntas, los programas clásicos de las entrevistas (palíndromos, anagramas, primos...) y la revisión crítica de una hoja de «preguntas importantes de Python».
 
 ---
 

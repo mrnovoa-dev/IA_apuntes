@@ -19,7 +19,7 @@ Web de apuntes de **Inteligencia Artificial con Python** para *Tecnoloxías Inte
 | `itinerario.html` | Itinerario «De Python a experto en IA» en seis etapas (fundamentos, ML y DL, LLM, agentes, evaluación, despliegue): qué aprender, dónde está en la web, qué falta, proyecto y evaluación de cada etapa, y rúbrica del portafolio |
 | `algoritmos.html` | Catálogo de algoritmos de IA por familias (búsqueda, optimización, supervisado, no supervisado, redes, lenguaje, visión, refuerzo) con enlaces a la web, fichas de regresión lineal, KNN, k-means, A* y Q-learning, guía para elegir y ejercicios A1–A3 |
 | `assets/menu.css`, `assets/menu.js` | Cabecera y menú principal comunes a todas las páginas (desplegables accesibles con teclado; botón «Menú» en el móvil). El HTML del menú lo genera `build.py` a partir de la lista `MENU`, también en `index.html` y `mapa.html` (entre las marcas `<!-- menu -->`) |
-| `mapa.html` | Mapa visual: conceptos, 43 librerías filtrables, chuletas y autoevaluación |
+| `mapa.html` | Mapa visual: conceptos, 44 librerías filtrables, chuletas y autoevaluación |
 | `descargas/` | Teoría en `.odt` (editable) y en Markdown (fuente) |
 
 Las unidades siguen la programación oficial 2026/27 (UD3 Visión, UD4 Lenguaje) y el libro de J. F. Puentes Calvo, *Tecnologías Inteligentes* (2025, CC BY-NC-ND 4.0). Los textos son propios: el libro se cita por capítulos, no se copia.

@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E90 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E94 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -5507,6 +5507,7 @@ print(saldo)                          # 4000 (sin candado salía unos 1000)
 | *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
 | *Python Module 8: Tuples* (@Mastercode.sagar, 15 págs.), procesado con OCR y MarkItDown | Crear tuplas, `count` e `index`, operaciones, tuplas anidadas, tupla frente a lista, desempaquetado, proyecto de registro | 5.3 y ejercicios E83–E86 |
 | Seis chuletas dibujadas a mano (Python, NumPy, Pandas, PyTorch, TensorFlow y Terraform; sin autor indicado), publicadas tal cual en [Chuletas](chuletas.html) | Decoradores; `linspace`, `eye`, unir, dividir y guardar arrays; dispositivo, *autograd*, `DataLoader`, evaluación y `state_dict` en PyTorch; `tf.data`, TensorBoard y exportar en Keras; infraestructura como código | 7.1, 12.2, 13.8, 14.7, 14.14 y ejercicios E87–E90 |
+| *200 Machine Learning Commands* (41 págs., sin autor indicado), procesado con MarkItDown | Línea base (`DummyClassifier`), exactitud equilibrada, MCC, curva precisión-exhaustividad, *log loss*, MAPE; curvas de validación y aprendizaje, `cross_validate`, estrategias de partición; silueta, DBSCAN, jerárquico, `GaussianMixture`, anomalías; `RobustScaler`, asimetría, `TargetEncoder`; variables de fecha, retrasos y medias móviles | [UD5](ud5-ml.html), secciones 2, 3, 5, 6, 7 y 8, y ejercicios E91–E94 |
 | *Introduction to Data Science Using Python* (A. Agah, OER, licencia CC BY-NC 4.0) | Estadística descriptiva e inferencial, estandarizar, regresión, grafos y NetworkX; errores usados en E79 | 6.5–6.9, 14.17, ejercicios E75–E79 |
 | *Neural Networks – Complete Study Guide* (codingwithmee_18, 49 págs.) | XOR con capa oculta, red desde cero en NumPy, normalización, calendarios de η, depuración, otras arquitecturas | 14.7 y ejercicios E80–E82 |
 

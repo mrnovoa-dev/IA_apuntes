@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Itinerario IA con Python · IA Apuntes</title>
+<meta name="description" content="Itinerario en seis etapas para pasar
+de los fundamentos de Python a construir, evaluar y desplegar
+aplicaciones de IA: qué aprender, dónde está en esta web, qué falta,
+proyecto de cada etapa y cómo evaluarlo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="brand" href="./">IA<span>·</span>Apuntes</a>
+  <nav aria-label="Principal">
+    <a href="./">Inicio</a>
+    <a href="asignatura.html" title="Programación, criterios y evaluación">Asignatura</a>
+    <a href="ud1.html" title="Conceptos clave de la IA">UD1</a>
+    <a href="teoria.html" title="Teoría de todo el curso, con la unidad de cada sección">Teoría</a>
+    <a href="ejercicios.html" title="Ejercicios E1–E99 de todas las unidades">Ejercicios</a>
+    <a href="ud3-vision.html" title="Visión artificial">UD3 Visión</a>
+    <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural">UD4 Lenguaje</a>
+    <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
+    <a href="datos.html" title="Análisis de datos: de los datos al modelo">Datos</a>
+    <a href="itinerario.html" title="De Python a experto en IA en seis etapas" aria-current="page">Itinerario</a>
+    <a href="libro.html" title="El libro de referencia, capítulo a capítulo">Libro</a>
+    <a href="apps.html" title="Proyectos de apps y juegos con Python">Apps y juegos</a>
+    <a href="chuletas.html" title="Chuletas visuales de las librerías">Chuletas</a>
+    <a href="mapa.html">Mapa</a>
+  </nav>
+</div></header>
+<main class="doc">
+  <div class="toc-side">
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="TOC"><span class="toc-ico" aria-hidden="true">☰</span><b>Índice</b><span class="toc-cur"></span></button>
+<nav id="TOC" aria-label="Índice de la página">
+<div class="toc-head"><span>Índice</span><button class="toc-close" type="button" aria-label="Cerrar el índice">✕</button></div>
+<ul>
+<li><a href="#de-python-a-experto-en-ia-itinerario-en-seis-etapas"
+id="toc-de-python-a-experto-en-ia-itinerario-en-seis-etapas">De Python a
+experto en IA: itinerario en seis etapas</a>
+<ul>
+<li><a href="#mapa-del-itinerario" id="toc-mapa-del-itinerario">Mapa del
+itinerario</a></li>
+<li><a href="#etapa-1--fundamentos-de-programación"
+id="toc-etapa-1--fundamentos-de-programación">Etapa 1 · Fundamentos de
+programación</a></li>
+<li><a href="#etapa-2--machine-learning-y-deep-learning"
+id="toc-etapa-2--machine-learning-y-deep-learning">Etapa 2 · Machine
+learning y deep learning</a></li>
+<li><a href="#etapa-3--aplicaciones-con-modelos-de-lenguaje-llm"
+id="toc-etapa-3--aplicaciones-con-modelos-de-lenguaje-llm">Etapa 3 ·
+Aplicaciones con modelos de lenguaje (LLM)</a></li>
+<li><a href="#etapa-4--agentes-de-ia"
+id="toc-etapa-4--agentes-de-ia">Etapa 4 · Agentes de IA</a></li>
+<li><a href="#etapa-5--evaluar-y-asegurar-la-ia"
+id="toc-etapa-5--evaluar-y-asegurar-la-ia">Etapa 5 · Evaluar y asegurar
+la IA</a></li>
+<li><a href="#etapa-6--desplegar-y-diseñar-el-sistema"
+id="toc-etapa-6--desplegar-y-diseñar-el-sistema">Etapa 6 · Desplegar y
+diseñar el sistema</a></li>
+<li><a href="#portafolio-final-construir-publicar-enseñar"
+id="toc-portafolio-final-construir-publicar-enseñar">Portafolio final:
+construir, publicar, enseñar</a>
+<ul>
+<li><a href="#rúbrica-común-del-portafolio"
+id="toc-rúbrica-común-del-portafolio">Rúbrica común del
+portafolio</a></li>
+</ul></li>
+<li><a href="#lo-que-todavía-falta-en-esta-web"
+id="toc-lo-que-todavía-falta-en-esta-web">Lo que todavía falta en esta
+web</a></li>
+<li><a href="#recursos-para-seguir"
+id="toc-recursos-para-seguir">Recursos para seguir</a></li>
+</ul></li>
+</ul>
+</nav>
+    <div class="toc-backdrop" hidden></div>
+  </div>
+  <article class="content">
+<h1 id="de-python-a-experto-en-ia-itinerario-en-seis-etapas">De Python a
+experto en IA: itinerario en seis etapas</h1>
+<div class="ud-head" style="--c:var(--c-dl)">
+<span class="k">Itinerario transversal · UD1 → UD5 y más allá del curso</span>
+<p>Seis etapas que van de escribir el primer programa a <b>construir, evaluar y publicar</b> una aplicación de IA. Para cada una: qué aprender, dónde está explicado en esta web, qué falta todavía, un proyecto con el que demostrarlo y cómo evaluarlo. Las etapas 1 y 2 son el núcleo del curso; las 3 a 6 son el camino para quien quiera seguir.</p>
+</div>
+
+<blockquote>
+<p><strong>De dónde sale.</strong> La estructura se inspira en un
+carrusel de Instagram muy compartido, <em>90-Day AI Engineer
+Roadmap</em> (@code_scholar_ai), que propone seis bloques de 15 días:
+fundamentos, <em>machine learning</em>, LLM, agentes, evaluación y
+despliegue, más un portafolio de tres proyectos. Aquí está
+<strong>adaptado</strong> al alumnado de Bachillerato, enlazado a los
+apuntes de esta web y con proyectos y datos propios.</p>
+<p><strong>Tres matices al original.</strong></p>
+<ul>
+<li><strong>«90 días» es un reclamo.</strong> Cada etapa da para meses
+si se hace bien. Mejor medir el avance por <strong>proyectos
+terminados</strong> que por días.</li>
+<li><strong>Las herramientas cambian; las ideas no.</strong> LangChain,
+LangGraph, LangSmith o n8n pueden ser otras dentro de dos años. Lo que
+se mantiene es lo de debajo: datos, validación, pruebas, evaluación y
+seguridad. Por eso aquí se aprende primero el concepto con Python puro y
+después la herramienta.</li>
+<li><strong>Edad y privacidad.</strong> Las cuentas de API de los
+grandes proveedores de modelos suelen exigir <strong>mayoría de
+edad</strong>. En clase se trabaja con modelos simulados, con modelos
+abiertos que funcionan en el propio ordenador o con la cuenta del
+profesorado, y <strong>nunca con datos personales</strong> del
+alumnado.</li>
+</ul>
+</blockquote>
+<h2 id="mapa-del-itinerario">Mapa del itinerario</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Etapa</th>
+<th>Pregunta</th>
+<th>Unidades</th>
+<th>Proyecto</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#etapa-1--fundamentos-de-programación">1 · Fundamentos de
+programación</a></td>
+<td>¿Sé escribir, probar y compartir un programa?</td>
+<td>UD2</td>
+<td>API de tareas de clase</td>
+<td>Un <em>backend</em> en Python que funciona y está probado</td>
+</tr>
+<tr class="even">
+<td><a href="#etapa-2--machine-learning-y-deep-learning">2 · Machine
+learning y deep learning</a></td>
+<td>¿Sé entrenar, evaluar y explicar un modelo?</td>
+<td>UD2, UD3, UD5</td>
+<td>¿Quién deja de venir a la biblioteca?</td>
+<td>Un modelo evaluado con honestidad</td>
+</tr>
+<tr class="odd">
+<td><a href="#etapa-3--aplicaciones-con-modelos-de-lenguaje-llm">3 ·
+Aplicaciones con LLM</a></td>
+<td>¿Sé usar un modelo de lenguaje con mis propios datos?</td>
+<td>UD4</td>
+<td>Asistente de las normas del centro (RAG)</td>
+<td>Respuestas basadas en documentos, con cita</td>
+</tr>
+<tr class="even">
+<td><a href="#etapa-4--agentes-de-ia">4 · Agentes</a></td>
+<td>¿Sé dejar que la IA actúe sin perder el control?</td>
+<td>UD1, UD4</td>
+<td>Agente investigador con aprobación humana</td>
+<td>Un flujo con herramientas, límites y confirmación</td>
+</tr>
+<tr class="odd">
+<td><a href="#etapa-5--evaluar-y-asegurar-la-ia">5 · Evaluación y
+seguridad</a></td>
+<td>¿Cómo sé que funciona y que no es peligrosa?</td>
+<td>UD4, UD5</td>
+<td>Batería de pruebas del asistente</td>
+<td>Calidad, seguridad, tiempo y coste medidos</td>
+</tr>
+<tr class="even">
+<td><a href="#etapa-6--desplegar-y-diseñar-el-sistema">6 ·
+Despliegue</a></td>
+<td>¿Puede usarlo otra persona, de forma segura?</td>
+<td>UD5</td>
+<td>Publicar el asistente</td>
+<td>Una aplicación publicada, documentada y vigilada</td>
+</tr>
+</tbody>
+</table>
+<pre><code> FUNDAMENTOS ──► ML y DL ──► LLM ──► AGENTES ──► EVALUACIÓN ──► DESPLIEGUE
+  Python, Git,    datos,      prompts,  herramientas, pruebas,     contenedores,
+  API, SQL,       modelos,    RAG,      bucle,        alucinaciones, CI/CD,
+  pruebas         métricas    embeddings aprobación   inyección     vigilancia
+      └────────────────── portafolio: 3 proyectos en GitHub ──────────────────┘</code></pre>
+<p><strong>Leyenda de la columna «En esta web»:</strong> ✅ está
+explicado · 🟡 está en parte · ⬜ todavía no está (con un recurso
+externo gratuito).</p>
+<h2 id="etapa-1--fundamentos-de-programación">Etapa 1 · Fundamentos de
+programación</h2>
+<p>Antes de la IA, saber <strong>programar bien</strong>: código que se
+entiende, se prueba y se comparte.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Qué aprender</th>
+<th>En esta web</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sintaxis, funciones y POO</td>
+<td><a href="teoria.html#1️⃣-fundamentos-de-programación">Teoría 1–5</a>
+y <a
+href="teoria.html#1414-buenas-prácticas-de-python-y-conceptos-avanzados">14.14</a>;
+ejercicios E1–E12, E28–E37, E47–E52</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Estructuras de datos y algoritmos</td>
+<td><a href="teoria.html#5️⃣-estructuras-de-datos-complejas">5</a>, <a
+href="teoria.html#149-hashing-por-qué-los-diccionarios-son-tan-rápidos">14.9
+hashing</a>, <a
+href="teoria.html#1412-algoritmia-pensar-antes-de-programar">14.12
+algoritmia</a>; bloques M y P</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Pruebas con <code>pytest</code> y depurar</td>
+<td><a href="teoria.html#pruebas-automáticas-con-pytest">14.11</a>; leer
+un <em>traceback</em> en <a
+href="teoria.html#1414-buenas-prácticas-de-python-y-conceptos-avanzados">14.14</a></td>
+<td>🟡 falta el depurador paso a paso (puntos de ruptura en VS
+Code)</td>
+</tr>
+<tr class="even">
+<td>Entornos virtuales y dependencias</td>
+<td><a href="teoria.html#estilo-y-organización-de-un-proyecto">Estilo y
+organización de un proyecto</a></td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Programación asíncrona</td>
+<td><a
+href="teoria.html#concurrencia-hilos-procesos-y-asyncio">Concurrencia:
+hilos, procesos y <code>asyncio</code></a></td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>JSON y API web</td>
+<td><a href="datos.html#12-leer-y-escribir-en-distintos-formatos">Datos
+1.2</a>, <a href="teoria.html#1410-automatización-con-python">14.10</a>,
+<a
+href="teoria.html#paso-4-ampliación--una-api-para-otros-programas">13.7
+paso 4</a> (FastAPI)</td>
+<td>🟡 falta HTTP explicado: métodos GET/POST/PUT/DELETE, códigos de
+estado (200, 404, 500), qué es REST</td>
+</tr>
+<tr class="odd">
+<td>SQL</td>
+<td><a
+href="teoria.html#bases-de-datos-con-sqlite3-incluido-en-python"><code>sqlite3</code></a></td>
+<td>🟡 consultas básicas; falta un servidor de bases de datos
+(PostgreSQL)</td>
+</tr>
+<tr class="even">
+<td>Git y GitHub</td>
+<td>Solo se menciona (<code>.gitignore</code>, publicar)</td>
+<td>⬜ <em>commit</em>, ramas, <em>pull request</em>: <a
+href="https://git-scm.com/book/es/v2">Pro Git en español</a></td>
+</tr>
+<tr class="odd">
+<td>Línea de órdenes (Linux)</td>
+<td>—</td>
+<td>⬜ moverse por carpetas, ejecutar programas, permisos: <a
+href="https://ubuntu.com/tutorials/command-line-for-beginners">The Linux
+command line for beginners</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Proyecto 1 · API de tareas de clase.</strong> Una API con
+FastAPI que permita crear, ver, cambiar y borrar tareas (CRUD), con los
+datos en SQLite, validación con Pydantic (<a
+href="datos.html#15-validar-con-reglas-pydantic">Datos 1.5</a>) y al
+menos cinco pruebas con <code>pytest</code>. Se publica en GitHub con un
+README. Punto de partida: <a href="apps.html#p3--lista-de-tareas">P3
+Lista de tareas</a> y <a
+href="teoria.html#137-del-notebook-a-la-app-desplegar-un-modelo">13.7</a>.</p>
+<p><strong>Cómo se evalúa:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Las cuatro operaciones funcionan y
+los datos se conservan al reiniciar.</label></li>
+<li><label><input type="checkbox" />Una entrada inválida (fecha
+imposible, título vacío) devuelve un error claro, no un
+fallo.</label></li>
+<li><label><input type="checkbox" /><code>pytest</code> pasa y hay
+pruebas de casos límite.</label></li>
+<li><label><input type="checkbox" />El README explica qué hace, cómo se
+instala y cómo se ejecuta.</label></li>
+<li><label><input type="checkbox" />El historial de Git tiene
+<em>commits</em> pequeños con mensajes que se entienden.</label></li>
+</ul>
+<h2 id="etapa-2--machine-learning-y-deep-learning">Etapa 2 · Machine
+learning y deep learning</h2>
+<p>Aprender de los datos: prepararlos, entrenar, <strong>medir con
+honestidad</strong> y explicar.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Qué aprender</th>
+<th>En esta web</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Álgebra lineal (vectores, matrices)</td>
+<td><a href="teoria.html#7️⃣-librerías-científicas">7.1 NumPy</a>, <a
+href="ejercicios.html#bloque-c--numpy-e18e19">E19</a>, propagación con
+matrices en <a
+href="teoria.html#147-redes-neuronales-desde-cero">14.7</a></td>
+<td>🟡 lo práctico; falta la intuición geométrica (producto escalar como
+«parecido»)</td>
+</tr>
+<tr class="even">
+<td>Probabilidad y estadística</td>
+<td><a href="teoria.html#6️⃣-conceptos-estadísticos-básicos">6</a>
+(descriptiva, contrastes); bloque N</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>NumPy y Pandas</td>
+<td><a href="teoria.html#7️⃣-librerías-científicas">7</a>, <a
+href="teoria.html#143-referencia-rápida-de-pandas-las-funciones-que-más-se-usan">14.3</a>;
+bloques J y Q</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Preparar los datos e ingeniería de características</td>
+<td><a href="datos.html">Análisis de datos</a>, <a
+href="ud5-ml.html#preparar-los-datos-para-el-modelo">UD5 sección
+2</a></td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Aprendizaje supervisado y no supervisado</td>
+<td><a href="ud5-ml.html">UD5</a> secciones 2–8</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Entrenar, validar y evitar el sobreajuste</td>
+<td><a
+href="ud5-ml.html#6-sobreajuste-validación-cruzada-e-hiperparámetros">UD5
+sección 6</a>; bloque R</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Evaluar modelos</td>
+<td><a href="ud5-ml.html#5-evaluar-un-clasificador">UD5 sección 5</a> y
+<a
+href="ud5-ml.html#línea-base-y-métricas-para-clases-desequilibradas">línea
+base y métricas</a></td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Redes neuronales</td>
+<td><a href="teoria.html#147-redes-neuronales-desde-cero">14.7</a>, <a
+href="ud5-ml.html#9-redes-neuronales">UD5 sección 9</a>; bloques L, O y
+T</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Tensores y <em>autograd</em> con PyTorch</td>
+<td><a
+href="teoria.html#pytorch-paso-a-paso-de-los-tensores-a-guardar-el-modelo">PyTorch
+paso a paso</a></td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Transformers y atención</td>
+<td><a href="ud4-lenguaje.html#1010-el-transformer-por-dentro">UD4
+10.9–10.10</a></td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Explicar un modelo</td>
+<td><a href="ud5-ml.html#10-sesgos-ética-y-explicabilidad">UD5 sección
+10</a></td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Proyecto 2 · ¿Quién deja de venir a la biblioteca?</strong>
+Con datos <strong>inventados</strong> de socios de una biblioteca
+municipal (edad, préstamos al mes, meses desde el último préstamo, si
+usa la sala de estudio...), predecir quién dejará de venir. Es el
+problema del <em>customer churn</em> del original, sin datos de personas
+reales. Se sigue la <a
+href="ud5-ml.html#plantilla-de-un-proyecto-de-principio-a-fin">plantilla
+de proyecto de la UD5</a>. Ampliación: clasificar imágenes con PyTorch o
+Keras (<a href="ud3-vision.html#5-clasificar-imágenes">UD3 sección
+5</a>).</p>
+<p><strong>Cómo se evalúa:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Hay una línea base
+(<code>DummyClassifier</code>) y el modelo la supera
+claramente.</label></li>
+<li><label><input type="checkbox" />La preparación está dentro de un
+<code>Pipeline</code> (sin fuga de datos) y la prueba se usa una sola
+vez.</label></li>
+<li><label><input type="checkbox" />La métrica se elige por el coste de
+cada error, no solo por la exactitud.</label></li>
+<li><label><input type="checkbox" />Se explica qué variables pesan más y
+si el modelo trata peor a algún grupo.</label></li>
+<li><label><input type="checkbox" />Las conclusiones dicen también lo
+que el modelo <strong>no</strong> puede hacer.</label></li>
+</ul>
+<h2 id="etapa-3--aplicaciones-con-modelos-de-lenguaje-llm">Etapa 3 ·
+Aplicaciones con modelos de lenguaje (LLM)</h2>
+<p>Usar un LLM como pieza de un programa: pedir bien, darle
+<strong>datos propios</strong> y controlar lo que devuelve.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Qué aprender</th>
+<th>En esta web</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cómo funciona un LLM: <em>tokens</em>, <em>embeddings</em>,
+temperatura</td>
+<td><a href="teoria.html#cómo-lee-un-llm-tokens-y-embeddings">14.8</a>,
+<a href="ud4-lenguaje.html#8-modelos-de-lenguaje">UD4</a>; bloque H</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Escribir <em>prompts</em></td>
+<td><a href="teoria.html#prompting-cómo-pedir-bien">Prompting</a>, <a
+href="libro.html">banco de prompts del libro</a></td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Elegir un modelo y usar su API</td>
+<td><a
+href="teoria.html#124-librerías-poco-conocidas-cuáles-merecen-la-pena">12.4</a>
+(Hugging Face, Ollama)</td>
+<td>🟡 falta una comparación de modelos abiertos y comerciales (tamaño,
+coste, privacidad, licencia)</td>
+</tr>
+<tr class="even">
+<td>Salidas en JSON validadas</td>
+<td><a
+href="teoria.html#llamada-a-funciones-herramientas-y-agentes">Llamada a
+funciones</a> + <a
+href="datos.html#15-validar-con-reglas-pydantic">Pydantic</a></td>
+<td>🟡 falta el «modo JSON» con esquema de las API</td>
+</tr>
+<tr class="odd">
+<td>Llamada a funciones y herramientas</td>
+<td><a
+href="teoria.html#llamada-a-funciones-herramientas-y-agentes">Llamada a
+funciones, herramientas y agentes</a>; <a
+href="ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46">E45</a></td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td><em>Embeddings</em> y búsqueda semántica</td>
+<td><a href="ud4-lenguaje.html#104-embeddings-de-palabras-word2vec">UD4
+10.4</a>, <a
+href="ud4-lenguaje.html#5-similitud-entre-textos">similitud</a></td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Bases de datos vectoriales</td>
+<td><a href="teoria.html#rag-paso-a-paso">RAG paso a paso</a> (FAISS,
+Chroma, pgvector...)</td>
+<td>🟡 se explican; falta un ejemplo con Chroma</td>
+</tr>
+<tr class="even">
+<td>RAG: trocear, recuperar, generar</td>
+<td><a href="teoria.html#rag-paso-a-paso">RAG paso a paso</a>; <a
+href="ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46">E44</a></td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Reordenar los resultados (<em>reranking</em>)</td>
+<td>—</td>
+<td>⬜ un segundo modelo vuelve a ordenar los fragmentos recuperados
+antes de dárselos al LLM</td>
+</tr>
+<tr class="even">
+<td>Ventana de contexto, <em>tokens</em> y coste</td>
+<td><a href="teoria.html#la-ventana-de-contexto-es-un-presupuesto">La
+ventana de contexto es un presupuesto</a></td>
+<td>🟡 falta calcular el coste en euros de una conversación</td>
+</tr>
+<tr class="odd">
+<td>Ajuste fino y LoRA</td>
+<td><a href="teoria.html#prompt-rag-o-ajuste-fino">¿Prompt, RAG o ajuste
+fino?</a></td>
+<td>🟡 la idea; sin práctica (necesita GPU)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Proyecto 3 · Asistente de las normas del centro.</strong> Un
+programa que responde preguntas sobre las normas de convivencia, el
+calendario o el horario de la biblioteca <strong>solo</strong> con lo
+que dicen los documentos, y cita el fragmento usado. Se parte del
+mini-RAG con TF-IDF de <a
+href="ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46">E44</a>;
+la generación puede ser un modelo abierto local o una respuesta
+simulada.</p>
+<p><strong>Cómo se evalúa:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Para 10 preguntas de prueba,
+recupera el fragmento correcto (se mide el porcentaje de
+aciertos).</label></li>
+<li><label><input type="checkbox" />Cita la fuente de cada
+respuesta.</label></li>
+<li><label><input type="checkbox" />Ante una pregunta que no está en los
+documentos, dice «no lo sé» en lugar de inventar.</label></li>
+<li><label><input type="checkbox" />Se explica qué documentos usa y que
+no contienen datos personales.</label></li>
+</ul>
+<h2 id="etapa-4--agentes-de-ia">Etapa 4 · Agentes de IA</h2>
+<p>Un <strong>agente</strong> repite «pensar → elegir herramienta →
+actuar → observar» hasta cumplir un objetivo. Lo difícil no es que
+actúe, sino que actúe <strong>solo cuando debe</strong>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Qué aprender</th>
+<th>En esta web</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Qué es un agente</td>
+<td><a href="ud1.html#8-agentes-inteligentes">UD1 sección 8</a>, <a
+href="teoria.html#09-agentes-inteligentes">teoría 0.9</a></td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Llamada a herramientas y bucle del agente (tipo ReAct)</td>
+<td><a
+href="teoria.html#llamada-a-funciones-herramientas-y-agentes">Llamada a
+funciones, herramientas y agentes</a>; <a
+href="ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46">E45</a></td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Planificar y dividir una tarea</td>
+<td>Idea en la misma sección</td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>Estado y memoria del agente</td>
+<td>Idea en la misma sección</td>
+<td>🟡</td>
+</tr>
+<tr class="odd">
+<td>Aprobación humana y permisos mínimos</td>
+<td>Riesgos en la misma sección; <a
+href="ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46">E45</a></td>
+<td>🟡 falta un ejemplo de «pedir permiso antes de actuar»</td>
+</tr>
+<tr class="even">
+<td>Varios agentes que colaboran</td>
+<td>—</td>
+<td>⬜</td>
+</tr>
+<tr class="odd">
+<td>Herramientas para construir agentes: LangGraph, n8n</td>
+<td>—</td>
+<td>⬜ <a
+href="https://docs.langchain.com/oss/python/langgraph/overview">documentación
+de LangGraph</a></td>
+</tr>
+<tr class="even">
+<td><em>Model Context Protocol</em> (MCP)</td>
+<td>—</td>
+<td>⬜ estándar abierto para conectar modelos con herramientas y datos;
+desde diciembre de 2025 lo gestiona la Agentic AI Foundation, dentro de
+la Linux Foundation (<a
+href="https://blog.modelcontextprotocol.io/posts/2025-12-09-mcp-joins-agentic-ai-foundation/">anuncio</a>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Proyecto 4 · Agente investigador con aprobación
+humana.</strong> Un agente que, ante una pregunta («¿qué becas hay para
+estudiar FP en Galicia?»), decide qué herramientas usar (buscar, leer,
+resumir, guardar un informe) y <strong>pide confirmación</strong> antes
+de cualquier acción con efectos (guardar, enviar). Se programa primero
+con un «modelo» simulado que devuelve JSON, como en E45, para controlar
+cada paso.</p>
+<p><strong>Cómo se evalúa:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />El agente tiene un <strong>límite de
+pasos</strong> y termina siempre.</label></li>
+<li><label><input type="checkbox" />Las herramientas comprueban sus
+argumentos y tienen los permisos justos.</label></li>
+<li><label><input type="checkbox" />Ninguna acción con efectos se
+ejecuta sin confirmación.</label></li>
+<li><label><input type="checkbox" />Un documento con «ignora las
+instrucciones anteriores y...» no consigue que el agente haga algo no
+previsto.</label></li>
+<li><label><input type="checkbox" />Queda registro de cada paso (qué
+pensó, qué herramienta usó, qué obtuvo).</label></li>
+</ul>
+<h2 id="etapa-5--evaluar-y-asegurar-la-ia">Etapa 5 · Evaluar y asegurar
+la IA</h2>
+<p>La etapa que más se olvida: <strong>demostrar</strong> que la
+aplicación funciona, que no inventa, que no se deja manipular y cuánto
+cuesta.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Qué aprender</th>
+<th>En esta web</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Métricas de calidad</td>
+<td>Modelos clásicos: <a
+href="ud5-ml.html#5-evaluar-un-clasificador">UD5 sección 5</a>; RAG: <a
+href="ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46">E44</a></td>
+<td>🟡 falta medir texto generado (¿es fiel al documento?, ¿responde a
+lo preguntado?)</td>
+</tr>
+<tr class="even">
+<td>Conjuntos de prueba y evaluación por personas</td>
+<td><a
+href="ud5-ml.html#plantilla-de-un-proyecto-de-principio-a-fin">Plantilla
+de proyecto UD5</a></td>
+<td>🟡 falta cómo diseñar una batería de preguntas con respuestas
+esperadas</td>
+</tr>
+<tr class="odd">
+<td>Pruebas automáticas</td>
+<td><a
+href="teoria.html#pruebas-automáticas-con-pytest"><code>pytest</code></a>,
+<a href="teoria.html#paso-5--comprobar-que-funciona-tests">13.7 paso
+5</a></td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Un LLM como juez, y sus límites</td>
+<td>—</td>
+<td>⬜ usar un modelo para puntuar respuestas: rápido, pero con sesgos
+(prefiere respuestas largas, las suyas propias...)</td>
+</tr>
+<tr class="odd">
+<td>Alucinaciones y respuestas fundamentadas</td>
+<td><a
+href="teoria.html#148-ia-generativa-y-modelos-de-lenguaje-llm">14.8</a>,
+<a href="teoria.html#rag-paso-a-paso">RAG</a></td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>Defensa frente a la inyección de <em>prompts</em></td>
+<td>Riesgos de los agentes en <a
+href="teoria.html#llamada-a-funciones-herramientas-y-agentes">14.8</a></td>
+<td>🟡 falta una guía: <a
+href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 for LLM
+Applications</a>, donde es el riesgo LLM01</td>
+</tr>
+<tr class="odd">
+<td>Validar la salida y poner «barreras» (<em>guardrails</em>)</td>
+<td>Pydantic y validación de herramientas</td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>Observabilidad: registrar y seguir cada petición</td>
+<td>—</td>
+<td>⬜ guardar qué entró, qué salió, cuánto tardó y cuánto costó
+(LangSmith, MLflow, Grafana)</td>
+</tr>
+<tr class="odd">
+<td>Tiempo de respuesta y coste</td>
+<td>—</td>
+<td>⬜</td>
+</tr>
+<tr class="even">
+<td>Reintentos y alternativas si algo falla</td>
+<td>Excepciones en <a
+href="teoria.html#gestores-de-contexto-y-excepciones-propias">14.14</a>,
+decorador <code>@reintentar</code></td>
+<td>🟡</td>
+</tr>
+<tr class="odd">
+<td>Versiones y pruebas de regresión</td>
+<td><a
+href="teoria.html#más-allá-del-aula-qué-hacen-los-profesionales">13.7</a>
+(MLflow, DVC, como idea)</td>
+<td>🟡 falta comprobar que un <em>prompt</em> nuevo no empeora lo que ya
+funcionaba</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Proyecto 5 · Batería de pruebas del asistente.</strong> Para
+el asistente de la etapa 3: 20 preguntas con su respuesta esperada y su
+fuente, 5 preguntas sin respuesta en los documentos, 5 intentos de
+inyección y un programa con <code>pytest</code> que los ejecuta, guarda
+los resultados en un CSV y compara dos versiones del
+<em>prompt</em>.</p>
+<p><strong>Cómo se evalúa:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />La batería cubre preguntas normales,
+sin respuesta y maliciosas.</label></li>
+<li><label><input type="checkbox" />Se mide: recuperación correcta,
+respuesta fiel a la fuente, «no lo sé» cuando toca e intentos de
+inyección bloqueados.</label></li>
+<li><label><input type="checkbox" />Se compara la versión nueva con la
+anterior antes de cambiarla.</label></li>
+<li><label><input type="checkbox" />Se anota el tiempo y, si hay API,
+los <em>tokens</em> usados.</label></li>
+</ul>
+<h2 id="etapa-6--desplegar-y-diseñar-el-sistema">Etapa 6 · Desplegar y
+diseñar el sistema</h2>
+<p>Que otra persona pueda usar la aplicación sin que se caiga, sin
+exponer claves y sabiendo cuándo falla.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Qué aprender</th>
+<th>En esta web</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Servir un modelo con FastAPI</td>
+<td><a
+href="teoria.html#137-del-notebook-a-la-app-desplegar-un-modelo">13.7
+pasos 1–5</a></td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Variables de entorno y secretos</td>
+<td><a href="teoria.html#1410-automatización-con-python">14.10</a>
+(<code>.env</code>), errores frecuentes de <a
+href="teoria.html#1414-buenas-prácticas-de-python-y-conceptos-avanzados">14.14</a></td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>Docker y contenedores</td>
+<td><a
+href="teoria.html#más-allá-del-aula-qué-hacen-los-profesionales">Más
+allá del aula</a> (idea)</td>
+<td>⬜ escribir un <code>Dockerfile</code>: <a
+href="https://docs.docker.com/get-started/">Docker, primeros
+pasos</a></td>
+</tr>
+<tr class="even">
+<td>CI/CD con GitHub Actions</td>
+<td>La misma tabla (idea)</td>
+<td>⬜ que cada <code>git push</code> ejecute las pruebas: <a
+href="https://docs.github.com/es/actions">GitHub Actions</a></td>
+</tr>
+<tr class="odd">
+<td>Nube: AWS, Google Cloud, Azure</td>
+<td>Infraestructura como código en <a
+href="teoria.html#138-infraestructura-como-código-terraform">13.8</a></td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>Autenticación y seguridad de la API</td>
+<td>—</td>
+<td>⬜ claves de acceso, quién puede usar qué</td>
+</tr>
+<tr class="odd">
+<td>Caché y límite de peticiones</td>
+<td>—</td>
+<td>⬜ no repetir cálculos caros; impedir que alguien gaste el
+presupuesto</td>
+</tr>
+<tr class="even">
+<td>Colas y tareas en segundo plano</td>
+<td>—</td>
+<td>⬜</td>
+</tr>
+<tr class="odd">
+<td>Vigilar y avisar</td>
+<td>Deriva del modelo en <a
+href="teoria.html#más-allá-del-aula-qué-hacen-los-profesionales">13.7</a></td>
+<td>🟡</td>
+</tr>
+<tr class="even">
+<td>Escalar y Kubernetes</td>
+<td>—</td>
+<td>⬜</td>
+</tr>
+<tr class="odd">
+<td>Arquitectura del sistema</td>
+<td>—</td>
+<td>⬜ cómo se conectan web, API, modelo y base de datos (el esquema de
+abajo)</td>
+</tr>
+</tbody>
+</table>
+<pre><code>  Navegador / app ──► API (FastAPI) ──► Modelo o servicio RAG ──► Base de datos
+                          │                                         (SQLite / vectorial)
+                          ├── secretos en variables de entorno
+                          ├── registro y vigilancia (tiempo, errores, coste)
+                          └── pruebas automáticas en cada cambio (CI/CD)</code></pre>
+<p><strong>Proyecto 6 · Publicar el asistente.</strong> Empaquetar el
+asistente de las etapas 3 y 5 con una interfaz (Streamlit o Gradio, <a
+href="teoria.html#134-aplicaciones-web">13.4</a>), publicarlo gratis
+(Streamlit Community Cloud o Hugging Face Spaces), con las pruebas
+ejecutándose en GitHub Actions y un registro de errores. En el aula
+basta con la versión local y el <code>Dockerfile</code> explicado.</p>
+<p><strong>Cómo se evalúa:</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Otra persona puede usarlo siguiendo
+solo el README.</label></li>
+<li><label><input type="checkbox" />Ninguna clave aparece en el código
+ni en el historial de Git.</label></li>
+<li><label><input type="checkbox" />Las pruebas se ejecutan solas al
+subir cambios.</label></li>
+<li><label><input type="checkbox" />Hay un registro de errores y se
+explica qué se vigilaría en producción.</label></li>
+<li><label><input type="checkbox" />La app dice qué hace, con qué datos
+y cuáles son sus límites.</label></li>
+</ul>
+<h2 id="portafolio-final-construir-publicar-enseñar">Portafolio final:
+construir, publicar, enseñar</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Proyecto</th>
+<th>Etapas</th>
+<th>Qué demuestra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 · <em>Backend</em> en Python</td>
+<td>1</td>
+<td>Programar, probar y documentar</td>
+</tr>
+<tr class="even">
+<td>2 · Modelo de <em>machine learning</em></td>
+<td>2</td>
+<td>Datos, modelo y evaluación honesta</td>
+</tr>
+<tr class="odd">
+<td>3 · Asistente con documentos (RAG), evaluado y publicado</td>
+<td>3, 5, 6</td>
+<td>Usar un LLM con datos propios, medir su calidad y llevarlo a otras
+personas</td>
+</tr>
+<tr class="even">
+<td>(Ampliación) Agente con aprobación humana</td>
+<td>4</td>
+<td>Diseñar IA que actúa con control</td>
+</tr>
+</tbody>
+</table>
+<p>Cada proyecto va en su repositorio de GitHub con README,
+instrucciones, pruebas, una explicación de <strong>cómo se usó la IA
+para programarlo</strong> (los <em>prompts</em> y lo que se comprobó) y
+una sección de <strong>límites y uso responsable</strong>. Para
+presentarlos, la <a href="apps.html#p10--web-portafolio">web portafolio
+de P10</a>.</p>
+<h3 id="rúbrica-común-del-portafolio">Rúbrica común del portafolio</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Criterio</th>
+<th>Insuficiente</th>
+<th>Suficiente</th>
+<th>Notable</th>
+<th>Sobresaliente</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Funciona</strong></td>
+<td>No arranca o falla con lo básico</td>
+<td>Funciona con los casos normales</td>
+<td>También con casos límite</td>
+<td>Robusto: valida entradas y explica los errores</td>
+</tr>
+<tr class="even">
+<td><strong>Pruebas y evaluación</strong></td>
+<td>Ninguna</td>
+<td>Algunas pruebas manuales</td>
+<td>Pruebas automáticas de lo principal</td>
+<td>Batería completa, con métricas y comparación de versiones</td>
+</tr>
+<tr class="odd">
+<td><strong>Código</strong></td>
+<td>Difícil de seguir</td>
+<td>Ordenado</td>
+<td>Funciones claras, nombres explicativos</td>
+<td>Estructura de proyecto, tipos y estilo cuidados</td>
+</tr>
+<tr class="even">
+<td><strong>Documentación</strong></td>
+<td>Sin README</td>
+<td>README básico</td>
+<td>README con instalación, uso y ejemplos</td>
+<td>Además, decisiones de diseño y límites</td>
+</tr>
+<tr class="odd">
+<td><strong>Uso de la IA</strong></td>
+<td>Código copiado sin entenderlo</td>
+<td>Se indica qué se generó con IA</td>
+<td>Se explican y comprueban las partes generadas</td>
+<td>Se muestran <em>prompts</em>, errores detectados y correcciones
+propias</td>
+</tr>
+<tr class="even">
+<td><strong>Seguridad y ética</strong></td>
+<td>Claves o datos personales expuestos</td>
+<td>Sin claves en el código</td>
+<td>Datos inventados o anonimizados; permisos mínimos</td>
+<td>Análisis de riesgos (sesgos, inyección, privacidad) y medidas</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lo-que-todavía-falta-en-esta-web">Lo que todavía falta en esta
+web</h2>
+<p>Resumen de las casillas ⬜ y 🟡, por orden de prioridad para el
+curso:</p>
+<ol type="1">
+<li><strong>Git y GitHub</strong> paso a paso: <em>commit</em>, ramas,
+<em>pull request</em>, <code>.gitignore</code>.</li>
+<li><strong>HTTP y REST</strong>: métodos, códigos de estado, cabeceras,
+y probar una API con <code>requests</code>.</li>
+<li><strong>Evaluación de aplicaciones con LLM</strong>: batería de
+pruebas, fidelidad a la fuente, LLM como juez y sus límites, pruebas de
+regresión de <em>prompts</em>.</li>
+<li><strong>Seguridad de aplicaciones con LLM</strong>: inyección de
+<em>prompts</em>, validación de la salida y barreras (la lista
+OWASP).</li>
+<li><strong>Coste y tiempo</strong>: contar <em>tokens</em>, calcular el
+coste de una conversación, caché y límite de peticiones.</li>
+<li><strong>Agentes con aprobación humana</strong>, memoria y
+planificación, con un ejemplo completo; <strong>MCP</strong>.</li>
+<li><strong>Docker y GitHub Actions</strong> con un ejemplo mínimo que
+funcione.</li>
+<li><strong>Salida en JSON con esquema</strong>, <em>reranking</em> y un
+RAG con una base de datos vectorial real (Chroma).</li>
+<li><strong>Línea de órdenes</strong> y <strong>depurador</strong> de VS
+Code.</li>
+<li><strong>Más allá</strong>: PostgreSQL, autenticación, colas,
+Kubernetes y arquitectura de sistemas (para después del
+Bachillerato).</li>
+</ol>
+<h2 id="recursos-para-seguir">Recursos para seguir</h2>
+<ul>
+<li><a
+href="teoria.html#142-hoja-de-ruta-10-cosas-que-aprender-antes-de-empezar-con-ia">Teoría
+14.2: diez cosas que aprender antes de empezar con IA</a> y <a
+href="teoria.html#1416-recursos-gratuitos-para-seguir-aprendiendo-ia">14.16:
+recursos gratuitos</a>.</li>
+<li><a href="https://git-scm.com/book/es/v2">Pro Git, en español</a> ·
+<a href="https://developer.mozilla.org/es/docs/Web/HTTP">HTTP en MDN</a>
+· <a href="https://fastapi.tiangolo.com/es/tutorial/">Tutorial de
+FastAPI, en español</a>.</li>
+<li><a href="https://huggingface.co/learn/llm-course/chapter1/1">Curso
+de LLM de Hugging Face</a> (gratuito).</li>
+<li><a href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 for LLM
+Applications</a> · <a
+href="https://docs.docker.com/get-started/">Docker: primeros pasos</a> ·
+<a href="https://docs.github.com/es/actions">GitHub Actions</a>.</li>
+</ul>
+  </article>
+</main>
+<footer class="site"><div class="in">
+  <span>IA · Apuntes · Tecnoloxías Intelixentes · 1.º Bacharelato</span>
+  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0)</span>
+</div></footer>
+<a class="up" href="#">↑ Arriba</a>
+<script>
+(function () {
+  document.querySelectorAll("article.content table").forEach(function (t) {
+    var w = document.createElement("div"); w.className = "table-wrap";
+    t.parentNode.insertBefore(w, t); w.appendChild(t);
+  });
+  var root = document.documentElement, header = document.querySelector(".top");
+  var nav = header && header.querySelector("nav"), here = nav && nav.querySelector("[aria-current]");
+  if (here && nav.scrollWidth > nav.clientWidth) nav.scrollLeft += here.getBoundingClientRect().left - nav.getBoundingClientRect().left - 6;
+  var toc = document.getElementById("TOC"), side = document.querySelector(".toc-side");
+  if (!toc || !side) return;
+  var btn = side.querySelector(".toc-toggle"), cur = side.querySelector(".toc-cur"),
+      back = side.querySelector(".toc-backdrop"), closeBtn = toc.querySelector(".toc-close");
+  var movil = window.matchMedia("(max-width: 900px)");
+  toc.querySelectorAll(":scope > ul > li > ul > li").forEach(function (li) {
+    var sub = li.querySelector(":scope > ul"), a = li.querySelector(":scope > a");
+    if (!sub || !a) return;
+    li.classList.add("has-sub");
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "toc-exp"; b.setAttribute("aria-expanded", "false");
+    b.setAttribute("aria-label", "Mostrar u ocultar los apartados de " + a.textContent.trim());
+    b.addEventListener("click", function () {
+      var abierto = li.classList.contains("open") || li.classList.contains("exp");
+      li.classList.toggle("exp", !abierto); li.classList.toggle("cerrado", abierto);
+      b.setAttribute("aria-expanded", String(!abierto));
+    });
+    li.insertBefore(b, sub);
+  });
+  var links = {}, heads = [];
+  toc.querySelectorAll("a[href^='#']").forEach(function (a) { links[decodeURIComponent(a.getAttribute("href").slice(1))] = a; });
+  document.querySelectorAll("article.content h1[id], article.content h2[id], article.content h3[id]").forEach(function (h) {
+    if (links[h.id]) heads.push(h);
+  });
+  function offset() {
+    var h = header ? header.offsetHeight : 0;
+    return movil.matches ? h + side.offsetHeight + 12 : h + 20;
+  }
+  function medir() {
+    root.style.setProperty("--top-h", (header ? header.offsetHeight : 0) + "px");
+    root.style.scrollPaddingTop = offset() + "px";
+  }
+  function verEnIndice(a) {
+    var t = toc.getBoundingClientRect(), r = a.getBoundingClientRect();
+    if (r.top < t.top + 40 || r.bottom > t.bottom - 20) toc.scrollTop += r.top - t.top - toc.clientHeight / 3;
+  }
+  var activo = null;
+  function marcar() {
+    var lim = offset() + 8, h = heads[0];
+    for (var i = 0; i < heads.length; i++) { if (heads[i].getBoundingClientRect().top <= lim) h = heads[i]; else break; }
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) h = heads[heads.length - 1];
+    if (!h || h === activo) return;
+    activo = h;
+    toc.querySelectorAll(".on, .on-parent").forEach(function (x) { x.classList.remove("on", "on-parent"); });
+    toc.querySelectorAll("li.open, li.cerrado").forEach(function (x) { x.classList.remove("open", "cerrado"); });
+    var a = links[h.id]; a.classList.add("on"); a.setAttribute("aria-current", "location");
+    toc.querySelectorAll("a[aria-current]").forEach(function (x) { if (x !== a) x.removeAttribute("aria-current"); });
+    var li = a.closest("li");
+    while (li && toc.contains(li)) {
+      li.classList.add("open");
+      var la = li.querySelector(":scope > a");
+      if (la && la !== a) la.classList.add("on-parent");
+      li = li.parentNode.closest("li");
+    }
+    toc.querySelectorAll(".toc-exp").forEach(function (b) {
+      var l = b.parentNode; b.setAttribute("aria-expanded", String(l.classList.contains("open") || l.classList.contains("exp")));
+    });
+    cur.textContent = a.textContent.trim();
+    verEnIndice(a);
+  }
+  function abrir() {
+    toc.classList.add("open"); back.hidden = false; document.body.classList.add("toc-open");
+    btn.setAttribute("aria-expanded", "true");
+    if (activo) verEnIndice(links[activo.id]);
+    closeBtn.focus({ preventScroll: true });
+  }
+  function cerrar(volver) {
+    if (!toc.classList.contains("open")) return;
+    toc.classList.remove("open"); back.hidden = true; document.body.classList.remove("toc-open");
+    btn.setAttribute("aria-expanded", "false");
+    if (volver) btn.focus({ preventScroll: true });
+  }
+  btn.addEventListener("click", function () { toc.classList.contains("open") ? cerrar(true) : abrir(); });
+  closeBtn.addEventListener("click", function () { cerrar(true); });
+  back.addEventListener("click", function () { cerrar(true); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrar(true); });
+  toc.addEventListener("click", function (e) { if (e.target.closest("a") && movil.matches) cerrar(false); });
+  var pend = false;
+  window.addEventListener("scroll", function () {
+    if (pend) return; pend = true;
+    requestAnimationFrame(function () { pend = false; marcar(); });
+  }, { passive: true });
+  window.addEventListener("resize", function () { medir(); activo = null; marcar(); });
+  (movil.addEventListener ? movil.addEventListener.bind(movil, "change") : movil.addListener.bind(movil))(function () { cerrar(false); medir(); });
+  medir(); marcar();
+  window.addEventListener("load", function () {
+    medir();
+    var id = decodeURIComponent(location.hash.slice(1)), t = id && document.getElementById(id);
+    if (t) t.scrollIntoView({ behavior: "instant", block: "start" });
+    activo = null; marcar();
+  });
+})();
+</script>
+<script>
+/* Soluciones cifradas (AES-GCM + PBKDF2). Sin la contraseña, el contenido no se puede leer. */
+(function () {
+  var art = document.querySelector("article.content[data-salt]");
+  if (!art) return;
+  var locks = art.querySelectorAll(".sol-lock");
+  if (!locks.length) return;
+  var KEY = "ia-apuntes-sol";
+  function b64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function derive(pass) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(art.dataset.salt), iterations: +art.dataset.iter, hash: "SHA-256" },
+        k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    });
+  }
+  function unlockAll(pass) {
+    return derive(pass).then(function (key) {
+      var first = locks[0];
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(first.dataset.iv) }, key, b64(first.dataset.ct)).then(function () {
+        var dec = new TextDecoder();
+        return Promise.all(Array.prototype.map.call(locks, function (el) {
+          return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(el.dataset.iv) }, key, b64(el.dataset.ct)).then(function (buf) {
+            var tmp = document.createElement("div"); tmp.innerHTML = dec.decode(buf);
+            var d = tmp.firstElementChild; el.replaceWith(d);
+            return d;
+          });
+        }));
+      });
+    }).then(function (opened) {
+      try { sessionStorage.setItem(KEY, pass); } catch (e) {}
+      return opened;
+    });
+  }
+  locks.forEach(function (el) {
+    var label = el.dataset.label || "Solución";
+    el.innerHTML =
+      '<button type="button" class="sol-btn"><span aria-hidden="true">🔒</span> ' + label + ' <small>· con contraseña</small></button>' +
+      '<form class="sol-form" hidden><label>Contraseña del profesorado <input type="password" autocomplete="off" required></label>' +
+      '<button type="submit">Abrir</button><span class="sol-msg" role="status"></span></form>';
+    var b = el.querySelector(".sol-btn"), f = el.querySelector(".sol-form"), msg = el.querySelector(".sol-msg");
+    b.addEventListener("click", function () { f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); });
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var pass = f.querySelector("input").value;
+      msg.textContent = "Comprobando…";
+      var idx = Array.prototype.indexOf.call(locks, el);
+      unlockAll(pass).then(function (opened) {
+        var mine = opened[idx]; if (mine) { mine.open = true; mine.scrollIntoView({ block: "nearest" }); }
+      }).catch(function () { msg.textContent = "Contraseña incorrecta."; });
+    });
+  });
+  var saved = null; try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlockAll(saved).catch(function () { try { sessionStorage.removeItem(KEY); } catch (e) {} });
+})();
+</script>
+</body>
+</html>

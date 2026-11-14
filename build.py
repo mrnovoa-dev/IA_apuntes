@@ -41,6 +41,7 @@ PAGINAS = [
     ("contenidos/libro.md", "libro.html", "libro"),
     ("contenidos/apps.md", "apps.html", "apps"),
     ("contenidos/chuletas.md", "chuletas.html", "chuletas"),
+    ("contenidos/itinerario.md", "itinerario.html", "itinerario"),
     ("descargas/Teoria_Fundamental_Conceptos_UD2.md", "teoria.html", "teoria"),
 ]
 

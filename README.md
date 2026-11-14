@@ -16,6 +16,7 @@ Web de apuntes de **Inteligencia Artificial con Python** para *Tecnoloxías Inte
 | `libro.html` | El libro de J. F. Puentes, capítulo a capítulo, con notebooks y banco de prompts |
 | `apps.html` | Apps y juegos: diez proyectos de Python (P1–P10) y una revisión crítica (P11), con rúbrica y soluciones cifradas |
 | `chuletas.html` | Chuletas visuales (imágenes en `assets/chuletas/`) de Python, NumPy, Pandas, Polars, Matplotlib, scikit-learn, TensorFlow, PyTorch y Terraform (catorce en total, algunas en dos versiones), con notas «Ojo» |
+| `itinerario.html` | Itinerario «De Python a experto en IA» en seis etapas (fundamentos, ML y DL, LLM, agentes, evaluación, despliegue): qué aprender, dónde está en la web, qué falta, proyecto y evaluación de cada etapa, y rúbrica del portafolio |
 | `mapa.html` | Mapa visual: conceptos, 43 librerías filtrables, chuletas y autoevaluación |
 | `descargas/` | Teoría en `.odt` (editable) y en Markdown (fuente) |
 

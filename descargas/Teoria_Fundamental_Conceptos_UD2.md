@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E110 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E112 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -2763,6 +2763,136 @@ E20-E22: Pandas agrupación   → Distributed groupby
 - 📊 UD4: Aplicar ETL a millones de textos (NLP)
 - 🧠 UD5: Entrenar modelos ML con Big Data
 - ☁️ Futuro: Cloud (AWS, Google Cloud, Azure)
+
+### 11.7 Big Data por dentro: repartir los datos y el trabajo
+
+Cuando los datos no caben en un ordenador hay dos salidas: comprar uno más grande (**escalar en vertical**, con un límite y cada vez más caro) o repartir el trabajo entre muchos ordenadores normales (**escalar en horizontal**). Un **clúster** es ese grupo de ordenadores trabajando juntos. Hadoop fue el primer sistema libre que lo hizo fácil, con tres piezas:
+
+| Pieza | Qué hace | Idea clave |
+|-------|----------|------------|
+| **HDFS** (almacenamiento) | Guarda archivos enormes repartidos en **bloques** de 128 MB, cada uno copiado en **3** ordenadores | Si un ordenador se rompe, el bloque sigue en otros dos. Un *NameNode* sabe dónde está cada bloque; los *DataNodes* los guardan |
+| **MapReduce** (procesamiento) | Ejecuta el cálculo **donde están los datos**, en paralelo | Mover el programa (kilobytes) es más barato que mover los datos (terabytes) |
+| **YARN** (recursos) | Reparte memoria y procesador del clúster entre los trabajos | No procesa datos: decide quién usa qué. Permite que Spark y MapReduce compartan clúster |
+
+```python
+import math
+
+def hdfs(tam_mb, bloque_mb=128, replicas=3):
+    bloques = math.ceil(tam_mb / bloque_mb)
+    return bloques, bloques * replicas, tam_mb * replicas   # bloques, copias, MB ocupados
+
+print(hdfs(1024))    # (8, 24, 3072): 1 GB son 8 bloques, 24 copias y 3 GB de disco
+print(hdfs(0.001))   # (1, 3, 0.003): un archivo de 1 KB también es un bloque con 3 copias
+```
+
+Guardar todo tres veces es el precio de no perder datos. Y por la segunda línea, HDFS va mal con **millones de archivos pequeños**: cada uno es una entrada más en la memoria del *NameNode*, por pequeño que sea. HDFS está pensado para pocos archivos enormes que se escriben una vez y se leen muchas.
+
+**MapReduce paso a paso.** Todo cálculo se escribe en dos funciones: **map** convierte cada dato en pares (clave, valor) y **reduce** combina todos los valores de la misma clave. Entre medias, el sistema **baraja** (*shuffle*): junta los pares de cada clave, aunque vengan de ordenadores distintos. El ejemplo clásico es contar palabras; aquí, con dos procesos de Python haciendo de dos ordenadores:
+
+```python
+from collections import defaultdict
+from multiprocessing import Pool
+
+def mapear(linea):                          # MAP: cada línea -> pares (palabra, 1)
+    return [(p, 1) for p in linea.lower().split()]
+
+def barajar(listas_de_pares):               # SHUFFLE: juntar los pares de la misma clave
+    grupos = defaultdict(list)
+    for pares in listas_de_pares:
+        for clave, valor in pares:
+            grupos[clave].append(valor)
+    return grupos
+
+def reducir(item):                          # REDUCE: combinar los valores de cada clave
+    clave, valores = item
+    return clave, sum(valores)
+
+if __name__ == "__main__":
+    bloques = ["hadoop is great hadop is powerful",   # cada bloque, en un ordenador distinto
+               "spark is fast",
+               "hadoop is old"]
+    with Pool(2) as pool:                   # 2 procesos en paralelo, como 2 nodos
+        mapeado = pool.map(mapear, bloques)
+        grupos = barajar(mapeado)
+        resultado = dict(pool.map(reducir, grupos.items()))
+    print(dict(grupos))   # {'hadoop': [1, 1], 'is': [1, 1, 1, 1], 'great': [1], 'hadop': [1], ...}
+    print(resultado)      # {'hadoop': 2, 'is': 4, 'great': 1, 'hadop': 1, 'powerful': 1, ...}
+```
+
+Fíjate en que `hadop` (mal escrito) cuenta como otra palabra: el ordenador no sabe que es un error. Limpiar antes (sección 9) también importa a gran escala.
+
+### 11.8 Spark, lotes y flujos
+
+**Spark** sustituyó a MapReduce en casi todo porque guarda los resultados intermedios **en memoria** en lugar de escribirlos en disco entre cada paso: con algoritmos que repiten pasadas sobre los datos, como entrenar un modelo, es muchísimo más rápido. Tiene dos ideas que conviene entender:
+
+- **Transformaciones perezosas** (`filter`, `select`, `groupBy`): no hacen nada en el momento; Spark solo apunta el plan. Así puede optimizarlo entero antes de empezar.
+- **Acciones** (`count`, `show`, `collect`, `write`): obligan a ejecutar todo el plan.
+
+Los generadores de Python (sección 14.14) funcionan igual y sirven para verlo:
+
+```python
+def leer(n):
+    for i in range(n):
+        print("  leo", i)
+        yield i
+
+pares = (x for x in leer(6) if x % 2 == 0)      # «transformación»: todavía no lee nada
+cuadrados = (x * x for x in pares)
+print("aún no se ha leído nada")
+print(sum(cuadrados))                             # «acción»: ahora lee 0…5 y da 20
+```
+
+Con PySpark (no ejecutado aquí: necesita `pip install pyspark` y Java; en Colab funciona), el mismo estilo que Pandas:
+
+```python
+from pyspark.sql import SparkSession, functions as F
+
+spark = SparkSession.builder.appName("pedidos").getOrCreate()
+df = spark.read.csv("pedidos/*.csv", header=True, inferSchema=True)   # muchos archivos a la vez
+resumo = (df.filter(F.col("total") > 0)                                # transformación
+            .groupBy("categoria").agg(F.sum("total").alias("ventas"))) # transformación
+resumo.show()                                                          # acción: ahora se calcula
+```
+
+**Lotes o flujo.** En el **procesamiento por lotes** (*batch*) se juntan los datos y se procesan de vez en cuando: el informe mensual, reentrenar un modelo cada noche. En el **procesamiento en flujo** (*streaming*) cada dato se procesa al llegar, en segundos: detectar un pago fraudulento, el GPS de los autobuses. Para flujos se usan **Kafka** (la «cinta transportadora» que recibe y reparte los eventos), y Spark Structured Streaming o Flink para procesarlos.
+
+| | Por lotes | En flujo |
+|-|-----------|----------|
+| Cuándo se procesa | Cada cierto tiempo, todo junto | Cada dato al llegar |
+| Retraso | Minutos u horas | Segundos o menos |
+| Ejemplos | Informes, facturas, entrenar modelos | Fraude, sensores, recomendaciones al momento |
+| Herramientas | Spark, MapReduce, Hive, SQL | Kafka, Spark Structured Streaming, Flink |
+
+**Cómo es hoy.** Muchas empresas ya no montan un clúster Hadoop propio: guardan los archivos en almacenamiento en la nube (S3, Google Cloud Storage), los procesan con Spark o los consultan con SQL en almacenes de datos en la nube (BigQuery, Snowflake, Redshift). Las ideas (repartir, replicar, llevar el cálculo a los datos, perezoso frente a inmediato) siguen siendo las mismas.
+
+### 11.9 Guardar y consultar a gran escala: NoSQL, CAP, Hive y Parquet
+
+Las bases de datos relacionales (tablas con esquema fijo y SQL) escalan sobre todo en vertical. Las **NoSQL** (*not only SQL*) renuncian a parte de sus garantías para repartirse fácilmente entre muchos servidores:
+
+| Tipo | Cómo guarda | Ejemplos | Bueno para |
+|------|-------------|----------|------------|
+| **Documentos** | Documentos tipo JSON, cada uno con sus campos | MongoDB, CouchDB | Catálogos, perfiles, contenidos |
+| **Clave-valor** | Un diccionario gigante | Redis, DynamoDB | Cachés, sesiones, contadores |
+| **Columnas anchas** | Filas con muchas columnas variables, por familias | Cassandra, HBase | Series temporales, sensores, registros |
+| **Grafos** | Nodos y relaciones (sección 14.17) | Neo4j | Redes sociales, recomendaciones, fraude |
+
+**El teorema CAP.** Un sistema repartido no puede garantizar a la vez **C**onsistencia (todos ven el mismo dato al mismo tiempo), **D**isponibilidad (*Availability*: siempre responde) y tolerancia a **P**articiones (sigue funcionando si se corta la red entre servidores). Suele resumirse en «elige 2 de 3», pero es más preciso así: en un sistema repartido los cortes de red **van a pasar**, así que P no es opcional, y lo que se elige es **qué hacer cuando ocurren**: negarse a responder hasta estar seguro (consistencia, como un banco) o responder con lo que se tenga aunque esté desactualizado (disponibilidad, como el contador de «me gusta»). Muchas NoSQL eligen disponibilidad con **consistencia eventual**: al final todos los servidores coinciden, pero no al instante.
+
+**Hive y los formatos en columnas.** **Hive** permite consultar con SQL (HiveQL) archivos guardados en HDFS, como si fueran tablas: el esquema se aplica **al leer** (*schema-on-read*), no al guardar. Dos ideas que hoy se usan en todas partes:
+
+- **Formatos en columnas (Parquet, ORC).** Un CSV guarda fila a fila; Parquet guarda **columna a columna** y comprimida. Si una consulta solo usa 2 de 50 columnas, solo lee esas 2. En Pandas: `df.to_parquet("pedidos.parquet")` y `pd.read_parquet("pedidos.parquet", columns=["fecha", "total"])` (necesita `pip install pyarrow`).
+- **Particiones.** Guardar los datos en carpetas por fecha (`año=2026/mes=11/`) para que una consulta de noviembre no tenga que abrir el resto del año.
+
+### 11.10 Cuatro preguntas del análisis de datos
+
+| Tipo | Pregunta | Ejemplo en el instituto | Herramientas |
+|------|----------|-------------------------|--------------|
+| **Descriptivo** | ¿Qué pasó? | Los préstamos de la biblioteca bajaron un 20 % en noviembre | Medias, gráficos, paneles (UD2) |
+| **Diagnóstico** | ¿Por qué pasó? | Bajaron sobre todo en 1.º de ESO, y coincide con las semanas de exámenes | Filtrar, agrupar, comparar, correlación (sin confundirla con causa) |
+| **Predictivo** | ¿Qué pasará? | Se espera otra bajada en mayo | Modelos de ML (UD5) |
+| **Prescriptivo** | ¿Qué hacemos? | Ampliar el horario de préstamo en semanas de exámenes y medir si sirve | Optimización, simulación, pruebas A/B (UD5, sección 11) |
+
+Cada nivel necesita los anteriores, y el último paso siempre lo decide una persona.
 
 [Referencia: Apache Spark documentation](https://spark.apache.org/docs/latest/)
 [Referencia: Dask documentation](https://dask.org/)
@@ -5747,6 +5877,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | «The 25 Best Free Resources for Learning AI in 2026» (H. Sheikho, Substack, oct-2026) | Cursos, libros y vídeos gratuitos revisados uno a uno | 14.16; retropropagación a mano en 14.7 |
 | Siete repositorios para aprender ML (nov-2026): curso de scikit-learn de Inria, chuletas de CS229, libro de Raschka, *best-of-ml-python*, libro de Molnar, SHAP y *applied-ml* de E. Yan | Validación cruzada anidada, dependencia parcial, valores de Shapley, contrafactuales, pruebas A/B, fallos del ML en producción | 14.16; [UD5](ud5-ml.html), secciones 6, 10 y 11 |
 | *Data and Model Training Concepts*, *Neural Networks – Detailed Notes* y *RAG + LLM Complete Notes* (codingwithmee_18, PDF de 51, 34 y 36 págs., procesados con MarkItDown) y carrusel «Git Commands – Complete Handwritten Notes» (@codewithayansh, 13 diapositivas) | Git a fondo, comprobación del gradiente, búsqueda híbrida con BM25 y RRF, métricas de recuperación, calibración, etiquetas con ruido | 14.7, 14.19; [UD5](ud5-ml.html), secciones 1 y 5; ejercicios E106–E110 |
+| Carrusel «Big Data & Big Data Analytics» (@analyticswithsingh, 14 diapositivas, marcado como generado con IA) | 5 V, HDFS, MapReduce, YARN, Spark, lotes y flujos, NoSQL y CAP, Hive y Parquet, tipos de análisis | 11.7–11.10 y ejercicios E111–E112 |
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
 | *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
 | *Python Module 8: Tuples* (@Mastercode.sagar, 15 págs.), procesado con OCR y MarkItDown | Crear tuplas, `count` e `index`, operaciones, tuplas anidadas, tupla frente a lista, desempaquetado, proyecto de registro | 5.3 y ejercicios E83–E86 |

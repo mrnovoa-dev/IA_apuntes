@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E112 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E114 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -5878,6 +5878,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | Siete repositorios para aprender ML (nov-2026): curso de scikit-learn de Inria, chuletas de CS229, libro de Raschka, *best-of-ml-python*, libro de Molnar, SHAP y *applied-ml* de E. Yan | Validación cruzada anidada, dependencia parcial, valores de Shapley, contrafactuales, pruebas A/B, fallos del ML en producción | 14.16; [UD5](ud5-ml.html), secciones 6, 10 y 11 |
 | *Data and Model Training Concepts*, *Neural Networks – Detailed Notes* y *RAG + LLM Complete Notes* (codingwithmee_18, PDF de 51, 34 y 36 págs., procesados con MarkItDown) y carrusel «Git Commands – Complete Handwritten Notes» (@codewithayansh, 13 diapositivas) | Git a fondo, comprobación del gradiente, búsqueda híbrida con BM25 y RRF, métricas de recuperación, calibración, etiquetas con ruido | 14.7, 14.19; [UD5](ud5-ml.html), secciones 1 y 5; ejercicios E106–E110 |
 | Carrusel «Big Data & Big Data Analytics» (@analyticswithsingh, 14 diapositivas, marcado como generado con IA) | 5 V, HDFS, MapReduce, YARN, Spark, lotes y flujos, NoSQL y CAP, Hive y Parquet, tipos de análisis | 11.7–11.10 y ejercicios E111–E112 |
+| *RAG Cheat Sheet* (T. Khan, PDF de 24 págs. hecho con Canva; 12 de contenido y 12 de publicidad; texto con MarkItDown y código leído de las imágenes) | k, umbral y MMR, coseno frente a L2, estrategias *stuff*, *map-reduce* y *refine*, LangChain 1.x | 14.19 (RAG mejorado) y ejercicios E113–E114 |
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
 | *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
 | *Python Module 8: Tuples* (@Mastercode.sagar, 15 págs.), procesado con OCR y MarkItDown | Crear tuplas, `count` e `index`, operaciones, tuplas anidadas, tupla frente a lista, desempaquetado, proyecto de registro | 5.3 y ejercicios E83–E86 |
@@ -6528,6 +6529,81 @@ print("Híbrida", avaliar(lambda q: rrf(orden(bm25(q)), orden(parecido(q)))))   
 (Cada par es acierto@1 y MRR.) Cada buscador falla en preguntas distintas: BM25 en «reservo», las letras en «P-07» y en «préstamo». Aquí la fusión iguala al mejor de los dos; su ventaja es que no hace falta saber de antemano cuál irá mejor, porque eso cambia de una colección de documentos a otra. Seis preguntas son pocas para sacar conclusiones: un conjunto de prueba serio tiene decenas o cientos.
 
 **Con millones de trozos** no se compara la pregunta con todos: las bases vectoriales usan **índices aproximados** (el más común se llama HNSW, un grafo por el que se salta de vecino en vecino) que encuentran casi siempre los más parecidos en milisegundos, a cambio de fallar de vez en cuando. Es otra razón para medir la exhaustividad@k.
+
+**Cuántos trozos y cuáles: k, umbral y diversidad (MMR).** El buscador devuelve los **k** trozos más parecidos (lo habitual, entre 3 y 10). Con pocos, puede faltar información; con muchos, entra ruido, el texto que lee el modelo crece y cuesta más. Dos ajustes más:
+
+- **Umbral de similitud**: descartar los trozos que no llegan a un parecido mínimo, aunque queden menos de k. Si no queda ninguno, la aplicación debe decir «no lo encuentro en los documentos» en vez de inventar.
+- **Máxima relevancia marginal (MMR)**: si varios trozos dicen casi lo mismo, ocupan sitio sin aportar nada. MMR elige cada trozo puntuando lo **parecido a la pregunta** y restando lo **parecido a los ya elegidos**. El parámetro λ (*lambda*) reparte el peso: con 1 es la búsqueda normal; cuanto más bajo, más variedad.
+
+```python
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+trozos = [
+    "Os préstamos de libros duran 15 días.",
+    "Os préstamos de libros duran 15 días e pódense renovar.",       # casi repetido
+    "Os préstamos duran 15 días, tamén os dos libros de lectura.",   # casi repetido
+    "Quen devolva un libro tarde non poderá levar outro nunha semana.",
+    "A biblioteca abre de luns a venres de 9:00 a 14:30.",
+    "O comedor escolar funciona de 14:30 a 15:30.",
+]
+vec = TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 4)).fit(trozos)
+T = vec.transform(trozos)
+
+def parecido(pregunta):
+    return cosine_similarity(vec.transform([pregunta]), T)[0]
+
+def mmr(pregunta, k=3, lambda_=0.7):
+    s, entre = parecido(pregunta), cosine_similarity(T)
+    elegidos, candidatos = [], list(range(len(trozos)))
+    while len(elegidos) < k:
+        def puntos(i):
+            repetido = max((entre[i, j] for j in elegidos), default=0)
+            return lambda_ * s[i] - (1 - lambda_) * repetido
+        mejor = max(candidatos, key=puntos)
+        elegidos.append(mejor)
+        candidatos.remove(mejor)
+    return elegidos
+
+q = "Canto duran os préstamos e que pasa se devolvo tarde?"
+print([int(i) for i in np.argsort(-parecido(q))[:3]])   # [0, 2, 1]: tres veces lo mismo
+print(mmr(q))                                            # [0, 3, 1]: entra el trozo de devolver tarde
+print(mmr(q, lambda_=0.5))                               # [0, 3, 5]: demasiada variedad, se cuela el comedor
+```
+
+La búsqueda normal devuelve tres versiones de «los préstamos duran 15 días» y deja fuera la mitad de la respuesta (qué pasa si se devuelve tarde). MMR la recupera. Con λ demasiado bajo trae un trozo que no tiene nada que ver: por eso se combina con un umbral.
+
+**Coseno o distancia.** Casi todas las bases vectoriales permiten elegir cómo se mide el parecido. El **coseno** solo mira la **dirección** de los vectores; la **distancia euclídea (L2)** también su **longitud**. FAISS, por ejemplo, usa L2 por defecto. Con la pregunta (1, 1), un documento (3, 3) tiene coseno 1 (misma dirección), pero está a distancia 2,83, más lejos que un documento (1, 0,6), con coseno 0,97 y a distancia 0,40: los dos criterios ordenan al revés. Si los vectores se **normalizan** (se dividen por su longitud), los dos criterios dan el mismo orden. Muchos modelos de *embeddings* ya devuelven vectores normalizados, pero conviene comprobarlo.
+
+**Cuando no cabe todo en una pregunta.** Si los trozos recuperados son demasiados para el modelo (o la tarea es «resume este libro»), hay tres estrategias clásicas:
+
+| Estrategia | Cómo funciona | Llamadas al modelo | Cuándo |
+|------------|---------------|--------------------|--------|
+| **Todo junto** (*stuff*) | Se pegan todos los trozos en una sola pregunta | 1 | Lo normal, si cabe |
+| **Map-reduce** | Se pregunta a cada trozo por separado (en paralelo) y luego se combinan las respuestas | n + 1 | Muchos documentos; como el MapReduce de la sección 11.7 |
+| **Refinar** (*refine*) | Se responde con el primer trozo y se va mejorando la respuesta con cada uno de los siguientes | n, una detrás de otra | Cuando el orden importa; es la más lenta |
+
+**Con un framework: LangChain y LlamaIndex.** Todo lo de esta sección se puede programar a mano (y así se entiende). Las librerías **LangChain** y **LlamaIndex** traen piezas ya hechas: cargadores de PDF, CSV o webs, divisores de texto, conexiones con modelos y con bases vectoriales. Ahorran trabajo, pero sus funciones **cambian muy deprisa**: buena parte de los tutoriales y chuletas que circulan usan órdenes que ya no existen o están obsoletas. Con las versiones 1.x (no ejecutado aquí; necesita `pip install langchain-community langchain-text-splitters langchain-huggingface faiss-cpu pypdf`):
+
+```python
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+
+paginas = PyPDFLoader("normas_biblioteca.pdf").load()            # una lista de documentos, uno por página
+divisor = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
+trozos = divisor.split_documents(paginas)                          # conserva de qué página sale cada trozo
+emb = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+db = FAISS.from_documents(trozos, emb)
+
+buscador = db.as_retriever(search_type="mmr", search_kwargs={"k": 4})
+for d in buscador.invoke("Canto duran os préstamos?"):            # antes: get_relevant_documents (obsoleto)
+    print(d.metadata["page"], d.page_content[:80])
+```
+
+Lo que queda (montar la instrucción con los trozos y llamar al modelo) es igual que en el «RAG paso a paso» de arriba. `RecursiveCharacterTextSplitter` intenta cortar primero por párrafos, luego por líneas y luego por palabras, para no partir frases. El tamaño del trozo no tiene una cifra mágica: depende de los documentos y se elige **midiendo** con un conjunto de prueba (más abajo).
 
 #### Evaluar una aplicación con LLM
 

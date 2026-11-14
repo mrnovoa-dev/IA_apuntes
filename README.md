@@ -8,14 +8,14 @@ Web de apuntes de **Inteligencia Artificial con Python** para *Tecnoloxías Inte
 | `asignatura.html` | La asignatura: objetivos, unidades, criterios, evaluación y metodología (programación 2026/27) |
 | `ud1.html` | UD1 · Conceptos clave de la IA: desarrollo, ejemplos y ejercicios |
 | `teoria.html` | Teoría de todo el curso (secciones 0–15, de la UD1 a la UD5) con índice navegable y la unidad de cada sección |
-| `ejercicios.html` | Ejercicios E1–E86 de todas las unidades (cada bloque indica la suya) con pistas y soluciones, y ejercicios «prompt → código» |
+| `ejercicios.html` | Ejercicios E1–E90 de todas las unidades (cada bloque indica la suya) con pistas y soluciones, y ejercicios «prompt → código» |
 | `ud3-vision.html` | UD3 · Visión artificial |
 | `ud4-lenguaje.html` | UD4 · Procesamiento del lenguaje natural |
 | `ud5-ml.html` | UD5 · Aprendizaje automático |
 | `datos.html` | Itinerario de análisis de datos (UD2 → UD5): adquirir, explorar, limpiar y modelar. Estructura inspirada en el módulo «Análisis de datos (AD)» ([mp5101-ad.vercel.app](https://mp5101-ad.vercel.app/)) |
 | `libro.html` | El libro de J. F. Puentes, capítulo a capítulo, con notebooks y banco de prompts |
 | `apps.html` | Apps y juegos: diez proyectos de Python (P1–P10) y una revisión crítica (P11), con rúbrica y soluciones cifradas |
-| `chuletas.html` | Chuletas visuales (imágenes en `assets/chuletas/`) de Python, NumPy, Pandas, Polars, Matplotlib, scikit-learn, TensorFlow y PyTorch, con notas «Ojo» |
+| `chuletas.html` | Chuletas visuales (imágenes en `assets/chuletas/`) de Python, NumPy, Pandas, Polars, Matplotlib, scikit-learn, TensorFlow, PyTorch y Terraform (catorce en total, algunas en dos versiones), con notas «Ojo» |
 | `mapa.html` | Mapa visual: conceptos, 43 librerías filtrables, chuletas y autoevaluación |
 | `descargas/` | Teoría en `.odt` (editable) y en Markdown (fuente) |
 

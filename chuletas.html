@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chuletas · IA Apuntes</title>
 <meta name="description" content="Chuletas visuales de Python, NumPy,
-Pandas, Polars, Matplotlib, scikit-learn, TensorFlow y PyTorch, con
-avisos sobre lo que conviene matizar.">
+Pandas, Polars, Matplotlib, scikit-learn, TensorFlow, PyTorch y
+Terraform, con avisos sobre lo que conviene matizar.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -20,7 +20,7 @@ avisos sobre lo que conviene matizar.">
     <a href="asignatura.html" title="Programación, criterios y evaluación">Asignatura</a>
     <a href="ud1.html" title="Conceptos clave de la IA">UD1</a>
     <a href="teoria.html" title="Teoría de todo el curso, con la unidad de cada sección">Teoría</a>
-    <a href="ejercicios.html" title="Ejercicios E1–E86 de todas las unidades">Ejercicios</a>
+    <a href="ejercicios.html" title="Ejercicios E1–E90 de todas las unidades">Ejercicios</a>
     <a href="ud3-vision.html" title="Visión artificial">UD3 Visión</a>
     <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural">UD4 Lenguaje</a>
     <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
@@ -48,6 +48,7 @@ visuales</a>
 <li><a href="#scikit-learn" id="toc-scikit-learn">scikit-learn</a></li>
 <li><a href="#tensorflow" id="toc-tensorflow">TensorFlow</a></li>
 <li><a href="#pytorch" id="toc-pytorch">PyTorch</a></li>
+<li><a href="#terraform" id="toc-terraform">Terraform</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -55,10 +56,13 @@ visuales</a>
   </div>
   <article class="content">
 <h1 id="chuletas-visuales">Chuletas visuales</h1>
-<p>Ocho chuletas de una página con las órdenes más usadas de cada
+<p>Catorce chuletas de una página con las órdenes más usadas de cada
 librería del curso, en el orden en que aparecen: primero Python, después
-los datos, los gráficos y los modelos. Toca una imagen para verla a
-tamaño completo o descargarla.</p>
+los datos, los gráficos y los modelos, y al final Terraform, para llevar
+un modelo a la nube. Python, NumPy, Pandas, TensorFlow y PyTorch tienen
+<strong>dos versiones</strong>: la segunda, más resumida, está debajo de
+la primera. Toca una imagen para verla a tamaño completo o
+descargarla.</p>
 <p>Son infografías que circulan en redes sociales (en inglés, sin autor
 indicado) y se reproducen <strong>tal cual</strong>. Debajo de cada una
 hay una nota <strong>Ojo</strong> con lo que conviene matizar o lo que
@@ -73,6 +77,7 @@ apuntes donde se explica con calma.</p>
 <a href="#scikit-learn"><img src="assets/chuletas/scikit-learn.jpg" alt="" loading="lazy" width="1477" height="1846"><span>scikit-learn</span></a>
 <a href="#tensorflow"><img src="assets/chuletas/tensorflow.jpg" alt="" loading="lazy" width="1477" height="1846"><span>TensorFlow</span></a>
 <a href="#pytorch"><img src="assets/chuletas/pytorch.jpg" alt="" loading="lazy" width="1476" height="1846"><span>PyTorch</span></a>
+<a href="#terraform"><img src="assets/chuletas/terraform.jpg" alt="" loading="lazy" width="1199" height="1312"><span>Terraform</span></a>
 </nav>
 
 <h2 id="python">Python</h2>
@@ -87,6 +92,22 @@ funcionan, pero en Python se suele preferir una comprensión:
 <p><strong>En los apuntes:</strong> <a
 href="teoria.html#1️⃣-fundamentos-de-programación">Teoría, secciones 1 a
 5</a> y <a href="ejercicios.html">ejercicios E1–E12 y E28–E37</a>.</p>
+<div class="chuleta-version">
+
+<p><strong>Otra versión</strong>, más resumida y dibujada a mano.</p>
+<figure class="chuleta"><a href="assets/chuletas/python-2.jpg" target="_blank" rel="noopener"><img src="assets/chuletas/python-2.jpg" alt="Segunda chuleta de Python: variables, tipos de datos, listas, tuplas, conjuntos, diccionarios, if/elif/else, bucles for y while, funciones, lambda, clases, herencia, métodos especiales, generadores, decoradores, excepciones, archivos, módulos, entornos virtuales y funciones integradas." loading="lazy" width="1199" height="1312"></a><figcaption>Segunda versión: clic para verla a tamaño completo.</figcaption></figure>
+
+</div>
+
+<p><strong>Ojo con esta versión:</strong> <code>for</code> no sirve solo
+para «repetir un número fijo de veces»: recorre cualquier secuencia (una
+lista, una cadena, las filas de un archivo). El decorador
+<code>@log</code> no viene con Python: hay que escribirlo antes, como se
+explica en <a href="teoria.html#decoradores-paso-a-paso">Decoradores
+paso a paso</a>. Y <code>python -m venv venv</code> solo
+<strong>crea</strong> el entorno virtual: después hay que activarlo con
+<code>source venv/bin/activate</code> (Linux y macOS) o
+<code>venv\Scripts\activate</code> (Windows).</p>
 <h2 id="numpy">NumPy</h2>
 <figure class="chuleta"><a href="assets/chuletas/numpy.jpg" target="_blank" rel="noopener"><img src="assets/chuletas/numpy.jpg" alt="Chuleta de NumPy: crear arrays, zeros, ones, arange, linspace, números aleatorios, shape, reshape, ndim, dtype, indexado, slicing, máscaras booleanas, broadcasting, suma, media, desviación típica, mínimo y máximo, argmax, concatenar, dividir, apilar, matriz identidad y producto de matrices." loading="lazy" width="1441" height="1846"></a></figure>
 
@@ -98,6 +119,26 @@ elemento a elemento; el producto de matrices es <code>A @ B</code>.</p>
 <p><strong>En los apuntes:</strong> <a
 href="teoria.html#71-numpy-computación-numérica">Teoría 7.1</a> y <a
 href="ejercicios.html">ejercicios E18–E19</a>.</p>
+<div class="chuleta-version">
+
+<p><strong>Otra versión</strong>, más resumida y dibujada a mano.</p>
+<figure class="chuleta"><a href="assets/chuletas/numpy-2.jpg" target="_blank" rel="noopener"><img src="assets/chuletas/numpy-2.jpg" alt="Segunda chuleta de NumPy: crear arrays, zeros y ones, arange, linspace, aleatorios, shape, reshape, ndim, dtype, indexado, slicing, broadcasting, operaciones, agregación, estadística, comparación, máscaras booleanas, concatenar, dividir, apilar, producto de matrices, matriz identidad y guardar y cargar." loading="lazy" width="1199" height="1312"></a><figcaption>Segunda versión: clic para verla a tamaño completo.</figcaption></figure>
+
+</div>
+
+<p><strong>Ojo con esta versión:</strong> «Arrange» está mal escrito: la
+función es <code>np.arange</code> (<em>a range</em>, «un rango»), y
+<code>np.arrange</code> da <code>AttributeError</code>.
+<code>np.split(arr, 3)</code> solo funciona si el tamaño se puede
+dividir entre 3 en partes iguales; si no, da <code>ValueError</code> y
+hay que usar <code>np.array_split</code>. Para los aleatorios, mejor
+<code>rng = np.random.default_rng(42)</code> que
+<code>np.random.rand</code> y <code>randint</code> (ver la nota de la
+primera versión).</p>
+<p><strong>Ampliado en los apuntes:</strong> <a
+href="teoria.html#71-numpy-computación-numérica">Teoría 7.1</a>:
+<code>linspace</code>, <code>eye</code>, máscaras, unir y dividir
+arrays, y guardar con <code>np.save</code> y <code>np.savez</code>.</p>
 <h2 id="pandas">Pandas</h2>
 <figure class="chuleta"><a href="assets/chuletas/pandas.jpg" target="_blank" rel="noopener"><img src="assets/chuletas/pandas.jpg" alt="Chuleta de Pandas: leer CSV, head, info, describe, shape, columns, dtypes, seleccionar columnas, filtrar filas, ordenar, groupby, agregación, merge, concat, drop, rename, valores que faltan, apply, value_counts, tabla dinámica, fechas, métodos de texto, valores únicos y máscaras booleanas." loading="lazy" width="1443" height="1846"></a></figure>
 
@@ -113,6 +154,20 @@ calcula nada hasta que se le añade una agregación. Y antes de usar
 href="teoria.html#72-pandas-manipulación-de-datos">Teoría 7.2</a> y <a
 href="teoria.html#73-pandas-a-fondo">7.3 Pandas a fondo</a>; <a
 href="ejercicios.html">ejercicios E20–E22 y E53–E58</a>.</p>
+<div class="chuleta-version">
+
+<p><strong>Otra versión</strong>, más resumida y dibujada a mano.</p>
+<figure class="chuleta"><a href="assets/chuletas/pandas-2.jpg" target="_blank" rel="noopener"><img src="assets/chuletas/pandas-2.jpg" alt="Segunda chuleta de Pandas: leer datos, head y tail, info, describe, shape, columns, dtypes, seleccionar columnas, filtrar filas, ordenar, groupby, agregación, merge, concat, drop, rename, valores que faltan, apply, value_counts, tabla dinámica, fechas, métodos de texto, valores únicos y máscaras booleanas." loading="lazy" width="1199" height="1312"></a><figcaption>Segunda versión: clic para verla a tamaño completo.</figcaption></figure>
+
+</div>
+
+<p><strong>Ojo con esta versión:</strong> <code>pd.read_csv</code> solo
+lee CSV: para Excel es <code>pd.read_excel</code> y para JSON,
+<code>pd.read_json</code>. <code>isnull()</code> e <code>isna()</code>
+son lo mismo (en los apuntes se usa <code>isna</code>). Siguen valiendo
+las notas de la primera versión: <code>fillna</code>,
+<code>dropna</code>, <code>drop</code> y <code>rename</code> devuelven
+una tabla nueva que hay que guardar.</p>
 <h2 id="polars">Polars</h2>
 <figure class="chuleta"><a href="assets/chuletas/polars.jpg" target="_blank" rel="noopener"><img src="assets/chuletas/polars.jpg" alt="Chuleta de Polars: instalación, importar, leer CSV y Parquet, crear un DataFrame, explorar, seleccionar columnas, filtrar filas, ordenar, agregar por grupos, añadir columnas, unir, concatenar, valores nulos, ejecución perezosa, guardar y funciones útiles." loading="lazy" width="1477" height="1846"></a></figure>
 
@@ -171,6 +226,27 @@ ahora LiteRT.</p>
 href="teoria.html#147-redes-neuronales-desde-cero">Teoría 14.7, redes
 neuronales desde cero</a> y la <a href="ud3-vision.html">UD3</a>, donde
 se usa Keras con imágenes.</p>
+<div class="chuleta-version">
+
+<p><strong>Otra versión</strong>, más resumida y dibujada a mano.</p>
+<figure class="chuleta"><a href="assets/chuletas/tensorflow-2.jpg" target="_blank" rel="noopener"><img src="assets/chuletas/tensorflow-2.jpg" alt="Segunda chuleta de TensorFlow: tensores, crear tensores, indexado, reshape, operaciones, tipos de datos, CPU o GPU, Keras, capas, construir, compilar, tf.data, entrenar, evaluar, predecir, guardar y cargar, TensorBoard y despliegue." loading="lazy" width="1199" height="1312"></a><figcaption>Segunda versión: clic para verla a tamaño completo.</figcaption></figure>
+
+</div>
+
+<p><strong>Ojo con esta versión:</strong> en «Dataset»,
+<code>.batch(32).shuffle(1000)</code> está al revés: así solo se baraja
+el orden de los lotes, y cada lote tiene siempre los mismos ejemplos; lo
+correcto es <code>.shuffle(1000).batch(32)</code>. En «Training»,
+<code>validation_split=0.2</code> <strong>no funciona</strong> con un
+<code>tf.data.Dataset</code> (solo con arrays): la validación se pasa
+con <code>validation_data</code>. Para desplegar, en Keras 3 se usa
+<code>model.export("export/")</code> en vez de
+<code>tf.saved_model.save</code>, y <code>.h5</code> es el formato
+antiguo (<code>.keras</code>).</p>
+<p><strong>Ampliado en los apuntes:</strong> <a
+href="teoria.html#datos-por-lotes-con-tfdata-tensorboard-y-exportar-el-modelo">Datos
+por lotes con <code>tf.data</code>, TensorBoard y exportar el
+modelo</a>.</p>
 <h2 id="pytorch">PyTorch</h2>
 <figure class="chuleta"><a href="assets/chuletas/pytorch.jpg" target="_blank" rel="noopener"><img src="assets/chuletas/pytorch.jpg" alt="Chuleta de PyTorch: instalación, versión, tensores, forma, crear tensores, operaciones, producto de matrices, indexado, autograd, red neuronal con Sequential, funciones de pérdida, optimizadores, bucle de entrenamiento, Dataset y DataLoader, CPU o GPU, guardar y cargar, e inferencia." loading="lazy" width="1476" height="1846"></a></figure>
 
@@ -190,6 +266,59 @@ mano</a> de la teoría.</p>
 href="teoria.html#122-dónde-encaja-pytorch">Teoría 12.2, dónde encaja
 PyTorch</a> y <a
 href="teoria.html#147-redes-neuronales-desde-cero">14.7</a>.</p>
+<div class="chuleta-version">
+
+<p><strong>Otra versión</strong>, más resumida y dibujada a mano.</p>
+<figure class="chuleta"><a href="assets/chuletas/pytorch-2.jpg" target="_blank" rel="noopener"><img src="assets/chuletas/pytorch-2.jpg" alt="Segunda chuleta de PyTorch: tensores, crear tensores, operaciones, indexado, reshape, atributos, conversión de tipos, CPU o GPU, autograd, gradientes, red neuronal, funciones de pérdida, optimizadores, bucle de entrenamiento, evaluación, guardar y cargar el modelo, Dataset y DataLoader y transformaciones." loading="lazy" width="1199" height="1312"></a><figcaption>Segunda versión: clic para verla a tamaño completo.</figcaption></figure>
+
+</div>
+
+<p><strong>Ojo con esta versión:</strong> el «Training Loop» usa
+<code>criterion</code>, que no está definido (<code>NameError</code>):
+la función de pérdida se guardó en <code>loss</code>
+(<code>loss = nn.CrossEntropyLoss()</code>). Y si se «arregla» cambiando
+<code>criterion</code> por <code>loss</code>, el bucle sobrescribe
+<code>loss</code> con el valor del error y en el segundo lote ya no es
+una función. Hay que darles nombres distintos. Con
+<code>device = torch.device('cuda')</code>, el <code>x.to(device)</code>
+da error en un ordenador sin GPU de NVIDIA (lo habitual en el aula):
+mejor <code>"cuda" if torch.cuda.is_available() else "cpu"</code>, y
+mover <strong>también el modelo</strong> con
+<code>model.to(device)</code>. Después de <code>model.eval()</code> hay
+que volver a <code>model.train()</code> antes de seguir entrenando. Y
+<code>T.Resize(224)</code> no deja la imagen cuadrada: para 224×224 es
+<code>T.Resize((224, 224))</code>. Lo que esta versión hace bien es
+guardar con <code>state_dict</code>, como se recomienda.</p>
+<p><strong>Ampliado en los apuntes:</strong> <a
+href="teoria.html#pytorch-paso-a-paso-de-los-tensores-a-guardar-el-modelo">PyTorch
+paso a paso</a>, con el bucle completo corregido.</p>
+<h2 id="terraform">Terraform</h2>
+<figure class="chuleta"><a href="assets/chuletas/terraform.jpg" target="_blank" rel="noopener"><img src="assets/chuletas/terraform.jpg" alt="Chuleta de Terraform: qué es, conceptos clave, instalación, estructura de archivos, provider, resource, data source, variables, outputs, estado, módulos, flujo de trabajo init, plan, apply y destroy, workspaces, backend remoto y buenas prácticas." loading="lazy" width="1199" height="1312"></a></figure>
+
+<p>Terraform no es una librería de Python: es la herramienta con la que
+se <strong>crean servidores y servicios en la nube</strong>
+describiéndolos en archivos (infraestructura como código). Aparece aquí
+porque es el paso siguiente a desplegar un modelo: crear el sitio donde
+vive.</p>
+<p><strong>Ojo:</strong> <code>brew install terraform</code> ya no
+funciona, porque Homebrew dejó de aceptar versiones nuevas tras el
+cambio de licencia de 2023; ahora es <code>brew tap hashicorp/tap</code>
+y <code>brew install hashicorp/tap/terraform</code>. El
+<code>data "aws_ami"</code> necesita un <code>filter</code> con el
+nombre de la imagen: sin él devuelve la última imagen cualquiera de
+Canonical. El bloque <code>backend "s3"</code> no va suelto: va
+<strong>dentro</strong> de <code>terraform { ... }</code>. La región
+<code>ap-south-1</code> es Bombay; desde Galicia lo normal sería una
+región europea (<code>eu-west-3</code>, París, o
+<code>eu-south-2</code>, España). Y lo más importante, que la chuleta no
+dice: el archivo <code>terraform.tfstate</code> puede guardar
+contraseñas en texto claro y <strong>nunca</strong> se sube a Git.</p>
+<p><strong>En los apuntes:</strong> <a
+href="teoria.html#138-infraestructura-como-código-terraform">Teoría
+13.8, infraestructura como código</a>, con un ejemplo gratis que no
+necesita cuenta en la nube, y el <a
+href="ejercicios.html#bloque-q--de-las-chuletas-al-código-e87e90">ejercicio
+E90</a>.</p>
   </article>
 </main>
 <footer class="site"><div class="in">

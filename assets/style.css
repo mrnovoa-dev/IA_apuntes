@@ -189,6 +189,8 @@ article.content details.sol > summary::after { content: " 🔓"; font-weight: 40
 figure.chuleta { margin: 1em 0; max-width: 760px; }
 figure.chuleta a { display: block; }
 figure.chuleta img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--r); background: #fff; }
+figure.chuleta figcaption { margin-top: .45em; font-size: .9rem; color: var(--muted); }
+.chuleta-version { margin-top: 2em; padding-top: 1em; border-top: 1px dashed var(--line); }
 
 /* Etiquetas de unidad en la teoría y los ejercicios */
 .ud-tags { display: inline-flex; flex-wrap: wrap; gap: 4px; vertical-align: middle; }

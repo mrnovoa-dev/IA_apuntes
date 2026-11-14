@@ -16,13 +16,13 @@ Esta teoría es común a **todo el curso**. Empezó como el apoyo de la UD2 (Pyt
 | 4. Funciones (argumentos, lambda, map/filter/reduce, recursión, ámbito) | UD2 |
 | 5. Estructuras de datos complejas (listas, tuplas, conjuntos, comprensiones, módulos, tablas y CSV sin Pandas) | UD2 |
 | 6. Conceptos estadísticos (descriptiva, cuartiles, puntuación z, correlación, contraste de hipótesis) | UD2 |
-| 7. Librerías científicas (NumPy, Pandas) | UD2 |
+| 7. Librerías científicas (NumPy: crear, unir, dividir y guardar arrays; Pandas) | UD2 |
 | 8. Visualización (Matplotlib) | UD2 |
 | 9. ETL y análisis de datos | UD2 |
 | 10. Introducción a Machine Learning | [UD5](ud5-ml.html) |
 | 11. Introducción a Big Data | UD2 · [UD5](ud5-ml.html) |
 | 12. Ecosistema de librerías: PyTorch, scikit-learn y Seaborn | UD2 · [UD3](ud3-vision.html) · [UD5](ud5-ml.html) |
-| 13. Crear aplicaciones: escritorio y web, y desplegar un modelo | UD2 · [UD5](ud5-ml.html) |
+| 13. Crear aplicaciones: escritorio y web, desplegar un modelo e infraestructura como código (Terraform) | UD2 · [UD5](ud5-ml.html) |
 | 14. Ampliación: IA, ML, DL y GenAI, pipeline de ML, EDA, redes neuronales, IA generativa, hashing, automatización, testing, algoritmia, buenas prácticas, recursos, redes y grafos | [UD1](ud1.html) a [UD5](ud5-ml.html), según el apartado |
 | 15. Referencias externas, IDEs, datasets y guía práctica | General |
 
@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E86 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E90 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -2110,14 +2110,80 @@ np.min(arr)          # 1
 np.std(arr)          # Desviación estándar
 ```
 
+**Más formas de crear arrays**:
+```python
+np.linspace(0, 1, 5)          # [0.   0.25 0.5  0.75 1.  ]: 5 valores igual de separados, ¡incluye el final!
+np.full((2, 3), 7)            # matriz 2×3 llena de sietes
+np.eye(3)                     # matriz identidad 3×3 (unos en la diagonal); np.identity(3) es lo mismo
+
+rng = np.random.default_rng(42)          # generador con semilla: siempre los mismos números
+rng.random((2, 3))                       # decimales entre 0 y 1 (sin llegar a 1)
+rng.integers(1, 11, size=(2, 3))         # enteros del 1 al 10: ¡el final no se incluye!
+```
+
+`arange(0, 10, 2)` excluye el final, como `range`; `linspace(0, 1, 5)` lo incluye. Las funciones antiguas `np.random.rand` y `np.random.randint` siguen funcionando, pero hoy se recomienda el generador `default_rng`, que hace los resultados repetibles y no depende de un estado global.
+
+**Forma de un array: `shape`, `ndim`, `dtype` y `reshape`**:
+```python
+a = np.arange(6).reshape(2, 3)    # [[0 1 2]
+                                  #  [3 4 5]]
+a.shape, a.ndim, a.dtype, a.size  # (2, 3) 2 int64 6: forma (una tupla, 5.3), dimensiones, tipo y n.º de elementos
+a.reshape(3, -1)                  # 3 filas y «las columnas que hagan falta»: (3, 2)
+a.flatten()                       # [0 1 2 3 4 5]: aplanar a una dimensión
+```
+
+`reshape` solo funciona si el número de elementos encaja: 6 elementos pueden ser 2×3 o 3×2, pero no 4×2 (`ValueError`). Es lo que se hace con las imágenes antes de una red densa (UD3): una imagen de 28×28 se convierte en un vector de 784.
+
+**Máscaras: filtrar sin bucles**:
+```python
+notas = np.array([4.5, 7, 9.5, 3, 6])
+notas > 5                             # [False  True  True False  True]
+notas[notas > 5]                      # [7.  9.5 6. ]
+np.where(notas >= 5, "AP", "SS")      # ['SS' 'AP' 'AP' 'SS' 'AP']
+(notas >= 5).sum(), (notas >= 5).mean()   # 3 aprobados, 0.6 = 60 %
+```
+
+Para combinar condiciones se usan `&` (y), `|` (o) y `~` (no), **con paréntesis**: `notas[(notas >= 5) & (notas < 7)]`. Con `and` y `or` da error, igual que en Pandas.
+
+**Unir y dividir arrays**:
+```python
+a = np.arange(6).reshape(2, 3)        # [[0 1 2] [3 4 5]]
+b = np.array([[10, 20, 30]])
+
+np.vstack((a, b))                     # una fila más debajo: 3×3 (= np.concatenate((a, b)))
+np.hstack((a, a))                     # columnas al lado: 2×6 (= np.concatenate((a, a), axis=1))
+
+x = np.arange(10)
+np.split(x, 2)                        # dos trozos de 5
+np.split(x, 3)                        # ValueError: array split does not result in an equal division
+np.array_split(x, 3)                  # trozos de 4, 3 y 3: no exige partes iguales
+np.split(x, [3, 7])                   # cortar por las posiciones 3 y 7: [0 1 2] [3 4 5 6] [7 8 9]
+```
+
+`vstack` necesita el mismo número de **columnas**, y `hstack`, el mismo número de **filas**. `np.split(x, 3)` solo funciona si el tamaño es divisible entre 3; para repartir datos en lotes casi iguales se usa `array_split`.
+
 **Matrices**:
 ```python
 A = np.array([[1, 2], [3, 4]])
 B = np.array([[5, 6], [7, 8]])
 
-np.dot(A, B)         # Multiplicación matricial
-A.T                  # Transposición
+A @ B                # producto de matrices (forma recomendada; np.dot(A, B) es lo mismo)
+A * B                # ¡elemento a elemento! No es el producto de matrices
+A.T                  # transpuesta
+A @ np.eye(2)        # la identidad no cambia la matriz: [[1. 2.] [3. 4.]]
 ```
+
+**Guardar y cargar arrays**:
+```python
+np.save("notas.npy", notas)                       # un array, formato binario de NumPy
+np.load("notas.npy")                              # [4.5 7.  9.5 3.  6. ]
+np.savez("datos.npz", notas=notas, matriz=A)      # varios arrays con nombre en un archivo
+d = np.load("datos.npz"); d["matriz"]             # se recuperan por su nombre: d.files → ['notas', 'matriz']
+np.savetxt("notas.csv", notas.reshape(1, -1), delimiter=",", fmt="%.1f")   # texto: 4.5,7.0,9.5,3.0,6.0
+np.loadtxt("notas.csv", delimiter=",")
+```
+
+`.npy` y `.npz` guardan exactamente la forma y el tipo, y se leen muy rápido, pero solo los entiende NumPy. Para compartir datos con otras personas o con una hoja de cálculo es mejor un CSV, y para tablas con columnas de distinto tipo, Pandas (7.2). Se practica en el [ejercicio E88](ejercicios.html#bloque-q--de-las-chuletas-al-código-e87e90).
 
 [Referencia: NumPy documentation](https://numpy.org/doc/stable/)
 
@@ -2804,6 +2870,95 @@ Fíjate en que el bucle de entrenamiento es un **bucle `for` normal** (E6): los 
 
 **Recomendación didáctica**: en Bachillerato basta con usar **una** de las dos en profundidad. Keras es más fácil para el primer contacto con CNN (UD3). PyTorch es una buena ampliación para el alumnado más avanzado, o si se quieren usar modelos de Hugging Face.
 
+#### PyTorch paso a paso: de los tensores a guardar el modelo
+
+El ejemplo mínimo de arriba entrena con todos los datos de golpe. Un proyecto real añade cinco piezas: el **dispositivo** (CPU o GPU), los **gradientes automáticos**, la carga de datos **por lotes**, la **evaluación** y **guardar** el modelo. Este es el recorrido completo, en el orden en que se usa.
+
+**1. Tensores: atributos y tipos.**
+```python
+x = torch.tensor([[1, 2, 3], [4, 5, 6]])
+x.shape, x.dtype, x.device       # torch.Size([2, 3]) torch.int64 cpu
+x.float()                        # a decimales (float32): lo que esperan las capas de la red
+x.long()                         # a enteros largos (int64): lo que espera CrossEntropyLoss en las etiquetas
+x.view(3, 2), x.reshape(3, 2)    # cambiar la forma (view solo si el tensor está seguido en memoria; reshape siempre)
+x[0], x[:, 1], x[0:1]            # indexar como en NumPy (7.1)
+```
+
+**2. CPU o GPU, sin que falle en ningún ordenador.**
+```python
+dispositivo = "cuda" if torch.cuda.is_available() else "cpu"
+modelo = modelo.to(dispositivo)            # el modelo...
+X, y = X.to(dispositivo), y.to(dispositivo)  # ...y los datos tienen que estar en el MISMO sitio
+```
+Si se escribe directamente `torch.device("cuda")`, el `.to(dispositivo)` da error en un ordenador sin tarjeta gráfica de NVIDIA, que es lo normal en el aula (en un Mac con chip Apple se usa `"mps"`). Si el modelo está en la GPU y los datos en la CPU, PyTorch da el error *Expected all tensors to be on the same device*.
+
+**3. Gradientes automáticos (*autograd*).** Es la retropropagación de [14.7](#147-redes-neuronales-desde-cero), pero hecha por PyTorch:
+```python
+x = torch.tensor(3.0, requires_grad=True)   # «vigila» las operaciones con x
+y = x ** 2
+y.backward()                                # calcula dy/dx
+print(x.grad)                               # tensor(6.): la derivada de x² es 2x, y 2·3 = 6
+```
+
+**4. Datos por lotes con `Dataset` y `DataLoader`.** Igual que un generador (14.14), entrega los datos de 32 en 32 y los baraja en cada época:
+```python
+from torch.utils.data import TensorDataset, DataLoader
+
+datos_train = TensorDataset(X_train, y_train)          # junta entradas y etiquetas
+cargador = DataLoader(datos_train, batch_size=32, shuffle=True)
+for xb, yb in cargador:                                 # cada vuelta, un lote
+    ...
+```
+Para imágenes, `torchvision` trae datasets (MNIST, CIFAR-10) y **transformaciones** que se aplican a cada imagen al cargarla: `T.Compose([T.Resize((224, 224)), T.ToTensor()])`. Ojo: `T.Resize(224)` con un solo número no deja la imagen en 224×224, sino que pone el **lado menor** a 224 y mantiene la proporción.
+
+**5. El bucle de entrenamiento completo, con evaluación.**
+```python
+funcion_error = nn.CrossEntropyLoss()
+optimizador = torch.optim.Adam(modelo.parameters(), lr=1e-3)
+
+for epoca in range(20):
+    modelo.train()                               # modo entrenamiento: dropout y BatchNorm activos
+    for xb, yb in cargador:
+        xb, yb = xb.to(dispositivo), yb.to(dispositivo)
+        pred = modelo(xb)                        # 1. predecir
+        error = funcion_error(pred, yb)          # 2. medir el error
+        optimizador.zero_grad()                  # 3. borrar los gradientes del lote anterior
+        error.backward()                         # 4. calcular los gradientes
+        optimizador.step()                       # 5. ajustar los pesos
+
+    modelo.eval()                                # modo evaluación: dropout apagado
+    with torch.no_grad():                        # sin guardar gradientes: más rápido y menos memoria
+        pred_val = modelo(X_val.to(dispositivo)).argmax(dim=1)
+        acierto = (pred_val == y_val.to(dispositivo)).float().mean().item()
+    print(f"Época {epoca + 1}: error {error.item():.3f}, acierto en validación {acierto:.1%}")
+```
+- Si falta `zero_grad()`, los gradientes de cada lote **se suman** a los anteriores y el entrenamiento se descontrola.
+- Si después de `eval()` se olvida volver a `train()`, el *dropout* deja de actuar en las épocas siguientes. Por eso `modelo.train()` va al principio de cada época.
+- `CrossEntropyLoss` recibe las **puntuaciones** de la última capa (sin `softmax`: ya lo aplica ella) y las etiquetas como números de clase en `long`.
+- No conviene llamar igual a la función de error y al valor del error: si se escribe `loss = nn.CrossEntropyLoss()` y luego `loss = loss(pred, y)` dentro del bucle, en el segundo lote `loss` ya no es una función y da error.
+
+**6. Guardar y cargar.** Se guardan los **pesos** (`state_dict`), no el objeto entero:
+```python
+torch.save(modelo.state_dict(), "modelo.pth")
+
+modelo2 = nn.Sequential(nn.Linear(4, 16), nn.ReLU(), nn.Linear(16, 3))   # la misma arquitectura
+modelo2.load_state_dict(torch.load("modelo.pth"))
+modelo2.eval()                                   # antes de predecir
+```
+Desde PyTorch 2.6, `torch.load` carga por defecto solo pesos (`weights_only=True`), porque cargar un objeto cualquiera de un archivo puede ejecutar código malicioso. Es la misma precaución que con `pickle` y `joblib` (13.7): no abrir modelos de origen desconocido.
+
+| Paso | Keras | PyTorch |
+|------|-------|---------|
+| Definir la red | `keras.Sequential([...])` | `nn.Sequential(...)` |
+| Error y optimizador | `model.compile(loss=..., optimizer=...)` | `nn.CrossEntropyLoss()`, `torch.optim.Adam(...)` |
+| Entrenar | `model.fit(X, y, epochs=20)` | bucle `for` escrito a mano (paso 5) |
+| Evaluar | `model.evaluate(X_test, y_test)` | `model.eval()` + `torch.no_grad()` |
+| Guardar | `model.save("modelo.keras")` | `torch.save(model.state_dict(), "modelo.pth")` |
+
+El [ejercicio E89](ejercicios.html#bloque-q--de-las-chuletas-al-código-e87e90) pide encontrar los fallos de los bucles de entrenamiento de las chuletas.
+
+> Código de PyTorch y TensorFlow revisado con la documentación oficial, pero no ejecutado en el entorno de prueba (las librerías no estaban instaladas): pruébalo en Google Colab, que ya las trae.
+
 **Instalación**:
 ```bash
 # Versión solo CPU (suficiente para el aula)
@@ -3380,6 +3535,7 @@ Estos conceptos no se programan en el curso, pero conviene conocerlos para enten
 |----------|-------------------|
 | **Docker** | Empaquetar la app con su Python y sus librerías en un «contenedor» que funciona igual en cualquier ordenador |
 | **Nube** (Cloud Run, Azure, AWS) | Ejecutar ese contenedor en servidores que crecen según el número de usuarios |
+| **Infraestructura como código** (Terraform, OpenTofu) | Describir en archivos los servidores y servicios de la nube para crearlos, cambiarlos y borrarlos de forma repetible ([13.8](#138-infraestructura-como-código-terraform)) |
 | **CI/CD** (GitHub Actions) | Cada vez que se sube código, se ejecutan los tests y, si pasan, se publica automáticamente |
 | **Monitorización y deriva** (*drift*) | Los datos del mundo cambian (nuevos clientes, nuevas costumbres) y el modelo empeora sin avisar: hay que vigilar sus predicciones y reentrenarlo |
 | **Versionado** (MLflow, DVC) | Guardar qué datos, qué código y qué parámetros produjeron cada versión del modelo |
@@ -3397,6 +3553,118 @@ Estos conceptos no se programan en el curso, pero conviene conocerlos para enten
 - [ ] La app explica qué hace el modelo, su precisión y sus límites.
 
 > Ejemplos de 13.7 comprobados (entrenar, guardar, cargar, predecir y los dos tests). Streamlit y FastAPI no se pudieron ejecutar en el entorno de prueba: ejecútalos en local o en Colab tras `pip install streamlit fastapi uvicorn`.
+
+### 13.8 Infraestructura como código: Terraform
+
+Para que una app con un modelo (13.7) llegue a otras personas hace falta **infraestructura**: un servidor, una base de datos, un almacén de archivos, una red. Se puede crear a mano, haciendo clic en la web de un proveedor de nube, pero así nadie recuerda qué se configuró, es fácil equivocarse y no se puede repetir igual. La **infraestructura como código** (*Infrastructure as Code*, IaC) consiste en **describirla en archivos de texto**, guardarlos en Git como cualquier programa y dejar que una herramienta la cree, la cambie o la borre.
+
+**Terraform** (de HashiCorp, hoy parte de IBM) es la herramienta de IaC más extendida. Funciona con cientos de proveedores: nubes (AWS, Azure, Google Cloud), Docker, GitHub, e incluso archivos del propio ordenador.
+
+**La idea clave: es declarativo.** No se escriben los pasos («crea un servidor, después ábrele el puerto 80...»), sino **el estado final** que se quiere («quiero un servidor con el puerto 80 abierto»). Terraform compara ese estado deseado con el que existe y calcula él solo qué tiene que crear, cambiar o borrar. Por eso aplicar dos veces el mismo archivo no crea dos servidores: la segunda vez responde *No changes* (es **idempotente**).
+
+| Concepto | Qué es | Ejemplo |
+|----------|--------|---------|
+| **Provider** | El «traductor» para un servicio concreto | `aws`, `azurerm`, `google`, `docker`, `local` |
+| **Resource** | Algo que Terraform crea y gestiona | un servidor, un *bucket*, un archivo |
+| **Data source** | Algo que ya existe y solo se **lee** | la última imagen de Ubuntu disponible |
+| **Variable** | Un valor que se puede cambiar sin tocar el código | la región, el entorno (`dev` o `prod`) |
+| **Output** | Un valor que se muestra al terminar | la dirección IP del servidor creado |
+| **State** (`terraform.tfstate`) | El archivo donde Terraform apunta lo que ha creado | es su «memoria»: sin él no sabe qué es suyo |
+| **Module** | Un grupo de recursos reutilizable, como una función | una red completa que se usa en varios proyectos |
+
+**Un primer ejemplo sin nube y gratis.** El proveedor `local` crea archivos en el propio ordenador. No necesita cuenta, no cuesta dinero y permite ver el ciclo completo en el aula:
+
+```hcl
+# main.tf
+terraform {
+  required_providers {
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.5"
+    }
+  }
+}
+
+variable "curso" {
+  type    = string
+  default = "1BAC"
+}
+
+resource "local_file" "benvida" {
+  filename = "${path.module}/saida/benvida.txt"
+  content  = "Benvida ao curso ${var.curso} de Tecnoloxías Intelixentes\n"
+}
+
+output "ficheiro" {
+  value = local_file.benvida.filename
+}
+```
+
+El lenguaje se llama **HCL**: bloques con llaves, `nombre = valor` y referencias como `var.curso` o `local_file.benvida.filename`. El ciclo de trabajo es siempre el mismo:
+
+```bash
+terraform init        # descarga el proveedor (crea la carpeta .terraform y .terraform.lock.hcl)
+terraform fmt         # ordena el formato del código
+terraform validate    # comprueba que la sintaxis es correcta
+terraform plan        # muestra qué va a hacer, sin hacerlo: "Plan: 1 to add, 0 to change, 0 to destroy."
+terraform apply       # lo hace (pide escribir "yes"); crea saida/benvida.txt y el terraform.tfstate
+terraform apply -var="curso=2BAC"   # cambia el contenido: el plan avisa de que va a reemplazar el archivo
+terraform destroy     # borra todo lo que creó
+```
+
+**`plan` antes de `apply`, siempre.** En la nube, un `apply` sin revisar puede borrar una base de datos o crear máquinas que se cobran por horas. `plan` es el momento de leer con calma qué se va a crear (`+`), cambiar (`~`) o destruir (`-`).
+
+**El mismo esquema en la nube.** Así sería un servidor en AWS (el ejemplo que traen muchas chuletas):
+
+```hcl
+provider "aws" {
+  region = "eu-west-3"                     # París; la región decide dónde están los datos (RGPD)
+}
+
+data "aws_ami" "ubuntu" {                  # leer: la imagen de Ubuntu más reciente de Canonical
+  most_recent = true
+  owners      = ["099720109477"]           # el identificador de Canonical en AWS
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd*/ubuntu-*-24.04-amd64-server-*"]
+  }
+}
+
+resource "aws_instance" "web" {            # crear: un servidor pequeño
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+}
+
+output "ip_publica" {
+  value = aws_instance.web.public_ip
+}
+```
+
+Sin el `filter`, `most_recent = true` devolvería la última imagen cualquiera publicada por Canonical, que puede no ser un Ubuntu de servidor. Es un detalle que las chuletas suelen omitir.
+
+**Buenas prácticas y errores típicos:**
+
+- **El archivo de estado es delicado.** `terraform.tfstate` puede guardar contraseñas y claves **en texto claro**. Nunca se sube a Git: en `.gitignore` van `.terraform/`, `*.tfstate` y `*.tfstate.backup`. Lo que sí se sube es `.terraform.lock.hcl`, que fija las versiones de los proveedores.
+- **En equipo, estado remoto.** Si dos personas tienen cada una su `tfstate`, Terraform cree cosas distintas en cada ordenador. Se guarda en un **backend remoto** (un *bucket* de S3, Google Cloud Storage o Azure), declarado **dentro** del bloque `terraform { backend "s3" { ... } }`, con bloqueo para que no lo cambien dos personas a la vez.
+- **Las claves de acceso nunca en los `.tf`.** Se pasan por variables de entorno o con la herramienta del proveedor (`aws configure`, `az login`, `gcloud auth`). Es la misma regla que en 13.7: sin contraseñas en el repositorio.
+- **Variables** para lo que cambia entre entornos, **módulos** para no copiar y pegar, **etiquetas** (*tags*) en los recursos para saber de quién es cada uno y cuánto cuesta, y `output` para lo que otros necesiten saber.
+- **Entornos separados** (`dev`, `staging`, `prod`): con `terraform workspace new staging` o, mejor en proyectos grandes, con carpetas distintas.
+- **`terraform destroy` al terminar una práctica en la nube**: un servidor olvidado sigue facturando.
+
+**Instalación.** En Windows, descargando el ejecutable de developer.hashicorp.com o con `choco install terraform`; en macOS, `brew tap hashicorp/tap` y `brew install hashicorp/tap/terraform` (el `brew install terraform` de muchas chuletas ya no funciona, porque Homebrew dejó de aceptar versiones nuevas tras el cambio de licencia); en Ubuntu, desde el repositorio `apt` de HashiCorp. Para el aula, el proveedor `local` o el de Docker evitan crear cuentas de nube.
+
+**Licencia y alternativas.** Desde agosto de 2023 (a partir de la versión 1.6), Terraform no es software libre: usa la licencia BSL, que permite usarlo gratis pero no ofrecerlo como servicio que compita con HashiCorp. En respuesta nació **OpenTofu**, una copia libre gestionada por la Linux Foundation que acepta casi los mismos archivos (con la orden `tofu` en lugar de `terraform`). Otras herramientas: **Pulumi** (la infraestructura se escribe en Python u otros lenguajes), **Ansible** (más orientada a configurar servidores que ya existen) y las propias de cada nube (CloudFormation en AWS, Bicep en Azure).
+
+| | Python (todo el curso) | Terraform |
+|-|------------------------|-----------|
+| Estilo | Imperativo: los pasos, en orden | Declarativo: el resultado final |
+| Ejecutar dos veces | Lo repite todo | Si nada ha cambiado, no hace nada |
+| Qué produce | Resultados, archivos, modelos | Servidores, redes, permisos... en la nube |
+| Dónde encaja | Entrenar y servir el modelo (13.7) | Crear el sitio donde vive ese modelo |
+
+El [ejercicio E90](ejercicios.html#bloque-q--de-las-chuletas-al-código-e87e90) propone leer un plan de Terraform y encontrar los fallos de seguridad de una configuración.
+
+> Los archivos de Terraform de esta sección no se han ejecutado en el entorno de prueba (la herramienta no estaba disponible). Se han revisado con la documentación oficial; pruébalos con Terraform u OpenTofu instalados.
 
 ---
 
@@ -3989,6 +4257,41 @@ Cómo leer las curvas de `historia.history`:
 | Error bajo y bajando | Baja y luego **sube** | **Sobreajuste**: memoriza | Dropout, regularización L2, más datos, aumento de datos, *early stopping* |
 
 Los ejercicios [E62–E69](ejercicios.html#bloque-l--deep-learning-con-números-e62e69) practican todo esto con números. Las redes convolucionales, con el cálculo de tamaños y parámetros, están en la [UD3](ud3-vision.html#5-clasificar-imágenes), y las recurrentes y los Transformers, en la [UD4](ud4-lenguaje.html#108-redes-para-secuencias-rnn-lstm-gru-y-atención).
+
+#### Datos por lotes con `tf.data`, TensorBoard y exportar el modelo
+
+Con pocos datos basta con pasar arrays de NumPy a `fit`, como arriba. Con muchas imágenes o textos que no caben en memoria se usa `tf.data`, que lee, baraja y agrupa los datos por lotes mientras la red entrena:
+
+```python
+import tensorflow as tf
+
+train = (tf.data.Dataset.from_tensor_slices((X_train, y_train))
+         .shuffle(1000)                  # 1.º barajar ejemplos (con un búfer de 1000)
+         .batch(32)                      # 2.º agrupar en lotes de 32
+         .prefetch(tf.data.AUTOTUNE))    # preparar el siguiente lote mientras se entrena el actual
+val = tf.data.Dataset.from_tensor_slices((X_val, y_val)).batch(32)
+
+registro = keras.callbacks.TensorBoard(log_dir="logs/")
+modelo.fit(train, validation_data=val, epochs=20, callbacks=[parar, registro])
+```
+
+- **El orden importa**: `.shuffle(1000).batch(32)` baraja los ejemplos y después forma lotes. Al revés, `.batch(32).shuffle(1000)`, solo baraja el **orden de los lotes**: cada lote tiene siempre los mismos 32 ejemplos.
+- Con un `Dataset`, `validation_split` **no funciona** (solo admite arrays de NumPy o tensores): la validación se prepara aparte y se pasa con `validation_data`. Tampoco se indica `batch_size` en `fit`, porque los lotes ya vienen hechos.
+- **TensorBoard** guarda las curvas de error y acierto de cada época; se ven con `tensorboard --logdir logs/` en el navegador o, en Colab, con `%load_ext tensorboard` y `%tensorboard --logdir logs/`.
+- **GPU**: `tf.config.list_physical_devices("GPU")` dice si hay alguna. TensorFlow la usa sola si la encuentra; `with tf.device("/GPU:0"):` solo hace falta para elegir una concreta.
+
+**Guardar o exportar** no es lo mismo:
+
+| Para qué | Cómo (Keras 3, TensorFlow 2.16 o posterior) | Notas |
+|----------|----------------------------------------------|-------|
+| Seguir entrenando o usarlo en Python | `modelo.save("modelo.keras")` y `keras.models.load_model("modelo.keras")` | `.h5` es el formato antiguo |
+| Servirlo en producción (TF Serving, en la nube) | `modelo.export("export/")` | Crea un *SavedModel*; antes se hacía con `tf.saved_model.save` |
+| Móvil o dispositivos pequeños | `modelo.export("modelo.tflite", format="litert")` | TensorFlow Lite se llama ahora LiteRT |
+| Otros entornos | `modelo.export("modelo.onnx", format="onnx")` | ONNX lo leen muchos lenguajes y programas |
+
+Es el mismo camino que [13.7](#137-del-notebook-a-la-app-desplegar-un-modelo) con scikit-learn: entrenar una vez, guardar, y cargar el modelo ya entrenado en la aplicación.
+
+> Código de PyTorch y TensorFlow revisado con la documentación oficial, pero no ejecutado en el entorno de prueba (las librerías no estaban instaladas): pruébalo en Google Colab, que ya las trae.
 
 #### La XOR: por qué hacen falta capas ocultas
 
@@ -4952,6 +5255,109 @@ print(any(x < 5 for x in notas), all(x >= 5 for x in notas))   # False True
 
 **Rendimiento**: las comprensiones suelen ser más rápidas que los bucles con `append`. Se debe preferir las funciones integradas y usar `set` para comprobar si un elemento está en una colección (O(1), 14.9). Para medir tiempos, `timeit`.
 
+#### Decoradores paso a paso
+
+Un **decorador** es una función que recibe una función y devuelve otra que la «envuelve»: hace algo antes, la llama y hace algo después. Así se añade un comportamiento (registrar, medir tiempos, reintentar, comprobar permisos) **sin tocar** el código de la función original. Se entiende en cuatro pasos.
+
+**1. Una función es un objeto más**: se puede guardar en una variable, pasar como argumento y devolver.
+
+```python
+def saludar(nome):
+    return f"Ola, {nome}"
+
+f = saludar           # sin paréntesis: la función, no su resultado
+print(f("Iria"))      # Ola, Iria
+```
+
+**2. Un decorador escrito a mano.** La función interna (`envoltura`) recuerda `func` aunque `log` ya haya terminado: es un **cierre** (*closure*).
+
+```python
+def log(func):
+    def envoltura(*args, **kwargs):
+        print(f"→ {func.__name__}{args}")
+        resultado = func(*args, **kwargs)
+        print(f"← {resultado}")
+        return resultado
+    return envoltura
+
+def media(a, b):
+    return (a + b) / 2
+
+media = log(media)    # «decorar» a mano
+media(6, 9)           # → media(6, 9)
+                      # ← 7.5
+```
+
+**3. La `@` es solo una abreviatura** de la línea `media = log(media)`:
+
+```python
+@log
+def media(a, b):
+    return (a + b) / 2
+```
+
+Este `@log` es el de las chuletas de Python, que lo usan sin definirlo: `log` no viene con Python, hay que escribirlo antes (o importarlo).
+
+**4. `functools.wraps` conserva el nombre y la documentación.** Sin él, `media.__name__` vale `"envoltura"`, y los mensajes de error, la ayuda y algunas herramientas se confunden. Por eso todos los decoradores serios lo usan:
+
+```python
+import functools
+
+def log(func):
+    @functools.wraps(func)            # copia __name__, __doc__... de func a envoltura
+    def envoltura(*args, **kwargs):
+        print(f"→ {func.__name__}{args}")
+        return func(*args, **kwargs)
+    return envoltura
+```
+
+**Decoradores con parámetros.** `@reintentar(veces=3)` primero **llama** a `reintentar(3)`, que devuelve el decorador de verdad. Por eso hay tres funciones, una dentro de otra:
+
+```python
+def reintentar(veces):
+    def decorador(func):
+        @functools.wraps(func)
+        def envoltura(*args, **kwargs):
+            for intento in range(1, veces + 1):
+                try:
+                    return func(*args, **kwargs)
+                except ConnectionError as e:          # solo el error que tiene sentido repetir
+                    print(f"Intento {intento} fallido: {e}")
+            raise ConnectionError(f"{func.__name__}: {veces} intentos sin éxito")
+        return envoltura
+    return decorador
+
+@reintentar(veces=3)
+def descargar():
+    ...                                               # p. ej., pedir un CSV a una web (14.10)
+```
+
+**Varios decoradores a la vez** se aplican de abajo arriba (el más cercano a `def` envuelve primero):
+
+```python
+@dobre                # dobre(mais_un(tres)): (3 + 1) * 2 = 8
+@mais_un
+def tres():
+    return 3
+```
+
+Con el orden cambiado, `(3 * 2) + 1 = 7`: el orden importa.
+
+**Decoradores que ya usas sin saberlo:**
+
+| Decorador | Qué hace | Dónde |
+|-----------|----------|-------|
+| `@property` | Un método que se usa como un atributo y permite validar | POO, más arriba |
+| `@staticmethod`, `@classmethod` | Métodos que no necesitan el objeto | POO, más arriba |
+| `@dataclass` | Escribe `__init__`, `__repr__` y `__eq__` por ti | POO, más arriba |
+| `@functools.lru_cache` | Guarda resultados ya calculados (memoización): `fib(80)` sale al instante | [14.12](#1412-algoritmia-pensar-antes-de-programar) |
+| `@app.route`, `@app.post` | Asocian una dirección web a una función | Flask y FastAPI (13.4, 13.7) |
+| `@st.cache_data` | Streamlit no repite una carga lenta de datos | 13.7 |
+| `@pytest.fixture` | Prepara datos para los tests | 14.11 |
+| `@torch.no_grad()` | Desactiva el cálculo de gradientes en una función de predicción | 12.2 |
+
+> **Ojo:** un decorador cambia lo que hace la función cada vez que se llama, así que conviene que sea sencillo y que no se trague los errores (`except Exception: pass` dentro de un decorador esconde todos los fallos del programa). Se practica en el [ejercicio E87](ejercicios.html#bloque-q--de-las-chuletas-al-código-e87e90).
+
 #### Iteradores y generadores por dentro
 
 Un **iterable** es algo que se puede recorrer (lista, texto, archivo); un **iterador** es el objeto que lleva la cuenta de por dónde va. `for` hace esto por debajo:
@@ -5100,6 +5506,7 @@ print(saldo)                          # 4000 (sin candado salía unos 1000)
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
 | *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
 | *Python Module 8: Tuples* (@Mastercode.sagar, 15 págs.), procesado con OCR y MarkItDown | Crear tuplas, `count` e `index`, operaciones, tuplas anidadas, tupla frente a lista, desempaquetado, proyecto de registro | 5.3 y ejercicios E83–E86 |
+| Seis chuletas dibujadas a mano (Python, NumPy, Pandas, PyTorch, TensorFlow y Terraform; sin autor indicado), publicadas tal cual en [Chuletas](chuletas.html) | Decoradores; `linspace`, `eye`, unir, dividir y guardar arrays; dispositivo, *autograd*, `DataLoader`, evaluación y `state_dict` en PyTorch; `tf.data`, TensorBoard y exportar en Keras; infraestructura como código | 7.1, 12.2, 13.8, 14.7, 14.14 y ejercicios E87–E90 |
 | *Introduction to Data Science Using Python* (A. Agah, OER, licencia CC BY-NC 4.0) | Estadística descriptiva e inferencial, estandarizar, regresión, grafos y NetworkX; errores usados en E79 | 6.5–6.9, 14.17, ejercicios E75–E79 |
 | *Neural Networks – Complete Study Guide* (codingwithmee_18, 49 págs.) | XOR con capa oculta, red desde cero en NumPy, normalización, calendarios de η, depuración, otras arquitecturas | 14.7 y ejercicios E80–E82 |
 

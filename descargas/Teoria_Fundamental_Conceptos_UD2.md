@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E105 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E110 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -4379,6 +4379,38 @@ Al principio interesa avanzar rápido y al final, afinar. Por eso se suele **cam
 3. **Mira los datos y las etiquetas**: que cada imagen tenga su etiqueta, que se mezclen en cada época y que se normalicen igual en entrenamiento y en prueba.
 4. **Prueba varias tasas de aprendizaje** en escala logarítmica (10⁻⁴, 10⁻³, 10⁻²): demasiado alta da `nan` u oscilaciones; demasiado baja, una curva plana.
 5. **Compara con algo trivial**: predecir siempre la clase mayoritaria o la media. Si la red no lo supera, no está aprendiendo nada.
+6. **Si programaste la retropropagación a mano, comprueba el gradiente.** Se mueve cada peso un poquito hacia arriba y hacia abajo y se mira cuánto cambia la pérdida: (L(w + h) − L(w − h)) / 2h. Debe coincidir con el gradiente calculado; una diferencia relativa por debajo de 10⁻⁶ significa que está bien. Es lentísimo, así que solo sirve para buscar errores, no para entrenar.
+
+```python
+import numpy as np
+
+rng = np.random.default_rng(0)
+X = rng.normal(size=(8, 3))
+y = rng.integers(0, 2, size=(8, 1)).astype(float)
+W = rng.normal(size=(3, 1)) * 0.5
+sig = lambda z: 1 / (1 + np.exp(-z))
+
+def perdida(W):
+    p = sig(X @ W)
+    return -np.mean(y * np.log(p) + (1 - y) * np.log(1 - p))   # entropía cruzada binaria
+
+def gradiente(W):                                  # el que calcula la retropropagación
+    return X.T @ (sig(X @ W) - y) / len(X)
+
+def gradiente_numerico(W, h=1e-5):
+    g = np.zeros_like(W)
+    for i in range(W.size):
+        Wmas, Wmenos = W.copy(), W.copy()
+        Wmas.flat[i] += h
+        Wmenos.flat[i] -= h
+        g.flat[i] = (perdida(Wmas) - perdida(Wmenos)) / (2 * h)
+    return g
+
+a, n = gradiente(W), gradiente_numerico(W)
+print(f"{np.abs(a - n).max() / np.abs(a).max():.1e}")     # 1.5e-11: correcto
+mal = lambda W: X.T @ (sig(X @ W) - y)                    # error típico: olvidar dividir entre N
+print(f"{np.abs(mal(W) - n).max() / np.abs(n).max():.1f}")  # 7.0: el gradiente es 8 veces mayor
+```
 
 | Error típico | Síntoma |
 |--------------|---------|
@@ -5714,6 +5746,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | Listas de redes sociales: «10 great Python packages for Data Science» y «8 awesome GitHub repos» | Librerías y repositorios revisados uno a uno | 12.4 y repositorios de 14.15 |
 | «The 25 Best Free Resources for Learning AI in 2026» (H. Sheikho, Substack, oct-2026) | Cursos, libros y vídeos gratuitos revisados uno a uno | 14.16; retropropagación a mano en 14.7 |
 | Siete repositorios para aprender ML (nov-2026): curso de scikit-learn de Inria, chuletas de CS229, libro de Raschka, *best-of-ml-python*, libro de Molnar, SHAP y *applied-ml* de E. Yan | Validación cruzada anidada, dependencia parcial, valores de Shapley, contrafactuales, pruebas A/B, fallos del ML en producción | 14.16; [UD5](ud5-ml.html), secciones 6, 10 y 11 |
+| *Data and Model Training Concepts*, *Neural Networks – Detailed Notes* y *RAG + LLM Complete Notes* (codingwithmee_18, PDF de 51, 34 y 36 págs., procesados con MarkItDown) y carrusel «Git Commands – Complete Handwritten Notes» (@codewithayansh, 13 diapositivas) | Git a fondo, comprobación del gradiente, búsqueda híbrida con BM25 y RRF, métricas de recuperación, calibración, etiquetas con ruido | 14.7, 14.19; [UD5](ud5-ml.html), secciones 1 y 5; ejercicios E106–E110 |
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
 | *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
 | *Python Module 8: Tuples* (@Mastercode.sagar, 15 págs.), procesado con OCR y MarkItDown | Crear tuplas, `count` e `index`, operaciones, tuplas anidadas, tupla frente a lista, desempaquetado, proyecto de registro | 5.3 y ejercicios E83–E86 |
@@ -5961,6 +5994,95 @@ Hay que editarlo a mano dejando la versión buena (o una mezcla), borrar las mar
 
 **Buenas costumbres:** *commits* pequeños y con mensajes que digan **qué** y **por qué**; un `.gitignore` con `.venv/`, `__pycache__/`, `.env` y los datos personales; y nunca subir claves (aunque se borren después, quedan en el historial). Con VS Code o GitHub Desktop se hace lo mismo con botones.
 
+#### Git a fondo: configurar, deshacer, historial y equipo
+
+Todo lo de este apartado se ha ejecutado en un repositorio de prueba con Git 2; los códigos de los *commits* (`851e20f`…) cambian en cada ordenador.
+
+**Configurar una vez.** Git firma cada *commit* con un nombre y un correo:
+
+```bash
+git config --global user.name "Uxía Pereira"         # para todos tus repositorios
+git config --global user.email "uxia@example.com"
+git config --global init.defaultBranch main          # la rama inicial se llamará main
+git config user.email "uxia.proxecto@example.com"    # sin --global: solo este repositorio
+git config --list                                    # ver toda la configuración
+```
+
+La configuración global está en `~/.gitconfig`; la de cada repositorio, en `.git/config`, y gana a la global. En los ordenadores del aula, que comparte mucha gente, mejor sin `--global`, y con el correo que da GitHub para no publicar el tuyo (`...@users.noreply.github.com`).
+
+**Las tres zonas.** Un cambio pasa por la **carpeta de trabajo** (lo que editas), el **área de preparación** (lo que entrará en la próxima foto, tras `git add`) y el **repositorio** (las fotos guardadas, tras `git commit`). Cada forma de deshacer actúa sobre una zona distinta, y por eso unas son seguras y otras no:
+
+| Quiero… | Orden | ¿Se puede recuperar? |
+|---------|-------|----------------------|
+| Tirar lo que cambié en un archivo y no guardé | `git restore notas.py` | **No**: el cambio no estaba en ningún *commit* |
+| Sacar un archivo de la preparación sin perder el cambio | `git restore --staged notas.py` | Sí: el cambio sigue en la carpeta |
+| Apartar un momento el trabajo a medias | `git stash -u` y luego `git stash pop` | Sí. Sin `-u`, los archivos nuevos **no** se apartan |
+| Corregir el mensaje o añadir algo al último *commit* (sin subir) | `git commit --amend` | Sí, con `git reflog` |
+| Deshacer el último *commit* conservando los cambios preparados | `git reset --soft HEAD~1` | Sí |
+| … conservándolos pero sin preparar | `git reset HEAD~1` (es `--mixed`) | Sí |
+| … y tirando los cambios | `git reset --hard HEAD~1` | El *commit*, con `git reflog`; lo no guardado, **no** |
+| Deshacer un *commit* que **ya está en GitHub** | `git revert 851e20f` | Sí: crea un *commit* nuevo que hace lo contrario |
+
+Lo que pasó en la prueba, paso a paso:
+
+```bash
+git log --oneline
+# 851e20f Engade aprobado
+# bb8533e Lista baleira devolve None
+# 16f8ec9 Calcula a media
+git reset --soft HEAD~1 ; git status --short     # A  extra.py   (el cambio sigue preparado)
+git reset HEAD~1        ; git status --short     # ?? extra.py   (sigue en la carpeta, sin preparar)
+git reset --hard HEAD~1                          # HEAD is now at bb8533e … y extra.py ha desaparecido
+
+git reflog                                       # el «diario» de dónde estuvo HEAD
+# bb8533e HEAD@{0}: reset: moving to HEAD~1
+# 851e20f HEAD@{1}: commit: Engade aprobado
+git reset --hard HEAD@{1}                        # HEAD is now at 851e20f … extra.py ha vuelto
+```
+
+`git reflog` recuerda durante semanas (por defecto, al menos 30 días) por dónde ha pasado `HEAD`, así que un *commit* «perdido» casi nunca lo está. Lo que **no** puede recuperar es lo que nunca se guardó: antes de un `restore` o un `reset --hard`, mira `git status`.
+
+**La regla de oro: no reescribir lo que ya es de todos.** `reset`, `commit --amend` y `rebase` cambian la historia. En tu rama local da igual; en una rama que ya subiste y otros han descargado, sus copias dejan de cuadrar con la tuya. Para deshacer algo publicado se usa `revert`. Si de verdad hay que reescribir una rama propia ya subida, `git push --force-with-lease` en vez de `--force`: se niega a subir si alguien añadió algo mientras tanto, en lugar de borrarlo sin avisar.
+
+**Leer la historia.**
+
+| Orden | Para qué | Salida en la prueba |
+|-------|----------|---------------------|
+| `git log --oneline --graph` | Historia con las ramas dibujadas | Ver más abajo |
+| `git show --stat 851e20f` | Qué cambió en un *commit* | `extra.py \| 2 ++` |
+| `git blame notas.py` | Quién cambió cada línea por última vez, y en qué *commit* | `bb8533e5 (Uxía 2026-11-14 2)     if not notas:` |
+| `git tag -a v1.0 -m "Primeira versión"` | Poner nombre a una versión (y `git push origin v1.0` para subirla) | `851e20f (HEAD -> main, tag: v1.0)` |
+
+`git blame` sirve para entender **por qué** está una línea (el mensaje del *commit* lo explica), no para buscar culpables.
+
+**Dos formas de unir: *merge* y *rebase*.** Si `main` no ha cambiado desde que se creó la rama, la unión es un **avance rápido** (*fast-forward*): `main` simplemente avanza, sin *commit* nuevo. Si las dos ramas tienen *commits* nuevos, `git merge` crea un ***commit* de unión** con dos padres:
+
+```text
+*   9cf1e89 Merge branch 'mediana'
+|\
+| * 278ac4f Engade mediana (provisional)
+* | e83c9d8 Engade README
+|/
+* 9dc7c62 Redondea a media
+```
+
+`git rebase main`, en cambio, **vuelve a aplicar** los *commits* de tu rama encima del último de `main`, como si la hubieras empezado ahora: la historia queda en línea recta, pero los *commits* son **nuevos** (en la prueba, `c0dbf3f Engade probas` pasó a ser `64efb27`). Por eso solo se hace con ramas propias que nadie más usa. `git cherry-pick 64efb27` copia **un** *commit* concreto de otra rama a la actual (con otro código: `091c23c`), útil para llevar un arreglo sin traer el resto.
+
+**Trabajo en equipo con ramas y *pull requests*.**
+
+```bash
+git switch -c arreglo/media-baleira       # una rama por tarea, con nombre que se entienda
+git add notas.py
+git commit -m "Evita dividir entre cero cunha lista baleira"
+git push -u origin arreglo/media-baleira  # -u: recuerda a qué rama remota va
+# en GitHub: abrir una pull request, que otra persona revise y apruebe, y unir
+git switch main
+git pull                                  # traer main ya con el cambio
+git branch -d arreglo/media-baleira       # borrar la rama ya unida (-d se niega si no lo está)
+```
+
+`git pull` es `git fetch` (descargar) más `git merge` (unir). Con `git fetch` solo, se puede mirar lo que trae (`git log main..origin/main`) antes de unirlo. En la revisión de una *pull request* se comprueba que el código funciona y tiene pruebas, que se entiende, que no sube datos personales ni claves, y que el mensaje explica el porqué.
+
 #### La línea de órdenes en cinco minutos
 
 La **terminal** es la forma de dar órdenes al ordenador escribiendo. Muchas herramientas de IA solo se usan así (Git, `pip`, Docker, servidores).
@@ -6188,6 +6310,93 @@ reordenador = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 puntos = reordenador.predict([(pregunta, c) for c in candidatos])
 mellores = [c for _, c in sorted(zip(puntos, candidatos), reverse=True)[:3]]
 ```
+
+**Búsqueda híbrida: palabras exactas y parecido.** La búsqueda por *embeddings* entiende sinónimos, pero falla con lo que hay que encontrar **tal cual**: un código (`P-07`), un nombre propio, un número de norma. La búsqueda por palabras clave hace justo lo contrario. Los buscadores reales usan las dos y **mezclan los resultados**. La búsqueda por palabras más usada es **BM25**, una mejora de TF-IDF: las palabras raras pesan más, repetir una palabra ayuda cada vez menos y los documentos largos no ganan solo por ser largos. Para mezclar dos listas ordenadas se usa la **fusión por rango recíproco** (RRF): cada documento suma 1 / (60 + su posición) en cada lista, así que gana el que sale arriba en las dos, sin necesidad de comparar puntuaciones de escalas distintas.
+
+En el ejemplo, como sin internet no hay modelo de *embeddings*, el papel de la búsqueda «por parecido» lo hace un TF-IDF de **trozos de letras**, que también empareja palabras de la misma familia («reservo» con «reservar»):
+
+```python
+import math, re
+from collections import Counter
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+docs = [
+    "A biblioteca abre de luns a venres de 9:00 a 14:30.",
+    "Os préstamos de libros duran 15 días e pódense renovar unha vez.",
+    "Quen devolva un libro tarde non poderá levar outro durante unha semana.",
+    "O portátil P-07 está avariado: non o reserves.",
+    "Para reservar un portátil hai que ir á conserxería cun día de antelación.",
+    "O comedor escolar funciona de 14:30 a 15:30.",
+]
+VALEIRAS = {"o", "a", "os", "as", "un", "unha", "de", "e", "se", "que", "en", "non", "para", "do", "da"}
+
+def palabras(t):
+    return [p for p in re.findall(r"[a-záéíóúñü0-9-]+", t.lower()) if p not in VALEIRAS]
+
+def bm25(pregunta, k1=1.5, b=0.75):
+    tok = [palabras(d) for d in docs]
+    media, N = sum(map(len, tok)) / len(tok), len(docs)
+    df = Counter(p for t in tok for p in set(t))           # en cuántos documentos sale cada palabra
+    puntos = []
+    for t in tok:
+        f, s = Counter(t), 0
+        for p in palabras(pregunta):
+            if p in f:
+                idf = math.log(1 + (N - df[p] + 0.5) / (df[p] + 0.5))
+                s += idf * f[p] * (k1 + 1) / (f[p] + k1 * (1 - b + b * len(t) / media))
+        puntos.append(s)
+    return puntos
+
+letras = TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 4))
+M = letras.fit_transform(docs)
+def parecido(pregunta):
+    return cosine_similarity(letras.transform([pregunta]), M)[0]
+
+def orden(puntos):
+    return sorted(range(len(puntos)), key=lambda i: -puntos[i])
+
+def rrf(*ordenes, k=60):
+    total = Counter()
+    for o in ordenes:
+        for pos, i in enumerate(o, start=1):
+            total[i] += 1 / (k + pos)
+    return [i for i, _ in total.most_common()]
+
+q = "Funciona o P-07?"
+print(orden(bm25(q))[0], orden(parecido(q))[0], rrf(orden(bm25(q)), orden(parecido(q)))[0])   # 3 5 3
+```
+
+Con «Funciona o P-07?», la búsqueda por letras pone primero el comedor (por «funciona»); BM25 encuentra el portátil por su código, y la fusión se queda con él.
+
+**Medir la recuperación.** Igual que un clasificador, un buscador se evalúa con un **conjunto de prueba**: preguntas con el documento correcto anotado a mano. Las medidas más usadas:
+
+| Medida | Qué mide | Ejemplo |
+|--------|----------|---------|
+| **Acierto@k** (*hit rate*) | En qué fracción de preguntas sale **algún** documento correcto entre los k primeros | 8 de 10 preguntas lo tienen en el top 3: 0,80 |
+| **Exhaustividad@k** (*recall@k*) | Qué fracción de **todos** los documentos correctos sale entre los k primeros | Hay 4 correctos y salen 2 en el top 5: 0,50 |
+| **Precisión@k** | Qué fracción de los k primeros es correcta | 2 correctos en el top 5: 0,40 |
+| **MRR** (rango recíproco medio) | La media de 1 / posición del primer correcto | Primer correcto en las posiciones 1, 3 y 2: (1 + 0,33 + 0,5) / 3 = 0,61 |
+
+Si cada pregunta tiene un único documento correcto, acierto@k y exhaustividad@k coinciden, y por eso a veces se confunden; con varios documentos correctos por pregunta, no.
+
+```python
+proba = {"Funciona o P-07?": 3, "Que pasa se entrego tarde un préstamo?": 2,
+         "Podo renovar un libro?": 1, "A que hora abre a biblioteca?": 0,
+         "Horario do comedor": 5, "Como reservo un portátil?": 4}
+
+def avaliar(buscar):
+    pos = [buscar(q).index(bo) + 1 for q, bo in proba.items()]
+    return round(sum(p == 1 for p in pos) / len(pos), 2), round(sum(1 / p for p in pos) / len(pos), 2)
+
+print("BM25   ", avaliar(lambda q: orden(bm25(q))))                            # (0.83, 0.92)
+print("Letras ", avaliar(lambda q: orden(parecido(q))))                        # (0.67, 0.83)
+print("Híbrida", avaliar(lambda q: rrf(orden(bm25(q)), orden(parecido(q)))))   # (0.83, 0.92)
+```
+
+(Cada par es acierto@1 y MRR.) Cada buscador falla en preguntas distintas: BM25 en «reservo», las letras en «P-07» y en «préstamo». Aquí la fusión iguala al mejor de los dos; su ventaja es que no hace falta saber de antemano cuál irá mejor, porque eso cambia de una colección de documentos a otra. Seis preguntas son pocas para sacar conclusiones: un conjunto de prueba serio tiene decenas o cientos.
+
+**Con millones de trozos** no se compara la pregunta con todos: las bases vectoriales usan **índices aproximados** (el más común se llama HNSW, un grafo por el que se salta de vecino en vecino) que encuentran casi siempre los más parecidos en milisegundos, a cambio de fallar de vez en cuando. Es otra razón para medir la exhaustividad@k.
 
 #### Evaluar una aplicación con LLM
 

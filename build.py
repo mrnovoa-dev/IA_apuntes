@@ -147,6 +147,69 @@ def cifrar_soluciones(html: str, password: str):
     return SOL.sub(sustituir, html), b64(sal), n
 
 
+# Menú principal: una sola definición para todas las páginas (plantilla, index.html y mapa.html).
+# Cada entrada: (texto, enlace, clave de página) o (grupo, [(texto, descripción, enlace, clave), ...]).
+MENU = [
+    ("Inicio", "./", "index"),
+    ("Unidades", [
+        ("La asignatura", "Programación, criterios y evaluación", "asignatura.html", "asignatura"),
+        ("UD1 · Conceptos de IA", "Qué es la IA, búsqueda, agentes, ética", "ud1.html", "ud1"),
+        ("UD2 · Python y datos", "En la teoría y los ejercicios del curso", "teoria.html#1️⃣-fundamentos-de-programación", None),
+        ("UD3 · Visión artificial", "Imágenes, CNN, YOLO, OCR", "ud3-vision.html", "ud3-vision"),
+        ("UD4 · Lenguaje", "PLN, embeddings, Transformers", "ud4-lenguaje.html", "ud4-lenguaje"),
+        ("UD5 · Aprendizaje automático", "Modelos, métricas, validación, ética", "ud5-ml.html", "ud5-ml"),
+    ]),
+    ("Teoría", "teoria.html", "teoria"),
+    ("Ejercicios", "ejercicios.html", "ejercicios"),
+    ("Guías", [
+        ("Itinerario IA con Python", "De Python a experto en IA en seis etapas", "itinerario.html", "itinerario"),
+        ("Análisis de datos", "De los datos al modelo", "datos.html", "datos"),
+        ("Algoritmos de IA", "Catálogo: qué hace cada uno y cuándo usarlo", "algoritmos.html", "algoritmos"),
+        ("Mapa de librerías", "Guía visual de Python para IA", "mapa.html", "mapa"),
+    ]),
+    ("Recursos", [
+        ("Apps y juegos", "Proyectos con rúbrica", "apps.html", "apps"),
+        ("Chuletas", "Infografías de las librerías", "chuletas.html", "chuletas"),
+        ("El libro", "J. F. Puentes, capítulo a capítulo", "libro.html", "libro"),
+    ]),
+]
+
+
+def menu_html(actual):
+    """HTML del menú con la página actual marcada (aria-current) y su grupo resaltado."""
+    def cur(clave):
+        return ' aria-current="page"' if clave == actual else ""
+    li = []
+    for entrada in MENU:
+        if isinstance(entrada[1], str):
+            texto, enlace, clave = entrada
+            li.append(f'<li><a href="{enlace}"{cur(clave)}>{texto}</a></li>')
+            continue
+        grupo, items = entrada
+        ident = "menu-" + grupo.lower()
+        clase = "menu-grupo actual" if any(c == actual for *_, c in items) else "menu-grupo"
+        sub = "".join(f'<li><a href="{e}"{cur(c)}>{t}<small>{d}</small></a></li>' for t, d, e, c in items)
+        li.append(f'<li class="{clase}"><button type="button" class="menu-grupo-boton" aria-expanded="false" '
+                  f'aria-controls="{ident}">{grupo}</button><ul class="menu-sub" id="{ident}">{sub}</ul></li>')
+    return ('<nav class="menu" aria-label="Principal">'
+            '<button type="button" class="menu-boton" aria-expanded="false" aria-controls="menu-lista">'
+            '<span class="menu-boton-ico" aria-hidden="true">☰</span>Menú</button>'
+            '<ul class="menu-lista" id="menu-lista">' + "".join(li) + '</ul></nav>')
+
+
+MARCA_MENU = re.compile(r"<!-- menu -->.*?<!-- /menu -->", re.S)
+
+
+def actualizar_menus_estaticos():
+    """index.html y mapa.html no salen de pandoc: se les reescribe el menú entre las marcas."""
+    for archivo, clave in [("index.html", "index"), ("mapa.html", "mapa")]:
+        ruta = RAIZ / archivo
+        texto = ruta.read_text(encoding="utf-8")
+        nuevo = MARCA_MENU.sub(lambda m: "<!-- menu -->" + menu_html(clave) + "<!-- /menu -->", texto)
+        if nuevo != texto:
+            ruta.write_text(nuevo, encoding="utf-8")
+
+
 def main():
     faltan = [f for f, _, _ in PAGINAS if not (RAIZ / f).exists()]
     if faltan:
@@ -158,7 +221,7 @@ def main():
         html = subprocess.run(
             ["pandoc", fuente, "-f", "gfm+yaml_metadata_block", "-t", "html5", "-s",
              "--template", str(PLANTILLA), "--toc", "--toc-depth=3",
-             "--highlight-style=pygments", f"-V", f"cur-{nav}=1", *extra],
+             "--highlight-style=pygments", "-V", f"menu={menu_html(nav)}", *extra],
             cwd=RAIZ, check=True, capture_output=True, text=True).stdout
         html = marcar_unidades(html, nav)
         html, sal, n = cifrar_soluciones(html, password)
@@ -167,6 +230,7 @@ def main():
                                 f'<article class="content" data-salt="{sal}" data-iter="{ITERACIONES}">', 1)
         (RAIZ / salida).write_text(html, encoding="utf-8")
         print(f"{salida:<20} {n:>3} soluciones cifradas")
+    actualizar_menus_estaticos()
 
 
 if __name__ == "__main__":

@@ -12,27 +12,13 @@ neuronales e IA generativa.">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/menu.css">
+<script src="assets/menu.js" defer></script>
 </head>
 <body>
 <header class="top"><div class="in">
   <a class="brand" href="./">IA<span>·</span>Apuntes</a>
-  <nav aria-label="Principal">
-    <a href="./">Inicio</a>
-    <a href="asignatura.html" title="Programación, criterios y evaluación">Asignatura</a>
-    <a href="ud1.html" title="Conceptos clave de la IA">UD1</a>
-    <a href="teoria.html" title="Teoría de todo el curso, con la unidad de cada sección" aria-current="page">Teoría</a>
-    <a href="ejercicios.html" title="Ejercicios E1–E105 de todas las unidades">Ejercicios</a>
-    <a href="ud3-vision.html" title="Visión artificial">UD3 Visión</a>
-    <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural">UD4 Lenguaje</a>
-    <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
-    <a href="datos.html" title="Análisis de datos: de los datos al modelo">Datos</a>
-    <a href="itinerario.html" title="De Python a experto en IA en seis etapas">Itinerario</a>
-    <a href="algoritmos.html" title="Catálogo de algoritmos de IA">Algoritmos</a>
-    <a href="libro.html" title="El libro de referencia, capítulo a capítulo">Libro</a>
-    <a href="apps.html" title="Proyectos de apps y juegos con Python">Apps y juegos</a>
-    <a href="chuletas.html" title="Chuletas visuales de las librerías">Chuletas</a>
-    <a href="mapa.html">Mapa</a>
-  </nav>
+  <nav class="menu" aria-label="Principal"><button type="button" class="menu-boton" aria-expanded="false" aria-controls="menu-lista"><span class="menu-boton-ico" aria-hidden="true">☰</span>Menú</button><ul class="menu-lista" id="menu-lista"><li><a href="./">Inicio</a></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-unidades">Unidades</button><ul class="menu-sub" id="menu-unidades"><li><a href="asignatura.html">La asignatura<small>Programación, criterios y evaluación</small></a></li><li><a href="ud1.html">UD1 · Conceptos de IA<small>Qué es la IA, búsqueda, agentes, ética</small></a></li><li><a href="teoria.html#1️⃣-fundamentos-de-programación">UD2 · Python y datos<small>En la teoría y los ejercicios del curso</small></a></li><li><a href="ud3-vision.html">UD3 · Visión artificial<small>Imágenes, CNN, YOLO, OCR</small></a></li><li><a href="ud4-lenguaje.html">UD4 · Lenguaje<small>PLN, embeddings, Transformers</small></a></li><li><a href="ud5-ml.html">UD5 · Aprendizaje automático<small>Modelos, métricas, validación, ética</small></a></li></ul></li><li><a href="teoria.html" aria-current="page">Teoría</a></li><li><a href="ejercicios.html">Ejercicios</a></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-guías">Guías</button><ul class="menu-sub" id="menu-guías"><li><a href="itinerario.html">Itinerario IA con Python<small>De Python a experto en IA en seis etapas</small></a></li><li><a href="datos.html">Análisis de datos<small>De los datos al modelo</small></a></li><li><a href="algoritmos.html">Algoritmos de IA<small>Catálogo: qué hace cada uno y cuándo usarlo</small></a></li><li><a href="mapa.html">Mapa de librerías<small>Guía visual de Python para IA</small></a></li></ul></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-recursos">Recursos</button><ul class="menu-sub" id="menu-recursos"><li><a href="apps.html">Apps y juegos<small>Proyectos con rúbrica</small></a></li><li><a href="chuletas.html">Chuletas<small>Infografías de las librerías</small></a></li><li><a href="libro.html">El libro<small>J. F. Puentes, capítulo a capítulo</small></a></li></ul></li></ul></nav>
 </div></header>
 <main class="doc">
   <div class="toc-side">

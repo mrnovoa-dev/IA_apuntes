@@ -1,0 +1,58 @@
+/* Cabecera y menú principal: compartidos por todas las páginas (plantilla, portada y mapa).
+   El HTML del menú lo genera build.py (MENU) para que sea igual en todas. */
+.top { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--paper, #F2F6F7) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line, #D3DEE3); font-family: var(--font-body, system-ui, sans-serif); }
+.top.top-estatica { position: relative; }
+.top .in { position: relative; max-width: 1180px; margin: 0 auto; padding: 10px 16px; display: flex; gap: 18px; align-items: center; }
+.top .brand { flex: none; font-family: var(--font-display, system-ui, sans-serif); font-weight: 800; font-size: 1.15rem; color: var(--ink, #13212C); text-decoration: none; }
+.top .brand span { color: var(--accent-ink, #8A5D00); }
+
+.menu { flex: 1; font-size: 0.95rem; }
+.menu ul { list-style: none; margin: 0; padding: 0; }
+.menu-lista { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.menu a, .menu button { font: inherit; font-weight: 600; color: var(--muted, #4E5F6B); text-decoration: none; background: none; border: 0; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border-radius: 8px; line-height: 1.2; }
+.menu a:hover, .menu button:hover { color: var(--ink, #13212C); background: var(--sunk, #E7EEF1); }
+.menu a:focus-visible, .menu button:focus-visible { outline: 3px solid var(--accent, #E3A008); outline-offset: 2px; }
+.menu a[aria-current="page"] { color: var(--ink, #13212C); background: var(--sunk, #E7EEF1); }
+.menu-grupo.actual > .menu-grupo-boton { color: var(--ink, #13212C); }
+.menu-grupo.actual > .menu-grupo-boton::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent, #E3A008); }
+.menu-grupo-boton::after { content: ""; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(45deg); transition: transform .15s; }
+.menu-grupo-boton[aria-expanded="true"]::after { transform: translateY(1px) rotate(-135deg); }
+.menu-grupo { position: relative; }
+.menu-sub { display: none; }
+.menu-sub a { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; width: 100%; }
+.menu-sub small { font-weight: 400; font-size: .82rem; color: var(--muted, #4E5F6B); }
+
+/* Escritorio: desplegables flotantes */
+@media (min-width: 901px) {
+  .menu-grupo.abierto > .menu-sub { display: block; position: absolute; top: calc(100% + 6px); left: 0; z-index: 30; min-width: 290px;
+    padding: 6px; background: var(--surface, #fff); border: 1px solid var(--line, #D3DEE3); border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,.14); }
+  .menu-grupo:last-child.abierto > .menu-sub { left: auto; right: 0; }
+  .menu .menu-boton { display: none; }
+}
+
+/* Sin JavaScript: todo visible, en línea */
+.menu:not(.menu-js) .menu-grupo-boton { cursor: default; pointer-events: none; }
+.menu:not(.menu-js) .menu-grupo-boton::after { display: none; }
+.menu:not(.menu-js) .menu-sub { display: flex; flex-wrap: wrap; gap: 2px; }
+.menu:not(.menu-js) .menu-sub small { display: none; }
+.menu:not(.menu-js) .menu-boton { display: none; }
+
+/* Móvil: botón «Menú» y panel desplegable a lo ancho */
+@media (max-width: 900px) {
+  .top .in { gap: 10px; padding: 6px 12px; justify-content: space-between; }
+  .top .brand { font-size: 1.05rem; }
+  .menu { flex: none; }
+  .menu.menu-js .menu-boton { display: inline-flex; color: var(--ink, #13212C); border: 1px solid var(--line, #D3DEE3); background: var(--surface, #fff); }
+  .menu-boton-ico { font-size: 1.1rem; line-height: 1; }
+  .menu.menu-js .menu-lista { display: none; }
+  .menu.menu-js.abierto .menu-lista { display: flex; flex-direction: column; align-items: stretch; flex-wrap: nowrap; gap: 2px;
+    position: absolute; left: 0; right: 0; top: 100%; z-index: 40; padding: 10px 12px 16px;
+    max-height: calc(100dvh - 60px); overflow-y: auto; overscroll-behavior: contain;
+    background: var(--paper, #F2F6F7); border-bottom: 1px solid var(--line, #D3DEE3); box-shadow: 0 16px 32px rgba(0,0,0,.18); }
+  .menu.menu-js .menu-lista > li > a, .menu.menu-js .menu-grupo-boton { width: 100%; justify-content: flex-start; padding: 11px 12px; font-size: 1rem; }
+  .menu.menu-js .menu-grupo-boton::after { margin-left: auto; }
+  .menu.menu-js .menu-grupo.abierto > .menu-sub { display: block; padding: 0 0 6px 14px; border-left: 2px solid var(--line, #D3DEE3); margin-left: 14px; }
+  .menu.menu-js .menu-sub a { padding: 9px 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .menu-grupo-boton::after { transition: none; } }

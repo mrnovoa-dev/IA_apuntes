@@ -306,9 +306,15 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: s
   .q .a { margin-left: 0; text-align: left; }
 }
 </style>
+<link rel="stylesheet" href="assets/menu.css">
+<script src="assets/menu.js" defer></script>
 </head>
 <body>
 <a class="back-home" href="./" style="position:fixed;right:12px;bottom:12px;z-index:50;background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:999px;font:600 .85rem var(--font-body);text-decoration:none">← IA · Apuntes</a>
+<header class="top top-estatica"><div class="in">
+  <a class="brand" href="./">IA<span>·</span>Apuntes</a>
+  <!-- menu --><nav class="menu" aria-label="Principal"><button type="button" class="menu-boton" aria-expanded="false" aria-controls="menu-lista"><span class="menu-boton-ico" aria-hidden="true">☰</span>Menú</button><ul class="menu-lista" id="menu-lista"><li><a href="./">Inicio</a></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-unidades">Unidades</button><ul class="menu-sub" id="menu-unidades"><li><a href="asignatura.html">La asignatura<small>Programación, criterios y evaluación</small></a></li><li><a href="ud1.html">UD1 · Conceptos de IA<small>Qué es la IA, búsqueda, agentes, ética</small></a></li><li><a href="teoria.html#1️⃣-fundamentos-de-programación">UD2 · Python y datos<small>En la teoría y los ejercicios del curso</small></a></li><li><a href="ud3-vision.html">UD3 · Visión artificial<small>Imágenes, CNN, YOLO, OCR</small></a></li><li><a href="ud4-lenguaje.html">UD4 · Lenguaje<small>PLN, embeddings, Transformers</small></a></li><li><a href="ud5-ml.html">UD5 · Aprendizaje automático<small>Modelos, métricas, validación, ética</small></a></li></ul></li><li><a href="teoria.html">Teoría</a></li><li><a href="ejercicios.html">Ejercicios</a></li><li class="menu-grupo actual"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-guías">Guías</button><ul class="menu-sub" id="menu-guías"><li><a href="itinerario.html">Itinerario IA con Python<small>De Python a experto en IA en seis etapas</small></a></li><li><a href="datos.html">Análisis de datos<small>De los datos al modelo</small></a></li><li><a href="algoritmos.html">Algoritmos de IA<small>Catálogo: qué hace cada uno y cuándo usarlo</small></a></li><li><a href="mapa.html" aria-current="page">Mapa de librerías<small>Guía visual de Python para IA</small></a></li></ul></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-recursos">Recursos</button><ul class="menu-sub" id="menu-recursos"><li><a href="apps.html">Apps y juegos<small>Proyectos con rúbrica</small></a></li><li><a href="chuletas.html">Chuletas<small>Infografías de las librerías</small></a></li><li><a href="libro.html">El libro<small>J. F. Puentes, capítulo a capítulo</small></a></li></ul></li></ul></nav><!-- /menu -->
+</div></header>
 <nav class="nav" aria-label="Secciones">
   <div class="wrap">
     <a class="brand" href="#inicio">Mapa Python IA</a>

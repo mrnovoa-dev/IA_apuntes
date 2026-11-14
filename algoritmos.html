@@ -1,0 +1,1076 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algoritmos de IA · IA Apuntes</title>
+<meta name="description" content="Catálogo de los algoritmos de IA del
+curso: búsqueda, optimización, aprendizaje supervisado y no supervisado,
+redes neuronales, lenguaje, visión y refuerzo. Qué hace cada uno, cuándo
+usarlo, cómo se programa en Python y dónde se explica en la web.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="brand" href="./">IA<span>·</span>Apuntes</a>
+  <nav aria-label="Principal">
+    <a href="./">Inicio</a>
+    <a href="asignatura.html" title="Programación, criterios y evaluación">Asignatura</a>
+    <a href="ud1.html" title="Conceptos clave de la IA">UD1</a>
+    <a href="teoria.html" title="Teoría de todo el curso, con la unidad de cada sección">Teoría</a>
+    <a href="ejercicios.html" title="Ejercicios E1–E105 de todas las unidades">Ejercicios</a>
+    <a href="ud3-vision.html" title="Visión artificial">UD3 Visión</a>
+    <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural">UD4 Lenguaje</a>
+    <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
+    <a href="datos.html" title="Análisis de datos: de los datos al modelo">Datos</a>
+    <a href="itinerario.html" title="De Python a experto en IA en seis etapas">Itinerario</a>
+    <a href="algoritmos.html" title="Catálogo de algoritmos de IA" aria-current="page">Algoritmos</a>
+    <a href="libro.html" title="El libro de referencia, capítulo a capítulo">Libro</a>
+    <a href="apps.html" title="Proyectos de apps y juegos con Python">Apps y juegos</a>
+    <a href="chuletas.html" title="Chuletas visuales de las librerías">Chuletas</a>
+    <a href="mapa.html">Mapa</a>
+  </nav>
+</div></header>
+<main class="doc">
+  <div class="toc-side">
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="TOC"><span class="toc-ico" aria-hidden="true">☰</span><b>Índice</b><span class="toc-cur"></span></button>
+<nav id="TOC" aria-label="Índice de la página">
+<div class="toc-head"><span>Índice</span><button class="toc-close" type="button" aria-label="Cerrar el índice">✕</button></div>
+<ul>
+<li><a href="#algoritmos-de-ia" id="toc-algoritmos-de-ia">Algoritmos de
+IA</a>
+<ul>
+<li><a href="#cómo-leer-el-catálogo" id="toc-cómo-leer-el-catálogo">Cómo
+leer el catálogo</a></li>
+<li><a href="#catálogo" id="toc-catálogo">Catálogo</a>
+<ul>
+<li><a href="#búsqueda-y-optimización"
+id="toc-búsqueda-y-optimización">Búsqueda y optimización</a></li>
+<li><a href="#aprendizaje-supervisado"
+id="toc-aprendizaje-supervisado">Aprendizaje supervisado</a></li>
+<li><a href="#aprendizaje-no-supervisado"
+id="toc-aprendizaje-no-supervisado">Aprendizaje no supervisado</a></li>
+<li><a href="#redes-neuronales-lenguaje-y-visión"
+id="toc-redes-neuronales-lenguaje-y-visión">Redes neuronales, lenguaje y
+visión</a></li>
+<li><a href="#aprendizaje-por-refuerzo"
+id="toc-aprendizaje-por-refuerzo">Aprendizaje por refuerzo</a></li>
+</ul></li>
+<li><a href="#fichas" id="toc-fichas">Fichas</a>
+<ul>
+<li><a href="#regresión-lineal" id="toc-regresión-lineal">Regresión
+lineal</a></li>
+<li><a href="#k-vecinos-knn" id="toc-k-vecinos-knn">k vecinos
+(KNN)</a></li>
+<li><a href="#k-means" id="toc-k-means">k-means</a></li>
+<li><a href="#a-búsqueda-informada" id="toc-a-búsqueda-informada">A*:
+búsqueda informada</a></li>
+<li><a href="#q-learning-aprender-probando"
+id="toc-q-learning-aprender-probando">Q-learning: aprender
+probando</a></li>
+</ul></li>
+<li><a href="#cómo-elegir-un-algoritmo"
+id="toc-cómo-elegir-un-algoritmo">Cómo elegir un algoritmo</a></li>
+<li><a href="#ejercicios" id="toc-ejercicios">Ejercicios</a>
+<ul>
+<li><a href="#ejercicio-a1--la-recta-del-carrusel-a-mano-"
+id="toc-ejercicio-a1--la-recta-del-carrusel-a-mano-">Ejercicio A1 · La
+recta del carrusel, a mano 🟢</a></li>
+<li><a href="#ejercicio-a2--knn-con-y-sin-escalar-"
+id="toc-ejercicio-a2--knn-con-y-sin-escalar-">Ejercicio A2 · KNN con y
+sin escalar 🟡</a></li>
+<li><a href="#ejercicio-a3--qué-algoritmo-usarías-"
+id="toc-ejercicio-a3--qué-algoritmo-usarías-">Ejercicio A3 · ¿Qué
+algoritmo usarías? 🟢</a></li>
+</ul></li>
+<li><a href="#revisión-crítica-del-carrusel"
+id="toc-revisión-crítica-del-carrusel">Revisión crítica del
+carrusel</a></li>
+</ul></li>
+</ul>
+</nav>
+    <div class="toc-backdrop" hidden></div>
+  </div>
+  <article class="content" data-salt="XWaXkDAR8zbn7qaQDAm/mg==" data-iter="250000">
+<h1 id="algoritmos-de-ia">Algoritmos de IA</h1>
+<div class="ud-head" style="--c:var(--c-ml)">
+<span class="k">Catálogo transversal · UD1 → UD5</span>
+<p>Todos los algoritmos de la web en un solo sitio, agrupados por familias: <b>qué hacen en una frase, cuándo usarlos, cómo se llaman en Python y dónde están explicados</b>. Después, fichas completas de los más importantes, una guía para elegir y tres ejercicios.</p>
+</div>
+
+<blockquote>
+<p><strong>De dónde sale.</strong> El catálogo reúne los algoritmos que
+ya estaban repartidos por la teoría, las unidades y los ejercicios. Las
+fichas de regresión lineal, k vecinos y k-means amplían un carrusel de
+Instagram, <em>3 Algoritmos de Machine Learning que tenés que
+aprender</em> (@todo_code), corrigiendo sus errores (al final de la
+página). El carrusel termina anunciando un curso de pago de Java; aquí
+todo se hace en Python con scikit-learn.</p>
+</blockquote>
+<h2 id="cómo-leer-el-catálogo">Cómo leer el catálogo</h2>
+<p>Un <strong>algoritmo</strong> es una receta: una lista de pasos que
+siempre termina y resuelve un tipo de problema. En IA se usan para
+<strong>buscar</strong> (el camino más corto),
+<strong>optimizar</strong> (el mejor valor), <strong>aprender de
+datos</strong> (predecir, agrupar) o <strong>aprender actuando</strong>
+(refuerzo). Cada familia responde a una pregunta distinta:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Familia</th>
+<th>Pregunta</th>
+<th>¿Necesita datos con respuesta?</th>
+<th>Unidad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Búsqueda</td>
+<td>¿Qué pasos llevan del inicio a la meta?</td>
+<td>No: necesita el mapa de estados</td>
+<td>UD1</td>
+</tr>
+<tr class="even">
+<td>Optimización</td>
+<td>¿Qué valores dan el mejor resultado?</td>
+<td>No: necesita una función que medir</td>
+<td>UD1, UD5</td>
+</tr>
+<tr class="odd">
+<td>Supervisado: regresión</td>
+<td>¿Cuánto? (un número)</td>
+<td>Sí</td>
+<td>UD5</td>
+</tr>
+<tr class="even">
+<td>Supervisado: clasificación</td>
+<td>¿Cuál? (una clase)</td>
+<td>Sí</td>
+<td>UD3, UD4, UD5</td>
+</tr>
+<tr class="odd">
+<td>No supervisado</td>
+<td>¿Qué grupos o estructura hay?</td>
+<td>No</td>
+<td>UD5</td>
+</tr>
+<tr class="even">
+<td>Redes neuronales</td>
+<td>Patrones complejos en imágenes, texto, audio</td>
+<td>Sí (casi siempre)</td>
+<td>UD3, UD4, UD5</td>
+</tr>
+<tr class="odd">
+<td>Refuerzo</td>
+<td>¿Qué acción da más premio a la larga?</td>
+<td>No: aprende probando</td>
+<td>UD1, UD5</td>
+</tr>
+</tbody>
+</table>
+<h2 id="catálogo">Catálogo</h2>
+<h3 id="búsqueda-y-optimización">Búsqueda y optimización</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Algoritmo</th>
+<th>Idea en una frase</th>
+<th>Cuándo usarlo</th>
+<th>Python</th>
+<th>En la web</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Búsqueda en anchura</strong> (BFS)</td>
+<td>Explora por capas: todos los estados a 1 paso, luego a 2...</td>
+<td>Camino con menos pasos cuando todos cuestan igual</td>
+<td><code>collections.deque</code></td>
+<td><a
+href="ud1.html#6-resolver-problemas-buscando-el-espacio-de-estados">UD1
+sección 6</a>, <a
+href="teoria.html#07-algoritmos-y-resolución-de-problemas-por-búsqueda">0.7</a></td>
+</tr>
+<tr class="even">
+<td><strong>Búsqueda en profundidad</strong> (DFS)</td>
+<td>Sigue un camino hasta el final y retrocede</td>
+<td>Explorar todas las soluciones (reinas, laberintos)</td>
+<td>recursión</td>
+<td><a
+href="ud1.html#6-resolver-problemas-buscando-el-espacio-de-estados">UD1
+sección 6</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Dijkstra</strong></td>
+<td>Expande siempre el estado más barato hasta ahora</td>
+<td>Camino más corto con distancias distintas (GPS)</td>
+<td><code>heapq</code></td>
+<td><a
+href="ud1.html#6-resolver-problemas-buscando-el-espacio-de-estados">UD1
+sección 6</a>, <a
+href="teoria.html#1417-redes-y-grafos-con-networkx">14.17</a></td>
+</tr>
+<tr class="even">
+<td><strong>A*</strong></td>
+<td>Como Dijkstra, pero sumando una estimación de lo que falta</td>
+<td>Camino más corto en mapas grandes (videojuegos, robots)</td>
+<td><code>heapq</code></td>
+<td><a href="#a-búsqueda-informada">Ficha</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Minimax</strong></td>
+<td>Elige la jugada mejor suponiendo que el rival juega lo mejor
+posible</td>
+<td>Juegos de dos jugadores (tres en raya, ajedrez)</td>
+<td>recursión</td>
+<td><a
+href="ud1.html#6-resolver-problemas-buscando-el-espacio-de-estados">UD1
+sección 6</a></td>
+</tr>
+<tr class="even">
+<td><strong>Ascenso de colinas</strong></td>
+<td>Prueba un vecino y se queda con él si mejora</td>
+<td>Optimizar sin fórmula; cae en óptimos locales</td>
+<td>bucle</td>
+<td><a href="ud1.html#7-resolver-problemas-optimizando">UD1 sección
+7</a>, <a
+href="teoria.html#08-resolver-problemas-optimizando">0.8</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Descenso del gradiente</strong></td>
+<td>Da pasos en la dirección en que más baja el error</td>
+<td>Entrenar casi todos los modelos (regresión, redes)</td>
+<td>NumPy, PyTorch</td>
+<td><a href="ud1.html#ejercicio-72--el-gradiente-en-python-">UD1
+ejercicio 7.2</a>, <a
+href="teoria.html#147-redes-neuronales-desde-cero">14.7</a></td>
+</tr>
+<tr class="even">
+<td><strong>Algoritmos genéticos</strong></td>
+<td>Una población de soluciones que se cruzan, mutan y se
+seleccionan</td>
+<td>Problemas sin gradiente (horarios, diseño)</td>
+<td>bucle</td>
+<td><a href="teoria.html#08-resolver-problemas-optimizando">0.8</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="aprendizaje-supervisado">Aprendizaje supervisado</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Algoritmo</th>
+<th>Idea en una frase</th>
+<th>Cuándo usarlo</th>
+<th>scikit-learn</th>
+<th>En la web</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Regresión lineal</strong></td>
+<td>La recta (o plano) que mejor pasa por los puntos</td>
+<td>Predecir un número con relación aproximadamente lineal; línea
+base</td>
+<td><code>LinearRegression</code></td>
+<td><a href="#regresión-lineal">Ficha</a>, <a
+href="ud5-ml.html#3-regresión-lineal">UD5 sección 3</a></td>
+</tr>
+<tr class="even">
+<td><strong>Ridge, Lasso</strong></td>
+<td>Regresión lineal que castiga los coeficientes grandes</td>
+<td>Muchas columnas, riesgo de sobreajuste; Lasso elige columnas</td>
+<td><code>Ridge</code>, <code>Lasso</code></td>
+<td><a href="ud5-ml.html#3-regresión-lineal">UD5 sección 3</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Regresión logística</strong></td>
+<td>Una recta que separa clases y da una probabilidad (sigmoide)</td>
+<td>Clasificación binaria explicable; línea base</td>
+<td><code>LogisticRegression</code></td>
+<td><a href="ud5-ml.html#4-clasificación">UD5 sección 4</a></td>
+</tr>
+<tr class="even">
+<td><strong>k vecinos</strong> (KNN)</td>
+<td>Mira los k ejemplos más parecidos y vota (o promedia)</td>
+<td>Pocos datos y pocas columnas; fronteras irregulares</td>
+<td><code>KNeighborsClassifier</code>,
+<code>KNeighborsRegressor</code></td>
+<td><a href="#k-vecinos-knn">Ficha</a>, <a
+href="ud5-ml.html#4-clasificación">UD5 sección 4</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Árbol de decisión</strong></td>
+<td>Preguntas «¿mayor que...?» encadenadas</td>
+<td>Reglas explicables; datos mezclados</td>
+<td><code>DecisionTreeClassifier</code></td>
+<td><a href="ud5-ml.html#4-clasificación">UD5 sección 4</a>, <a
+href="ud5-ml.html#6-sobreajuste-validación-cruzada-e-hiperparámetros">sección
+6</a></td>
+</tr>
+<tr class="even">
+<td><strong>Random forest</strong></td>
+<td>Muchos árboles distintos que votan</td>
+<td>Tablas: buen resultado sin apenas ajustar</td>
+<td><code>RandomForestClassifier</code></td>
+<td><a href="ud5-ml.html#7-ensembles-muchos-modelos-mejor-que-uno">UD5
+sección 7</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Gradient boosting</strong> (XGBoost, LightGBM)</td>
+<td>Árboles en serie, cada uno corrige los errores del anterior</td>
+<td>Tablas: suele ser el mejor</td>
+<td><code>HistGradientBoostingClassifier</code></td>
+<td><a href="ud5-ml.html#7-ensembles-muchos-modelos-mejor-que-uno">UD5
+sección 7</a></td>
+</tr>
+<tr class="even">
+<td><strong>SVM</strong></td>
+<td>La frontera con el mayor margen posible entre clases</td>
+<td>Datos medianos con muchas columnas</td>
+<td><code>SVC</code></td>
+<td><a href="ud5-ml.html#4-clasificación">UD5 sección 4</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Naive Bayes</strong></td>
+<td>Multiplica las probabilidades de cada característica por clase</td>
+<td>Texto (spam, temas): rápido y con pocos datos</td>
+<td><code>MultinomialNB</code></td>
+<td><a
+href="ud4-lenguaje.html#6-clasificar-textos-y-analizar-sentimientos">UD4
+sección 6</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="aprendizaje-no-supervisado">Aprendizaje no supervisado</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Algoritmo</th>
+<th>Idea en una frase</th>
+<th>Cuándo usarlo</th>
+<th>scikit-learn</th>
+<th>En la web</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>k-means</strong></td>
+<td>k centros; cada punto al más cercano; los centros se mueven a la
+media</td>
+<td>Grupos redondos de tamaño parecido</td>
+<td><code>KMeans</code></td>
+<td><a href="#k-means">Ficha</a>, <a
+href="ud5-ml.html#8-aprendizaje-no-supervisado-agrupar-y-reducir">UD5
+sección 8</a></td>
+</tr>
+<tr class="even">
+<td><strong>DBSCAN</strong></td>
+<td>Grupos = zonas densas; lo aislado es ruido</td>
+<td>Formas raras, sin saber cuántos grupos</td>
+<td><code>DBSCAN</code></td>
+<td><a
+href="ud5-ml.html#más-allá-de-k-means-elegir-k-otras-formas-y-anomalías">UD5
+sección 8</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Jerárquico</strong></td>
+<td>Une poco a poco los grupos más cercanos (dendrograma)</td>
+<td>Ver grupos dentro de grupos</td>
+<td><code>AgglomerativeClustering</code></td>
+<td><a
+href="ud5-ml.html#más-allá-de-k-means-elegir-k-otras-formas-y-anomalías">UD5
+sección 8</a></td>
+</tr>
+<tr class="even">
+<td><strong>Mezcla de gaussianas</strong></td>
+<td>Grupos con probabilidad, no con etiqueta fija</td>
+<td>Puntos que están entre dos grupos</td>
+<td><code>GaussianMixture</code></td>
+<td><a
+href="ud5-ml.html#más-allá-de-k-means-elegir-k-otras-formas-y-anomalías">UD5
+sección 8</a></td>
+</tr>
+<tr class="odd">
+<td><strong>PCA</strong></td>
+<td>Resume muchas columnas en pocas que conservan la variación</td>
+<td>Dibujar en 2D, comprimir, quitar redundancia</td>
+<td><code>PCA</code></td>
+<td><a
+href="ud5-ml.html#8-aprendizaje-no-supervisado-agrupar-y-reducir">UD5
+sección 8</a></td>
+</tr>
+<tr class="even">
+<td><strong>t-SNE, UMAP</strong></td>
+<td>Dibujo en 2D que respeta los vecinos cercanos</td>
+<td>Solo para <strong>mirar</strong> grupos</td>
+<td><code>TSNE</code></td>
+<td><a
+href="ud5-ml.html#más-allá-de-k-means-elegir-k-otras-formas-y-anomalías">UD5
+sección 8</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Isolation Forest, LOF</strong></td>
+<td>Los puntos raros se aíslan con pocos cortes / tienen pocos
+vecinos</td>
+<td>Detectar anomalías (fraude, averías, errores)</td>
+<td><code>IsolationForest</code>, <code>LocalOutlierFactor</code></td>
+<td><a
+href="ud5-ml.html#más-allá-de-k-means-elegir-k-otras-formas-y-anomalías">UD5
+sección 8</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="redes-neuronales-lenguaje-y-visión">Redes neuronales, lenguaje y
+visión</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Algoritmo</th>
+<th>Idea en una frase</th>
+<th>Cuándo usarlo</th>
+<th>Python</th>
+<th>En la web</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Perceptrón</strong></td>
+<td>Suma ponderada + umbral: separa con una recta</td>
+<td>Historia y base de todo lo demás; no resuelve la XOR</td>
+<td>NumPy</td>
+<td><a href="ud5-ml.html#9-redes-neuronales">UD5 sección 9</a>, <a
+href="teoria.html#147-redes-neuronales-desde-cero">14.7</a></td>
+</tr>
+<tr class="even">
+<td><strong>Red densa</strong> (MLP)</td>
+<td>Capas de neuronas con activación no lineal, entrenadas con
+retropropagación</td>
+<td>Patrones complejos; tablas grandes</td>
+<td><code>MLPClassifier</code>, Keras, PyTorch</td>
+<td><a href="teoria.html#147-redes-neuronales-desde-cero">14.7</a></td>
+</tr>
+<tr class="odd">
+<td><strong>CNN</strong> (convolucional)</td>
+<td>Filtros que recorren la imagen buscando bordes y formas</td>
+<td>Imágenes</td>
+<td>Keras, PyTorch</td>
+<td><a href="ud3-vision.html#5-clasificar-imágenes">UD3 sección
+5</a></td>
+</tr>
+<tr class="even">
+<td><strong>YOLO</strong></td>
+<td>Detecta y sitúa varios objetos de una pasada</td>
+<td>Detectar objetos en tiempo real</td>
+<td><code>ultralytics</code></td>
+<td><a
+href="ud3-vision.html#6-detectar-y-segmentar-objetos-con-yolo">UD3
+sección 6</a></td>
+</tr>
+<tr class="odd">
+<td><strong>RNN, LSTM, GRU</strong></td>
+<td>Redes con memoria del paso anterior</td>
+<td>Secuencias (texto, series temporales)</td>
+<td>Keras, PyTorch</td>
+<td><a
+href="ud4-lenguaje.html#108-redes-para-secuencias-rnn-lstm-gru-y-atención">UD4
+10.8</a></td>
+</tr>
+<tr class="even">
+<td><strong>Transformer</strong> (atención)</td>
+<td>Cada palabra «mira» a todas las demás</td>
+<td>Lenguaje (LLM), también imágenes</td>
+<td>Hugging Face</td>
+<td><a href="ud4-lenguaje.html#1010-el-transformer-por-dentro">UD4
+10.9–10.10</a></td>
+</tr>
+<tr class="odd">
+<td><strong>n-gramas</strong></td>
+<td>Probabilidad de una palabra según las anteriores</td>
+<td>Modelos de lenguaje sencillos, autocompletar</td>
+<td>Python puro</td>
+<td><a href="ud4-lenguaje.html#103-n-gramas">UD4 10.3–10.5</a></td>
+</tr>
+<tr class="even">
+<td><strong>TF-IDF</strong></td>
+<td>Peso de cada palabra: frecuente en el texto, rara en el resto</td>
+<td>Convertir texto en números; buscar documentos</td>
+<td><code>TfidfVectorizer</code></td>
+<td><a href="ud4-lenguaje.html#4-del-texto-al-vector">UD4 sección
+4</a></td>
+</tr>
+<tr class="odd">
+<td><strong>word2vec</strong></td>
+<td>Cada palabra, un vector; palabras parecidas, vectores cercanos</td>
+<td>Similitud de significado</td>
+<td><code>gensim</code></td>
+<td><a href="ud4-lenguaje.html#104-embeddings-de-palabras-word2vec">UD4
+10.4</a></td>
+</tr>
+<tr class="even">
+<td><strong>Convolución, umbral, bordes</strong></td>
+<td>Operaciones sobre los píxeles</td>
+<td>Procesar imágenes antes de aprender</td>
+<td>OpenCV, NumPy</td>
+<td><a href="ud3-vision.html#3-filtros-y-convolución">UD3 secciones
+2–4</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="aprendizaje-por-refuerzo">Aprendizaje por refuerzo</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Algoritmo</th>
+<th>Idea en una frase</th>
+<th>Cuándo usarlo</th>
+<th>Python</th>
+<th>En la web</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Q-learning</strong></td>
+<td>Una tabla con lo que vale cada acción en cada situación, que se
+corrige con cada premio</td>
+<td>Juegos y robots sencillos con pocos estados</td>
+<td>NumPy</td>
+<td><a href="#q-learning-aprender-probando">Ficha</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="fichas">Fichas</h2>
+<h3 id="regresión-lineal">Regresión lineal</h3>
+<p><strong>Tipo:</strong> supervisado, regresión.
+<strong>Pregunta:</strong> ¿cuánto? (un número).</p>
+<p><strong>Idea.</strong> Busca la recta ŷ = m·x + b (con varias
+columnas, ŷ = b + m₁x₁ + m₂x₂ + ...) que hace <strong>mínima la suma de
+los errores al cuadrado</strong> (mínimos cuadrados). <code>m</code> es
+la <strong>pendiente</strong>: cuánto cambia ŷ por cada unidad de x.
+<code>b</code> es la <strong>ordenada en el origen</strong>: el valor
+cuando x = 0, que muchas veces no tiene sentido real (una casa de 0
+m²).</p>
+<p><strong>Con el ejemplo del carrusel</strong> (datos inventados de
+precios de casas):</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>m2 <span class="op">=</span> np.array([[<span class="dv">50</span>], [<span class="dv">100</span>], [<span class="dv">150</span>], [<span class="dv">200</span>]])</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>prezo <span class="op">=</span> np.array([<span class="dv">90_000</span>, <span class="dv">150_000</span>, <span class="dv">210_000</span>, <span class="dv">280_000</span>])</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> LinearRegression().fit(m2, prezo)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(reg.coef_[<span class="dv">0</span>], <span class="dv">1</span>), <span class="bu">round</span>(reg.intercept_, <span class="dv">1</span>))   <span class="co"># 1260.0 25000.0</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(reg.predict([[<span class="dv">120</span>]]))                    <span class="co"># [176200.]</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(reg.score(m2, prezo), <span class="dv">4</span>))          <span class="co"># 0.9985  (R²)</span></span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>Recta</th>
+<th>50 m²</th>
+<th>100 m²</th>
+<th>150 m²</th>
+<th>200 m²</th>
+<th>Error medio (MAE)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Datos reales</td>
+<td>90 000</td>
+<td>150 000</td>
+<td>210 000</td>
+<td>280 000</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>La del carrusel: 1000·x + 40 000</td>
+<td>90 000</td>
+<td>140 000</td>
+<td>190 000</td>
+<td>240 000</td>
+<td>17 500</td>
+</tr>
+<tr class="odd">
+<td>Mínimos cuadrados: 1260·x + 25 000</td>
+<td>88 000</td>
+<td>151 000</td>
+<td>214 000</td>
+<td>277 000</td>
+<td><strong>2 500</strong></td>
+</tr>
+</tbody>
+</table>
+<p>La recta del carrusel solo acierta el primer punto: no es «la mejor
+recta», y con ella la casa de 120 m² costaría 160 000 en lugar de unos
+176 200. La pendiente y la ordenada se pueden calcular a mano: m = Σ(x −
+x̄)(y − ȳ) / Σ(x − x̄)², y b = ȳ − m·x̄ (<a
+href="#ejercicio-a1--la-recta-del-carrusel-a-mano-">ejercicio
+A1</a>).</p>
+<p><strong>Ojo:</strong> solo vale dentro del rango de los datos
+(extrapolar a 1000 m² es adivinar); un valor extremo tuerce mucho la
+recta; y que dos cosas vayan juntas no significa que una cause la otra.
+Con muchas columnas: Ridge o Lasso.</p>
+<h3 id="k-vecinos-knn">k vecinos (KNN)</h3>
+<p><strong>Tipo:</strong> supervisado, clasificación y regresión.
+<strong>Pregunta:</strong> ¿a qué se parece más?</p>
+<p><strong>Idea.</strong> No «aprende» nada al entrenar: guarda los
+ejemplos. Para un dato nuevo, calcula la <strong>distancia</strong> a
+todos (normalmente la euclídea, √((x₁−y₁)² + (x₂−y₂)² + ...)), toma los
+k más cercanos y <strong>vota</strong> la clase más frecuente
+(clasificación) o <strong>promedia</strong> sus valores (regresión).</p>
+<p><strong>El error más frecuente: no escalar.</strong> La distancia
+suma diferencias de cada columna; si una va de 0 a 10 000 y otra de 0 a
+10, la grande decide todo. Con datos inventados (aprobar según las horas
+de estudio y una columna de número de identificación, que no tiene nada
+que ver):</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>horas <span class="op">=</span> rng.uniform(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">200</span>)                 <span class="co"># 0 a 10</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>ident <span class="op">=</span> rng.uniform(<span class="dv">0</span>, <span class="dv">10_000</span>, <span class="dv">200</span>)             <span class="co"># 0 a 10 000 (no influye)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>aproba <span class="op">=</span> (horas <span class="op">+</span> rng.normal(<span class="dv">0</span>, <span class="fl">1.5</span>, <span class="dv">200</span>) <span class="op">&gt;</span> <span class="dv">5</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack([horas, ident])</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cross_val_score(KNeighborsClassifier(<span class="dv">5</span>), X, aproba, cv<span class="op">=</span><span class="dv">5</span>).mean())          <span class="co"># 0.485: ¡como el azar!</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cross_val_score(make_pipeline(StandardScaler(), KNeighborsClassifier(<span class="dv">5</span>)),</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                      X, aproba, cv<span class="op">=</span><span class="dv">5</span>).mean())                                   <span class="co"># 0.885</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cross_val_score(KNeighborsClassifier(<span class="dv">5</span>), X[:, :<span class="dv">1</span>], aproba, cv<span class="op">=</span><span class="dv">5</span>).mean())   <span class="co"># 0.85 solo con las horas</span></span></code></pre></div>
+<p>Sin escalar, el modelo mide distancias casi solo con el número de
+identificación, que no tiene nada que ver: acierta como lanzar una
+moneda. Escalar lo arregla; quitar la columna inútil, también.</p>
+<p><strong>Elegir k:</strong> con k = 1 copia el ruido (sobreajuste);
+con k muy grande, todo se parece (subajuste). Se elige con validación
+cruzada (<a href="ud5-ml.html#ejercicio-61--curva-de-k-vecinos-">UD5
+ejercicio 6.1</a>); en clasificación binaria, mejor impar para evitar
+empates. <strong>Otros inconvenientes:</strong> predecir es lento con
+muchos datos (compara con todos) y con muchas columnas las distancias
+dejan de distinguir (la «maldición de la dimensionalidad»).</p>
+<h3 id="k-means">k-means</h3>
+<p><strong>Tipo:</strong> no supervisado, agrupamiento.
+<strong>Pregunta:</strong> ¿qué grupos hay?</p>
+<p><strong>Idea.</strong> 1) Se elige k. 2) Se colocan k centros. 3)
+Cada punto va al centro más cercano. 4) Cada centro se mueve a la media
+de sus puntos. 5) Se repiten 3 y 4 hasta que los centros casi no se
+mueven.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> StandardScaler().fit_transform(load_iris().data)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>km <span class="op">=</span> KMeans(n_clusters<span class="op">=</span><span class="dv">3</span>, n_init<span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>).fit(X)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(km.cluster_centers_.shape, <span class="bu">round</span>(km.inertia_, <span class="dv">1</span>))     <span class="co"># (3, 4) 139.8</span></span></code></pre></div>
+<p><strong>Ojo:</strong></p>
+<ul>
+<li><strong>k lo decides tú:</strong> con el codo de la inercia o la
+silueta (<a
+href="ud5-ml.html#más-allá-de-k-means-elegir-k-otras-formas-y-anomalías">UD5
+sección 8</a>), y pensando en el problema.</li>
+<li><strong>El comienzo importa:</strong> con centros al azar, cada
+ejecución puede dar grupos distintos. scikit-learn coloca los centros
+iniciales con <strong>k-means++</strong> (separados entre sí) y repite
+<code>n_init</code> veces quedándose con el mejor resultado.</li>
+<li><strong>Escalar antes</strong>, por la misma razón que en KNN.</li>
+<li><strong>Solo encuentra grupos redondos</strong> y de tamaño
+parecido: con formas alargadas o medias lunas, DBSCAN o el
+jerárquico.</li>
+<li>Los números de grupo (0, 1, 2) no significan nada: hay que
+interpretar cada grupo mirando sus datos.</li>
+</ul>
+<h3 id="a-búsqueda-informada">A*: búsqueda informada</h3>
+<p><strong>Tipo:</strong> búsqueda. <strong>Pregunta:</strong> ¿cuál es
+el camino más corto?</p>
+<p><strong>Idea.</strong> Expande primero el estado con menor f = g + h,
+donde <strong>g</strong> es lo que ya ha costado llegar y
+<strong>h</strong> una <strong>heurística</strong>: una estimación de lo
+que falta. Si h nunca sobreestima (por ejemplo, la distancia en línea
+recta, o la distancia Manhattan en una cuadrícula), A* encuentra siempre
+el camino más corto, y explora menos que una búsqueda a ciegas.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> heapq</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> deque</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>MAPA <span class="op">=</span> [<span class="st">&quot;S....#....&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;.###.#.##.&quot;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;...#...#..&quot;</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;.#.#####.#&quot;</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;.#.......G&quot;</span>]                     <span class="co"># S: salida · G: meta · #: pared</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> vecinos(p):</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    f, c <span class="op">=</span> p</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> df, dc <span class="kw">in</span> [(<span class="dv">1</span>, <span class="dv">0</span>), (<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>), (<span class="dv">0</span>, <span class="dv">1</span>), (<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>)]:</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        nf, nc <span class="op">=</span> f <span class="op">+</span> df, c <span class="op">+</span> dc</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="dv">0</span> <span class="op">&lt;=</span> nf <span class="op">&lt;</span> <span class="bu">len</span>(MAPA) <span class="kw">and</span> <span class="dv">0</span> <span class="op">&lt;=</span> nc <span class="op">&lt;</span> <span class="bu">len</span>(MAPA[<span class="dv">0</span>]) <span class="kw">and</span> MAPA[nf][nc] <span class="op">!=</span> <span class="st">&quot;#&quot;</span>:</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> (nf, nc)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> a_estrela(inicio, meta):</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> <span class="kw">lambda</span> p: <span class="bu">abs</span>(p[<span class="dv">0</span>] <span class="op">-</span> meta[<span class="dv">0</span>]) <span class="op">+</span> <span class="bu">abs</span>(p[<span class="dv">1</span>] <span class="op">-</span> meta[<span class="dv">1</span>])     <span class="co"># distancia Manhattan</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    abertos <span class="op">=</span> [(h(inicio), <span class="dv">0</span>, inicio)]                           <span class="co"># (f, g, estado)</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    custo, vindo_de, expandidos <span class="op">=</span> {inicio: <span class="dv">0</span>}, {inicio: <span class="va">None</span>}, <span class="dv">0</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> abertos:</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        _, g, actual <span class="op">=</span> heapq.heappop(abertos)                    <span class="co"># el de menor f</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> g <span class="op">&gt;</span> custo[actual]:</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span>                                             <span class="co"># entrada antigua: ya hay un camino mejor</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        expandidos <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> actual <span class="op">==</span> meta:</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> v <span class="kw">in</span> vecinos(actual):</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> g <span class="op">+</span> <span class="dv">1</span> <span class="op">&lt;</span> custo.get(v, <span class="bu">float</span>(<span class="st">&quot;inf&quot;</span>)):</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>                custo[v], vindo_de[v] <span class="op">=</span> g <span class="op">+</span> <span class="dv">1</span>, actual</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>                heapq.heappush(abertos, (g <span class="op">+</span> <span class="dv">1</span> <span class="op">+</span> h(v), g <span class="op">+</span> <span class="dv">1</span>, v))</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> vindo_de, expandidos</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>vindo_de, expandidos <span class="op">=</span> a_estrela((<span class="dv">0</span>, <span class="dv">0</span>), (<span class="dv">4</span>, <span class="dv">9</span>))</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(expandidos)        <span class="co"># 24 estados expandidos para un camino de 13 pasos</span></span></code></pre></div>
+<p>En el mismo mapa, la búsqueda en anchura (BFS) encuentra el mismo
+camino de 13 pasos expandiendo 29 estados; en mapas grandes la
+diferencia es enorme. Con h = 0, A* es exactamente Dijkstra.</p>
+<h3 id="q-learning-aprender-probando">Q-learning: aprender probando</h3>
+<p><strong>Tipo:</strong> aprendizaje por refuerzo.
+<strong>Pregunta:</strong> ¿qué hago en cada situación para conseguir
+más premio a la larga?</p>
+<p><strong>Idea.</strong> El agente guarda una tabla <strong>Q[estado,
+acción]</strong> con lo que espera ganar. Al principio está a cero. Cada
+vez que actúa y recibe un premio <code>r</code>, la corrige un poco: Q ←
+Q + α·(r + γ·máx Q(siguiente) − Q). <code>α</code> es lo rápido que
+aprende y <code>γ</code> cuánto le importa el futuro. Para no quedarse
+siempre con lo primero que funcionó, a veces <strong>explora</strong> al
+azar (probabilidad ε).</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Pasillo de 6 casillas: empieza en la 0; la 5 es la salida (+10); cada paso cuesta −1.</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>N, ACCIONS <span class="op">=</span> <span class="dv">6</span>, [<span class="op">-</span><span class="dv">1</span>, <span class="op">+</span><span class="dv">1</span>]                        <span class="co"># izquierda, derecha</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>Q <span class="op">=</span> np.zeros((N, <span class="dv">2</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>alfa, gamma, epsilon <span class="op">=</span> <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.2</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> episodio <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">200</span>):</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> s <span class="op">!=</span> N <span class="op">-</span> <span class="dv">1</span>:</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        a <span class="op">=</span> rng.integers(<span class="dv">2</span>) <span class="cf">if</span> rng.random() <span class="op">&lt;</span> epsilon <span class="cf">else</span> <span class="bu">int</span>(Q[s].argmax())   <span class="co"># explorar o aprovechar</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        s2 <span class="op">=</span> <span class="bu">min</span>(<span class="bu">max</span>(s <span class="op">+</span> ACCIONS[a], <span class="dv">0</span>), N <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        r <span class="op">=</span> <span class="dv">10</span> <span class="cf">if</span> s2 <span class="op">==</span> N <span class="op">-</span> <span class="dv">1</span> <span class="cf">else</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        Q[s, a] <span class="op">+=</span> alfa <span class="op">*</span> (r <span class="op">+</span> gamma <span class="op">*</span> Q[s2].<span class="bu">max</span>() <span class="op">*</span> (s2 <span class="op">!=</span> N <span class="op">-</span> <span class="dv">1</span>) <span class="op">-</span> Q[s, a])</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        s <span class="op">=</span> s2</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([<span class="st">&quot;←→&quot;</span>[a] <span class="cf">for</span> a <span class="kw">in</span> Q[:<span class="op">-</span><span class="dv">1</span>].argmax(axis<span class="op">=</span><span class="dv">1</span>)])    <span class="co"># [&#39;→&#39;, &#39;→&#39;, &#39;→&#39;, &#39;→&#39;, &#39;→&#39;]</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(Q[<span class="dv">3</span>:<span class="dv">5</span>].<span class="bu">round</span>(<span class="dv">2</span>))                              <span class="co"># [[4.58 8.] [6.2 10.]]</span></span></code></pre></div>
+<p>Nadie le dijo que fuera a la derecha: lo descubre por los premios. En
+la casilla 4, ir a la derecha vale 10 (la salida); en la 3, −1 + 0,9 ·
+10 = 8. Así aprendieron a jugar AlphaGo o los agentes de videojuegos,
+con redes neuronales en lugar de tablas cuando hay demasiados
+estados.</p>
+<h2 id="cómo-elegir-un-algoritmo">Cómo elegir un algoritmo</h2>
+<pre><code>¿Hay que encontrar una secuencia de pasos o una configuración?
+  ├─ Sí → búsqueda (BFS, A*, minimax) u optimización (gradiente, ascenso de colinas, genéticos)
+  └─ No, hay DATOS →
+       ¿Tienen la respuesta (etiqueta)?
+         ├─ Sí → SUPERVISADO
+         │     ├─ número        → regresión lineal (base) → random forest / boosting
+         │     └─ clase         → regresión logística (base) → random forest / boosting
+         │                         texto → TF-IDF + Naive Bayes o logística · imágenes → CNN
+         │                         pocos datos y pocas columnas → KNN
+         └─ No → NO SUPERVISADO
+               ├─ grupos        → k-means (redondos) · DBSCAN (formas, ruido) · jerárquico
+               ├─ resumir/dibujar → PCA · t-SNE (solo mirar)
+               └─ casos raros   → Isolation Forest, LOF
+  ¿Aprende actuando, con premios? → REFUERZO (Q-learning)</code></pre>
+<p>Tres reglas que valen siempre: <strong>empezar por el modelo más
+sencillo</strong> y compararlo con una línea base (<a
+href="ud5-ml.html#línea-base-y-métricas-para-clases-desequilibradas">UD5</a>);
+<strong>evaluar con datos que el modelo no ha visto</strong>; y preferir
+el que se pueda <strong>explicar</strong> si el resultado afecta a
+personas.</p>
+<h2 id="ejercicios">Ejercicios</h2>
+<h3 id="ejercicio-a1--la-recta-del-carrusel-a-mano-">Ejercicio A1 · La
+recta del carrusel, a mano 🟢</h3>
+<p>El carrusel dibuja los puntos (1; 2,1), (2; 2,8), (3; 3,6), (4; 4,2)
+y (5; 5,1) con la recta β₀ = 1,2 y β₁ = 0,8, y para las casas propone y
+= 1000x + 40 000.</p>
+<ol type="1">
+<li>Calcula a mano (o con NumPy, sin <code>LinearRegression</code>) la
+recta de mínimos cuadrados de los cinco puntos con m = Σ(x − x̄)(y − ȳ) /
+Σ(x − x̄)² y b = ȳ − m·x̄.</li>
+<li>Compara el error cuadrático medio de la recta del carrusel y el de
+la tuya.</li>
+<li>Haz lo mismo con las casas y calcula el precio de una de 120 m² con
+cada recta.</li>
+</ol>
+<div class="sol-lock" data-label="Solución" data-iv="n2oScO5WclyU+QHz" data-ct="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"></div>
+
+<h3 id="ejercicio-a2--knn-con-y-sin-escalar-">Ejercicio A2 · KNN con y
+sin escalar 🟡</h3>
+<p>Con los datos del ejemplo de la ficha de KNN (horas de estudio y una
+columna de identificación sin sentido):</p>
+<ol type="1">
+<li>Calcula la exactitud con validación cruzada para k = 1, 5, 15 y 51,
+sin escalar y escalando.</li>
+<li>¿Qué pasa si en lugar de escalar quitas la columna de
+identificación?</li>
+<li>Explica por qué un árbol de decisión <strong>no</strong> necesita
+escalar.</li>
+</ol>
+<div class="sol-lock" data-label="Solución" data-iv="6jzocvnHCHh73J7/" data-ct="TNteAFkYOlOTUPta80I7oHJw05K4LCEWVxEGohz7SqEzBPJLQ5RfTYE0+EWRtJGh4oA7LH9Oa49W83JislT0ZHBPvIipjH7kZycUWleYUxDVudYJA5ocuCNzb8iAi4UvOANup0tgGzl/jyzoW6GJX6/MphJ9Zg+8+vPYXChtswikRI1V78WP4ghViDpzuhbdzny+vIlLOdPrv8QHbENXyVkULFX5NIZA5qnOiBYgOlgnq8DIxthug+CKWW+jxMzMJnqYoL9jqZ6HkVocr5p1zZcpb/QhkAJYcMxnx1MrGaiHOzjBlGrODf9nafX60ZlL0Bg1W+c+oa50/JbJmSO5EIJBOJarUETQMphXIzpeemtC+nqy46wHo9h8dtSDGPM9zKKHdzaMU7g8S53uY0/54bS34RKm1qf89qpcCUidF0KKaMNzqmWgtbf3TGsDhivOj1rHzvkePTQyGccggBWX2ClgmmPS2u0PyI0N17FN4j7kNna/naFs0ecSAmGyKIs2kmfLo4CRv7wdwhhRQ8tE8wTFh+OQ1R2tWOXfDGX5PUjekn5EOSMxplRgW57vyrgmUQY2Ic+ytkBWSjAUwUW0qpyFpWCyFQHd2Sp6F337d9sphkSAmaY7NUhhSDNZQCjxFHGqRamNpWXfRo8KU8rcbNA8QNFbo2DXQaqA3HZGkeKUL5fZq4PLcz9GI0BXenmmDkaxiUUhrtNV3e0Bhcn6/ks3V0YTxX10H0VXa/ZnuUBVbZHOn883+yTy5bdZvTKJuh/9B0rVcvDxV337LrY2LDJXOR3N3xCKhGe2FemUxQ8rX2G91kObosjqUGvm797BN1E8SbEjce4y14NR0dVS2swABaXyL7a79iHi+XzS7+As1T04MTM67SzI25IxCDe4sEzSXF7hATL1t8ttfcBUVnKV80juLf/sWahjhhLqM3QGhfvcT84/VF8UouHtUttQHsP95pB2F6ygWTbi1LApH/gjPf5qE2C4gBrjegcbL+GsH5q1IwtTqizDDdLH7BAO5dyBYNkpp9WYfduQnUEX/Dbp3b6WPxjjZ2w66EWKEca0loT3OnrGmQUnujN9xbkhuNIndH9XUS49RrrYSqZtDZsSA77v+k5jo6elWlOd201PsWi+zzg5Wi43E1EHRJQnsuVBJ+rjoeHnGlZhsYo9hMjJ/pZMONCojRklPO/GH6D7T8I6xI080otdS9QJ2vTK66ZLn9ksNvU4bSZ9f1Tg8LuPKYoL4iCLZkq/O5nAhtXOr4y6j81x8+WBkNbk3S2VtkWOJHZFK3LA263AnXtUuVQRURoKYlcl88LPoXJpRt+3jkpM6w6BzEPRb8dFYu6FfuF8915aSmaB1R9gPn9RMhyg7CoRSnQZQKh23P19Du4YGz0osyXyzEScR72zbm8hCKJPpvo4EaCZdBccpOyWzkslaTfu/hGaCHjFlIOsdKAlK/drQPPuVhhUyAz4MLLG8Xwxtmm1sQyLhIs8Dpdb/kCEO6XeB77iyx6Ba07Wt2A2wG97pHqOxQgjB4e4mkC2nSgBwIJsHMzvZ+uMvhItMGHyKYhlZf/q6sgR48kWBe/UhSSTMlzS6tLvj3r+Vfz8rnvzo+wpp8ll97NTLYcIJp2KQjdvS6W6hbodRaDY2r5asF3MLpzEMNlkmQ/cMFngYAeWx01DKOEH2LX/LRmU4FOx5bvqpjs9uBCOhjt+as24gyZGTRX0jsGdJxH2k0GXbQkcAZ4QY31ah4R0UttTSk94SCzzT9QZa6kOXfx1bJANZVhWo3SJ/gDT9rYc2aBOKEQSncn05blPlBYBzpI="></div>
+
+<h3 id="ejercicio-a3--qué-algoritmo-usarías-">Ejercicio A3 · ¿Qué
+algoritmo usarías? 🟢</h3>
+<p>Para cada problema, indica la familia y un algoritmo razonable, y por
+qué:</p>
+<ol type="1">
+<li>Repartir 300 libros de la biblioteca en grupos de temas parecidos
+sin tener categorías.</li>
+<li>Predecir los minutos de retraso del autobús de Marín según la hora,
+el día y la lluvia.</li>
+<li>Decidir si un correo del instituto es spam, con 2000 correos ya
+etiquetados.</li>
+<li>Encontrar la ruta más corta entre dos aulas en el plano del
+centro.</li>
+<li>Detectar lecturas extrañas en el contador de luz del centro.</li>
+<li>Que un robot aspirador aprenda qué zonas limpiar primero según dónde
+encuentra más suciedad.</li>
+<li>Clasificar fotos de hojas por especie de árbol, con 5000 fotos
+etiquetadas.</li>
+<li>Elegir el horario de exámenes que minimiza los choques entre
+asignaturas.</li>
+</ol>
+<div class="sol-lock" data-label="Solución" data-iv="NTW177dPTMc6woKe" data-ct="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"></div>
+
+<h2 id="revisión-crítica-del-carrusel">Revisión crítica del
+carrusel</h2>
+<p>El carrusel de @todo_code explica bien la idea de los tres algoritmos
+y acierta al decir que KNN y regresión lineal son supervisados y k-means
+no supervisado. Lo que conviene corregir o completar:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Lámina</th>
+<th>Dice</th>
+<th>Matiz</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Recta β₀ = 1,2, β₁ = 0,8 para la tabla (1; 2,1) ... (5; 5,1)</td>
+<td>La de mínimos cuadrados es 1,34 + 0,74x (ejercicio A1)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>«Con estos datos, el modelo encuentra la mejor recta... podría ser y
+= 1000x + 40 000»</td>
+<td>No es la mejor: la de mínimos cuadrados es 1260x + 25 000. Con la
+suya, error medio de 17 500 en lugar de 2 500</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><em>b</em> = «valor cuando x = 0»</td>
+<td>Correcto, pero una casa de 0 m² no existe: la ordenada no siempre
+tiene sentido real</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>KNN con distancia euclídea</td>
+<td>Falta lo más importante: <strong>escalar</strong> las columnas, o el
+resultado puede ser como el azar (ficha de KNN)</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Python: «KNeighbors, módulo de scikit-learn»</td>
+<td>Las clases son <code>KNeighborsClassifier</code> y
+<code>KNeighborsRegressor</code>, del módulo
+<code>sklearn.neighbors</code></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>«Se inicializan k centroides de forma aleatoria»</td>
+<td>scikit-learn usa <strong>k-means++</strong> y repite varias veces
+(<code>n_init</code>); con un solo comienzo al azar los grupos pueden
+cambiar en cada ejecución</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Pasos de k-means</td>
+<td>Falta cómo elegir k y que solo encuentra grupos
+<strong>redondos</strong></td>
+</tr>
+<tr class="even">
+<td>2–4</td>
+<td>Librerías de Java (Weka, Smile)</td>
+<td>Existen, pero en el curso se usa Python; la última lámina es
+publicidad de un curso de pago</td>
+</tr>
+</tbody>
+</table>
+  </article>
+</main>
+<footer class="site"><div class="in">
+  <span>IA · Apuntes · Tecnoloxías Intelixentes · 1.º Bacharelato</span>
+  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0)</span>
+</div></footer>
+<a class="up" href="#">↑ Arriba</a>
+<script>
+(function () {
+  document.querySelectorAll("article.content table").forEach(function (t) {
+    var w = document.createElement("div"); w.className = "table-wrap";
+    t.parentNode.insertBefore(w, t); w.appendChild(t);
+  });
+  var root = document.documentElement, header = document.querySelector(".top");
+  var nav = header && header.querySelector("nav"), here = nav && nav.querySelector("[aria-current]");
+  if (here && nav.scrollWidth > nav.clientWidth) nav.scrollLeft += here.getBoundingClientRect().left - nav.getBoundingClientRect().left - 6;
+  var toc = document.getElementById("TOC"), side = document.querySelector(".toc-side");
+  if (!toc || !side) return;
+  var btn = side.querySelector(".toc-toggle"), cur = side.querySelector(".toc-cur"),
+      back = side.querySelector(".toc-backdrop"), closeBtn = toc.querySelector(".toc-close");
+  var movil = window.matchMedia("(max-width: 900px)");
+  toc.querySelectorAll(":scope > ul > li > ul > li").forEach(function (li) {
+    var sub = li.querySelector(":scope > ul"), a = li.querySelector(":scope > a");
+    if (!sub || !a) return;
+    li.classList.add("has-sub");
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "toc-exp"; b.setAttribute("aria-expanded", "false");
+    b.setAttribute("aria-label", "Mostrar u ocultar los apartados de " + a.textContent.trim());
+    b.addEventListener("click", function () {
+      var abierto = li.classList.contains("open") || li.classList.contains("exp");
+      li.classList.toggle("exp", !abierto); li.classList.toggle("cerrado", abierto);
+      b.setAttribute("aria-expanded", String(!abierto));
+    });
+    li.insertBefore(b, sub);
+  });
+  var links = {}, heads = [];
+  toc.querySelectorAll("a[href^='#']").forEach(function (a) { links[decodeURIComponent(a.getAttribute("href").slice(1))] = a; });
+  document.querySelectorAll("article.content h1[id], article.content h2[id], article.content h3[id]").forEach(function (h) {
+    if (links[h.id]) heads.push(h);
+  });
+  function offset() {
+    var h = header ? header.offsetHeight : 0;
+    return movil.matches ? h + side.offsetHeight + 12 : h + 20;
+  }
+  function medir() {
+    root.style.setProperty("--top-h", (header ? header.offsetHeight : 0) + "px");
+    root.style.scrollPaddingTop = offset() + "px";
+  }
+  function verEnIndice(a) {
+    var t = toc.getBoundingClientRect(), r = a.getBoundingClientRect();
+    if (r.top < t.top + 40 || r.bottom > t.bottom - 20) toc.scrollTop += r.top - t.top - toc.clientHeight / 3;
+  }
+  var activo = null;
+  function marcar() {
+    var lim = offset() + 8, h = heads[0];
+    for (var i = 0; i < heads.length; i++) { if (heads[i].getBoundingClientRect().top <= lim) h = heads[i]; else break; }
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) h = heads[heads.length - 1];
+    if (!h || h === activo) return;
+    activo = h;
+    toc.querySelectorAll(".on, .on-parent").forEach(function (x) { x.classList.remove("on", "on-parent"); });
+    toc.querySelectorAll("li.open, li.cerrado").forEach(function (x) { x.classList.remove("open", "cerrado"); });
+    var a = links[h.id]; a.classList.add("on"); a.setAttribute("aria-current", "location");
+    toc.querySelectorAll("a[aria-current]").forEach(function (x) { if (x !== a) x.removeAttribute("aria-current"); });
+    var li = a.closest("li");
+    while (li && toc.contains(li)) {
+      li.classList.add("open");
+      var la = li.querySelector(":scope > a");
+      if (la && la !== a) la.classList.add("on-parent");
+      li = li.parentNode.closest("li");
+    }
+    toc.querySelectorAll(".toc-exp").forEach(function (b) {
+      var l = b.parentNode; b.setAttribute("aria-expanded", String(l.classList.contains("open") || l.classList.contains("exp")));
+    });
+    cur.textContent = a.textContent.trim();
+    verEnIndice(a);
+  }
+  function abrir() {
+    toc.classList.add("open"); back.hidden = false; document.body.classList.add("toc-open");
+    btn.setAttribute("aria-expanded", "true");
+    if (activo) verEnIndice(links[activo.id]);
+    closeBtn.focus({ preventScroll: true });
+  }
+  function cerrar(volver) {
+    if (!toc.classList.contains("open")) return;
+    toc.classList.remove("open"); back.hidden = true; document.body.classList.remove("toc-open");
+    btn.setAttribute("aria-expanded", "false");
+    if (volver) btn.focus({ preventScroll: true });
+  }
+  btn.addEventListener("click", function () { toc.classList.contains("open") ? cerrar(true) : abrir(); });
+  closeBtn.addEventListener("click", function () { cerrar(true); });
+  back.addEventListener("click", function () { cerrar(true); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrar(true); });
+  toc.addEventListener("click", function (e) { if (e.target.closest("a") && movil.matches) cerrar(false); });
+  var pend = false;
+  window.addEventListener("scroll", function () {
+    if (pend) return; pend = true;
+    requestAnimationFrame(function () { pend = false; marcar(); });
+  }, { passive: true });
+  window.addEventListener("resize", function () { medir(); activo = null; marcar(); });
+  (movil.addEventListener ? movil.addEventListener.bind(movil, "change") : movil.addListener.bind(movil))(function () { cerrar(false); medir(); });
+  medir(); marcar();
+  window.addEventListener("load", function () {
+    medir();
+    var id = decodeURIComponent(location.hash.slice(1)), t = id && document.getElementById(id);
+    if (t) t.scrollIntoView({ behavior: "instant", block: "start" });
+    activo = null; marcar();
+  });
+})();
+</script>
+<script>
+/* Soluciones cifradas (AES-GCM + PBKDF2). Sin la contraseña, el contenido no se puede leer. */
+(function () {
+  var art = document.querySelector("article.content[data-salt]");
+  if (!art) return;
+  var locks = art.querySelectorAll(".sol-lock");
+  if (!locks.length) return;
+  var KEY = "ia-apuntes-sol";
+  function b64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function derive(pass) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(art.dataset.salt), iterations: +art.dataset.iter, hash: "SHA-256" },
+        k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    });
+  }
+  function unlockAll(pass) {
+    return derive(pass).then(function (key) {
+      var first = locks[0];
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(first.dataset.iv) }, key, b64(first.dataset.ct)).then(function () {
+        var dec = new TextDecoder();
+        return Promise.all(Array.prototype.map.call(locks, function (el) {
+          return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(el.dataset.iv) }, key, b64(el.dataset.ct)).then(function (buf) {
+            var tmp = document.createElement("div"); tmp.innerHTML = dec.decode(buf);
+            var d = tmp.firstElementChild; el.replaceWith(d);
+            return d;
+          });
+        }));
+      });
+    }).then(function (opened) {
+      try { sessionStorage.setItem(KEY, pass); } catch (e) {}
+      return opened;
+    });
+  }
+  locks.forEach(function (el) {
+    var label = el.dataset.label || "Solución";
+    el.innerHTML =
+      '<button type="button" class="sol-btn"><span aria-hidden="true">🔒</span> ' + label + ' <small>· con contraseña</small></button>' +
+      '<form class="sol-form" hidden><label>Contraseña del profesorado <input type="password" autocomplete="off" required></label>' +
+      '<button type="submit">Abrir</button><span class="sol-msg" role="status"></span></form>';
+    var b = el.querySelector(".sol-btn"), f = el.querySelector(".sol-form"), msg = el.querySelector(".sol-msg");
+    b.addEventListener("click", function () { f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); });
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var pass = f.querySelector("input").value;
+      msg.textContent = "Comprobando…";
+      var idx = Array.prototype.indexOf.call(locks, el);
+      unlockAll(pass).then(function (opened) {
+        var mine = opened[idx]; if (mine) { mine.open = true; mine.scrollIntoView({ block: "nearest" }); }
+      }).catch(function () { msg.textContent = "Contraseña incorrecta."; });
+    });
+  });
+  var saved = null; try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlockAll(saved).catch(function () { try { sessionStorage.removeItem(KEY); } catch (e) {} });
+})();
+</script>
+</body>
+</html>

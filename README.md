@@ -17,6 +17,7 @@ Web de apuntes de **Inteligencia Artificial con Python** para *Tecnoloxías Inte
 | `apps.html` | Apps y juegos: diez proyectos de Python (P1–P10) y una revisión crítica (P11), con rúbrica y soluciones cifradas |
 | `chuletas.html` | Chuletas visuales (imágenes en `assets/chuletas/`) de Python, NumPy, Pandas, Polars, Matplotlib, scikit-learn, TensorFlow, PyTorch y Terraform (catorce en total, algunas en dos versiones), con notas «Ojo» |
 | `itinerario.html` | Itinerario «De Python a experto en IA» en seis etapas (fundamentos, ML y DL, LLM, agentes, evaluación, despliegue): qué aprender, dónde está en la web, qué falta, proyecto y evaluación de cada etapa, y rúbrica del portafolio |
+| `algoritmos.html` | Catálogo de algoritmos de IA por familias (búsqueda, optimización, supervisado, no supervisado, redes, lenguaje, visión, refuerzo) con enlaces a la web, fichas de regresión lineal, KNN, k-means, A* y Q-learning, guía para elegir y ejercicios A1–A3 |
 | `mapa.html` | Mapa visual: conceptos, 43 librerías filtrables, chuletas y autoevaluación |
 | `descargas/` | Teoría en `.odt` (editable) y en Markdown (fuente) |
 

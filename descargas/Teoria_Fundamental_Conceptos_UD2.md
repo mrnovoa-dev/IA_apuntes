@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E98 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E99 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -3709,6 +3709,17 @@ Son cuatro términos **relacionados pero no intercambiables**. Cada uno está co
 | **DL** | Redes neuronales de muchas capas; aprende patrones complejos | Reconocimiento facial, de voz, detección de objetos | UD3 y UD5 |
 | **GenAI** | Genera contenido nuevo a partir de lo aprendido | Chatbots (ChatGPT, Claude), generadores de imágenes, asistentes de código | UD4 |
 
+**Machine learning clásico frente a deep learning:**
+
+| Aspecto | ML clásico (árboles, regresión, SVM...) | Deep learning (redes profundas) |
+|---------|------------------------------------------|---------------------------------|
+| Características | Las elige y prepara una persona (ingeniería de características) | La red las aprende de los datos en bruto (píxeles, palabras); sigue haciendo falta limpiar y preparar los datos |
+| Datos | Funciona con cientos o miles de filas | Suele necesitar muchos más, salvo que se parta de un modelo preentrenado (*transfer learning*, UD3) |
+| Cálculo | Un portátil basta | A menudo GPU o TPU |
+| Interpretación | Más fácil (coeficientes, importancia de variables) | Más difícil: hacen falta técnicas de explicabilidad (UD5, sección 10) |
+| Dónde gana | **Tablas** (notas, ventas, sensores): el *gradient boosting* suele igualar o superar a una red | Imágenes, texto, audio, vídeo |
+| Ejemplos | Random forest, XGBoost, k vecinos | CNN, RNN y LSTM, Transformers |
+
 **Diferencia clave ML ↔ GenAI**: un modelo de ML clásico *clasifica o predice* ("¿este correo es spam?"). Un modelo generativo *crea* ("escribe un correo"). Una analogía de los materiales: el ML es "una persona con un cerebro muy potente para reconocer patrones"; la GenAI es "una persona creativa que, además, produce cosas nuevas".
 
 ---
@@ -4387,6 +4398,28 @@ Al principio interesa avanzar rápido y al final, afinar. Por eso se suele **cam
 | **Redes de grafos (GNN)** | Cada nodo actualiza su información con la de sus vecinos ([14.17](#1417-redes-y-grafos-con-networkx)) | Moléculas, redes sociales, recomendaciones, tráfico |
 
 Los ejercicios [E80–E82](ejercicios.html#bloque-o--redes-neuronales-desde-cero-e80e82) practican la XOR, la normalización y la depuración.
+
+#### Capa de salida y función de pérdida según el problema
+
+La última capa y la pérdida no se eligen por gusto: dependen de **qué** hay que predecir.
+
+| Problema | Ejemplo | Última capa | Pérdida (Keras) |
+|----------|---------|-------------|-----------------|
+| **Regresión** | Precio de un piso, nota final | 1 neurona, **sin activación** (lineal) | `"mse"` o `"mae"` (con atípicos) |
+| **Binaria** | ¿Spam o no? | 1 neurona con **sigmoide** | `"binary_crossentropy"` |
+| **Multiclase** (una sola clase correcta) | Dígito del 0 al 9 | *n* neuronas con **softmax** | `"categorical_crossentropy"` con etiquetas *one-hot*; `"sparse_categorical_crossentropy"` con números de clase |
+| **Multietiqueta** (varias a la vez) | Etiquetas de una foto: playa, personas, perro | *n* neuronas con **sigmoide** (una por etiqueta) | `"binary_crossentropy"` |
+
+El último caso no suele aparecer en los apuntes resumidos y es un error frecuente: con softmax, las probabilidades **suman 1** y compiten entre sí; con una sigmoide por etiqueta, cada una es independiente.
+
+```python
+import numpy as np
+logits = np.array([2.0, 0.5, -1.0])                        # playa, personas, perro
+print((1 / (1 + np.exp(-logits))).round(3))                # sigmoide: [0.881 0.622 0.269] → playa y personas
+print((np.exp(logits) / np.exp(logits).sum()).round(3))    # softmax:  [0.786 0.175 0.039] → «solo» playa
+```
+
+Una curiosidad que ayuda a entenderlo: una sigmoide con una neurona es **lo mismo** que una softmax con dos neuronas cuando la primera vale 0. Con z = 1,5, sigmoide(1,5) = 0,8176, y la softmax de [0; 1,5] da 0,8176 para la segunda clase. Por eso en binaria basta con una neurona.
 
 #### Arquitecturas: cuál se usa para qué
 
@@ -5686,6 +5719,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | Seis chuletas dibujadas a mano (Python, NumPy, Pandas, PyTorch, TensorFlow y Terraform; sin autor indicado), publicadas tal cual en [Chuletas](chuletas.html) | Decoradores; `linspace`, `eye`, unir, dividir y guardar arrays; dispositivo, *autograd*, `DataLoader`, evaluación y `state_dict` en PyTorch; `tf.data`, TensorBoard y exportar en Keras; infraestructura como código | 7.1, 12.2, 13.8, 14.7, 14.14 y ejercicios E87–E90 |
 | *200 Machine Learning Commands* (41 págs., sin autor indicado), procesado con MarkItDown | Línea base (`DummyClassifier`), exactitud equilibrada, MCC, curva precisión-exhaustividad, *log loss*, MAPE; curvas de validación y aprendizaje, `cross_validate`, estrategias de partición; silueta, DBSCAN, jerárquico, `GaussianMixture`, anomalías; `RobustScaler`, asimetría, `TargetEncoder`; variables de fecha, retrasos y medias móviles | [UD5](ud5-ml.html), secciones 2, 3, 5, 6, 7 y 8, y ejercicios E91–E94 |
 | *Python Important Questions* (@abhi_techhub, 15 págs., sin capa de texto: Tesseract + MarkItDown) | Preguntas tipo entrevista: compilación a *bytecode*, memoria y recolector de basura, `is` frente a `==`, gestores de contexto, excepciones propias, MRO, trampas clásicas, programas típicos | 4.4, 14.14, 14.18 y ejercicios E95–E98 |
+| Carrusel *Deep Learning Notes* (@ds_ai_ketan, 5 láminas generadas con IA) | ML frente a DL; capa de salida y pérdida según el problema; revisión crítica (multietiqueta, normalización por lotes, validación) | 14.1, 14.7 y ejercicio E99 |
 | *Introduction to Data Science Using Python* (A. Agah, OER, licencia CC BY-NC 4.0) | Estadística descriptiva e inferencial, estandarizar, regresión, grafos y NetworkX; errores usados en E79 | 6.5–6.9, 14.17, ejercicios E75–E79 |
 | *Neural Networks – Complete Study Guide* (codingwithmee_18, 49 págs.) | XOR con capa oculta, red desde cero en NumPy, normalización, calendarios de η, depuración, otras arquitecturas | 14.7 y ejercicios E80–E82 |
 

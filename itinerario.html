@@ -21,7 +21,7 @@ proyecto de cada etapa y cómo evaluarlo.">
     <a href="asignatura.html" title="Programación, criterios y evaluación">Asignatura</a>
     <a href="ud1.html" title="Conceptos clave de la IA">UD1</a>
     <a href="teoria.html" title="Teoría de todo el curso, con la unidad de cada sección">Teoría</a>
-    <a href="ejercicios.html" title="Ejercicios E1–E99 de todas las unidades">Ejercicios</a>
+    <a href="ejercicios.html" title="Ejercicios E1–E105 de todas las unidades">Ejercicios</a>
     <a href="ud3-vision.html" title="Visión artificial">UD3 Visión</a>
     <a href="ud4-lenguaje.html" title="Procesamiento del lenguaje natural">UD4 Lenguaje</a>
     <a href="ud5-ml.html" title="Aprendizaje automático">UD5 ML</a>
@@ -215,11 +215,10 @@ algoritmia</a>; bloques M y P</td>
 </tr>
 <tr class="odd">
 <td>Pruebas con <code>pytest</code> y depurar</td>
-<td><a href="teoria.html#pruebas-automáticas-con-pytest">14.11</a>; leer
-un <em>traceback</em> en <a
-href="teoria.html#1414-buenas-prácticas-de-python-y-conceptos-avanzados">14.14</a></td>
-<td>🟡 falta el depurador paso a paso (puntos de ruptura en VS
-Code)</td>
+<td><a href="teoria.html#pruebas-automáticas-con-pytest">14.11</a>, <a
+href="teoria.html#depurar-del-print-al-depurador">depurar: del print al
+depurador</a>; E101</td>
+<td>✅</td>
 </tr>
 <tr class="even">
 <td>Entornos virtuales y dependencias</td>
@@ -235,14 +234,13 @@ hilos, procesos y <code>asyncio</code></a></td>
 <td>✅</td>
 </tr>
 <tr class="even">
-<td>JSON y API web</td>
-<td><a href="datos.html#12-leer-y-escribir-en-distintos-formatos">Datos
-1.2</a>, <a href="teoria.html#1410-automatización-con-python">14.10</a>,
-<a
+<td>JSON, HTTP y API REST</td>
+<td><a href="teoria.html#http-y-api-rest">HTTP y API REST</a>, <a
+href="datos.html#12-leer-y-escribir-en-distintos-formatos">Datos
+1.2</a>, <a
 href="teoria.html#paso-4-ampliación--una-api-para-otros-programas">13.7
-paso 4</a> (FastAPI)</td>
-<td>🟡 falta HTTP explicado: métodos GET/POST/PUT/DELETE, códigos de
-estado (200, 404, 500), qué es REST</td>
+paso 4</a> (FastAPI); E101</td>
+<td>✅</td>
 </tr>
 <tr class="odd">
 <td>SQL</td>
@@ -253,16 +251,15 @@ href="teoria.html#bases-de-datos-con-sqlite3-incluido-en-python"><code>sqlite3</
 </tr>
 <tr class="even">
 <td>Git y GitHub</td>
-<td>Solo se menciona (<code>.gitignore</code>, publicar)</td>
-<td>⬜ <em>commit</em>, ramas, <em>pull request</em>: <a
-href="https://git-scm.com/book/es/v2">Pro Git en español</a></td>
+<td><a href="teoria.html#git-y-github-paso-a-paso">Git y GitHub paso a
+paso</a>; E100</td>
+<td>✅</td>
 </tr>
 <tr class="odd">
-<td>Línea de órdenes (Linux)</td>
-<td>—</td>
-<td>⬜ moverse por carpetas, ejecutar programas, permisos: <a
-href="https://ubuntu.com/tutorials/command-line-for-beginners">The Linux
-command line for beginners</a></td>
+<td>Línea de órdenes</td>
+<td><a href="teoria.html#la-línea-de-órdenes-en-cinco-minutos">La línea
+de órdenes en cinco minutos</a></td>
+<td>✅</td>
 </tr>
 </tbody>
 </table>
@@ -440,10 +437,9 @@ coste, privacidad, licencia)</td>
 <tr class="even">
 <td>Salidas en JSON validadas</td>
 <td><a
-href="teoria.html#llamada-a-funciones-herramientas-y-agentes">Llamada a
-funciones</a> + <a
-href="datos.html#15-validar-con-reglas-pydantic">Pydantic</a></td>
-<td>🟡 falta el «modo JSON» con esquema de las API</td>
+href="teoria.html#respuestas-del-modelo-con-un-esquema">Respuestas del
+modelo con un esquema</a>; E102</td>
+<td>✅</td>
 </tr>
 <tr class="odd">
 <td>Llamada a funciones y herramientas</td>
@@ -462,9 +458,11 @@ href="ud4-lenguaje.html#5-similitud-entre-textos">similitud</a></td>
 </tr>
 <tr class="odd">
 <td>Bases de datos vectoriales</td>
-<td><a href="teoria.html#rag-paso-a-paso">RAG paso a paso</a> (FAISS,
-Chroma, pgvector...)</td>
-<td>🟡 se explican; falta un ejemplo con Chroma</td>
+<td><a
+href="teoria.html#rag-mejorado-trozos-con-solapamiento-reordenación-y-bases-vectoriales">RAG
+mejorado</a> (ejemplo con Chroma)</td>
+<td>🟡 el código de Chroma no se ha ejecutado aquí: necesita instalarlo
+y descargar modelos</td>
 </tr>
 <tr class="even">
 <td>RAG: trocear, recuperar, generar</td>
@@ -473,16 +471,19 @@ href="ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46">E44<
 <td>✅</td>
 </tr>
 <tr class="odd">
-<td>Reordenar los resultados (<em>reranking</em>)</td>
-<td>—</td>
-<td>⬜ un segundo modelo vuelve a ordenar los fragmentos recuperados
-antes de dárselos al LLM</td>
+<td>Reordenar los resultados (<em>reranking</em>) y trocear</td>
+<td><a
+href="teoria.html#rag-mejorado-trozos-con-solapamiento-reordenación-y-bases-vectoriales">RAG
+mejorado</a></td>
+<td>✅</td>
 </tr>
 <tr class="even">
 <td>Ventana de contexto, <em>tokens</em> y coste</td>
 <td><a href="teoria.html#la-ventana-de-contexto-es-un-presupuesto">La
-ventana de contexto es un presupuesto</a></td>
-<td>🟡 falta calcular el coste en euros de una conversación</td>
+ventana de contexto</a>, <a
+href="teoria.html#tokens-coste-tiempo-caché-y-límites">Tokens, coste,
+tiempo, caché y límites</a>; E102</td>
+<td>✅</td>
 </tr>
 <tr class="odd">
 <td>Ajuste fino y LoRA</td>
@@ -541,39 +542,47 @@ href="ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46">E45<
 </tr>
 <tr class="odd">
 <td>Planificar y dividir una tarea</td>
-<td>Idea en la misma sección</td>
-<td>🟡</td>
+<td><a
+href="teoria.html#agentes-con-aprobación-humana-memoria-y-límites">Agentes
+con aprobación humana</a></td>
+<td>🟡 la idea; el ejemplo no planifica</td>
 </tr>
 <tr class="even">
 <td>Estado y memoria del agente</td>
-<td>Idea en la misma sección</td>
-<td>🟡</td>
+<td><a
+href="teoria.html#agentes-con-aprobación-humana-memoria-y-límites">Agentes
+con aprobación humana</a>; E104</td>
+<td>✅</td>
 </tr>
 <tr class="odd">
 <td>Aprobación humana y permisos mínimos</td>
-<td>Riesgos en la misma sección; <a
-href="ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46">E45</a></td>
-<td>🟡 falta un ejemplo de «pedir permiso antes de actuar»</td>
+<td><a
+href="teoria.html#agentes-con-aprobación-humana-memoria-y-límites">Agentes
+con aprobación humana</a>; E104</td>
+<td>✅</td>
 </tr>
 <tr class="even">
 <td>Varios agentes que colaboran</td>
-<td>—</td>
-<td>⬜</td>
+<td><a
+href="teoria.html#agentes-con-aprobación-humana-memoria-y-límites">Agentes
+con aprobación humana</a> (idea)</td>
+<td>🟡 sin ejemplo</td>
 </tr>
 <tr class="odd">
 <td>Herramientas para construir agentes: LangGraph, n8n</td>
-<td>—</td>
-<td>⬜ <a
+<td><a
+href="teoria.html#agentes-con-aprobación-humana-memoria-y-límites">Agentes
+con aprobación humana</a> (qué son)</td>
+<td>🟡 <a
 href="https://docs.langchain.com/oss/python/langgraph/overview">documentación
 de LangGraph</a></td>
 </tr>
 <tr class="even">
 <td><em>Model Context Protocol</em> (MCP)</td>
-<td>—</td>
-<td>⬜ estándar abierto para conectar modelos con herramientas y datos;
-desde diciembre de 2025 lo gestiona la Agentic AI Foundation, dentro de
-la Linux Foundation (<a
-href="https://blog.modelcontextprotocol.io/posts/2025-12-09-mcp-joins-agentic-ai-foundation/">anuncio</a>)</td>
+<td><a
+href="teoria.html#agentes-con-aprobación-humana-memoria-y-límites">Agentes
+con aprobación humana</a></td>
+<td>✅ (la idea y sus riesgos)</td>
 </tr>
 </tbody>
 </table>
@@ -615,18 +624,17 @@ cuesta.</p>
 <tr class="odd">
 <td>Métricas de calidad</td>
 <td>Modelos clásicos: <a
-href="ud5-ml.html#5-evaluar-un-clasificador">UD5 sección 5</a>; RAG: <a
-href="ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46">E44</a></td>
-<td>🟡 falta medir texto generado (¿es fiel al documento?, ¿responde a
-lo preguntado?)</td>
+href="ud5-ml.html#5-evaluar-un-clasificador">UD5 sección 5</a>;
+aplicaciones con LLM: <a
+href="teoria.html#evaluar-una-aplicación-con-llm">Evaluar una aplicación
+con LLM</a></td>
+<td>✅</td>
 </tr>
 <tr class="even">
-<td>Conjuntos de prueba y evaluación por personas</td>
-<td><a
-href="ud5-ml.html#plantilla-de-un-proyecto-de-principio-a-fin">Plantilla
-de proyecto UD5</a></td>
-<td>🟡 falta cómo diseñar una batería de preguntas con respuestas
-esperadas</td>
+<td>Baterías de prueba</td>
+<td><a href="teoria.html#evaluar-una-aplicación-con-llm">Evaluar una
+aplicación con LLM</a>; E103</td>
+<td>✅</td>
 </tr>
 <tr class="odd">
 <td>Pruebas automáticas</td>
@@ -638,40 +646,42 @@ href="teoria.html#pruebas-automáticas-con-pytest"><code>pytest</code></a>,
 </tr>
 <tr class="even">
 <td>Un LLM como juez, y sus límites</td>
-<td>—</td>
-<td>⬜ usar un modelo para puntuar respuestas: rápido, pero con sesgos
-(prefiere respuestas largas, las suyas propias...)</td>
+<td><a href="teoria.html#evaluar-una-aplicación-con-llm">Evaluar una
+aplicación con LLM</a></td>
+<td>✅</td>
 </tr>
 <tr class="odd">
 <td>Alucinaciones y respuestas fundamentadas</td>
-<td><a
-href="teoria.html#148-ia-generativa-y-modelos-de-lenguaje-llm">14.8</a>,
-<a href="teoria.html#rag-paso-a-paso">RAG</a></td>
-<td>🟡</td>
+<td><a href="teoria.html#evaluar-una-aplicación-con-llm">Evaluar</a>
+(fidelidad, abstención); E103</td>
+<td>✅</td>
 </tr>
 <tr class="even">
 <td>Defensa frente a la inyección de <em>prompts</em></td>
-<td>Riesgos de los agentes en <a
-href="teoria.html#llamada-a-funciones-herramientas-y-agentes">14.8</a></td>
-<td>🟡 falta una guía: <a
-href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 for LLM
-Applications</a>, donde es el riesgo LLM01</td>
+<td><a
+href="teoria.html#seguridad-inyección-de-instrucciones-y-barreras">Seguridad:
+inyección de instrucciones y barreras</a> (lista OWASP); E104</td>
+<td>✅</td>
 </tr>
 <tr class="odd">
 <td>Validar la salida y poner «barreras» (<em>guardrails</em>)</td>
-<td>Pydantic y validación de herramientas</td>
-<td>🟡</td>
+<td><a
+href="teoria.html#seguridad-inyección-de-instrucciones-y-barreras">Seguridad</a>,
+<a
+href="teoria.html#respuestas-del-modelo-con-un-esquema">esquemas</a></td>
+<td>✅</td>
 </tr>
 <tr class="even">
 <td>Observabilidad: registrar y seguir cada petición</td>
-<td>—</td>
-<td>⬜ guardar qué entró, qué salió, cuánto tardó y cuánto costó
-(LangSmith, MLflow, Grafana)</td>
+<td><a href="teoria.html#evaluar-una-aplicación-con-llm">Evaluar una
+aplicación con LLM</a></td>
+<td>🟡 la idea; sin herramientas (LangSmith, MLflow, Grafana)</td>
 </tr>
 <tr class="odd">
 <td>Tiempo de respuesta y coste</td>
-<td>—</td>
-<td>⬜</td>
+<td><a href="teoria.html#tokens-coste-tiempo-caché-y-límites">Tokens,
+coste, tiempo, caché y límites</a>; E102</td>
+<td>✅</td>
 </tr>
 <tr class="even">
 <td>Reintentos y alternativas si algo falla</td>
@@ -682,11 +692,9 @@ decorador <code>@reintentar</code></td>
 </tr>
 <tr class="odd">
 <td>Versiones y pruebas de regresión</td>
-<td><a
-href="teoria.html#más-allá-del-aula-qué-hacen-los-profesionales">13.7</a>
-(MLflow, DVC, como idea)</td>
-<td>🟡 falta comprobar que un <em>prompt</em> nuevo no empeora lo que ya
-funcionaba</td>
+<td><a href="teoria.html#evaluar-una-aplicación-con-llm">Evaluar una
+aplicación con LLM</a> (comparar versiones); E103</td>
+<td>✅</td>
 </tr>
 </tbody>
 </table>
@@ -738,17 +746,17 @@ href="teoria.html#1414-buenas-prácticas-de-python-y-conceptos-avanzados">14.14<
 <tr class="odd">
 <td>Docker y contenedores</td>
 <td><a
-href="teoria.html#más-allá-del-aula-qué-hacen-los-profesionales">Más
-allá del aula</a> (idea)</td>
-<td>⬜ escribir un <code>Dockerfile</code>: <a
-href="https://docs.docker.com/get-started/">Docker, primeros
-pasos</a></td>
+href="teoria.html#docker-y-github-actions-el-mínimo-que-funciona">Docker
+y GitHub Actions</a></td>
+<td>🟡 el <code>Dockerfile</code> está explicado, pero no se ha
+construido aquí</td>
 </tr>
 <tr class="even">
 <td>CI/CD con GitHub Actions</td>
-<td>La misma tabla (idea)</td>
-<td>⬜ que cada <code>git push</code> ejecute las pruebas: <a
-href="https://docs.github.com/es/actions">GitHub Actions</a></td>
+<td><a
+href="teoria.html#docker-y-github-actions-el-mínimo-que-funciona">Docker
+y GitHub Actions</a>; E105</td>
+<td>✅</td>
 </tr>
 <tr class="odd">
 <td>Nube: AWS, Google Cloud, Azure</td>
@@ -758,19 +766,23 @@ href="teoria.html#138-infraestructura-como-código-terraform">13.8</a></td>
 </tr>
 <tr class="even">
 <td>Autenticación y seguridad de la API</td>
-<td>—</td>
-<td>⬜ claves de acceso, quién puede usar qué</td>
+<td><a
+href="teoria.html#proteger-una-api-claves-secretos-y-autenticación">Proteger
+una API</a>; E105</td>
+<td>✅</td>
 </tr>
 <tr class="odd">
 <td>Caché y límite de peticiones</td>
-<td>—</td>
-<td>⬜ no repetir cálculos caros; impedir que alguien gaste el
-presupuesto</td>
+<td><a href="teoria.html#tokens-coste-tiempo-caché-y-límites">Tokens,
+coste, tiempo, caché y límites</a>; E102</td>
+<td>✅</td>
 </tr>
 <tr class="even">
 <td>Colas y tareas en segundo plano</td>
-<td>—</td>
-<td>⬜</td>
+<td><a
+href="teoria.html#arquitectura-de-una-aplicación-de-ia">Arquitectura</a>
+(idea)</td>
+<td>🟡 sin ejemplo</td>
 </tr>
 <tr class="odd">
 <td>Vigilar y avisar</td>
@@ -780,14 +792,17 @@ href="teoria.html#más-allá-del-aula-qué-hacen-los-profesionales">13.7</a></td
 </tr>
 <tr class="even">
 <td>Escalar y Kubernetes</td>
-<td>—</td>
-<td>⬜</td>
+<td><a
+href="teoria.html#arquitectura-de-una-aplicación-de-ia">Arquitectura</a>
+(idea)</td>
+<td>🟡</td>
 </tr>
 <tr class="odd">
 <td>Arquitectura del sistema</td>
-<td>—</td>
-<td>⬜ cómo se conectan web, API, modelo y base de datos (el esquema de
-abajo)</td>
+<td><a
+href="teoria.html#arquitectura-de-una-aplicación-de-ia">Arquitectura de
+una aplicación de IA</a></td>
+<td>✅</td>
 </tr>
 </tbody>
 </table>
@@ -914,32 +929,28 @@ propias</td>
 </table>
 <h2 id="lo-que-todavía-falta-en-esta-web">Lo que todavía falta en esta
 web</h2>
-<p>Resumen de las casillas ⬜ y 🟡, por orden de prioridad para el
-curso:</p>
+<p>La mayoría de los huecos de la primera versión de este itinerario se
+han cubierto en la <a
+href="teoria.html#1419-de-prototipo-a-aplicación-herramientas-de-ingeniería-de-ia">teoría
+14.19</a> y en el <a
+href="ejercicios.html#bloque-u--de-prototipo-a-aplicación-e100e105">bloque
+U de ejercicios</a> (E100–E105). Quedan, por orden de prioridad:</p>
 <ol type="1">
-<li><strong>Git y GitHub</strong> paso a paso: <em>commit</em>, ramas,
-<em>pull request</em>, <code>.gitignore</code>.</li>
-<li><strong>HTTP y REST</strong>: métodos, códigos de estado, cabeceras,
-y probar una API con <code>requests</code>.</li>
-<li><strong>Evaluación de aplicaciones con LLM</strong>: batería de
-pruebas, fidelidad a la fuente, LLM como juez y sus límites, pruebas de
-regresión de <em>prompts</em>.</li>
-<li><strong>Seguridad de aplicaciones con LLM</strong>: inyección de
-<em>prompts</em>, validación de la salida y barreras (la lista
-OWASP).</li>
-<li><strong>Coste y tiempo</strong>: contar <em>tokens</em>, calcular el
-coste de una conversación, caché y límite de peticiones.</li>
-<li><strong>Agentes con aprobación humana</strong>, memoria y
-planificación, con un ejemplo completo; <strong>MCP</strong>.</li>
-<li><strong>Docker y GitHub Actions</strong> con un ejemplo mínimo que
-funcione.</li>
-<li><strong>Salida en JSON con esquema</strong>, <em>reranking</em> y un
-RAG con una base de datos vectorial real (Chroma).</li>
-<li><strong>Línea de órdenes</strong> y <strong>depurador</strong> de VS
-Code.</li>
-<li><strong>Más allá</strong>: PostgreSQL, autenticación, colas,
-Kubernetes y arquitectura de sistemas (para después del
-Bachillerato).</li>
+<li><strong>Comparar modelos</strong> abiertos y comerciales (tamaño,
+coste, privacidad, licencia) y usar uno abierto en local con un ejemplo
+guiado.</li>
+<li><strong>Planificación y varios agentes</strong> con un ejemplo
+completo; agentes con LangGraph o n8n.</li>
+<li><strong>Practicar con herramientas reales</strong> lo que aquí está
+explicado: construir la imagen de Docker, Chroma y un reordenador
+(<em>cross-encoder</em>), y un panel de observabilidad. Necesitan
+instalarse; conviene probarlos en el aula o en Colab.</li>
+<li><strong>Colas y tareas en segundo plano</strong> con un ejemplo
+mínimo.</li>
+<li><strong>Álgebra lineal con intuición geométrica</strong> (el
+producto escalar como «parecido» entre vectores).</li>
+<li><strong>Más allá del Bachillerato:</strong> PostgreSQL, ajuste fino
+con LoRA (necesita GPU) y Kubernetes.</li>
 </ol>
 <h2 id="recursos-para-seguir">Recursos para seguir</h2>
 <ul>

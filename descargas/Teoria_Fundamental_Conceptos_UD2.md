@@ -5713,6 +5713,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *Python Module 6: Strings* (@Mastercode.sagar, 11 págs.), procesado con OCR y MarkItDown | Formatos `%`, `format` y f-string, métodos de cadenas, programas típicos | 2.5, 2.6 y ejercicios E59–E61 |
 | Listas de redes sociales: «10 great Python packages for Data Science» y «8 awesome GitHub repos» | Librerías y repositorios revisados uno a uno | 12.4 y repositorios de 14.15 |
 | «The 25 Best Free Resources for Learning AI in 2026» (H. Sheikho, Substack, oct-2026) | Cursos, libros y vídeos gratuitos revisados uno a uno | 14.16; retropropagación a mano en 14.7 |
+| Siete repositorios para aprender ML (nov-2026): curso de scikit-learn de Inria, chuletas de CS229, libro de Raschka, *best-of-ml-python*, libro de Molnar, SHAP y *applied-ml* de E. Yan | Validación cruzada anidada, dependencia parcial, valores de Shapley, contrafactuales, pruebas A/B, fallos del ML en producción | 14.16; [UD5](ud5-ml.html), secciones 6, 10 y 11 |
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
 | *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
 | *Python Module 8: Tuples* (@Mastercode.sagar, 15 págs.), procesado con OCR y MarkItDown | Crear tuplas, `count` e `index`, operaciones, tuplas anidadas, tupla frente a lista, desempaquetado, proyecto de registro | 5.3 y ejercicios E83–E86 |
@@ -5763,6 +5764,10 @@ Revisión de la lista «The 25 Best Free Resources for Learning AI in 2026» (H.
 | [MIT 6.S191: *Introduction to Deep Learning*](http://introtodeeplearning.com/) | Curso intensivo que se renueva cada año, con prácticas en Python | Buena panorámica de lo más reciente |
 | [*Dive into Deep Learning*](https://d2l.ai/) | Libro interactivo con código ejecutable en cada capítulo | Necesita PyTorch |
 | [mlcourse.ai](https://mlcourse.ai/) | Curso práctico con tareas y soluciones sobre datos reales | Alternativa al curso de Coursera |
+| [Curso de scikit-learn de Inria](https://inria.github.io/scikit-learn-mooc/) | Cuadernos, ejercicios con solución y cuestionarios: *pipelines*, validación, hiperparámetros, modelos lineales, árboles, ensembles y evaluación | Sigue casi el orden de la [UD5](ud5-ml.html): es el mejor paso siguiente |
+| [S. Raschka: *Machine Learning with PyTorch and Scikit-Learn*](https://github.com/rasbt/machine-learning-book) | Código de los 19 capítulos del libro, de la clasificación a los Transformers | El libro es de pago; los cuadernos, libres |
+| [C. Molnar: *Interpretable Machine Learning*](https://christophm.github.io/interpretable-ml-book/) | Libro gratuito sobre cómo explicar modelos: dependencia parcial, SHAP, contrafactuales | [UD5](ud5-ml.html), sección 10 |
+| [E. Yan: *applied-ml*](https://github.com/eugeneyan/applied-ml) | Cientos de artículos de empresas que cuentan cómo usan el ML, por tipo de problema | Profesorado: ideas de proyecto; UD5, sección 11 |
 | [M. Labonne: *LLM Course*](https://github.com/mlabonne/llm-course) | Hoja de ruta y cuadernos de Colab sobre ajuste fino, cuantización, RAG y despliegue | Profesorado: ideas para ampliar 14.8 |
 | [Lil'Log (Lilian Weng)](https://lilianweng.github.io/) y [Hugging Face Papers](https://huggingface.co/papers) | Artículos de repaso muy documentados y selección diaria de artículos de investigación | Profesorado: estar al día |
 
@@ -5770,13 +5775,15 @@ Revisión de la lista «The 25 Best Free Resources for Learning AI in 2026» (H.
 
 - *Mathematics for Machine Learning* ([mml-book.github.io](https://mml-book.github.io/)): las matemáticas que hay debajo de todo lo anterior.
 - *Understanding Deep Learning* de S. Prince ([udlbook](https://udlbook.github.io/udlbook/)) y *Deep Learning* de Goodfellow, Bengio y Courville ([deeplearningbook.org](https://www.deeplearningbook.org/)). Este último es de 2016: sus capítulos de arquitecturas se han quedado antiguos y no trata los Transformers.
-- Cursos de Stanford: [CS229](https://cs229.stanford.edu/) (ML), [CS231n](https://cs231n.stanford.edu/) (visión), [CS224n](https://web.stanford.edu/class/cs224n/) (lenguaje) y [CS336](https://stanford-cs336.github.io/) (entrenar un modelo de lenguaje desde cero, muy exigente).
+- Cursos de Stanford: [CS229](https://cs229.stanford.edu/) (ML; sus [chuletas, traducidas al castellano](https://github.com/afshinea/stanford-cs-229-machine-learning/tree/master/es), sirven de resumen), [CS231n](https://cs231n.stanford.edu/) (visión), [CS224n](https://web.stanford.edu/class/cs224n/) (lenguaje) y [CS336](https://stanford-cs336.github.io/) (entrenar un modelo de lenguaje desde cero, muy exigente).
 - Aprendizaje por refuerzo: el libro de [Sutton y Barto](http://incompleteideas.net/book/the-book-2nd.html) y la guía [*Spinning Up*](https://spinningup.openai.com/) de OpenAI.
 
 **Lo que no conviene recomendar.**
 
 - *Machine Learning Handbook* de Yandex y *Deep Learning School* del MIPT: están **en ruso**.
 - *Machine Learning Specialization* de Andrew Ng (Coursera): la lista dice que se puede seguir gratis como oyente, pero desde agosto de 2025 Coursera **retiró ese modo** en muchos cursos y en los de DeepLearning.AI solo deja ver gratis la primera semana. Antes de recomendarlo, comprueba cómo está el acceso.
+
+**Para encontrar herramientas.** [*best-of-ml-python*](https://github.com/ml-tooling/best-of-ml-python) es un directorio de cientos de librerías de ML ordenadas por categorías (texto, imagen, datos geográficos, explicabilidad…) y por popularidad, que se actualiza cada semana. No sirve para aprender, pero sí para saber qué existe y si una librería sigue viva.
 
 **Lo que falta en la lista.** No incluye nada en castellano ni en gallego. Como primer curso de IA en castellano, sin programar, está [*Elements of AI*](https://www.elementsofai.com/) (Universidad de Helsinki; la versión en castellano, «Elementos de la IA», es de la UNED). Y para cualquier recurso sirven las mismas preguntas de 12.4: si está actualizado, qué nivel exige y quién lo publica.
 

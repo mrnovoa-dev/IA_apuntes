@@ -73,7 +73,7 @@ UD_TEORIA = {
 # Ejercicios: por letra de bloque
 UD_EJERCICIOS = {
     "A": ["UD2"], "B": ["UD2"], "C": ["UD2"], "D": ["UD2"], "E": ["UD2", "UD5"], "F": ["UD2"],
-    "G": ["UD2"], "H": ["UD4"], "I": ["UD2"], "J": ["UD2"], "K": ["UD2"], "L": ["UD3", "UD5"], "M": ["UD2"], "N": ["UD1", "UD2"], "O": ["UD3", "UD5"], "P": ["UD2"], "Q": ["UD2", "UD3", "UD5"], "R": ["UD5"], "S": ["UD2"], "T": ["UD3", "UD5"], "U": ["UD2", "UD4", "UD5"], "V": ["UD2"], "W": ["UD4", "UD5"], "X": ["UD2", "UD5"], "Y": ["UD4"], "Z": ["UD2"],
+    "G": ["UD2"], "H": ["UD4"], "I": ["UD2"], "J": ["UD2"], "K": ["UD2"], "L": ["UD3", "UD5"], "M": ["UD2"], "N": ["UD1", "UD2"], "O": ["UD3", "UD5"], "P": ["UD2"], "Q": ["UD2", "UD3", "UD5"], "R": ["UD5"], "S": ["UD2"], "T": ["UD3", "UD5"], "U": ["UD2", "UD4", "UD5"], "V": ["UD2"], "W": ["UD4", "UD5"], "X": ["UD2", "UD5"], "Y": ["UD4"], "Z": ["UD2"], "AA": ["UD3", "UD4", "UD5"],
     "prompt": ["UD2"],
 }
 CABECERA = re.compile(r'<(h[23])\s+id="([^"]+)">(.*?)</\1>', re.S)
@@ -91,7 +91,7 @@ def clave_teoria(nivel, texto):
 def clave_ejercicios(nivel, texto):
     if nivel != "h2":
         return None
-    m = re.match(r"\s*Bloque ([A-Z])\s", texto)
+    m = re.match(r"\s*Bloque ([A-Z]{1,2})\s", texto)
     if m:
         return m.group(1)
     return "prompt" if "prompt" in texto else None

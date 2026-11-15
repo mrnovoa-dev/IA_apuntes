@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E116 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E117 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -4186,6 +4186,18 @@ ProfileReport(df, title="Informe Titanic").to_file("informe.html")
 
 Base de *Neural Networks Beginner Notes* y *Deep Learning*. Es la introducción a la parte de Deep Learning de **UD3 (Visión Artificial)** y **UD5 (Machine Learning)**.
 
+**Mapa de la sección.** Veinte conceptos del aprendizaje profundo, agrupados según para qué sirven, y dónde se explica cada uno:
+
+![Mapa mental del aprendizaje profundo: piezas (neurona, red, activaciones), entrenar (propagación, pérdida, retropropagación, descenso del gradiente, optimizadores, dropout), arquitecturas (CNN, RNN, LSTM, GRU, Transformer, atención), generativos (autoencoder, VAE, GAN) y reutilizar (transferencia)](assets/img/mapa_dl.png)
+
+| Grupo | Conceptos | Dónde |
+|-------|-----------|-------|
+| Piezas | Neurona y perceptrón, red neuronal, funciones de activación | [La neurona](#la-neurona-artificial), [activaciones](#funciones-de-activación), [la XOR](#la-xor-por-qué-hacen-falta-capas-ocultas) |
+| Entrenar | Propagación hacia delante, pérdida, retropropagación, descenso del gradiente, optimizadores, *dropout* | [Cómo aprende](#cómo-aprende-una-red), [matrices](#propagación-hacia-delante-con-matrices), [pérdidas](#las-funciones-de-pérdida-con-números), [optimizadores](#optimizadores-momento-y-adam), [*dropout*](#entrenar-en-keras-épocas-validación-dropout-y-early-stopping) |
+| Arquitecturas | CNN, RNN, LSTM, GRU, Transformer, atención y autoatención | [Tabla de arquitecturas](#arquitecturas-cuál-se-usa-para-qué); CNN en la [UD3](ud3-vision.html#5-clasificar-imágenes); RNN y atención en la [UD4](ud4-lenguaje.html#108-redes-para-secuencias-rnn-lstm-gru-y-atención) y el [Transformer por dentro](ud4-lenguaje.html#1010-el-transformer-por-dentro) |
+| Generativos | Autoencoder, VAE, GAN | [Modelos generativos por dentro](#modelos-generativos-por-dentro-autoencoder-vae-y-gan) |
+| Reutilizar | Transferencia de aprendizaje | [Transferencia de aprendizaje](#transferencia-de-aprendizaje-no-empezar-de-cero) |
+
 #### La neurona artificial
 
 Una neurona hace tres cosas: **multiplica** cada entrada por un peso, **suma** todo más un sesgo (*bias*) y **aplica** una función de activación.
@@ -4222,6 +4234,11 @@ print("sigmoide:", np.round(1 / (1 + np.exp(-z)), 3))   # [0.119 0.5 0.881]
 print("relu    :", np.maximum(0, z))                     # [0. 0. 2.]
 s = np.exp([2.0, 1.0, 0.1]); print("softmax :", np.round(s / s.sum(), 3))  # [0.659 0.242 0.099]
 ```
+
+![Izquierda: sigmoide, tanh, ReLU, Leaky ReLU y GELU. Derecha: sus derivadas; la de la sigmoide nunca pasa de 0,25, y la de ReLU vale 0 o 1](assets/img/dl_activaciones.png)
+
+La derivada es lo que la retropropagación multiplica capa a capa: con sigmoides, cada capa la multiplica como mucho por 0,25 y en diez capas queda en menos de una millonésima (el **gradiente que se desvanece**). ReLU deja pasar 1 cuando la neurona está activa; su riesgo es la neurona «muerta», siempre en 0, que Leaky ReLU evita con una pequeña pendiente. GELU, una ReLU suavizada, es la que usan los Transformer.
+
 
 #### Cómo aprende una red
 
@@ -4478,6 +4495,11 @@ print(round(adam(1), 3), round(adam(100), 3))      # 3.0 3.0
 
 Adam llega a 3 en los dos casos, porque divide el gradiente por su propio tamaño. SGD con `η = 0,01` funciona con la escala 1, pero con la escala 100 oscila para siempre entre 0 y 6. Adam es la opción por defecto razonable, no «la mejor siempre»: en algunos problemas (sobre todo de imágenes) SGD con momento generaliza mejor.
 
+![Trayectorias de SGD, momento y Adam en un valle alargado: SGD zigzaguea de lado a lado, el momento coge inercia y se pasa, Adam avanza más recto pero con pasos de tamaño parecido](assets/img/dl_optimizadores.png)
+
+En este valle, con estas tasas, el que acaba más cerca es SGD; con otras tasas o en otro problema cambia el orden. Por eso Adam se usa como **primera opción razonable** (funciona aceptablemente sin ajustar mucho), no como el mejor siempre.
+
+
 #### Inicialización de los pesos
 
 Los pesos no pueden empezar todos en 0: todas las neuronas de una capa calcularían lo mismo, recibirían el mismo gradiente y seguirían siendo iguales (problema de **simetría**). Se empiezan con números aleatorios pequeños, pero **cuánto** de pequeños importa. Pasando datos aleatorios por 20 capas ReLU de 256 neuronas, la desviación típica de la salida es:
@@ -4525,6 +4547,9 @@ Cómo leer las curvas de `historia.history`:
 | Error bajo y bajando | Baja y luego **sube** | **Sobreajuste**: memoriza | Dropout, regularización L2, más datos, aumento de datos, *early stopping* |
 
 Los ejercicios [E62–E69](ejercicios.html#bloque-l--deep-learning-con-números-e62e69) practican todo esto con números. Las redes convolucionales, con el cálculo de tamaños y parámetros, están en la [UD3](ud3-vision.html#5-clasificar-imágenes), y las recurrentes y los Transformers, en la [UD4](ud4-lenguaje.html#108-redes-para-secuencias-rnn-lstm-gru-y-atención).
+
+![Dropout: en cada lote de entrenamiento se apagan neuronas distintas al azar; al predecir, están todas activas](assets/img/dl_dropout.png)
+
 
 #### Datos por lotes con `tf.data`, TensorBoard y exportar el modelo
 
@@ -4686,6 +4711,48 @@ print(f"{np.abs(mal(W) - n).max() / np.abs(n).max():.1f}")  # 7.0: el gradiente 
 
 Los ejercicios [E80–E82](ejercicios.html#bloque-o--redes-neuronales-desde-cero-e80e82) practican la XOR, la normalización y la depuración.
 
+#### Modelos generativos por dentro: autoencoder, VAE y GAN
+
+![Esquemas del autoencoder (codificador, código z, decodificador), del VAE (el codificador da una media y una desviación y z = μ + σ·ε) y de la GAN (generador frente a discriminador)](assets/img/dl_generativos.png)
+
+**Autoencoder.** Se entrena para que la salida sea **igual a la entrada**, pero obligando a la información a pasar por un «cuello» de pocos números (el **código latente** z). Para conseguirlo, la red tiene que aprender lo esencial de los datos. No necesita etiquetas. Un uso práctico: detectar **anomalías**, porque lo que no se parece a lo visto en el entrenamiento se reconstruye mal. Con scikit-learn basta una red cuya entrada y salida son lo mismo:
+
+```python
+import numpy as np
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPRegressor
+
+X = load_digits().data / 16                     # 1797 dígitos de 8 × 8 píxeles, valores de 0 a 1
+X_tr, X_te = train_test_split(X, test_size=0.2, random_state=0)
+
+# Autoencoder: la salida debe ser igual a la entrada, pasando por un «cuello» de 8 números
+ae = MLPRegressor(hidden_layer_sizes=(32, 8, 32), max_iter=600, random_state=0)
+ae.fit(X_tr, X_tr)
+
+def error(X):                                    # error de reconstrucción de cada imagen
+    return ((ae.predict(X) - X) ** 2).mean(axis=1)
+
+normales = error(X_te)
+rng = np.random.default_rng(0)
+raras = error(rng.uniform(0, 1, (50, 64)))      # «imágenes» de ruido: no son dígitos
+print(f"dígitos: {normales.mean():.3f} · ruido: {raras.mean():.3f}")   # dígitos: 0.032 · ruido: 0.190
+umbral = np.percentile(normales, 99)
+print("ruido marcado como anomalía:", (raras > umbral).mean())          # 1.0: todas
+```
+
+(Puede salir un aviso de que no ha convergido del todo; no cambia el resultado.)
+
+**VAE (autoencoder variacional).** En un autoencoder normal, los códigos de los ejemplos quedan sueltos y un z inventado entre ellos suele decodificarse como basura. El VAE hace que el codificador dé, para cada entrada, una **media μ y una desviación σ**, y toma z = μ + σ·ε, con ε al azar de una normal (el «truco de la reparametrización», que permite entrenar aunque haya azar en medio). La pérdida suma el error de reconstrucción y un término que empuja esas nubes hacia una normal estándar. Resultado: un espacio latente **continuo**, en el que cualquier z al azar da algo verosímil y moverse poco a poco transforma una imagen en otra.
+
+**GAN (red generativa antagónica).** Dos redes compiten: el **generador** convierte ruido en falsificaciones y el **discriminador** intenta distinguirlas de los datos reales. El generador nunca ve las imágenes reales: aprende solo del error del discriminador. Producen imágenes muy nítidas, pero el entrenamiento es inestable (a veces el generador se queda haciendo siempre lo mismo, el «colapso de modos»). Hoy los generadores de imágenes usan sobre todo **difusión**, más estable. Las GAN están detrás de muchos *deepfakes*: [UD3, impacto social](ud3-vision.html).
+
+#### Transferencia de aprendizaje: no empezar de cero
+
+![Un modelo preentrenado con millones de fotos se reutiliza congelando sus capas (bordes, texturas, partes, objetos) y cambiando solo la última por una nueva de 2 clases](assets/img/dl_transferencia.png)
+
+Entrenar una red de visión desde cero necesita millones de imágenes y mucho cálculo. Pero las primeras capas de una red ya entrenada detectan cosas generales (bordes, texturas, formas) que sirven para casi cualquier tarea. La **transferencia de aprendizaje** reutiliza esa red: se **congelan** sus capas, se cambia la última por una con las clases nuevas y se entrena solo esa, con unos cientos de fotos. Si hace falta, después se «descongelan» algunas capas y se ajustan con una tasa de aprendizaje muy baja (**ajuste fino**, *fine-tuning*). Es lo que se hace en la [UD3 con YOLO](ud3-vision.html#6-detectar-y-segmentar-objetos-con-yolo) y, con texto, al adaptar un modelo de lenguaje a una tarea concreta ([14.8](#148-ia-generativa-y-modelos-de-lenguaje-llm)).
+
 #### Capa de salida y función de pérdida según el problema
 
 La última capa y la pérdida no se eligen por gusto: dependen de **qué** hay que predecir.
@@ -4717,6 +4784,10 @@ Una curiosidad que ayuda a entenderlo: una sigmoide con una neurona es **lo mism
 | **RNN** (recurrente) | Tiene "memoria" (estado oculto) de lo anterior | Secuencias, texto, series temporales | UD4, UD5 |
 | **LSTM / GRU** | RNN con "puertas" que deciden qué recordar y qué olvidar | Secuencias largas | UD4 |
 | **Transformer** | Mecanismo de **atención**: cada palabra "mira" a todas las demás | Texto (LLM), también imágenes | **UD4** (14.8) |
+
+![Una RNN desenrollada sobre «El gato come pescado»: la misma red en cada paso, que recibe una palabra y el estado anterior (la memoria) y pasa un estado nuevo al siguiente](assets/img/dl_rnn_desenrollada.png)
+
+Una **LSTM** añade a esa memoria tres puertas (olvidar, escribir y mostrar) que deciden qué se guarda; una **GRU** hace algo parecido con dos puertas y menos parámetros. Las dos sufren menos el gradiente que se desvanece que una RNN simple, pero procesan las palabras de una en una; el Transformer las mira todas a la vez, y por eso entrena mucho más rápido en GPU.
 
 ---
 

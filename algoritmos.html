@@ -57,6 +57,17 @@ búsqueda informada</a></li>
 <li><a href="#q-learning-aprender-probando"
 id="toc-q-learning-aprender-probando">Q-learning: aprender
 probando</a></li>
+<li><a href="#árbol-de-decisión" id="toc-árbol-de-decisión">Árbol de
+decisión</a></li>
+<li><a href="#naive-bayes" id="toc-naive-bayes">Naive Bayes</a></li>
+<li><a href="#máquinas-de-vectores-de-soporte-svm"
+id="toc-máquinas-de-vectores-de-soporte-svm">Máquinas de vectores de
+soporte (SVM)</a></li>
+<li><a href="#boosting-gradient-boosting-y-adaboost"
+id="toc-boosting-gradient-boosting-y-adaboost">Boosting: gradient
+boosting y AdaBoost</a></li>
+<li><a href="#agrupamiento-jerárquico"
+id="toc-agrupamiento-jerárquico">Agrupamiento jerárquico</a></li>
 </ul></li>
 <li><a href="#cómo-elegir-un-algoritmo"
 id="toc-cómo-elegir-un-algoritmo">Cómo elegir un algoritmo</a></li>
@@ -71,6 +82,12 @@ sin escalar 🟡</a></li>
 <li><a href="#ejercicio-a3--qué-algoritmo-usarías-"
 id="toc-ejercicio-a3--qué-algoritmo-usarías-">Ejercicio A3 · ¿Qué
 algoritmo usarías? 🟢</a></li>
+<li><a href="#ejercicio-a4--naive-bayes-a-mano-con-y-sin-suavizado-"
+id="toc-ejercicio-a4--naive-bayes-a-mano-con-y-sin-suavizado-">Ejercicio
+A4 · Naive Bayes a mano, con y sin suavizado 🟡</a></li>
+<li><a href="#ejercicio-a5--revisión-crítica-12-algoritmos-de-ml-"
+id="toc-ejercicio-a5--revisión-crítica-12-algoritmos-de-ml-">Ejercicio
+A5 · Revisión crítica: «12 algoritmos de ML» 🔴</a></li>
 </ul></li>
 <li><a href="#revisión-crítica-del-carrusel"
 id="toc-revisión-crítica-del-carrusel">Revisión crítica del
@@ -80,7 +97,7 @@ carrusel</a></li>
 </nav>
     <div class="toc-backdrop" hidden></div>
   </div>
-  <article class="content" data-salt="anR+mD1Rs3ibOyKExEfOmg==" data-iter="250000">
+  <article class="content" data-salt="gAwkQbn4OSOMxWuzFAQHCQ==" data-iter="250000">
 <h1 id="algoritmos-de-ia">Algoritmos de IA</h1>
 <div class="ud-head" style="--c:var(--c-ml)">
 <span class="k">Catálogo transversal · UD1 → UD5</span>
@@ -293,7 +310,8 @@ href="ud5-ml.html#4-clasificación">UD5 sección 4</a></td>
 <td>Preguntas «¿mayor que...?» encadenadas</td>
 <td>Reglas explicables; datos mezclados</td>
 <td><code>DecisionTreeClassifier</code></td>
-<td><a href="ud5-ml.html#4-clasificación">UD5 sección 4</a>, <a
+<td><a href="#árbol-de-decisión">Ficha</a>, <a
+href="ud5-ml.html#4-clasificación">UD5 sección 4</a>, <a
 href="ud5-ml.html#6-sobreajuste-validación-cruzada-e-hiperparámetros">sección
 6</a></td>
 </tr>
@@ -310,22 +328,33 @@ sección 7</a></td>
 <td>Árboles en serie, cada uno corrige los errores del anterior</td>
 <td>Tablas: suele ser el mejor</td>
 <td><code>HistGradientBoostingClassifier</code></td>
-<td><a href="ud5-ml.html#7-ensembles-muchos-modelos-mejor-que-uno">UD5
-sección 7</a></td>
+<td><a href="#boosting-gradient-boosting-y-adaboost">Ficha</a>, <a
+href="ud5-ml.html#7-ensembles-muchos-modelos-mejor-que-uno">UD5 sección
+7</a></td>
 </tr>
 <tr class="even">
+<td><strong>AdaBoost</strong></td>
+<td>Modelos muy simples en serie; cada uno da más peso a lo que el
+anterior falló</td>
+<td>Ver la idea del boosting; hoy se usa menos que el gradient
+boosting</td>
+<td><code>AdaBoostClassifier</code></td>
+<td><a href="#boosting-gradient-boosting-y-adaboost">Ficha</a></td>
+</tr>
+<tr class="odd">
 <td><strong>SVM</strong></td>
 <td>La frontera con el mayor margen posible entre clases</td>
 <td>Datos medianos con muchas columnas</td>
 <td><code>SVC</code></td>
-<td><a href="ud5-ml.html#4-clasificación">UD5 sección 4</a></td>
+<td><a href="#máquinas-de-vectores-de-soporte-svm">Ficha</a>, <a
+href="ud5-ml.html#4-clasificación">UD5 sección 4</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><strong>Naive Bayes</strong></td>
 <td>Multiplica las probabilidades de cada característica por clase</td>
 <td>Texto (spam, temas): rápido y con pocos datos</td>
 <td><code>MultinomialNB</code></td>
-<td><a
+<td><a href="#naive-bayes">Ficha</a>, <a
 href="ud4-lenguaje.html#6-clasificar-textos-y-analizar-sentimientos">UD4
 sección 6</a></td>
 </tr>
@@ -367,7 +396,7 @@ sección 8</a></td>
 <td>Une poco a poco los grupos más cercanos (dendrograma)</td>
 <td>Ver grupos dentro de grupos</td>
 <td><code>AgglomerativeClustering</code></td>
-<td><a
+<td><a href="#agrupamiento-jerárquico">Ficha</a>, <a
 href="ud5-ml.html#más-allá-de-k-means-elegir-k-otras-formas-y-anomalías">UD5
 sección 8</a></td>
 </tr>
@@ -752,6 +781,208 @@ la casilla 4, ir a la derecha vale 10 (la salida); en la 3, −1 + 0,9 ·
 10 = 8. Así aprendieron a jugar AlphaGo o los agentes de videojuegos,
 con redes neuronales en lugar de tablas cuando hay demasiados
 estados.</p>
+<h3 id="árbol-de-decisión">Árbol de decisión</h3>
+<p><strong>Tipo:</strong> supervisado, clasificación y regresión.
+<strong>Pregunta:</strong> ¿qué pregunta separa mejor los casos?</p>
+<p><strong>Idea.</strong> El árbol hace preguntas de sí o no
+(«¿llueve?») y en cada paso elige la que deja los grupos más
+<strong>puros</strong> (casi todo de una clase). La impureza se mide con
+la <strong>entropía</strong>, −Σ p·log₂ p (0 si todo es de una clase; 1
+si hay mitad y mitad entre dos), o con el <strong>índice de
+Gini</strong>, 1 − Σ p², que es lo que usa scikit-learn por defecto. La
+<strong>ganancia de información</strong> de una pregunta es la impureza
+antes menos la media ponderada de la impureza después.</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ¿Recreo en el patio? Datos inventados de 8 días</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>dias <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;cielo&quot;</span>:  [<span class="st">&quot;sol&quot;</span>, <span class="st">&quot;sol&quot;</span>, <span class="st">&quot;nubes&quot;</span>, <span class="st">&quot;lluvia&quot;</span>, <span class="st">&quot;lluvia&quot;</span>, <span class="st">&quot;nubes&quot;</span>, <span class="st">&quot;sol&quot;</span>, <span class="st">&quot;lluvia&quot;</span>],</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;viento&quot;</span>: [<span class="st">&quot;poco&quot;</span>, <span class="st">&quot;mucho&quot;</span>, <span class="st">&quot;poco&quot;</span>, <span class="st">&quot;mucho&quot;</span>, <span class="st">&quot;mucho&quot;</span>, <span class="st">&quot;mucho&quot;</span>, <span class="st">&quot;poco&quot;</span>, <span class="st">&quot;poco&quot;</span>],</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;patio&quot;</span>:  [<span class="st">&quot;sí&quot;</span>, <span class="st">&quot;sí&quot;</span>, <span class="st">&quot;sí&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;sí&quot;</span>, <span class="st">&quot;sí&quot;</span>, <span class="st">&quot;sí&quot;</span>],</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> entropia(y):</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> y.value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(<span class="op">-</span>(p <span class="op">*</span> np.log2(p)).<span class="bu">sum</span>())</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gini(y):</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> y.value_counts(normalize<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(<span class="dv">1</span> <span class="op">-</span> (p <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>())</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ganancia(df, col, medida<span class="op">=</span>entropia):</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    antes <span class="op">=</span> medida(df[<span class="st">&quot;patio&quot;</span>])</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    despues <span class="op">=</span> <span class="bu">sum</span>(<span class="bu">len</span>(g) <span class="op">/</span> <span class="bu">len</span>(df) <span class="op">*</span> medida(g[<span class="st">&quot;patio&quot;</span>]) <span class="cf">for</span> _, g <span class="kw">in</span> df.groupby(col))</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">round</span>(antes <span class="op">-</span> despues, <span class="dv">3</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">round</span>(entropia(dias[<span class="st">&quot;patio&quot;</span>]), <span class="dv">3</span>), <span class="bu">round</span>(gini(dias[<span class="st">&quot;patio&quot;</span>]), <span class="dv">3</span>))   <span class="co"># 0.811 0.375</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> [<span class="st">&quot;cielo&quot;</span>, <span class="st">&quot;viento&quot;</span>]:</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(col, ganancia(dias, col), ganancia(dias, col, gini))   <span class="co"># cielo 0.467 0.208 · viento 0.311 0.125</span></span></code></pre></div>
+<p>Preguntar por el cielo baja más la impureza (0,467) que preguntar por
+el viento (0,311), así que el árbol empieza por ahí:</p>
+<p><img src="assets/img/arbol_recreo.png"
+alt="Árbol aprendido: primero pregunta si llueve; si no llueve, siempre hay patio; si llueve, pregunta por el viento" /></p>
+<p>(El dibujo es el de <code>sklearn.tree.plot_tree</code>, con los
+textos en inglés: <em>entropy</em>, <em>samples</em>, <em>value</em>.)
+<strong>Ojo:</strong> sin límite de profundidad, el árbol memoriza los
+datos (sobreajuste): se controla con <code>max_depth</code> o
+<code>min_samples_leaf</code> (<a
+href="ud5-ml.html#6-sobreajuste-validación-cruzada-e-hiperparámetros">UD5
+sección 6</a>). Y es <strong>inestable</strong>: cambiar unos pocos
+datos puede cambiar el árbol entero; por eso se usan bosques (<a
+href="ud5-ml.html#7-ensembles-muchos-modelos-mejor-que-uno">UD5 sección
+7</a>).</p>
+<h3 id="naive-bayes">Naive Bayes</h3>
+<p><strong>Tipo:</strong> supervisado, clasificación.
+<strong>Pregunta:</strong> ¿qué clase hace más probables estas
+pistas?</p>
+<p><strong>Idea.</strong> Aplica el teorema de Bayes, P(clase | pistas)
+∝ P(clase) · P(pistas | clase), con una simplificación «ingenua»: supone
+que las pistas son <strong>independientes</strong> dentro de cada clase,
+así que P(pistas | clase) es el producto de P(cada pista | clase). Casi
+nunca es verdad, pero funciona sorprendentemente bien con texto.</p>
+<p><strong>El problema del cero y el suavizado de Laplace.</strong> Si
+una palabra no aparece nunca en una clase de los datos de entrenamiento,
+su probabilidad es 0 y <strong>anula todo el producto</strong>, por
+muchas otras pistas que haya. La solución es sumar 1 a cada recuento (y
+2 al total, porque cada pista tiene dos valores: aparece o no):</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>correos <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;gratis&quot;</span>: [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>],</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;premio&quot;</span>: [<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>],</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;oferta&quot;</span>: [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>],</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;spam&quot;</span>:   [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>],</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>nuevo <span class="op">=</span> {<span class="st">&quot;gratis&quot;</span>: <span class="dv">1</span>, <span class="st">&quot;premio&quot;</span>: <span class="dv">1</span>, <span class="st">&quot;oferta&quot;</span>: <span class="dv">1</span>}</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> puntuacion(clase, alfa<span class="op">=</span><span class="dv">0</span>):</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    g <span class="op">=</span> correos[correos[<span class="st">&quot;spam&quot;</span>] <span class="op">==</span> clase]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> <span class="bu">len</span>(g) <span class="op">/</span> <span class="bu">len</span>(correos)                       <span class="co"># P(clase)</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> palabra, valor <span class="kw">in</span> nuevo.items():</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        aciertos <span class="op">=</span> (g[palabra] <span class="op">==</span> valor).<span class="bu">sum</span>()</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>        p <span class="op">*=</span> (aciertos <span class="op">+</span> alfa) <span class="op">/</span> (<span class="bu">len</span>(g) <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> alfa)   <span class="co"># P(palabra | clase), con suavizado</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> p</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> alfa <span class="kw">in</span> (<span class="dv">0</span>, <span class="dv">1</span>):</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    s, n <span class="op">=</span> puntuacion(<span class="dv">1</span>, alfa), puntuacion(<span class="dv">0</span>, alfa)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;alfa=</span><span class="sc">{</span>alfa<span class="sc">}</span><span class="ss">: spam </span><span class="sc">{</span>s<span class="sc">:.4f}</span><span class="ss"> · no spam </span><span class="sc">{</span>n<span class="sc">:.4f}</span><span class="ss"> · P(spam) = </span><span class="sc">{</span>s <span class="op">/</span> (s <span class="op">+</span> n)<span class="sc">:.2f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co"># alfa=0: spam 0.2500 · no spam 0.0000 · P(spam) = 1.00</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># alfa=1: spam 0.1406 · no spam 0.0312 · P(spam) = 0.82</span></span></code></pre></div>
+<p>Sin suavizado, el modelo está <strong>seguro al 100 %</strong> de que
+es <em>spam</em> solo porque «premio» no salió en ninguno de los dos
+correos normales; con suavizado, un 82 %, más razonable con 4 correos.
+En scikit-learn, <code>MultinomialNB</code> y <code>BernoulliNB</code>
+aplican el suavizado con el parámetro <code>alpha=1.0</code> por
+defecto. Aplicado a texto: <a href="ud4-lenguaje.html">UD4</a>.</p>
+<h3 id="máquinas-de-vectores-de-soporte-svm">Máquinas de vectores de
+soporte (SVM)</h3>
+<p><strong>Tipo:</strong> supervisado, sobre todo clasificación
+(<code>SVR</code> para regresión). <strong>Pregunta:</strong> ¿cuál es
+la frontera más segura?</p>
+<p><strong>Idea.</strong> De todas las rectas (o planos) que separan dos
+clases, elige la que deja el <strong>margen</strong> más ancho hasta los
+puntos más cercanos de cada lado. Esos puntos se llaman <strong>vectores
+de soporte</strong>: solo ellos deciden dónde va la frontera. Si las
+clases no se separan con una recta, el <strong>truco del núcleo</strong>
+(<em>kernel</em>) las compara como si se hubieran añadido columnas
+nuevas (por ejemplo, x₁² + x₂²), donde sí se separan, sin calcularlas de
+verdad.</p>
+<p><img src="assets/img/svm_margen_nucleo.png"
+alt="Izquierda: frontera de una SVM con su margen y los tres vectores de soporte. Derecha: un círculo dentro de otro, que con la columna x₁² + x₂² se separa con una recta horizontal" /></p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_circles</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.svm <span class="im">import</span> SVC</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_circles(n_samples<span class="op">=</span><span class="dv">300</span>, noise<span class="op">=</span><span class="fl">0.1</span>, factor<span class="op">=</span><span class="fl">0.4</span>, random_state<span class="op">=</span><span class="dv">0</span>)   <span class="co"># un círculo dentro de otro</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> nucleo <span class="kw">in</span> [<span class="st">&quot;linear&quot;</span>, <span class="st">&quot;rbf&quot;</span>]:</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    modelo <span class="op">=</span> make_pipeline(StandardScaler(), SVC(kernel<span class="op">=</span>nucleo))</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(nucleo, <span class="bu">round</span>(cross_val_score(modelo, X, y, cv<span class="op">=</span><span class="dv">5</span>).mean(), <span class="dv">2</span>))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># linear 0.56 · rbf 1.0</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>modelo.fit(X, y)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(modelo[<span class="op">-</span><span class="dv">1</span>].support_vectors_), <span class="st">&quot;vectores de soporte de&quot;</span>, <span class="bu">len</span>(X))   <span class="co"># 38 de 300: solo esos definen la frontera</span></span></code></pre></div>
+<p><strong>Ojo:</strong> hay que <strong>escalar</strong> (usa
+distancias, como KNN). El parámetro <code>C</code> reparte entre margen
+ancho y pocos errores, y <code>gamma</code> (núcleo <code>rbf</code>)
+cuánto se curva la frontera: se eligen con validación cruzada. Con
+muchos miles de filas es lento. Una SVM no da probabilidades de serie:
+<code>predict</code> devuelve la clase, y para probabilidades hace falta
+<code>SVC(probability=True)</code>, que las estima aparte.</p>
+<h3 id="boosting-gradient-boosting-y-adaboost">Boosting: gradient
+boosting y AdaBoost</h3>
+<p><strong>Tipo:</strong> supervisado, conjunto de modelos.
+<strong>Pregunta:</strong> ¿qué errores quedan por corregir?</p>
+<p><strong>Idea.</strong> En un bosque los árboles se entrenan a la vez
+y votan; en <em>boosting</em> se entrenan <strong>uno detrás de
+otro</strong>, y cada nuevo modelo pequeño (a menudo un árbol de una
+sola pregunta, un «tocón») se centra en lo que los anteriores hacen
+mal.</p>
+<ul>
+<li><strong>Gradient boosting</strong> (y sus versiones rápidas:
+XGBoost, LightGBM, <code>HistGradientBoosting</code>): cada árbol
+aprende el <strong>residuo</strong> (lo que falta para acertar) y se
+suma con un peso pequeño, la tasa de aprendizaje.</li>
+<li><strong>AdaBoost</strong>: tras cada ronda <strong>aumenta el peso
+de los ejemplos mal clasificados</strong>, y al final vota cada modelo
+con un peso α = ½ ln((1 − ε) / ε), mayor cuanto menor es su error
+ε.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeRegressor</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>m2 <span class="op">=</span> np.array([[<span class="dv">50</span>], [<span class="dv">60</span>], [<span class="dv">70</span>], [<span class="dv">80</span>], [<span class="dv">90</span>], [<span class="dv">100</span>], [<span class="dv">110</span>], [<span class="dv">120</span>]])</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>precio <span class="op">=</span> np.array([<span class="dv">95</span>, <span class="dv">110</span>, <span class="dv">120</span>, <span class="dv">150</span>, <span class="dv">160</span>, <span class="dv">175</span>, <span class="dv">210</span>, <span class="dv">220</span>])   <span class="co"># miles de euros, inventado</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> np.full(<span class="bu">len</span>(precio), precio.mean())          <span class="co"># ronda 0: la media</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;ronda 0, error medio:&quot;</span>, <span class="bu">round</span>(np.<span class="bu">abs</span>(precio <span class="op">-</span> pred).mean(), <span class="dv">1</span>))   <span class="co"># 36.2</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ronda <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">4</span>):</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    residuo <span class="op">=</span> precio <span class="op">-</span> pred                        <span class="co"># lo que falta por explicar</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    tocon <span class="op">=</span> DecisionTreeRegressor(max_depth<span class="op">=</span><span class="dv">1</span>).fit(m2, residuo)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    pred <span class="op">=</span> pred <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> tocon.predict(m2)          <span class="co"># tasa de aprendizaje 0.5</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;ronda </span><span class="sc">{</span>ronda<span class="sc">}</span><span class="ss">, error medio:&quot;</span>, <span class="bu">round</span>(np.<span class="bu">abs</span>(precio <span class="op">-</span> pred).mean(), <span class="dv">1</span>))   <span class="co"># 24.7 · 17.7 · 11.5</span></span></code></pre></div>
+<p><img src="assets/img/boosting_rondas.png"
+alt="Cuatro rondas de gradient boosting: la predicción empieza siendo la media y se va ajustando en escalones a los puntos; el error medio baja de 36,2 a 11,5" /></p>
+<p><strong>Ojo:</strong> con demasiadas rondas o una tasa alta, también
+sobreajusta: se usa parada temprana.
+<code>HistGradientBoostingClassifier</code> de scikit-learn ya trata los
+huecos (NaN) sin imputar y es rápido; XGBoost y LightGBM son librerías
+aparte.</p>
+<h3 id="agrupamiento-jerárquico">Agrupamiento jerárquico</h3>
+<p><strong>Tipo:</strong> no supervisado, agrupamiento.
+<strong>Pregunta:</strong> ¿qué grupos hay dentro de qué grupos?</p>
+<p><strong>Idea</strong> (versión aglomerativa, la más usada): empieza
+con cada dato en su propio grupo y une, paso a paso, los dos grupos más
+cercanos, hasta que solo queda uno. El resultado es un árbol, el
+<strong>dendrograma</strong>: la altura de cada unión es la distancia a
+la que se unieron. <strong>Cortándolo</strong> a una altura se obtiene
+el número de grupos, sin tener que decidir k antes.</p>
+<p><img src="assets/img/dendrograma.png"
+alt="Seis estudiantes inventados según horas de lectura y deporte, y su dendrograma: un corte a altura 5 deja dos grupos" /></p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.cluster.hierarchy <span class="im">import</span> linkage, fcluster</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>alumnado <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">&quot;lectura&quot;</span>: [<span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">6</span>, <span class="fl">6.5</span>, <span class="dv">3</span>, <span class="dv">7</span>], <span class="st">&quot;deporte&quot;</span>: [<span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">4</span>, <span class="dv">2</span>]},   <span class="co"># horas a la semana, inventadas</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    index<span class="op">=</span>[<span class="st">&quot;Uxía&quot;</span>, <span class="st">&quot;Brais&quot;</span>, <span class="st">&quot;Noa&quot;</span>, <span class="st">&quot;Iago&quot;</span>, <span class="st">&quot;Sara&quot;</span>, <span class="st">&quot;Antía&quot;</span>])</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>uniones <span class="op">=</span> linkage(alumnado, method<span class="op">=</span><span class="st">&quot;ward&quot;</span>)        <span class="co"># cada fila: qué se une y a qué distancia</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(uniones[:, <span class="dv">2</span>].<span class="bu">round</span>(<span class="dv">2</span>))                      <span class="co"># [ 0.71  1.12  1.22  3.52 10.84]</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>grupos <span class="op">=</span> fcluster(uniones, t<span class="op">=</span><span class="dv">2</span>, criterion<span class="op">=</span><span class="st">&quot;maxclust&quot;</span>)   <span class="co"># «cortar» el árbol en 2 grupos</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>({n: <span class="bu">int</span>(g) <span class="cf">for</span> n, g <span class="kw">in</span> <span class="bu">zip</span>(alumnado.index, grupos)})   <span class="co"># Uxía, Brais y Sara: 2 · Noa, Iago y Antía: 1</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Para dibujarlo: from scipy.cluster.hierarchy import dendrogram; dendrogram(uniones, labels=list(alumnado.index))</span></span></code></pre></div>
+<p>El gran salto entre la última unión (10,84) y la anterior (3,52)
+indica que 2 grupos es una buena elección. <strong>Ojo:</strong> escalar
+si las columnas tienen unidades distintas; y con muchos miles de datos
+es lento (compara todos con todos). El método de unión cambia el
+resultado: <code>ward</code> busca grupos compactos; <code>single</code>
+encadena puntos y puede formar grupos alargados.</p>
 <h2 id="cómo-elegir-un-algoritmo">Cómo elegir un algoritmo</h2>
 <pre><code>¿Hay que encontrar una secuencia de pasos o una configuración?
   ├─ Sí → búsqueda (BFS, A*, minimax) u optimización (gradiente, ascenso de colinas, genéticos)
@@ -788,7 +1019,7 @@ la tuya.</li>
 <li>Haz lo mismo con las casas y calcula el precio de una de 120 m² con
 cada recta.</li>
 </ol>
-<div class="sol-lock" data-label="Solución" data-iv="SKzHv4iiIDTovaHd" data-ct="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"></div>
+<div class="sol-lock" data-label="Solución" data-iv="y/Y8Q4szU+lOqxAr" data-ct="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"></div>
 
 <h3 id="ejercicio-a2--knn-con-y-sin-escalar-">Ejercicio A2 · KNN con y
 sin escalar 🟡</h3>
@@ -802,7 +1033,7 @@ identificación?</li>
 <li>Explica por qué un árbol de decisión <strong>no</strong> necesita
 escalar.</li>
 </ol>
-<div class="sol-lock" data-label="Solución" data-iv="9UDsqnS2ovqE0KEf" data-ct="wmTKbd7O/hYchBGFLinDs2AKtBNlkaUWmOo1XUiLZUuopoKsM5uM6oM3d18rZULJ1mT+bMXAJKbkseBEaTc/I9sNkhK2jsNrhzMdPrzR7IJfx4WAYFi6s3EIEMmjczKCy8/nsp9AoYtAyAsFSvYUPWYlSQ6eQRIurjqrzwL0Y4xNdXwOwBPFwkWUGNgONP90tvxwpO/OYMNZYSeA8LqsbM3jI1IiMktiGOHrLnMbxW4byhIPdG8c6Dqzpp+xQ9+jzAqzO8S5Y0Pm5dqtjfq00v2dgEHRvLotFKysA7XFjZeQSWWUvO0EWH2J4awaTP+a9ImNebsHUZShadmXYY+lPxsV2VLIcB5006HVdH0jFyQ0Ps5vOYfBiFavC2Lu+dbFgsLgHV8fxmLI3NtO1M8/lIKiObGBBz3j9fs1wGxbbCSeo3m91gqQSLIXGocj4fjBbO1n9UE6pZeY3E4knILq6k/1mXJdLSwUolOFcluRKHW9inTp5polGQswW1jBIlxz1tz4lxasHCfOpqRuAcgKnict2viOXaDJ5/ms4OjbV9nyZgFGFTxovtPrmORXKiAqYBaGCKx3LNIrRRnKE0tVb1tiVwm7XOjDuim8KCehPq+TsNSkr3jhLtWUrKUHdbokjZofy/K5bPv+Gn2SMNoBPqyfrikFQE+zdS+t6ZrPca38mWCygeQLxeeweHCCQDyUPGhOHv3CVqfV0kYG/xxiptji4ua2m5VDsouDl3w5EXh/3RA+PzPa+mLoVMTILmOALPGOpuRg/nhLrUZjTkDgkmZ4tXLlRsUsVm0LWNXaLWeL+bShBXCOxgmvroqe92wt0QZ08g5Iz6N29XRhcRkd+nWNskYOXvtT9L1LnvAGOGGmxXwyyBBShoOQ1WO4x3w1YiulZi9TZKV54gSUYgHutJ42zp2Be7Gy70ILmHKBeCd4CSVpVcWrSnOX7Mv1fgIODViOKx0v1nf2QfsJov/p2uMVrz5NxWyoaktAV95DO0CfYGQYFzA7OCDdmn8Hf9KSgKWGx7Yij6zEUyq2g+QLfqYYRYZJFDV6Jq2+wiPut1QEoAhSscDBqs8pGTV3ji+nARZmSL5gar9j+aHnkiMelYG1M0Sg9yNBBvgnK9Db1Q3EhLTq2qHPf6G9Yf8qvy4fL8tJHRr/jsEsS11ryW3nrTBWSKPkcZl72x1Py7CGIr7WbYkO3pnePLFVEqbDD373tDoiHcuZ+4H+CNZt50TL03u3C0rQFteeB8tu7jMBkXUISzEcRySVZTBtuWhKa0U9o9mmkQL+/2Co/IJsDrwA8FgNDXVxlFjDju3yEYe1PTN2SKfQ6G+HH9k7eW10uIPjglv8kQ7XTQ7Sjt8pn8IgunrqIgsGlxo616wrYIHwyXWSlHtmhyz0Vgjt1pj9v7W9f11w3tGTipvr01aA8Kw7JaDMaWMdeG3Ax2PB3OWOOnQv6lnX1MW7W8K2KmhS8fsnA8KnJyAszuzyG6+cQk3zsdgL0XjCHT/AxDqPlypwvPCzWDKOTX7bny3fg2rC2VP2BTrOg8ovfbBaRUu7Fv7udsWJmjZK90vlrKJ+X22tjJky+TN2u5ELQgoxcOaTDKbrUo56VNF+DVqmbcHvEYmG6p59zvihlAA3yJHHob1rv+Vbkbos+r+9BIkEwgBLz1wTSLc9/7H6zxX5Or4hjn2Hgd/diVQW3UcsivWlXdrfO2KeUs4CgMtOevcgGket2Bw+O7fV9MX4i1oSZ/Xh9PVkFQQcTtsS+BKuAxGh8h+AbOOO0fTdcgnyzgSEj8ZuFTea2cK7X2jEtx/1C1YfOc4="></div>
+<div class="sol-lock" data-label="Solución" data-iv="S0I9v06RblyD0ZYy" data-ct="5JR5h3G1GI+oUXc/kcwpRneJ5q3u/1G3z7IrociYcP4K5BLJ/0x+8tdpaL+Ijmd6YD2B4MMLyh4wj5Ix0hKqu0VpM2uCjRtao9Zl0VcJ+IQksGjRbS3P6GkeHkiaXM1rClLVMG69XkEz0y4oReFks4ayhlU3369qOC4FCyEnrKab55MxPJ4oqj1+qvbk7uwGBhji9rmSOXrWakIkeo0+/b5gSJBq9iQnh91ybb4MU8KdoPGoUb9W0lALzQohVN2poDrMKX91Cx90Ko/Lpz34FSOuzPpWgTVpCD5M1j2y7J5goh/lUTyDqhd/Kc+OUnO0XsvHOOWod3+tlHrClLEynztRcmIuWoCGyH3SctuohFwjAanrgnJLO7QyQNa97sXmRgXm5yjFoyy9eMkFtuJN7W22Iu4vXgRqdbTlDimzgVvB4sRrsfZymbiuP0RkMkrBZ7gAfigiuID/iCzofHLLggP/nNvLFLNHosjlOQUl1cHk06WCEllcMMZpL87HhLsw37cT6l/h44C6ZQ8nikEJ471xmnGMAMQivhXJrJwhywzx3iy2jyiKiXGr95HOHe9x0JotUGXke3r+HIQffWMvOszC74b+XO0MHxFGM3hyK3qtcKyUZ+GjY9E2RxS1QezRFsisi1jjwy+y4NsQ/JBHD3ISOWaWP7V6Q7L5NU7YG87IY60xhGoNIkAiNzNlMbiXkqN6uHT543pScF83LbnSpQXHIxMPOmGO15BdU8NsOU1pOWMo88F3crbfq+8E9pPTltmpCRuLW6xjCwb75Zv+qwcyWOZ8p5AW6Jhs9UZdcwnijKNyQXWeL74KO3aW+mR7q+NmRHFs+JTMyV8GlEiZud6fkCverskK3ART3WMEmS9MlUy6WoavQFfWz72Q8VFyYEiMDWaKjti3OUcK9UqllWfkRpRFNfeTNc131Hgx3HBZ3vMgki5/VCtEN1WtJhmMNNJSQS2QF2i8U0iFi+qMswjhvsCGfWMEQ3RUeumiJfqAhXyFpBTXMZhOTwyIYKXbadK9pN+vQk4kn48qra4LTdEpu3oSs6/SQbxJO7HQe8ci/P2JJ87kY2iDJe9qruV2xE14ZX/WguuRtsmPYxNcvUEhhjCLgBXYzDQku50lpx2wmxsZ2V59ZwkvDKssL0VuJixLMN5DX9wMbhHDEOSM3WZ2tNR7hELwZB1QeHNCzxqrhv01tE2xnFMnkOViqQ/xFtO2DjEOwBfXkrxsV/y4kbv//mLvmKRu/q9u9Z4H4y47YGS01j6UJQwaK7JXyu/8yfgXB0d27N/WH18ejZlnyObC+xe8VrqkQYRdVPfRM0A2fQ/UsbjI0ftUZ/k/qvKk199hxoI2n2ZjzuQPAR8UrS+gKSvD3quqv3oCByzUacUq5fZvXCVP5ns+oTwHBwe2pAlML6GVwkp1qDtGALmtGlq45l4fi0RJDk+DcbnTdJAye7FHB26OYCALsesMR1ZnXxz58sERdS+vgruiD8gO60uK8yPZ9Jg8O7TUUFNcfmXb5sG8+yP5bU+FOK8d6gA4OAm3+IKPOaei6fKyhFzsUNptF+Fy9nAP24WwssjqUW5mNhJUqxvHND6Y5BgGef0JDmQ2FqXwcRfLLUlzCZb1NNIXkuiEC4kbJcGMxpTi9x5PWuo0BiZfig/Id9r3Asw2qX6ppx7I64tVb9mGdle1k2q3JIC42Rr08sa9I+16nz6ZiCJupCxGH2jKgp76Qm/T/soxV4RR5u1mu5AEvZMwdgbnrsb38L2/OFwNEyuy2DrqrljxD51+GwQcW5peR7R8fJ0SZI/IWyYmAUxgLf8="></div>
 
 <h3 id="ejercicio-a3--qué-algoritmo-usarías-">Ejercicio A3 · ¿Qué
 algoritmo usarías? 🟢</h3>
@@ -825,7 +1056,82 @@ etiquetadas.</li>
 <li>Elegir el horario de exámenes que minimiza los choques entre
 asignaturas.</li>
 </ol>
-<div class="sol-lock" data-label="Solución" data-iv="MWVFj8DEcC9cJb0C" data-ct="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"></div>
+<div class="sol-lock" data-label="Solución" data-iv="8a7eJKRDkp1nD26+" data-ct="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"></div>
+
+<h3 id="ejercicio-a4--naive-bayes-a-mano-con-y-sin-suavizado-">Ejercicio
+A4 · Naive Bayes a mano, con y sin suavizado 🟡</h3>
+<p>Con la tabla de 4 correos de la ficha de Naive Bayes, llega un correo
+con «gratis» y «oferta» pero <strong>sin</strong> «premio».</p>
+<ol type="1">
+<li>Calcula, sin suavizado, la puntuación de <em>spam</em> y de no
+<em>spam</em>, y la probabilidad de <em>spam</em>.</li>
+<li>Repítelo con suavizado de Laplace (sumar 1 a cada recuento y 2 a
+cada total).</li>
+<li>¿Por qué cambia tanto el resultado en el primer correo de la ficha y
+tan poco en este?</li>
+</ol>
+<div class="sol-lock" data-label="Solución" data-iv="Zd+nfrAio2yA1Btr" data-ct="QfK5KkyCA+AtVfj2NwlXuo5Xa2DCM+Vu1oIXTVhAwCKelwCjKKCx+L5Jsb4LpiHEEaheCfMSUWlzNr9WcaqYQwmj5JeUXdFUiBJUn4sviGmppasySdSR+CDQdTdrC7qKntRQim6WnnCR3/UA1JTo/ji0bt1m0POmstJH30fkIdbJirGOZ2oDGaqakbL5Jomi/jGnlVHorBpbCLCCje+1ULowR+3k/kw6fVA+t9FxCmNa8/XRRP96gPxn7588jRKEUETsAFz+3U49DPSNTfx9uDRe/VqVLOX5u+8tCOYJcs9QiT1RINQhnJ9ES5T2/DIVL6rakwzIFJvO3+TjGdAPiEA2LBFkG0+UQhe+GN4eAVgFuG+l1dFZg8UQldWT7HpvF2dkaBJsQexYFDlC7dFvbZuYN6SVgwfu3hwUd1GieUaKEC2NDQOEIM9Dsoml7HAVWtVELUDCmMY6mVMn0S5WKzEvlqnltkwQ08/aqUs5laW35f5kr+wu/bT6Xu2NefPaCkqlrxh3UsVHg6O1TprPhani4a9tB1xOIUbCSv+iJL1zfCSD3dWVVb8ESJ1KydK5gY0I8X53SGv0PPP7ZF+tz0hrB8fzUTDhAc3dWNg4uha9aXMgioBSWzwARXdvpQi1PZFaxVAUo2phcBbHIhW3b3/VF0+eKxDrop25HF9QgayXj0rjH5KYSyRgHsu6TZe8sRSljUw3ayfG84vFWIyHSwQgpDoOdbdxPyREb0ovjk1a99dz7Wf2xnfYdscwCEjPX/WBrCRm9gpc8KAfsB81EIRu7FLt1Nu8M6Jabw5H39GD6jKxnjEm4SBah4fXfhmbT5enXSbnupXeHUkbZKf/f2MhVlRdr5K9MbKzXgdOF45e8jK+2tb9TNqS/t7WZXufUn5peSghO4mK3OI41YfC7DKntuqz93HC+LRMuGbjkgdOzXP4uA/r0HtcJxX5NfMlLukcidj8F5zvhrjLwjDupGjgkLoF2KCVMLf7KNAn1B0nQTCGpvBpsPb+wvVPYMDlRDYtCcsZ0cntwLJ3VNb6E1rWY9keoPRltSWz3UVmazySzBXK1VZRP4+VNXDZP/6t5BUk8rTmyS7PrY8cmY+UKyHTySl1On2QZIIBH2vmnOwlL/1KBg78DMRhXPEqjsUogQyUTr5P+CNmnO+nzx5cufVKPjVzhvyUdMlZmhdqMI20iKyg9cpEd4i79jVZkwDevlRb5ydmNJf0nlJBXb7wpflecm5NnfaY3XfSKHODh7KpR6Jq4BmEm74UxaY6soNP4p+egElU73GZjxdybEb8RresmfJIweAholyZGBX3qiMm3UOy6kgvPmCnXUSEXrya8saTyykB6aDiGg08RAF5B20TIKic3vkwlZiH2CVqGp3Vs+i93ghtKdskEVdYyKAl5r6JwYVTM0zoelChng0ueRcFrSPWmu9yvywEh3Z09taiPlcADtu3D8r3hoURXeJE9T4M"></div>
+
+<h3 id="ejercicio-a5--revisión-crítica-12-algoritmos-de-ml-">Ejercicio
+A5 · Revisión crítica: «12 algoritmos de ML» 🔴</h3>
+<p>Un carrusel de 20 láminas, marcado como <strong>contenido generado
+con IA</strong>, resume 12 algoritmos con tablas de ejemplo. Comprueba
+estas tres láminas:</p>
+<ol type="1">
+<li><strong>AdaBoost.</strong> Dos clasificadores débiles h₁ y h₂ y la
+predicción final H(x) = signo(α₁h₁ + α₂h₂):</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th>Ejemplo</th>
+<th>Etiqueta real</th>
+<th>h₁</th>
+<th>h₂</th>
+<th>H final</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>x₁</td>
+<td>+1</td>
+<td>+1</td>
+<td>+1</td>
+<td>+1</td>
+</tr>
+<tr class="even">
+<td>x₂</td>
+<td>−1</td>
+<td>+1</td>
+<td>−1</td>
+<td>−1</td>
+</tr>
+<tr class="odd">
+<td>x₃</td>
+<td>+1</td>
+<td>+1</td>
+<td>−1</td>
+<td>+1</td>
+</tr>
+<tr class="even">
+<td>x₄</td>
+<td>−1</td>
+<td>−1</td>
+<td>−1</td>
+<td>−1</td>
+</tr>
+</tbody>
+</table>
+<p>¿Existen pesos α₁, α₂ &gt; 0 que den esa columna «H final»?</p>
+<ol start="2" type="1">
+<li><strong>PCA.</strong> Los datos x₁, x₂, x₃ son P1 (2,5; 2,4; 0,5),
+P2 (0,5; 0,7; 0,3), P3 (2,2; 2,9; 0,4) y P4 (1,9; 2,2; 0,6), y la lámina
+dice que la primera componente vale 1,62; −1,20; 1,38; −1,80. Calcúlala
+con <code>PCA(n_components=2)</code>, con y sin escalar antes.</li>
+<li><strong>SVM.</strong> La tabla de predicciones pone «P(E1) = Spam»,
+«P(E2) = Not Spam». ¿Qué está mal en esa notación?</li>
+</ol>
+<div class="sol-lock" data-label="Solución" data-iv="frksNRYi91/vqN4N" data-ct="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"></div>
 
 <h2 id="revisión-crítica-del-carrusel">Revisión crítica del
 carrusel</h2>

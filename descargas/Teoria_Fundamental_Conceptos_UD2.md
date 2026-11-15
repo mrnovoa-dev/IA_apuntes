@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E114 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E116 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -1423,6 +1423,53 @@ for clave, valor in persona.items():
     print(f"{clave}: {valor}")
 ```
 
+**Más allá de lo básico.** Desde Python 3.7 los diccionarios **conservan el orden en que se añaden las claves** (muchos apuntes antiguos dicen todavía que «no tienen orden»). Las claves tienen que ser inmutables (texto, números, tuplas) y no se repiten: asignar otra vez una clave sustituye su valor.
+
+| Quiero… | Cómo | Si la clave no existe |
+|---------|------|------------------------|
+| Leer | `d[clave]` / `d.get(clave, defecto)` | `KeyError` / devuelve el defecto |
+| Quitar y obtener el valor | `d.pop(clave, defecto)` | `KeyError` si no hay defecto |
+| Quitar el último añadido | `d.popitem()` | `KeyError` si está vacío |
+| Borrar | `del d[clave]` / `d.clear()` (todo) | `KeyError` |
+| Leer y, si falta, crear | `d.setdefault(clave, valor)` | La crea con `valor` |
+| Unir dos | `d1 | d2` (nuevo) / `d1.update(d2)` (cambia d1) | Gana el de la derecha |
+
+```python
+notas = {"Uxía": 8.5, "Brais": 6.0, "Noa": 9.2}
+
+# Quitar
+ultima = notas.popitem()             # quita el último añadido
+print(ultima, notas)                 # ('Noa', 9.2) {'Uxía': 8.5, 'Brais': 6.0}
+print(notas.pop("Iago", "no está"))  # con valor por defecto no hay KeyError
+del notas["Brais"]                   # también borra; sin la clave, KeyError
+
+# Crear de otras formas
+nombres, puntos = ["Uxía", "Brais", "Noa"], [8.5, 6.0, 9.2]
+notas = dict(zip(nombres, puntos))
+asistencia = dict.fromkeys(nombres, 0)   # mismo valor para todas
+print(asistencia)                         # {'Uxía': 0, 'Brais': 0, 'Noa': 0}
+
+# Contar y agrupar sin comprobar si la clave existe
+grupos = {}
+for nombre, curso in [("Uxía", "1A"), ("Brais", "1B"), ("Noa", "1A")]:
+    grupos.setdefault(curso, []).append(nombre)
+print(grupos)                             # {'1A': ['Uxía', 'Noa'], '1B': ['Brais']}
+
+# Unir (Python 3.9+), buscar el máximo y ordenar por valor
+extra = {"Iago": 7.4, "Noa": 9.5}
+print(notas | extra)                      # Noa queda con 9.5: gana el de la derecha
+print(max(notas, key=notas.get))          # Noa
+print(sorted(notas.items(), key=lambda par: par[1], reverse=True)[0])   # ('Noa', 9.2)
+print({n: ("apto" if p >= 5 else "no apto") for n, p in notas.items()})
+
+# Las vistas se actualizan solas
+claves = notas.keys()
+notas["Iago"] = 7.4
+print(list(claves))                       # ['Uxía', 'Brais', 'Noa', 'Iago']
+```
+
+`keys()`, `values()` e `items()` devuelven **vistas**, no listas: reflejan los cambios posteriores del diccionario. Si se va a modificar el diccionario mientras se recorre, hay que recorrer una copia: `for k in list(d): ...`. Para contar, `collections.Counter`; para agrupar sin `setdefault`, `collections.defaultdict(list)` (sección 14.14). Por qué buscar en un diccionario es tan rápido: sección 14.9.
+
 [Referencia: Diccionarios](https://docs.python.org/3/tutorial/datastructures.html#dictionaries)
 
 ### 5.3 Tuplas a fondo: registros que no cambian
@@ -2188,6 +2235,80 @@ np.loadtxt("notas.csv", delimiter=",")
 `.npy` y `.npz` guardan exactamente la forma y el tipo, y se leen muy rápido, pero solo los entiende NumPy. Para compartir datos con otras personas o con una hoja de cálculo es mejor un CSV, y para tablas con columnas de distinto tipo, Pandas (7.2). Se practica en el [ejercicio E88](ejercicios.html#bloque-q--de-las-chuletas-al-código-e87e90).
 
 [Referencia: NumPy documentation](https://numpy.org/doc/stable/)
+
+#### NumPy a fondo: difusión, máscaras, vistas y trampas
+
+**Difusión (*broadcasting*).** NumPy puede operar arrays de formas distintas sin copiarlos. Compara las formas **empezando por la derecha**: dos dimensiones encajan si son iguales o si una de ellas es 1 (o falta); la de tamaño 1 se «estira». `(3, 1) + (4,)` da `(3, 4)`; `(3, 2) + (3,)` da error, porque 2 y 3 no encajan.
+
+![Difusión: un array de forma (3, 1) más uno de forma (4,) da uno de forma (3, 4); las filas y columnas punteadas se repiten sin ocupar memoria](assets/img/numpy_broadcasting.png)
+
+```python
+import numpy as np
+
+notas = np.array([[6.5, 7.0, 4.0],      # filas: alumnado inventado
+                  [8.0, 5.5, 9.0],      # columnas: tres exámenes
+                  [3.5, 6.0, 5.0]])
+
+# Difusión (broadcasting): restar a cada examen su media, sin bucles
+medias = notas.mean(axis=0)              # forma (3,): una media por columna
+print((notas - medias).round(2))         # (3, 3) - (3,) -> (3, 3)
+print(notas.mean(axis=1, keepdims=True).shape)   # (3, 1): sirve para restar por filas
+
+# Máscaras: filtrar y cambiar con condiciones
+print(notas[notas < 5])                  # [4.  3.5]
+print(np.where(notas >= 5, "apto", "no apto")[0])   # ['apto' 'apto' 'no apto']
+
+# Vistas y copias
+fila = notas[0]                          # vista: comparte memoria
+fila[0] = 10
+print(notas[0, 0])                       # 10.0: ¡también cambió notas!
+copia = notas[[0, 1]]                    # índices en lista: copia
+copia[0, 0] = 0
+print(notas[0, 0])                       # 10.0: notas no cambia
+print(np.shares_memory(notas, notas.reshape(9)), np.shares_memory(notas, notas[notas > 5]))   # True False
+```
+
+**Vistas y copias.** Recortar con `:` (`a[1:4]`, `a[0]`) y `reshape` suelen dar una **vista**: otra forma de mirar la misma memoria, así que cambiarla cambia el original. Indexar con una lista (`a[[1, 2]]`) o con una máscara (`a[a > 5]`) da una **copia**. Si se duda, `np.shares_memory(a, b)`; y si se quiere trabajar sin tocar el original, `.copy()`.
+
+![Una vista enmarca parte del array original; una copia es un bloque aparte](assets/img/numpy_vistas.png)
+
+**Huecos, desbordamiento, ordenar y guardar.**
+
+```python
+import numpy as np
+
+# NaN: un hueco «contagia» la media
+x = np.array([7.0, np.nan, 5.0])
+print(x.mean(), np.nanmean(x))           # nan 6.0
+
+# Desbordamiento: los enteros pequeños dan la vuelta sin avisar
+pequenos = np.array([100, 100], dtype=np.int8)   # int8: de -128 a 127
+print(pequenos.sum(dtype=np.int8), pequenos + pequenos)   # -56 [-56 -56]
+
+# Ordenar, buscar y conjuntos
+t = np.array([7, 1, 5, 3, 9])
+print(np.argsort(t))                     # [1 3 2 0 4]: posiciones de menor a mayor
+print(np.partition(t, 2)[:3])            # [1 3 5]: los 3 menores, sin ordenar todo
+print(np.searchsorted([5, 7, 9], [6, 9]))    # [1 2]: dónde insertar para seguir ordenado
+print(np.intersect1d([1, 2, 3], [2, 3, 4]), np.setdiff1d([1, 2, 3], [2]), np.isin([1, 5], [1, 2]))
+print(np.add.accumulate([1, 2, 3, 4]))   # [ 1  3  6 10]: sumas acumuladas
+
+# Guardar: binario (rápido, exacto) o texto (legible)
+np.save("notas.npy", t)
+np.savez_compressed("todo.npz", notas=t, pesos=np.ones(3))
+print(np.load("todo.npz")["notas"])
+grande = np.memmap("grande.dat", dtype="float32", mode="w+", shape=(1000, 1000))
+print(grande.nbytes // 1_000_000, "MB en disco, no en memoria")   # 4 MB
+```
+
+| Trampa | Qué pasa | Solución |
+|--------|----------|----------|
+| Un `NaN` en los datos | `mean`, `sum`, `max` devuelven `nan` | `np.nanmean`, `np.nansum`… o limpiar antes |
+| Enteros pequeños (`int8`, `uint8`) | Al pasarse del límite dan la vuelta sin avisar (100 + 100 = −56) | Usar `int64` o `float64`; ojo con las imágenes (`uint8`, de 0 a 255) |
+| Cambiar una vista sin querer | El array original también cambia | `.copy()` |
+| Formas que no encajan | `ValueError: operands could not be broadcast together` | Mirar `.shape` y usar `reshape` o `keepdims=True` |
+| `np.dot` con 3 o más dimensiones | No hace lo mismo que `@` (forma `(2, 3, 2, 5)` en vez de `(2, 3, 5)`) | Para matrices, `@` o `np.matmul` |
+| `rng.choice(..., replace=False)` pidiendo más de los que hay | `ValueError` | `size` como mucho el número de elementos |
 
 ### 7.2 Pandas (Manipulación de Datos)
 
@@ -5879,6 +6000,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *Data and Model Training Concepts*, *Neural Networks – Detailed Notes* y *RAG + LLM Complete Notes* (codingwithmee_18, PDF de 51, 34 y 36 págs., procesados con MarkItDown) y carrusel «Git Commands – Complete Handwritten Notes» (@codewithayansh, 13 diapositivas) | Git a fondo, comprobación del gradiente, búsqueda híbrida con BM25 y RRF, métricas de recuperación, calibración, etiquetas con ruido | 14.7, 14.19; [UD5](ud5-ml.html), secciones 1 y 5; ejercicios E106–E110 |
 | Carrusel «Big Data & Big Data Analytics» (@analyticswithsingh, 14 diapositivas, marcado como generado con IA) | 5 V, HDFS, MapReduce, YARN, Spark, lotes y flujos, NoSQL y CAP, Hive y Parquet, tipos de análisis | 11.7–11.10 y ejercicios E111–E112 |
 | *RAG Cheat Sheet* (T. Khan, PDF de 24 págs. hecho con Canva; 12 de contenido y 12 de publicidad; texto con MarkItDown y código leído de las imágenes) | k, umbral y MMR, coseno frente a L2, estrategias *stuff*, *map-reduce* y *refine*, LangChain 1.x | 14.19 (RAG mejorado) y ejercicios E113–E114 |
+| *Python Module 9: Dictionaries* (@Mastercode.sagar, PDF escaneado de 16 págs., OCR con Tesseract y MarkItDown), chuleta «NumPy Complete Cheatsheet» (@thedataguy16, 11 láminas) y carrusel «12 Machine Learning Algorithms» (@code.withnarayan, 20 láminas, generado con IA) | Diccionarios a fondo, NumPy a fondo (difusión, vistas, trampas), fichas de árbol, Naive Bayes, SVM, boosting y jerárquico con figuras propias | 5.2, 7.1, [Algoritmos](algoritmos.html), ejercicios E115–E116 y A4–A5 |
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
 | *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
 | *Python Module 8: Tuples* (@Mastercode.sagar, 15 págs.), procesado con OCR y MarkItDown | Crear tuplas, `count` e `index`, operaciones, tuplas anidadas, tupla frente a lista, desempaquetado, proyecto de registro | 5.3 y ejercicios E83–E86 |

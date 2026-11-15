@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E117 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E119 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -921,6 +921,56 @@ s.strip(), s.lstrip(), s.rstrip()   # quitar espacios: por los dos lados, la izq
 **Recorrer una cadena**: `for letra in palabra:` da cada carácter; `for i, letra in enumerate(palabra):` da también la posición. Con `ord("A")` (65) y `chr(65)` ("A") se pasa de carácter a número Unicode y al revés (UD4, sección de texto como números).
 
 ---
+
+### 2.7 Expresiones regulares: buscar patrones en texto
+
+Los métodos de las cadenas (`find`, `replace`, `split`) buscan un texto **exacto**. Una **expresión regular** describe un **patrón**: «dos cifras, una barra, dos cifras…». Sirve para sacar fechas o correos de un texto, comprobar que un código tiene el formato correcto o limpiar datos antes de un modelo (sección 9 y [UD4](ud4-lenguaje.html)). Se usa el módulo `re` y se escribe el patrón como cadena «cruda», `r"..."`, para que las barras invertidas no se interpreten.
+
+| Símbolo | Significa | Ejemplo | Encaja con |
+|---------|-----------|---------|------------|
+| `\d` · `\w` · `\s` | Una cifra · letra, cifra o `_` · espacio | `\d\d` | `16`, `04` |
+| `.` | Cualquier carácter (`\.` es un punto de verdad) | `a.a` | `ala`, `a2a` |
+| `[abc]` · `[A-Z]` · `[^0-9]` | Uno de esos · un rango · cualquiera menos esos | `[A-Z]{3}` | `INF` |
+| `*` · `+` · `?` · `{n}` · `{n,m}` | 0 o más · 1 o más · 0 o 1 · exactamente n · de n a m | `\d{2,4}` | `12`, `2026` |
+| `^` · `$` | Principio · final del texto | `^Hola` | «Hola…» |
+| `( )` | Grupo: una parte que se quiere recuperar | `(\d{2})/(\d{2})` | `12/11` → `12` y `11` |
+| `a|b` | Una cosa o la otra | `lunes|martes` | `martes` |
+
+```python
+import re
+
+aviso = ("Reunión de 1.º B el 12/11/2026 a las 16:30 en el aula 2.04. "
+         "Dudas: titoria1b@iesexemplo.gal o 986 123 456. "
+         "Entrega del proyecto: 03/12/2026.")
+
+print(re.findall(r"\d{2}/\d{2}/\d{4}", aviso))           # ['12/11/2026', '03/12/2026']
+print(re.search(r"\d{2}:\d{2}", aviso).group())         # 16:30
+print(re.findall(r"[\w.]+@[\w.]+\.\w+", aviso))          # ['titoria1b@iesexemplo.gal']
+
+# Grupos: partes del patrón entre paréntesis
+for dia, mes, anio in re.findall(r"(\d{2})/(\d{2})/(\d{4})", aviso):
+    print(f"{anio}-{mes}-{dia}")                          # 2026-11-12 · 2026-12-03
+
+# Sustituir: ocultar teléfonos antes de compartir un texto
+oculto = re.sub(r"\d{3} ?\d{3} ?\d{3}", "[teléfono]", aviso)
+print(re.search(r"Dudas:.*?\]", oculto).group())        # Dudas: titoria1b@iesexemplo.gal o [teléfono]
+
+# Validar: fullmatch exige que TODO el texto encaje
+codigo = re.compile(r"[A-Z]{3}-\d{2}")                   # p. ej., un código de aula como INF-07
+for c in ["INF-07", "inf-07", "INF-007", "Aula INF-07"]:
+    print(c, bool(codigo.fullmatch(c)))
+print(bool(re.fullmatch(r"[A-Z]{3}-\d{2}", "inf-07", flags=re.IGNORECASE)))   # True
+```
+
+| Función | Para qué |
+|---------|----------|
+| `re.search(p, t)` | Primera coincidencia en cualquier parte (o `None`) |
+| `re.findall(p, t)` | Lista con todas (con grupos, lista de tuplas) |
+| `re.fullmatch(p, t)` | ¿Encaja el texto **entero**? Para validar |
+| `re.sub(p, nuevo, t)` | Sustituir lo que encaje |
+| `re.compile(p)` | Guardar el patrón para usarlo muchas veces |
+
+**Con cuidado.** Un patrón «para correos» como el de arriba sirve para encontrarlos en un texto, no para garantizar que existen: los correos válidos tienen reglas mucho más complicadas. Prueba siempre los patrones con ejemplos que **sí** y que **no** deben encajar (páginas como regex101.com lo explican paso a paso). Y si el texto es HTML o JSON, mejor su propio lector (`BeautifulSoup`, `json`) que una expresión regular. En Pandas, los mismos patrones funcionan con `df["col"].str.contains()`, `.str.extract()` y `.str.replace()`.
 
 ## 3️⃣ ESTRUCTURAS DE CONTROL
 
@@ -5675,6 +5725,54 @@ except TypeError as e:
 
 En Python, una **interfaz** es una clase abstracta en la que todos los métodos son abstractos. A diferencia de Java, un método abstracto **puede** tener código, que las hijas aprovechan con `super()`. Para clases que solo guardan datos, `@dataclass` (módulo `dataclasses`) escribe solo `__init__`, `__repr__` y `__eq__`.
 
+#### Tres trampas de la POO: atributos de clase, nombres «privados» y polimorfismo
+
+```python
+# Trampa 1: una lista como atributo de CLASE la comparten todos los objetos
+class Grupo:
+    alumnado = []                       # atributo de clase: uno para todos
+    def __init__(self, nombre):
+        self.nombre = nombre            # atributo de instancia: uno por objeto
+    def apuntar(self, persona):
+        self.alumnado.append(persona)
+
+a, b = Grupo("1A"), Grupo("1B")
+a.apuntar("Uxía")
+print(b.alumnado)                       # ['Uxía']  ¡también aparece en 1B!
+
+class GrupoBien:
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.alumnado = []              # se crea una lista nueva por objeto
+
+c, d = GrupoBien("1A"), GrupoBien("1B")
+c.alumnado.append("Uxía")
+print(d.alumnado)                       # []
+
+# Trampa 2: «privado» en Python es un acuerdo, no un candado
+class Cuenta:
+    def __init__(self):
+        self._saldo = 0                 # un guion: «no lo toques desde fuera» (convención)
+        self.__pin = 1234               # dos guiones: Python cambia el nombre (name mangling)
+
+cuenta = Cuenta()
+print(cuenta._saldo)                    # 0: se puede leer, aunque no se debe
+print(hasattr(cuenta, "__pin"), cuenta._Cuenta__pin)   # False 1234: escondido, no protegido
+
+# Polimorfismo y «tipado de pato»: si tiene el método, sirve
+class Perro:
+    def sonido(self): return "guau"
+class Robot:                            # no hereda de nada en común con Perro
+    def sonido(self): return "bip"
+
+for cosa in [Perro(), Robot()]:
+    print(cosa.sonido())                # guau · bip
+```
+
+- **Atributo de clase frente a atributo de instancia.** Lo que se escribe dentro de la clase, fuera de los métodos, es **uno para todos los objetos**. Con números o textos no se nota (al asignar se crea uno propio); con una lista o un diccionario, todos comparten la misma. Regla: los datos de cada objeto, en `__init__` con `self.`.
+- **No hay atributos privados de verdad.** `_saldo` (un guion) es un aviso entre programadores; `__pin` (dos guiones) cambia el nombre a `_Cuenta__pin` para evitar choques en clases hijas, pero se puede leer igual. Para controlar el acceso se usan propiedades (`@property`, más arriba).
+- **Tipado de pato** (*duck typing*): «si anda como un pato y hace cua, es un pato». Python no comprueba de qué clase es un objeto, sino si tiene el método que se le pide. Así funciona scikit-learn: cualquier objeto con `fit` y `predict` sirve en un *pipeline*. Cuando sí se quiere obligar a que existan ciertos métodos, se usa una clase abstracta (`abc`).
+
 #### Herencia múltiple y orden de búsqueda (MRO)
 
 Una clase puede heredar de varias. Cuando se llama a un método, Python lo busca en un orden fijo, el **MRO** (*Method Resolution Order*), que se calcula con un algoritmo llamado **linealización C3**: primero la propia clase, después sus padres de izquierda a derecha, sin repetir ninguna y sin que un padre aparezca antes que sus hijas.
@@ -6077,6 +6175,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *RAG Cheat Sheet* (T. Khan, PDF de 24 págs. hecho con Canva; 12 de contenido y 12 de publicidad; texto con MarkItDown y código leído de las imágenes) | k, umbral y MMR, coseno frente a L2, estrategias *stuff*, *map-reduce* y *refine*, LangChain 1.x | 14.19 (RAG mejorado) y ejercicios E113–E114 |
 | *Python Module 9: Dictionaries* (@Mastercode.sagar, PDF escaneado de 16 págs., OCR con Tesseract y MarkItDown), chuleta «NumPy Complete Cheatsheet» (@thedataguy16, 11 láminas) y carrusel «12 Machine Learning Algorithms» (@code.withnarayan, 20 láminas, generado con IA) | Diccionarios a fondo, NumPy a fondo (difusión, vistas, trampas), fichas de árbol, Naive Bayes, SVM, boosting y jerárquico con figuras propias | 5.2, 7.1, [Algoritmos](algoritmos.html), ejercicios E115–E116 y A4–A5 |
 | «10 GitHub repos for AI/ML eng beginners» (@marina.wyss, PDF de 3 págs. hecho con Canva) | Diez repositorios revisados uno a uno (licencia, actividad en noviembre de 2026, traducciones, requisitos) | 14.16 |
+| Coded Soul, *Pandas with Python* (parte 5) y nuevas versiones de las partes 3 (POO) y 4 (Python avanzado) (PDF escaneados de 16 págs., OCR con Tesseract y MarkItDown) | Expresiones regulares, trampas de la POO, unir tablas y cambiar su forma en Pandas, con figuras propias | 2.7, 14.14, [Análisis de datos 3.4](datos.html#34-unir-tablas-y-cambiar-su-forma-merge-concat-melt-y-pivot), ejercicios E118–E119 |
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
 | *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
 | *Python Module 8: Tuples* (@Mastercode.sagar, 15 págs.), procesado con OCR y MarkItDown | Crear tuplas, `count` e `index`, operaciones, tuplas anidadas, tupla frente a lista, desempaquetado, proyecto de registro | 5.3 y ejercicios E83–E86 |

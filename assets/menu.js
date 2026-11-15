@@ -53,3 +53,12 @@
   });
   movil.addEventListener("change", function () { abrirPanel(false); });
 })();
+
+/* Figuras: tocar para verlas a tamaño completo */
+document.querySelectorAll('main img[src^="assets/img/"]').forEach(function (img) {
+  if (img.closest('a')) return;
+  var a = document.createElement('a');
+  a.href = img.getAttribute('src'); a.target = '_blank'; a.rel = 'noopener';
+  a.title = 'Abrir la figura a tamaño completo';
+  img.parentNode.insertBefore(a, img); a.appendChild(img);
+});

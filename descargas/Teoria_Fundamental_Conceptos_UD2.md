@@ -1383,6 +1383,10 @@ pares = [i for i in range(10) if i % 2 == 0]
 
 ### 5.2 Diccionarios
 
+Para situar los diccionarios entre las demás colecciones de Python:
+
+![Mapa mental de las colecciones de Python: lista (ordenada, cambiable, con repetidos), tupla (ordenada, no cambiable), diccionario (clave → valor, claves únicas) y conjunto (sin orden ni repetidos)](assets/img/mapa_pyestr.png)
+
 **Creación**:
 ```python
 persona = {

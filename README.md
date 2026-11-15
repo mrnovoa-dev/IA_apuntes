@@ -19,6 +19,7 @@ Web de apuntes de **Inteligencia Artificial con Python** para *Tecnoloxías Inte
 | `itinerario.html` | Itinerario «De Python a experto en IA» en seis etapas (fundamentos, ML y DL, LLM, agentes, evaluación, despliegue): qué aprender, dónde está en la web, qué falta, proyecto y evaluación de cada etapa, y rúbrica del portafolio |
 | `algoritmos.html` | Catálogo de algoritmos de IA por familias (búsqueda, optimización, supervisado, no supervisado, redes, lenguaje, visión, refuerzo) con enlaces a la web, fichas de regresión lineal, KNN, k-means, A* y Q-learning, guía para elegir y ejercicios A1–A3 |
 | `assets/menu.css`, `assets/menu.js` | Cabecera y menú principal comunes a todas las páginas (desplegables accesibles con teclado; botón «Menú» en el móvil). El HTML del menú lo genera `build.py` a partir de la lista `MENU`, también en `index.html` y `mapa.html` (entre las marcas `<!-- menu -->`) |
+| `assets/img/`, `herramientas/figuras/` | Figuras explicativas propias (PNG). Se generan con `python3 herramientas/figuras/figuras_unidades.py` y `figuras_algoritmos.py` (matplotlib) y los mapas mentales con `mmdc -i herramientas/figuras/X.mmd -o assets/img/mapa_X.png -b white -w 1100`. En las páginas, al tocar una figura se abre a tamaño completo |
 | `mapa.html` | Mapa visual: conceptos, 44 librerías filtrables, chuletas y autoevaluación |
 | `descargas/` | Teoría en `.odt` (editable) y en Markdown (fuente) |
 

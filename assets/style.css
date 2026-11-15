@@ -197,4 +197,4 @@ article.content h2 .ud-tag { font-size: .72rem; }
 #TOC .ud-tags a.ud-tag:hover { background: color-mix(in srgb, var(--u) 32%, var(--surface)); }
 
 /* Figuras explicativas generadas con matplotlib */
-main p > img, main figure > img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--r); background: #fff; }
+main img[src^="assets/img/"] { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--r); background: #fff; }

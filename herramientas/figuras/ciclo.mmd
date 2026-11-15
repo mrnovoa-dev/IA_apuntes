@@ -1,0 +1,7 @@
+flowchart LR
+  A[1 · Adquirir<br/>CSV, API, web] --> B[2 · Explorar<br/>resúmenes y gráficos]
+  B --> C[3 · Limpiar<br/>huecos, duplicados, escalas]
+  C --> D[4 · Modelar<br/>entrenar y evaluar]
+  D --> E[5 · Publicar<br/>informe o app]
+  E -. nuevos datos y preguntas .-> A
+  C -. a veces hay que volver .-> B

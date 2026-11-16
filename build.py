@@ -250,8 +250,8 @@ def main():
         html = marcar_unidades(html, nav)
         html, sal, n = cifrar_soluciones(html, password)
         if n:
-            html = html.replace('<article class="content">',
-                                f'<article class="content" data-salt="{sal}" data-iter="{ITERACIONES}">', 1)
+            html = html.replace('<article class="content"',
+                                f'<article class="content" data-salt="{sal}" data-iter="{ITERACIONES}"', 1)
         (RAIZ / salida).write_text(html, encoding="utf-8")
         print(f"{salida:<20} {n:>3} soluciones cifradas")
     actualizar_menus_estaticos()

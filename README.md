@@ -25,6 +25,14 @@ Web de apuntes de **Inteligencia Artificial con Python** para *Tecnoloxías Inte
 
 Las unidades siguen la programación oficial 2026/27 (UD3 Visión, UD4 Lenguaje) y el libro de J. F. Puentes Calvo, *Tecnologías Inteligentes* (2025, CC BY-NC-ND 4.0). Los textos son propios: el libro se cita por capítulos, no se copia.
 
+## Licencia
+
+- **Código** (`build.py`, `herramientas/`, scripts y estilos, y los fragmentos de código de los apuntes): [MIT](LICENSE).
+- **Textos y figuras propias**: [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es). Se pueden compartir y adaptar citando la autoría, sin fines comerciales y con la misma licencia.
+- **No incluidos:** las chuletas de `assets/chuletas/` y demás materiales de terceros, que conservan la licencia de sus autores.
+
+Detalles en [LICENSE-CONTENIDOS.md](LICENSE-CONTENIDOS.md).
+
 ## Soluciones con contraseña
 
 Las soluciones de ejercicios y unidades están **cifradas** (AES-256-GCM con clave PBKDF2) dentro del HTML. Se abren en el navegador con la contraseña del profesorado; una vez abierta, se recuerda mientras dure la pestaña.

@@ -6605,7 +6605,7 @@ organizado y por qué archivo empezarías si quisieras cambiar algo.
 - **Un repositorio grande no cabe en una conversación.** Todo el código en un texto puede pasar de la ventana de contexto del modelo ([14.8](#148-ia-generativa-y-modelos-de-lenguaje-llm)). Mejor pedir solo una carpeta, o usar DeepWiki o GitMCP, que buscan las partes relevantes.
 - **Lo que diga la IA hay que comprobarlo** en el código. Un diagrama o una wiki generados automáticamente pueden equivocarse.
 - **`github.dev` no ejecuta nada:** no tiene terminal y hace falta iniciar sesión en GitHub. Para ejecutar, Colab o un *codespace*.
-- **Licencia:** que un repositorio sea público no significa que se pueda copiar sin más. Mira su archivo `LICENSE` antes de reutilizar código.
+- **Licencia:** que un repositorio sea público no significa que se pueda copiar sin más. Mira su archivo `LICENSE` antes de reutilizar código; algunos tienen más de una (esta web, por ejemplo: MIT para el código y CC BY-NC-SA para los textos). Sin ningún archivo de licencia, no se puede reutilizar.
 
 **Atajos de GitHub sin ninguna herramienta externa:**
 

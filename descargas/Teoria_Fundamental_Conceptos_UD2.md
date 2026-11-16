@@ -15,7 +15,7 @@ Esta teoría es común a **todo el curso**. Empezó como el apoyo de la UD2 (Pyt
 | 3. Estructuras de control (bucles anidados, patrones, problemas numéricos) | UD2 |
 | 4. Funciones (argumentos, lambda, map/filter/reduce, recursión, ámbito) | UD2 |
 | 5. Estructuras de datos complejas (listas, tuplas, conjuntos, comprensiones, módulos, tablas y CSV sin Pandas) | UD2 |
-| 6. Conceptos estadísticos (descriptiva, cuartiles, puntuación z, correlación, contraste de hipótesis) | UD2 |
+| 6. Conceptos estadísticos (descriptiva, cuartiles, puntuación z, correlación y covarianza, contraste de hipótesis, probabilidad y distribuciones) | UD2 |
 | 7. Librerías científicas (NumPy: crear, unir, dividir y guardar arrays; Pandas) | UD2 |
 | 8. Visualización (Matplotlib) | UD2 |
 | 9. ETL y análisis de datos | UD2 |
@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E125 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E126 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -2129,6 +2129,17 @@ recta.slope * 4.5 + recta.intercept                  # 6.61: predicción para 4,
 
 La **pendiente** (0,81) es lo que sube la nota por cada hora más; la **ordenada en el origen** (2,964), la nota estimada con 0 horas. Para predecir se usan las dos: algunos apuntes escriben la ordenada a mano o la olvidan, y la recta queda desplazada. Y siempre: **correlación no es causalidad**, y la recta solo vale dentro del rango de los datos (con 20 horas predeciría un 19,2).
 
+**Covarianza.** La correlación se construye a partir de la **covarianza**: la media de los productos (x − media de x) · (y − media de y). Es positiva si las dos variables suben juntas y negativa si una sube cuando la otra baja. El problema es que depende de las unidades, así que su tamaño no dice si la relación es fuerte. La correlación es la covarianza dividida entre las dos desviaciones típicas: por eso queda siempre entre −1 y 1.
+
+```python
+minutos = [h * 60 for h in horas]                    # las mismas horas, en minutos
+np.cov(horas, nota)[0, 1]                            # 3.643
+np.cov(minutos, nota)[0, 1]                          # 218.6: 60 veces más, la misma relación
+np.corrcoef(minutos, nota)[0, 1]                     # 0.947: la correlación no cambia
+```
+
+`np.cov` y `df.cov()` dividen entre n − 1 (muestra), igual que la varianza de [6.5](#65-varianza-y-desviación-población-o-muestra). La matriz de covarianzas aparece más adelante dentro de PCA ([UD5](ud5-ml.html#8-aprendizaje-no-supervisado-agrupar-y-reducir)).
+
 ### 6.9 ¿Diferencia real o casualidad? Contraste de hipótesis
 
 Un grupo que repasó con cuestionarios sacó de media 7,08 y otro sin cuestionarios, 5,92. ¿Funcionan los cuestionarios o es casualidad? Un **contraste de hipótesis** responde a esta pregunta: si en realidad no hubiera ninguna diferencia (**hipótesis nula**), ¿sería raro ver una diferencia tan grande como esta solo por azar?
@@ -2165,6 +2176,51 @@ t, p = stats.ttest_ind(a, b, equal_var=False)        # t = 2.94, p = 0.0078
 - Con **muchos datos**, cualquier diferencia minúscula sale significativa: con 20 000 alumnos por grupo, una diferencia de 0,04 puntos da p = 0,004. Significativo no es lo mismo que **importante**: hay que mirar también el tamaño de la diferencia.
 - El p-valor **no** es la probabilidad de que la hipótesis nula sea cierta.
 - Este estudio no demuestra que los cuestionarios causen la mejora: si los grupos no se formaron al azar, puede haber otras diferencias entre ellos.
+
+### 6.10 Probabilidad y distribuciones frecuentes
+
+La **probabilidad** de un suceso es la proporción de veces que ocurriría si se repitiera el experimento muchísimas veces: va de 0 (imposible) a 1 (seguro). Una **distribución** dice qué valores puede tomar algo y con qué probabilidad. Tres aparecen constantemente:
+
+| Distribución | Qué describe | Ejemplo | En NumPy |
+|--------------|--------------|---------|----------|
+| **Uniforme** | Todos los valores igual de probables | Un dado; un número al azar entre 0 y 1 | `rng.integers`, `rng.uniform` |
+| **Binomial** | Cuántos éxitos hay en *n* intentos independientes, cada uno con probabilidad *p* | Aciertos al contestar al azar; tiros libres encestados | `rng.binomial(n, p)` |
+| **Normal** (campana de Gauss) | Medidas que resultan de sumar muchos efectos pequeños: simétrica alrededor de la media | Alturas, errores de medida, notas de un examen largo | `rng.normal(media, desviación)` |
+
+![Tres distribuciones simuladas: un dado (uniforme), aciertos al azar en un test (binomial) y alturas (normal) con las franjas de 1, 2 y 3 desviaciones](assets/img/distribuciones.png)
+
+La forma más sencilla de entenderlas es **simular** muchas veces:
+
+```python
+import numpy as np
+rng = np.random.default_rng(42)                      # semilla: mismos resultados cada vez
+
+# 1. Uniforme: todos los valores igual de probables (un dado)
+dado = rng.integers(1, 7, size=60_000)
+print(np.bincount(dado)[1:] / len(dado))             # cada cara, cerca de 1/6 = 0.167
+
+# 2. Binomial: test de 10 preguntas con 4 opciones, contestando al azar
+aciertos = rng.binomial(n=10, p=0.25, size=100_000)
+print(aciertos.mean().round(2))                      # 2.5 = n·p
+print((aciertos >= 5).mean().round(3))               # 0.079: aprobar al azar, menos de 1 de cada 12
+
+# 3. Normal: alturas inventadas, media 170 cm y desviación 8
+alturas = rng.normal(loc=170, scale=8, size=100_000)
+for k in (1, 2, 3):
+    dentro = (np.abs(alturas - 170) <= k * 8).mean()
+    print(f"a {k} desviaciones: {dentro:.3f}")       # 0.684 · 0.954 · 0.997
+```
+
+El valor exacto de la binomial es 0,078 (`scipy.stats.binom.sf(4, 10, 0.25)`); la simulación se acerca más cuantas más repeticiones se hacen. Esto es la **ley de los grandes números**.
+
+**La regla 68-95-99,7.** En una normal, alrededor del 68 % de los datos queda a menos de 1 desviación de la media, el 95 % a menos de 2 y el 99,7 % a menos de 3. Es lo que hay detrás de la [puntuación z](#67-estandarizar-la-puntuación-z): un dato con z = 3 es muy raro.
+
+**Ojo:**
+
+- **No todo es normal.** Los ingresos, las visitas a páginas web o los tiempos de espera son muy asimétricos (pocos valores enormes), y ahí la media engaña: mejor la mediana. Antes de suponer una normal, hay que mirar el histograma.
+- **Independencia.** La binomial supone que un intento no influye en el siguiente. Si una pregunta da pistas para otra, ya no vale.
+- **La falacia del jugador.** Después de cinco caras seguidas, la sexta sigue teniendo probabilidad 1/2: la moneda no recuerda.
+- Las probabilidades que da un clasificador ([UD5](ud5-ml.html)) o un modelo de lenguaje ([14.8](#148-ia-generativa-y-modelos-de-lenguaje-llm)) solo son fiables si el modelo está **calibrado**.
 
 [Referencia: Estadística](https://es.wikipedia.org/wiki/Estad%C3%ADstica_descriptiva)
 
@@ -6175,7 +6231,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *RAG Cheat Sheet* (T. Khan, PDF de 24 págs. hecho con Canva; 12 de contenido y 12 de publicidad; texto con MarkItDown y código leído de las imágenes) | k, umbral y MMR, coseno frente a L2, estrategias *stuff*, *map-reduce* y *refine*, LangChain 1.x | 14.19 (RAG mejorado) y ejercicios E113–E114 |
 | *Python Module 9: Dictionaries* (@Mastercode.sagar, PDF escaneado de 16 págs., OCR con Tesseract y MarkItDown), chuleta «NumPy Complete Cheatsheet» (@thedataguy16, 11 láminas) y carrusel «12 Machine Learning Algorithms» (@code.withnarayan, 20 láminas, generado con IA) | Diccionarios a fondo, NumPy a fondo (difusión, vistas, trampas), fichas de árbol, Naive Bayes, SVM, boosting y jerárquico con figuras propias | 5.2, 7.1, [Algoritmos](algoritmos.html), ejercicios E115–E116 y A4–A5 |
 | «10 GitHub repos for AI/ML eng beginners» (@marina.wyss, PDF de 3 págs. hecho con Canva) | Diez repositorios revisados uno a uno (licencia, actividad en noviembre de 2026, traducciones, requisitos) | 14.16 |
-| Carrusel «Data Science using Python – Complete Handwritten Notes» (@ashram_academy_computer_center, 10 láminas; anuncio de apuntes de pago) | Ciclo completo de un proyecto (entender el problema y vigilar el modelo), perfiles profesionales, sistemas de recomendación, decisión basada en datos con criterio; errores usados en E124 | [Análisis de datos](datos.html#el-ciclo-completo-antes-y-después-del-código), [Algoritmos](algoritmos.html#sistemas-de-recomendación) y ejercicios E124–E125 |
+| Carrusel «Data Science using Python – Complete Handwritten Notes» (@ashram_academy_computer_center, 10 láminas; anuncio de apuntes de pago) | Ciclo completo de un proyecto (entender el problema y vigilar el modelo), perfiles profesionales, sistemas de recomendación, decisión basada en datos con criterio; del índice de los apuntes, covarianza y probabilidad y distribuciones; errores usados en E124 | [Análisis de datos](datos.html#el-ciclo-completo-antes-y-después-del-código), [Algoritmos](algoritmos.html#sistemas-de-recomendación), 6.8, 6.10 y ejercicios E124–E126 |
 | «Agentic AI with Multi-Agents System» (@TheAgenticAIEngineer, PDF de 20 págs. sin capa de texto, OCR con Tesseract y MarkItDown) | Patrones de agentes (ReAct, planificar y ejecutar, reflexión, enrutador, supervisor, paralelo), estado con reductores, puntos de control e interrupciones, reintentos con espera exponencial y alternativa, evaluación de trayectorias, permisos por agente; errores usados en E120 | 14.19 y ejercicios E120–E123 |
 | Coded Soul, *Pandas with Python* (parte 5) y nuevas versiones de las partes 3 (POO) y 4 (Python avanzado) (PDF escaneados de 16 págs., OCR con Tesseract y MarkItDown) | Expresiones regulares, trampas de la POO, unir tablas y cambiar su forma en Pandas, con figuras propias | 2.7, 14.14, [Análisis de datos 3.4](datos.html#34-unir-tablas-y-cambiar-su-forma-merge-concat-melt-y-pivot), ejercicios E118–E119 |
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |

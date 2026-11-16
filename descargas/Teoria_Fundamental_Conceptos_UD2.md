@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E126 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E127 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -6231,6 +6231,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *RAG Cheat Sheet* (T. Khan, PDF de 24 págs. hecho con Canva; 12 de contenido y 12 de publicidad; texto con MarkItDown y código leído de las imágenes) | k, umbral y MMR, coseno frente a L2, estrategias *stuff*, *map-reduce* y *refine*, LangChain 1.x | 14.19 (RAG mejorado) y ejercicios E113–E114 |
 | *Python Module 9: Dictionaries* (@Mastercode.sagar, PDF escaneado de 16 págs., OCR con Tesseract y MarkItDown), chuleta «NumPy Complete Cheatsheet» (@thedataguy16, 11 láminas) y carrusel «12 Machine Learning Algorithms» (@code.withnarayan, 20 láminas, generado con IA) | Diccionarios a fondo, NumPy a fondo (difusión, vistas, trampas), fichas de árbol, Naive Bayes, SVM, boosting y jerárquico con figuras propias | 5.2, 7.1, [Algoritmos](algoritmos.html), ejercicios E115–E116 y A4–A5 |
 | «10 GitHub repos for AI/ML eng beginners» (@marina.wyss, PDF de 3 págs. hecho con Canva) | Diez repositorios revisados uno a uno (licencia, actividad en noviembre de 2026, traducciones, requisitos) | 14.16 |
+| «Trucos de GitHub» (OliSapiens, guía web en PDF de 6 págs., procesada con MarkItDown) | Siete servicios que se usan cambiando la URL del repositorio (github.dev, GitDiagram, Gitingest, uithub, DeepWiki, GitMCP, GitReverse), comprobados uno a uno, con sus límites; atajos de teclado de GitHub | 14.19 ([Trucos de GitHub](#trucos-de-github-entender-un-repositorio-en-minutos)) y ejercicio E127 |
 | Carrusel «Data Science using Python – Complete Handwritten Notes» (@ashram_academy_computer_center, 10 láminas; anuncio de apuntes de pago) | Ciclo completo de un proyecto (entender el problema y vigilar el modelo), perfiles profesionales, sistemas de recomendación, decisión basada en datos con criterio; del índice de los apuntes, covarianza y probabilidad y distribuciones; errores usados en E124 | [Análisis de datos](datos.html#el-ciclo-completo-antes-y-después-del-código), [Algoritmos](algoritmos.html#sistemas-de-recomendación), 6.8, 6.10 y ejercicios E124–E126 |
 | «Agentic AI with Multi-Agents System» (@TheAgenticAIEngineer, PDF de 20 págs. sin capa de texto, OCR con Tesseract y MarkItDown) | Patrones de agentes (ReAct, planificar y ejecutar, reflexión, enrutador, supervisor, paralelo), estado con reductores, puntos de control e interrupciones, reintentos con espera exponencial y alternativa, evaluación de trayectorias, permisos por agente; errores usados en E120 | 14.19 y ejercicios E120–E123 |
 | Coded Soul, *Pandas with Python* (parte 5) y nuevas versiones de las partes 3 (POO) y 4 (Python avanzado) (PDF escaneados de 16 págs., OCR con Tesseract y MarkItDown) | Expresiones regulares, trampas de la POO, unir tablas y cambiar su forma en Pandas, con figuras propias | 2.7, 14.14, [Análisis de datos 3.4](datos.html#34-unir-tablas-y-cambiar-su-forma-merge-concat-melt-y-pivot), ejercicios E118–E119 |
@@ -6575,6 +6576,50 @@ git branch -d arreglo/media-baleira       # borrar la rama ya unida (-d se niega
 ```
 
 `git pull` es `git fetch` (descargar) más `git merge` (unir). Con `git fetch` solo, se puede mirar lo que trae (`git log main..origin/main`) antes de unirlo. En la revisión de una *pull request* se comprueba que el código funciona y tiene pruebas, que se entiende, que no sube datos personales ni claves, y que el mensaje explica el porqué.
+
+#### Trucos de GitHub: entender un repositorio en minutos
+
+Encontrar un repositorio interesante es fácil; entenderlo, no tanto. Hay servicios que, **cambiando una palabra de la dirección** del repositorio, devuelven un resumen, un diagrama o todo el código en un solo texto para pasárselo a una IA. Todos parten de una dirección como `github.com/usuario/proyecto`:
+
+| Cambia en la URL | Resultado | Para qué sirve |
+|------------------|-----------|----------------|
+| `github.com` → `github.dev` (o pulsar la tecla **.**) | El repositorio abierto en un editor tipo VS Code, en el navegador | Leer y buscar con colores, editar y hacer *commits* sin instalar nada |
+| `hub` → `diagram` (**gitdiagram.com**/usuario/proyecto) | Diagrama interactivo de las partes del proyecto y cómo se conectan | Orientarse antes de tocar un proyecto que no es tuyo |
+| `hub` → `ingest` (**gitingest.com**/usuario/proyecto) | Árbol de carpetas y contenido de los archivos en un único texto | Pegarlo en un asistente y hacerle preguntas sobre el código |
+| `g` → `u` (**uithub.com**/usuario/proyecto) | El repositorio como texto plano | Lo mismo que Gitingest, más directo |
+| `github.com` → **deepwiki.com** | Una wiki del proyecto, ordenada por temas, con un chat | Proyectos grandes con poca documentación |
+| `github.com` → **gitmcp.io** | Un servidor [MCP](#agentes-con-aprobación-humana-memoria-y-límites) con la documentación del proyecto | Que un asistente responda con la documentación actual y no con lo que «recuerda» |
+| `hub` → `reverse` (**gitreverse.com**/usuario/proyecto) | Un *prompt* que describe el proyecto para que una IA lo reconstruya | Punto de partida para un proyecto parecido |
+
+Un ejemplo con el repositorio de esta web: `github.com/mrnovoa-dev/IA_apuntes` → `gitingest.com/mrnovoa-dev/IA_apuntes`. Y una pregunta útil para pegar debajo del texto:
+
+```text
+Te paso un repositorio entero. Explícame en 10 líneas qué hace, cómo está
+organizado y por qué archivo empezarías si quisieras cambiar algo.
+```
+
+**Antes de usarlos, conviene saber esto:**
+
+- **Son servicios de terceros**, no de GitHub, salvo `github.dev`. Solo con **repositorios públicos**: no hay que pegar código privado, claves ni datos personales sin saber qué hace cada web con ellos. DeepWiki y Gitingest piden cuenta o *token* para repositorios privados.
+- **No leen todo.** Gitingest deja fuera por defecto los archivos grandes (unos 50 kB; se puede cambiar). GitReverse solo mira la descripción, la lista de archivos de la carpeta principal y el README: su *prompt* es un **resumen**, no «el proyecto entero», y lo escribe otro modelo de lenguaje, que puede inventar detalles.
+- **Un repositorio grande no cabe en una conversación.** Todo el código en un texto puede pasar de la ventana de contexto del modelo ([14.8](#148-ia-generativa-y-modelos-de-lenguaje-llm)). Mejor pedir solo una carpeta, o usar DeepWiki o GitMCP, que buscan las partes relevantes.
+- **Lo que diga la IA hay que comprobarlo** en el código. Un diagrama o una wiki generados automáticamente pueden equivocarse.
+- **`github.dev` no ejecuta nada:** no tiene terminal y hace falta iniciar sesión en GitHub. Para ejecutar, Colab o un *codespace*.
+- **Licencia:** que un repositorio sea público no significa que se pueda copiar sin más. Mira su archivo `LICENSE` antes de reutilizar código.
+
+**Atajos de GitHub sin ninguna herramienta externa:**
+
+| Atajo | Qué hace |
+|-------|----------|
+| **.** | Abrir el repositorio en `github.dev` (**>** lo abre en otra pestaña) |
+| **t** | Buscar un archivo por su nombre |
+| **y** | Cambiar la URL por un enlace permanente a esa versión exacta del archivo |
+| **?** | Ver todos los atajos de teclado |
+| Añadir `.patch` o `.diff` a la URL de un *commit* o una *pull request* | Ver el cambio como texto plano |
+| Botón **Blame** en un archivo | Quién cambió cada línea y en qué *commit* |
+| `raw.githubusercontent.com/usuario/proyecto/main/archivo.csv` | El archivo tal cual, para leerlo con `pd.read_csv` (como el [Titanic](#2️⃣-titanic-dataset-kaggle)) |
+
+E127 practica estas herramientas con un repositorio real.
 
 #### La línea de órdenes en cinco minutos
 

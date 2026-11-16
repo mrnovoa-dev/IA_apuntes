@@ -161,6 +161,7 @@ MENU = [
     ]),
     ("Teoría", "teoria.html", "teoria"),
     ("Ejercicios", "ejercicios.html", "ejercicios"),
+    ("Git y GitHub", "teoria.html#git-y-github-paso-a-paso", None),
     ("Guías", [
         ("Itinerario IA con Python", "De Python a experto en IA en seis etapas", "itinerario.html", "itinerario"),
         ("Análisis de datos", "De los datos al modelo", "datos.html", "datos"),

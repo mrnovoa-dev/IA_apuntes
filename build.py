@@ -176,8 +176,21 @@ MENU = [
 ]
 
 
+ICO_MENU = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">'
+            '<path d="M4 7h16M4 12h16M4 17h16"/></svg>')
+ICO_FLECHA = ('<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">'
+              '<path d="M2.5 4.5 6 8l3.5-3.5"/></svg>')
+ICO_LUNA = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">'
+            '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>')
+ICO_SOL = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">'
+           '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>')
+
+
 def menu_html(actual):
-    """HTML del menú con la página actual marcada (aria-current) y su grupo resaltado."""
+    """Navegación principal (patrón «responsive site navigation») y el interruptor claro/oscuro.
+
+    Una sola lista: sin JavaScript es un popover nativo que abre el botón «Menú»; menu.js la pone
+    en línea cuando cabe. Los grupos son un botón con aria-expanded seguido de su lista."""
     def cur(clave):
         return ' aria-current="page"' if clave == actual else ""
     li = []
@@ -191,22 +204,32 @@ def menu_html(actual):
         clase = "menu-grupo actual" if any(c == actual for *_, c in items) else "menu-grupo"
         sub = "".join(f'<li><a href="{e}"{cur(c)}>{t}<small>{d}</small></a></li>' for t, d, e, c in items)
         li.append(f'<li class="{clase}"><button type="button" class="menu-grupo-boton" aria-expanded="false" '
-                  f'aria-controls="{ident}">{grupo}</button><ul class="menu-sub" id="{ident}">{sub}</ul></li>')
+                  f'aria-controls="{ident}">{grupo}{ICO_FLECHA}</button><ul class="menu-sub" id="{ident}">{sub}</ul></li>')
+    tema = ('<button type="button" class="tema">'
+            f'<span class="a-oscuro">{ICO_LUNA}<span class="solo-lector">Cambiar a modo oscuro</span></span>'
+            f'<span class="a-claro">{ICO_SOL}<span class="solo-lector">Cambiar a modo claro</span></span></button>')
     return ('<nav class="menu" aria-label="Principal">'
-            '<button type="button" class="menu-boton" aria-expanded="false" aria-controls="menu-lista">'
-            '<span class="menu-boton-ico" aria-hidden="true">☰</span>Menú</button>'
-            '<ul class="menu-lista" id="menu-lista">' + "".join(li) + '</ul></nav>')
+            '<button type="button" class="menu-boton" popovertarget="menu-lista" aria-controls="menu-lista">'
+            f'{ICO_MENU}Menú</button>'
+            '<ul class="menu-lista" id="menu-lista" popover="auto">' + "".join(li) + '</ul></nav>' + tema)
 
 
 MARCA_MENU = re.compile(r"<!-- menu -->.*?<!-- /menu -->", re.S)
 
 
+MARCA_CABEZA = re.compile(r"<!-- cabeza -->.*?<!-- /cabeza -->", re.S)
+
+
 def actualizar_menus_estaticos():
-    """index.html y mapa.html no salen de pandoc: se les reescribe el menú entre las marcas."""
+    """index.html y mapa.html no salen de pandoc: se les reescribe la cabeza (tipografías, estilos,
+    esquema de color) y el menú entre las marcas, para que sean iguales que en la plantilla."""
+    plantilla = PLANTILLA.read_text(encoding="utf-8")
+    cabeza = MARCA_CABEZA.search(plantilla).group(0)
     for archivo, clave in [("index.html", "index"), ("mapa.html", "mapa")]:
         ruta = RAIZ / archivo
         texto = ruta.read_text(encoding="utf-8")
         nuevo = MARCA_MENU.sub(lambda m: "<!-- menu -->" + menu_html(clave) + "<!-- /menu -->", texto)
+        nuevo = MARCA_CABEZA.sub(lambda m: cabeza, nuevo)
         if nuevo != texto:
             ruta.write_text(nuevo, encoding="utf-8")
 

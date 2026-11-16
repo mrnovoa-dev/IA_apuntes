@@ -33,6 +33,8 @@ Las unidades siguen la programación oficial 2026/27 (UD3 Visión, UD4 Lenguaje)
 
 Detalles en [LICENSE-CONTENIDOS.md](LICENSE-CONTENIDOS.md).
 
+Las tipografías de `assets/fonts/` (Archivo, Atkinson Hyperlegible Next y JetBrains Mono) se sirven desde la propia web y tienen licencia SIL Open Font License 1.1 (`assets/fonts/OFL-*.txt`).
+
 ## Soluciones con contraseña
 
 Las soluciones de ejercicios y unidades están **cifradas** (AES-256-GCM con clave PBKDF2) dentro del HTML. Se abren en el navegador con la contraseña del profesorado; una vez abierta, se recuerda mientras dure la pestaña.

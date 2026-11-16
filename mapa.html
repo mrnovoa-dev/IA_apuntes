@@ -5,59 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Mapa visual de Python para IA: librerías, conceptos y autoevaluación (UD2, Tecnoloxías Intelixentes).">
 <title>Mapa de Python para IA</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<!-- cabeza -->
+<meta name="color-scheme" content="light dark">
+<script>try{var cs=localStorage.getItem("color-scheme");if(cs)document.querySelector('meta[name="color-scheme"]').content=cs}catch(e){}</script>
+<meta name="theme-color" content="#F8FAFD" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15211C" media="(prefers-color-scheme: dark)">
+<link rel="preload" href="assets/fonts/atkinson-next.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/menu.css">
+<script src="assets/menu.js" defer></script>
+<!-- /cabeza -->
 <style>
 /* Layout: guía de estudio en una columna ancha; el flujo de 4 etapas (datos → explorar → modelar → publicar) es el hilo que recorre toda la página y da color a cada familia de librerías */
+/* Colores propios del mapa (el resto de tokens y tipografías vienen de assets/style.css) */
 :root {
-  --paper: #F2F6F7;
-  --surface: #FFFFFF;
-  --sunk: #E7EEF1;
-  --ink: #13212C;
-  --muted: #566672;
-  --line: #D3DDE2;
-  --accent: #E3A008;
-  --accent-ink: #8A5D00;
-  --c-base: #5B6B78;
-  --c-datos: #2563C9;
-  --c-visual: #0B8577;
-  --c-ml: #7340B8;
-  --c-dl: #C7365F;
-  --c-texto: #C2620F;
-  --c-imagen: #3D8A22;
-  --c-escritorio: #44568C;
-  --c-web: #0379A0;
-  --c-bigdata: #85592F;
-  --c-auto: #A1367F;
-  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
-  --r: 10px;
+  --c-base: #5B6B78; --c-imagen: #3D8A22; --c-escritorio: #44568C; --c-web: #0379A0; --c-bigdata: #85592F;
+  --accent: var(--pen); --accent-ink: var(--pen); --r: 10px;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #0E171E; --surface: #15212A; --sunk: #1B2A35; --ink: #E6EEF2; --muted: #9AABB6; --line: #2A3B47;
-    --accent: #F2B636; --accent-ink: #F5C55C;
-    --c-base: #A2B1BC; --c-datos: #6E9CF0; --c-visual: #3CC2AF; --c-ml: #AE88EC; --c-dl: #F07397;
-    --c-texto: #F29A4E; --c-imagen: #7DC85A; --c-escritorio: #8FA2DA; --c-web: #4FBCE0; --c-bigdata: #C99766; --c-auto: #E487C6;
-    color-scheme: dark;
-  }
+  :root:not(:has(> head > meta[name="color-scheme"][content="light"])) { --c-base: #A2B1BC; --c-imagen: #7DC85A; --c-escritorio: #8FA2DA; --c-web: #4FBCE0; --c-bigdata: #C99766; }
 }
-:root[data-theme="dark"] {
-  --paper: #0E171E; --surface: #15212A; --sunk: #1B2A35; --ink: #E6EEF2; --muted: #9AABB6; --line: #2A3B47;
-  --accent: #F2B636; --accent-ink: #F5C55C;
-  --c-base: #A2B1BC; --c-datos: #6E9CF0; --c-visual: #3CC2AF; --c-ml: #AE88EC; --c-dl: #F07397;
-  --c-texto: #F29A4E; --c-imagen: #7DC85A; --c-escritorio: #8FA2DA; --c-web: #4FBCE0; --c-bigdata: #C99766; --c-auto: #E487C6;
-  color-scheme: dark;
-}
+:root:has(> head > meta[name="color-scheme"][content="dark"]) { --c-base: #A2B1BC; --c-imagen: #7DC85A; --c-escritorio: #8FA2DA; --c-web: #4FBCE0; --c-bigdata: #C99766; }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: calc(64px + env(safe-area-inset-top, 0px)); }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
 body {
   background: var(--paper); color: var(--ink);
-  font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+  font-family: var(--font-body); font-size: 1rem; line-height: 1.55;
 }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
 .wrap {
@@ -313,7 +290,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: s
 <a class="back-home" href="./" style="position:fixed;right:12px;bottom:12px;z-index:50;background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:999px;font:600 .85rem var(--font-body);text-decoration:none">← IA · Apuntes</a>
 <header class="top top-estatica"><div class="in">
   <a class="brand" href="./">IA<span>·</span>Apuntes</a>
-  <!-- menu --><nav class="menu" aria-label="Principal"><button type="button" class="menu-boton" aria-expanded="false" aria-controls="menu-lista"><span class="menu-boton-ico" aria-hidden="true">☰</span>Menú</button><ul class="menu-lista" id="menu-lista"><li><a href="./">Inicio</a></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-unidades">Unidades</button><ul class="menu-sub" id="menu-unidades"><li><a href="asignatura.html">La asignatura<small>Programación, criterios y evaluación</small></a></li><li><a href="ud1.html">UD1 · Conceptos de IA<small>Qué es la IA, búsqueda, agentes, ética</small></a></li><li><a href="teoria.html#1️⃣-fundamentos-de-programación">UD2 · Python y datos<small>En la teoría y los ejercicios del curso</small></a></li><li><a href="ud3-vision.html">UD3 · Visión artificial<small>Imágenes, CNN, YOLO, OCR</small></a></li><li><a href="ud4-lenguaje.html">UD4 · Lenguaje<small>PLN, embeddings, Transformers</small></a></li><li><a href="ud5-ml.html">UD5 · Aprendizaje automático<small>Modelos, métricas, validación, ética</small></a></li></ul></li><li><a href="teoria.html">Teoría</a></li><li><a href="ejercicios.html">Ejercicios</a></li><li><a href="teoria.html#git-y-github-paso-a-paso">Git y GitHub</a></li><li class="menu-grupo actual"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-guías">Guías</button><ul class="menu-sub" id="menu-guías"><li><a href="itinerario.html">Itinerario IA con Python<small>De Python a experto en IA en seis etapas</small></a></li><li><a href="datos.html">Análisis de datos<small>De los datos al modelo</small></a></li><li><a href="algoritmos.html">Algoritmos de IA<small>Catálogo: qué hace cada uno y cuándo usarlo</small></a></li><li><a href="mapa.html" aria-current="page">Mapa de librerías<small>Guía visual de Python para IA</small></a></li></ul></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-recursos">Recursos</button><ul class="menu-sub" id="menu-recursos"><li><a href="apps.html">Apps y juegos<small>Proyectos con rúbrica</small></a></li><li><a href="chuletas.html">Chuletas<small>Infografías de las librerías</small></a></li><li><a href="libro.html">El libro<small>J. F. Puentes, capítulo a capítulo</small></a></li></ul></li></ul></nav><!-- /menu -->
+  <!-- menu --><nav class="menu" aria-label="Principal"><button type="button" class="menu-boton" popovertarget="menu-lista" aria-controls="menu-lista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menú</button><ul class="menu-lista" id="menu-lista" popover="auto"><li><a href="./">Inicio</a></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-unidades">Unidades<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><ul class="menu-sub" id="menu-unidades"><li><a href="asignatura.html">La asignatura<small>Programación, criterios y evaluación</small></a></li><li><a href="ud1.html">UD1 · Conceptos de IA<small>Qué es la IA, búsqueda, agentes, ética</small></a></li><li><a href="teoria.html#1️⃣-fundamentos-de-programación">UD2 · Python y datos<small>En la teoría y los ejercicios del curso</small></a></li><li><a href="ud3-vision.html">UD3 · Visión artificial<small>Imágenes, CNN, YOLO, OCR</small></a></li><li><a href="ud4-lenguaje.html">UD4 · Lenguaje<small>PLN, embeddings, Transformers</small></a></li><li><a href="ud5-ml.html">UD5 · Aprendizaje automático<small>Modelos, métricas, validación, ética</small></a></li></ul></li><li><a href="teoria.html">Teoría</a></li><li><a href="ejercicios.html">Ejercicios</a></li><li><a href="teoria.html#git-y-github-paso-a-paso">Git y GitHub</a></li><li class="menu-grupo actual"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-guías">Guías<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><ul class="menu-sub" id="menu-guías"><li><a href="itinerario.html">Itinerario IA con Python<small>De Python a experto en IA en seis etapas</small></a></li><li><a href="datos.html">Análisis de datos<small>De los datos al modelo</small></a></li><li><a href="algoritmos.html">Algoritmos de IA<small>Catálogo: qué hace cada uno y cuándo usarlo</small></a></li><li><a href="mapa.html" aria-current="page">Mapa de librerías<small>Guía visual de Python para IA</small></a></li></ul></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-recursos">Recursos<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><ul class="menu-sub" id="menu-recursos"><li><a href="apps.html">Apps y juegos<small>Proyectos con rúbrica</small></a></li><li><a href="chuletas.html">Chuletas<small>Infografías de las librerías</small></a></li><li><a href="libro.html">El libro<small>J. F. Puentes, capítulo a capítulo</small></a></li></ul></li></ul></nav><button type="button" class="tema"><span class="a-oscuro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="solo-lector">Cambiar a modo oscuro</span></span><span class="a-claro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="solo-lector">Cambiar a modo claro</span></span></button><!-- /menu -->
 </div></header>
 <nav class="nav" aria-label="Secciones">
   <div class="wrap">

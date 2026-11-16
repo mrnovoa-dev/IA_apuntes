@@ -7,21 +7,30 @@
 <meta name="description" content="Tecnologías Inteligentes de J. F.
 Puentes Calvo, capítulo a capítulo, con sus notebooks y un banco de
 prompts para practicar.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<!-- cabeza -->
+<meta name="color-scheme" content="light dark">
+<script>try{var cs=localStorage.getItem("color-scheme");if(cs)document.querySelector('meta[name="color-scheme"]').content=cs}catch(e){}</script>
+<meta name="theme-color" content="#F8FAFD" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15211C" media="(prefers-color-scheme: dark)">
+<link rel="preload" href="assets/fonts/atkinson-next.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/menu.css">
 <script src="assets/menu.js" defer></script>
+<!-- /cabeza -->
 </head>
 <body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
 <header class="top"><div class="in">
   <a class="brand" href="./">IA<span>·</span>Apuntes</a>
-  <nav class="menu" aria-label="Principal"><button type="button" class="menu-boton" aria-expanded="false" aria-controls="menu-lista"><span class="menu-boton-ico" aria-hidden="true">☰</span>Menú</button><ul class="menu-lista" id="menu-lista"><li><a href="./">Inicio</a></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-unidades">Unidades</button><ul class="menu-sub" id="menu-unidades"><li><a href="asignatura.html">La asignatura<small>Programación, criterios y evaluación</small></a></li><li><a href="ud1.html">UD1 · Conceptos de IA<small>Qué es la IA, búsqueda, agentes, ética</small></a></li><li><a href="teoria.html#1️⃣-fundamentos-de-programación">UD2 · Python y datos<small>En la teoría y los ejercicios del curso</small></a></li><li><a href="ud3-vision.html">UD3 · Visión artificial<small>Imágenes, CNN, YOLO, OCR</small></a></li><li><a href="ud4-lenguaje.html">UD4 · Lenguaje<small>PLN, embeddings, Transformers</small></a></li><li><a href="ud5-ml.html">UD5 · Aprendizaje automático<small>Modelos, métricas, validación, ética</small></a></li></ul></li><li><a href="teoria.html">Teoría</a></li><li><a href="ejercicios.html">Ejercicios</a></li><li><a href="teoria.html#git-y-github-paso-a-paso">Git y GitHub</a></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-guías">Guías</button><ul class="menu-sub" id="menu-guías"><li><a href="itinerario.html">Itinerario IA con Python<small>De Python a experto en IA en seis etapas</small></a></li><li><a href="datos.html">Análisis de datos<small>De los datos al modelo</small></a></li><li><a href="algoritmos.html">Algoritmos de IA<small>Catálogo: qué hace cada uno y cuándo usarlo</small></a></li><li><a href="mapa.html">Mapa de librerías<small>Guía visual de Python para IA</small></a></li></ul></li><li class="menu-grupo actual"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-recursos">Recursos</button><ul class="menu-sub" id="menu-recursos"><li><a href="apps.html">Apps y juegos<small>Proyectos con rúbrica</small></a></li><li><a href="chuletas.html">Chuletas<small>Infografías de las librerías</small></a></li><li><a href="libro.html" aria-current="page">El libro<small>J. F. Puentes, capítulo a capítulo</small></a></li></ul></li></ul></nav>
+  <nav class="menu" aria-label="Principal"><button type="button" class="menu-boton" popovertarget="menu-lista" aria-controls="menu-lista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menú</button><ul class="menu-lista" id="menu-lista" popover="auto"><li><a href="./">Inicio</a></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-unidades">Unidades<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><ul class="menu-sub" id="menu-unidades"><li><a href="asignatura.html">La asignatura<small>Programación, criterios y evaluación</small></a></li><li><a href="ud1.html">UD1 · Conceptos de IA<small>Qué es la IA, búsqueda, agentes, ética</small></a></li><li><a href="teoria.html#1️⃣-fundamentos-de-programación">UD2 · Python y datos<small>En la teoría y los ejercicios del curso</small></a></li><li><a href="ud3-vision.html">UD3 · Visión artificial<small>Imágenes, CNN, YOLO, OCR</small></a></li><li><a href="ud4-lenguaje.html">UD4 · Lenguaje<small>PLN, embeddings, Transformers</small></a></li><li><a href="ud5-ml.html">UD5 · Aprendizaje automático<small>Modelos, métricas, validación, ética</small></a></li></ul></li><li><a href="teoria.html">Teoría</a></li><li><a href="ejercicios.html">Ejercicios</a></li><li><a href="teoria.html#git-y-github-paso-a-paso">Git y GitHub</a></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-guías">Guías<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><ul class="menu-sub" id="menu-guías"><li><a href="itinerario.html">Itinerario IA con Python<small>De Python a experto en IA en seis etapas</small></a></li><li><a href="datos.html">Análisis de datos<small>De los datos al modelo</small></a></li><li><a href="algoritmos.html">Algoritmos de IA<small>Catálogo: qué hace cada uno y cuándo usarlo</small></a></li><li><a href="mapa.html">Mapa de librerías<small>Guía visual de Python para IA</small></a></li></ul></li><li class="menu-grupo actual"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-recursos">Recursos<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><ul class="menu-sub" id="menu-recursos"><li><a href="apps.html">Apps y juegos<small>Proyectos con rúbrica</small></a></li><li><a href="chuletas.html">Chuletas<small>Infografías de las librerías</small></a></li><li><a href="libro.html" aria-current="page">El libro<small>J. F. Puentes, capítulo a capítulo</small></a></li></ul></li></ul></nav><button type="button" class="tema"><span class="a-oscuro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="solo-lector">Cambiar a modo oscuro</span></span><span class="a-claro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="solo-lector">Cambiar a modo claro</span></span></button>
 </div></header>
 <main class="doc">
   <div class="toc-side">
-    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="TOC"><span class="toc-ico" aria-hidden="true">☰</span><b>Índice</b><span class="toc-cur"></span></button>
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-cajon"><span class="toc-ico" aria-hidden="true">☰</span><b>Índice</b><span class="toc-cur"></span></button>
+    <div class="toc-drawer" id="toc-cajon" aria-label="Índice de la página">
+      <div class="toc-scroller">
 <nav id="TOC" aria-label="Índice de la página">
 <div class="toc-head"><span>Índice</span><button class="toc-close" type="button" aria-label="Cerrar el índice">✕</button></div>
 <ul>
@@ -126,9 +135,10 @@ id="toc-avisos-sobre-el-libro">Avisos sobre el libro</a></li>
 </ul></li>
 </ul>
 </nav>
-    <div class="toc-backdrop" hidden></div>
+      </div>
+    </div>
   </div>
-  <article class="content">
+  <article class="content" id="contenido" tabindex="-1">
 <h1 id="el-libro-de-referencia-capítulo-a-capítulo">El libro de
 referencia, capítulo a capítulo</h1>
 <p><strong>Libro:</strong> Juan Francisco Puentes Calvo, <em>Tecnologías
@@ -891,25 +901,85 @@ consentimiento y no hay que subir nada a servicios externos.</li>
   </article>
 </main>
 <footer class="site"><div class="in">
-  <span>IA · Apuntes · Tecnoloxías Intelixentes · 1.º Bacharelato</span>
-  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0)</span>
-  <span>Textos y figuras propias: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">CC BY-NC-SA 4.0</a> · Código: <a href="https://github.com/mrnovoa-dev/IA_apuntes/blob/main/LICENSE">MIT</a> · Materiales de terceros con su propia licencia</span>
+  <span>IA·Apuntes. Tecnoloxías Intelixentes, 1.º de Bacharelato</span>
+  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0).</span>
+  <span>Textos y figuras propias: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">CC BY-NC-SA 4.0</a>. Código: <a href="https://github.com/mrnovoa-dev/IA_apuntes/blob/main/LICENSE">MIT</a>. Los materiales de terceros conservan su propia licencia.</span>
 </div></footer>
 <a class="up" href="#">↑ Arriba</a>
 <script>
+/* Tablas: contenedor desplazable; si no cabe, región con nombre y alcanzable con el teclado */
 (function () {
+  var n = 0;
   document.querySelectorAll("article.content table").forEach(function (t) {
     var w = document.createElement("div"); w.className = "table-wrap";
     t.parentNode.insertBefore(w, t); w.appendChild(t);
   });
+  function revisar() {
+    document.querySelectorAll(".table-wrap").forEach(function (w) {
+      var desborda = w.scrollWidth > w.clientWidth + 1;
+      if (desborda && !w.hasAttribute("tabindex")) {
+        w.tabIndex = 0; w.setAttribute("role", "region");
+        w.setAttribute("aria-label", "Tabla desplazable " + (++n));
+      } else if (!desborda && w.hasAttribute("tabindex")) {
+        w.removeAttribute("tabindex"); w.removeAttribute("role"); w.removeAttribute("aria-label");
+      }
+    });
+  }
+  window.addEventListener("load", revisar);
+  var t0; window.addEventListener("resize", function () { clearTimeout(t0); t0 = setTimeout(revisar, 200); });
+})();
+
+/* Copiar código: botón con Invoker Commands (command / commandfor) y alternativa con clic */
+(function () {
+  var ICO = '<svg class="doc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>' +
+            '<svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>';
+  var i = 0, ultimo = "", timers = new WeakMap();
+  document.querySelectorAll("article.content pre > code").forEach(function (code) {
+    var pre = code.parentNode, bloque = pre.parentNode.classList.contains("sourceCode") ? pre.parentNode : pre;
+    if (!code.id) code.id = "codigo-" + (++i);
+    var caja = document.createElement("div"); caja.className = "codigo";
+    bloque.parentNode.insertBefore(caja, bloque); caja.appendChild(bloque);
+    var c = document.createElement("span"); c.className = "copiar-caja";
+    c.innerHTML = '<button type="button" class="copiar" command="--copiar" commandfor="' + code.id + '" aria-label="Copiar el código">' + ICO +
+                  '</button><span class="copiar-aviso" role="status"></span>';
+    caja.appendChild(c);
+  });
+  function avisar(b, ok) {
+    var aviso = b.nextElementSibling;
+    clearTimeout(timers.get(b));
+    b.removeAttribute("data-copied"); b.removeAttribute("data-failed");
+    var msg = ok ? "Copiado" : "No se pudo copiar";
+    if (msg === ultimo) msg += "\u00A0";
+    ultimo = msg; aviso.textContent = "";
+    b.setAttribute(ok ? "data-copied" : "data-failed", "");
+    requestAnimationFrame(function () { aviso.textContent = msg; });
+    timers.set(b, setTimeout(function () { b.removeAttribute("data-copied"); b.removeAttribute("data-failed"); aviso.textContent = ""; }, 2000));
+  }
+  function copiar(b, destino) {
+    var texto = destino.innerText.replace(/\s+$/, "");
+    if (!texto) return;
+    navigator.clipboard.writeText(texto).then(function () { avisar(b, true); }, function () { avisar(b, false); });
+  }
+  if ("CommandEvent" in window) {
+    document.addEventListener("command", function (e) { if (e.command === "--copiar") copiar(e.source, e.target); }, true);
+  } else {
+    document.addEventListener("click", function (e) {
+      var b = e.target.closest('button[command="--copiar"]'); if (!b) return;
+      var d = document.getElementById(b.getAttribute("commandfor")); if (d) copiar(b, d);
+    });
+  }
+})();
+
+/* Índice: sección actual marcada y, en móvil, cajón lateral que se desliza con el dedo */
+(function () {
   var root = document.documentElement, header = document.querySelector(".top");
-  var nav = header && header.querySelector("nav"), here = nav && nav.querySelector("[aria-current]");
-  if (here && nav.scrollWidth > nav.clientWidth) nav.scrollLeft += here.getBoundingClientRect().left - nav.getBoundingClientRect().left - 6;
   var toc = document.getElementById("TOC"), side = document.querySelector(".toc-side");
   if (!toc || !side) return;
   var btn = side.querySelector(".toc-toggle"), cur = side.querySelector(".toc-cur"),
-      back = side.querySelector(".toc-backdrop"), closeBtn = toc.querySelector(".toc-close");
+      cajon = side.querySelector(".toc-drawer"), scroller = side.querySelector(".toc-scroller"),
+      closeBtn = toc.querySelector(".toc-close");
   var movil = window.matchMedia("(max-width: 900px)");
+  side.classList.add("con-js");
   toc.querySelectorAll(":scope > ul > li > ul > li").forEach(function (li) {
     var sub = li.querySelector(":scope > ul"), a = li.querySelector(":scope > a");
     if (!sub || !a) return;
@@ -963,33 +1033,69 @@ consentimiento y no hay que subir nada a servicios externos.</li>
       var l = b.parentNode; b.setAttribute("aria-expanded", String(l.classList.contains("open") || l.classList.contains("exp")));
     });
     cur.textContent = a.textContent.trim();
-    verEnIndice(a);
+    if (!movil.matches || cajon.matches(":popover-open")) verEnIndice(a);
+  }
+
+  /* Cajón (patrón «navigation drawer» que también es barra lateral): popover manual + role=dialog solo en móvil */
+  var fuera = [header, document.querySelector("article.content"), document.querySelector("footer.site"),
+               document.querySelector(".up"), document.querySelector(".saltar"), btn].filter(Boolean);
+  var abierto = false, abriendo = false;
+  function modo() {
+    if (movil.matches) { cajon.setAttribute("popover", "manual"); cajon.setAttribute("role", "dialog"); }
+    else { cerrado(true); cajon.removeAttribute("popover"); cajon.removeAttribute("role"); }
   }
   function abrir() {
-    toc.classList.add("open"); back.hidden = false; document.body.classList.add("toc-open");
+    cajon.showPopover(); abierto = true; abriendo = true;
+    fuera.forEach(function (el) { el.inert = true; });
+    cajon.setAttribute("aria-modal", "true");
     btn.setAttribute("aria-expanded", "true");
-    if (activo) verEnIndice(links[activo.id]);
-    closeBtn.focus({ preventScroll: true });
+    var ir = function () { scroller.scrollTo({ left: 0, behavior: "auto" }); closeBtn.focus({ preventScroll: true }); if (activo) verEnIndice(links[activo.id]); };
+    if (!CSS.supports("scroll-initial-target", "nearest")) {
+      scroller.scrollTo({ left: scroller.scrollWidth, behavior: "instant" });
+      requestAnimationFrame(function () { requestAnimationFrame(ir); });
+    } else ir();
   }
-  function cerrar(volver) {
-    if (!toc.classList.contains("open")) return;
-    toc.classList.remove("open"); back.hidden = true; document.body.classList.remove("toc-open");
+  function cerrar() { if (abierto) scroller.scrollTo({ left: scroller.scrollWidth, behavior: "auto" }); }
+  function cerrado(sinFoco) {
+    if (!abierto) return;
+    abierto = false; abriendo = false;
+    if (cajon.matches(":popover-open")) cajon.hidePopover();
+    fuera.forEach(function (el) { el.inert = false; });
+    cajon.removeAttribute("aria-modal");
     btn.setAttribute("aria-expanded", "false");
-    if (volver) btn.focus({ preventScroll: true });
+    if (!sinFoco) btn.focus({ preventScroll: true });
   }
-  btn.addEventListener("click", function () { toc.classList.contains("open") ? cerrar(true) : abrir(); });
-  closeBtn.addEventListener("click", function () { cerrar(true); });
-  back.addEventListener("click", function () { cerrar(true); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrar(true); });
-  toc.addEventListener("click", function (e) { if (e.target.closest("a") && movil.matches) cerrar(false); });
+  if (window.IntersectionObserver) {
+    var umbral = 1 / Math.max(window.innerWidth, 1);
+    new IntersectionObserver(function (entradas) {
+      var e = entradas[entradas.length - 1];
+      if (!movil.matches || !abierto) return;
+      if (e.intersectionRatio >= 0.99) abriendo = false;
+      else if (e.intersectionRatio < umbral && !abriendo) cerrado(false);
+    }, { root: cajon, threshold: [umbral, 1] }).observe(toc);
+  }
+  if (!CSS.supports("animation-timeline: scroll()")) {
+    scroller.addEventListener("scroll", function () {
+      cajon.style.setProperty("--fondo-cajon", String(Math.max(0, 1 - scroller.scrollLeft / Math.max(toc.offsetWidth, 1))));
+    }, { passive: true });
+  }
+  btn.addEventListener("click", function () { abierto ? cerrar() : abrir(); });
+  closeBtn.addEventListener("click", cerrar);
+  cajon.addEventListener("click", function (e) {
+    if (!movil.matches || !abierto) return;
+    if (!toc.contains(e.target)) cerrar();
+    else if (e.target.closest("a")) cerrar();
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && abierto) cerrar(); });
+
   var pend = false;
   window.addEventListener("scroll", function () {
     if (pend) return; pend = true;
     requestAnimationFrame(function () { pend = false; marcar(); });
   }, { passive: true });
   window.addEventListener("resize", function () { medir(); activo = null; marcar(); });
-  (movil.addEventListener ? movil.addEventListener.bind(movil, "change") : movil.addListener.bind(movil))(function () { cerrar(false); medir(); });
-  medir(); marcar();
+  movil.addEventListener("change", function () { modo(); medir(); });
+  modo(); medir(); marcar();
   window.addEventListener("load", function () {
     medir();
     var id = decodeURIComponent(location.hash.slice(1)), t = id && document.getElementById(id);

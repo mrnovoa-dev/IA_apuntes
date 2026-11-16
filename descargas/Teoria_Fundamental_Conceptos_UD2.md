@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E119 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E123 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -6175,6 +6175,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *RAG Cheat Sheet* (T. Khan, PDF de 24 págs. hecho con Canva; 12 de contenido y 12 de publicidad; texto con MarkItDown y código leído de las imágenes) | k, umbral y MMR, coseno frente a L2, estrategias *stuff*, *map-reduce* y *refine*, LangChain 1.x | 14.19 (RAG mejorado) y ejercicios E113–E114 |
 | *Python Module 9: Dictionaries* (@Mastercode.sagar, PDF escaneado de 16 págs., OCR con Tesseract y MarkItDown), chuleta «NumPy Complete Cheatsheet» (@thedataguy16, 11 láminas) y carrusel «12 Machine Learning Algorithms» (@code.withnarayan, 20 láminas, generado con IA) | Diccionarios a fondo, NumPy a fondo (difusión, vistas, trampas), fichas de árbol, Naive Bayes, SVM, boosting y jerárquico con figuras propias | 5.2, 7.1, [Algoritmos](algoritmos.html), ejercicios E115–E116 y A4–A5 |
 | «10 GitHub repos for AI/ML eng beginners» (@marina.wyss, PDF de 3 págs. hecho con Canva) | Diez repositorios revisados uno a uno (licencia, actividad en noviembre de 2026, traducciones, requisitos) | 14.16 |
+| «Agentic AI with Multi-Agents System» (@TheAgenticAIEngineer, PDF de 20 págs. sin capa de texto, OCR con Tesseract y MarkItDown) | Patrones de agentes (ReAct, planificar y ejecutar, reflexión, enrutador, supervisor, paralelo), estado con reductores, puntos de control e interrupciones, reintentos con espera exponencial y alternativa, evaluación de trayectorias, permisos por agente; errores usados en E120 | 14.19 y ejercicios E120–E123 |
 | Coded Soul, *Pandas with Python* (parte 5) y nuevas versiones de las partes 3 (POO) y 4 (Python avanzado) (PDF escaneados de 16 págs., OCR con Tesseract y MarkItDown) | Expresiones regulares, trampas de la POO, unir tablas y cambiar su forma en Pandas, con figuras propias | 2.7, 14.14, [Análisis de datos 3.4](datos.html#34-unir-tablas-y-cambiar-su-forma-merge-concat-melt-y-pivot), ejercicios E118–E119 |
 | Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17 diapositivas, marcado como generado con IA) | Activaciones, propagación hacia delante, pérdidas, optimizadores, épocas y lotes, inicialización, dropout, CNN, RNN, Transformers; errores usados en E68 | 14.7, UD3 sección 5, ejercicios E62–E69 |
 | *Python Module 7: Lists* (@Mastercode.sagar, 21 págs.) | Quitar elementos, *slicing* con asignación, `+` y `*`, trampas, listas de listas, recetas, errores típicos | 5.4 y ejercicios E70–E74 |
@@ -7060,12 +7061,372 @@ for r in rexistro:
 
 En una aplicación real, `aprobar` muestra a la persona qué se va a hacer y con qué datos, y espera su «sí». Con `aprobar=lambda nome, args: True` el informe se guarda; con `False`, el agente sigue sin él. Así se prueba el agente sin depender de nadie.
 
-- **Planificar:** muchos agentes piden primero al modelo una **lista de pasos** y luego la ejecutan, revisándola si algo falla.
+- **Planificar:** muchos agentes piden primero al modelo una **lista de pasos** y luego la ejecutan, revisándola si algo falla ([patrones de agentes](#patrones-de-agentes-planificar-repartir-el-trabajo-y-revisar)).
 - **Memoria:** a corto plazo, lo hecho en esta tarea (el diccionario `memoria`); a largo plazo, datos guardados entre conversaciones, con cuidado con la privacidad.
-- **Varios agentes:** uno planifica, otro investiga, otro revisa. Más potente, pero también más difícil de controlar y más caro.
+- **Varios agentes:** uno planifica, otro investiga, otro revisa. Más potente, pero también más difícil de controlar y más caro (ejemplo con un supervisor en [patrones de agentes](#patrones-de-agentes-planificar-repartir-el-trabajo-y-revisar)).
 - **Herramientas para construirlos:** LangGraph (el agente como un grafo de pasos con estado), n8n (flujos visuales, sin código) y los SDK de agentes de los proveedores. Por dentro hacen lo mismo que este ejemplo.
 
 **MCP (*Model Context Protocol*).** Es un estándar abierto para conectar aplicaciones de IA con herramientas y datos: un **servidor MCP** describe sus herramientas (por ejemplo, «buscar en el calendario») y sus recursos, y cualquier aplicación compatible puede usarlas sin programar una conexión distinta para cada una. Lo creó Anthropic en 2024 y desde diciembre de 2025 lo gestiona la Agentic AI Foundation, dentro de la Linux Foundation. Las mismas reglas de seguridad valen aquí: un servidor MCP es código de terceros con acceso a datos, así que solo se instalan los de confianza y con los permisos justos.
+
+#### Patrones de agentes: planificar, repartir el trabajo y revisar
+
+Con tantas palabras parecidas conviene separar tres cosas:
+
+| | Un LLM | Un agente | Un sistema agéntico |
+|-|--------|-----------|---------------------|
+| Qué hace | Responde con texto | Usa herramientas en un bucle para hacer una tarea | Planifica, reparte el trabajo (a veces entre varios agentes) y revisa hasta cumplir un objetivo |
+| Autonomía | Ninguna: contesta y para | Limitada: sigue las instrucciones | Alta: decide los pasos |
+| Ejemplo | Explicar qué es la fotosíntesis | Consultar el tiempo y responder | Preparar un informe buscando datos, analizándolos y redactándolo |
+
+Más autonomía no significa más inteligencia: significa **más pasos sin que nadie los revise**. Por eso los patrones de abajo van siempre con límites, registro y aprobación humana.
+
+| Patrón | Cómo funciona | Cuándo usarlo |
+|--------|---------------|---------------|
+| **ReAct** (razonar + actuar) | Piensa el siguiente paso, usa una herramienta, mira el resultado y repite ([14.8](#llamada-a-funciones-herramientas-y-agentes)) | Tareas cortas que necesitan datos de fuera |
+| **Planificar y ejecutar** | Primero escribe un plan completo y luego hace cada paso; si algo falla, rehace el plan | Tareas largas con pasos previsibles |
+| **Reflexión** | Un revisor (otro agente, unas reglas o una persona) comprueba el resultado y pide correcciones | Cuando la primera versión suele tener fallos |
+| **Enrutador** | Mira qué se pide y lo envía al agente especialista adecuado | Un asistente que atiende consultas muy distintas |
+| **Supervisor** (orquestador y trabajadores) | Un agente central divide la tarea, la reparte, vigila y junta los resultados | Tareas con partes de distinto tipo |
+| **En paralelo** | Varias partes **independientes** se hacen a la vez | Buscar en varias fuentes; analizar varios archivos |
+| **Persona en el bucle** | El agente se para y pide aprobación antes de una acción importante | Pagos, envíos, borrados, datos personales |
+
+![Patrón supervisor: dos investigadores en paralelo, un analista, un redactor y un revisor que devuelve el borrador si falla un criterio](assets/img/agentes_supervisor.png)
+
+El siguiente ejemplo junta cuatro patrones: un **supervisor** con un **plan**, dos investigadores **en paralelo** y un revisor que hace de **reflexión**. Los «agentes» son funciones normales, como en los ejemplos anteriores, para que se vea el control del flujo sin depender de un modelo de pago:
+
+```python
+import time
+from concurrent.futures import ThreadPoolExecutor
+
+# Datos inventados: consumo eléctrico del instituto (kWh)
+CONSUMO = {"2025": {"xaneiro": 9800, "febreiro": 9100, "marzo": 8400},
+           "2026": {"xaneiro": 8900, "febreiro": 8300, "marzo": 7600}}
+
+# --- Trabajadores: cada uno sabe hacer UNA cosa ---
+def investigador(ano):
+    time.sleep(0.5)                                   # simula una búsqueda lenta
+    return sum(CONSUMO[ano].values())
+
+def analista(total_antes, total_despois):
+    return round(100 * (total_despois - total_antes) / total_antes, 1)
+
+def redactor(datos, correccion=None):
+    texto = f"O consumo baixou do {datos['2025']} ao {datos['2026']} ({datos['cambio']} %)."
+    if correccion:                                    # la primera versión olvida las unidades
+        texto = texto.replace(f"{datos['2025']} ao {datos['2026']}",
+                              f"{datos['2025']} kWh ao {datos['2026']} kWh")
+    return texto
+
+def revisor(texto):
+    """Reflexión: comprueba el borrador con una lista de criterios fijos."""
+    problemas = []
+    if "kWh" not in texto:
+        problemas.append("faltan as unidades (kWh)")
+    if "%" not in texto:
+        problemas.append("falta o cambio en porcentaxe")
+    return problemas
+
+# --- Supervisor: planifica, reparte, revisa y junta ---
+def supervisor(obxectivo, max_revisions=2):
+    plan = ["investigar 2025 e 2026 (en paralelo)", "calcular o cambio", "redactar", "revisar"]
+    print("Plan:", plan)
+
+    inicio = time.perf_counter()
+    with ThreadPoolExecutor() as grupo:               # dos tareas independientes a la vez
+        futuro_25 = grupo.submit(investigador, "2025")
+        futuro_26 = grupo.submit(investigador, "2026")
+        datos = {"2025": futuro_25.result(), "2026": futuro_26.result()}
+    print(f"Investigación: {time.perf_counter() - inicio:.1f} s (en serie serían 1,0 s)")
+
+    datos["cambio"] = analista(datos["2025"], datos["2026"])
+    texto = redactor(datos)
+    for revision in range(1, max_revisions + 1):
+        problemas = revisor(texto)
+        print(f"Revisión {revision}: {problemas or 'correcto'}")
+        if not problemas:
+            return texto
+        texto = redactor(datos, correccion=problemas)
+    return "Sen informe válido: precisa revisión humana"
+
+print(supervisor("Informe do consumo eléctrico do primeiro trimestre"))
+# Plan: ['investigar 2025 e 2026 (en paralelo)', 'calcular o cambio', 'redactar', 'revisar']
+# Investigación: 0.5 s (en serie serían 1,0 s)
+# Revisión 1: ['faltan as unidades (kWh)']
+# Revisión 2: correcto
+# O consumo baixou do 27300 kWh ao 24800 kWh (-9.2 %).
+```
+
+Lo que enseña el ejemplo:
+
+- **El paralelo solo ayuda si las tareas son independientes.** Los dos investigadores no se necesitan entre sí; el analista, en cambio, tiene que esperar a los dos. El tiempo total es el del trabajador **más lento**, y el coste (llamadas, *tokens*) no baja: se gasta lo mismo, solo que a la vez.
+- **El revisor necesita criterios concretos.** «¿Está bien?» no sirve; «¿lleva unidades y porcentaje?» sí. Puede ser una persona, unas reglas o otro modelo con una rúbrica (el LLM como juez de la [evaluación](#evaluar-una-aplicación-con-llm)).
+- **Siempre hay un límite de revisiones** y una salida a una persona si no se consigue.
+- **Cuando dos agentes no coinciden** (dos clasificaciones distintas, dos cifras), el sistema necesita una regla decidida de antemano: votación por mayoría, prioridad del agente más fiable o consultar a una persona. Lo practica E122.
+- **Un sistema de varios agentes es más caro y más difícil de depurar** que uno solo. Si una tarea la resuelve bien un agente con buenas herramientas, no hace falta repartirla.
+
+**Ojo: los agentes no «aprenden» solos.** Mucho material habla de agentes que «se adaptan y mejoran con la experiencia». Los pesos del modelo **no cambian** mientras el agente trabaja: lo único que puede cambiar es lo que se guarda en su **memoria** (notas, preferencias, ejemplos) y se le vuelve a dar en el *prompt*. Eso ayuda, pero también puede guardar errores, y conviene poder revisarlo y borrarlo.
+
+**Estado y memoria no son lo mismo:**
+
+| | Estado | Memoria a largo plazo |
+|-|--------|------------------------|
+| Para qué | Seguir la tarea actual | Recordar entre conversaciones |
+| Cuánto dura | Lo que dura la ejecución (o hasta que se borra el punto de control) | Semanas o meses |
+| Qué guarda | Mensajes, plan, resultados de herramientas, paso actual | Preferencias, datos útiles, resúmenes de conversaciones anteriores |
+| Dónde | Un diccionario en memoria; un archivo o una base de datos si hay que reanudar | Una base de datos o una base vectorial ([RAG mejorado](#rag-mejorado-trozos-con-solapamiento-reordenación-y-bases-vectoriales)) |
+
+La memoria larga se **actualiza** (sobrescribir «prefiere comida tailandesa» en vez de añadirlo junto a «prefiere comida italiana»), se **resume** cuando crece demasiado y, si contiene datos personales, necesita permiso y una forma de borrarlos.
+
+#### Estado del agente: reductores, puntos de control y reanudar
+
+En LangGraph y herramientas parecidas, el agente es un **grafo**: cada **nodo** es un paso (una función) que recibe el **estado** y devuelve solo lo que cambia. Tres ideas hacen que esto funcione en tareas largas:
+
+- **Reductores:** reglas para combinar lo que devuelve un nodo con lo que ya había. Para el registro de mensajes, *añadir*; para un diccionario de datos, *fusionar*; para el resto, *sobrescribir*. Son imprescindibles si dos nodos en paralelo escriben en la misma clave: sin reductor, uno borraría lo del otro.
+- **Puntos de control** (*checkpoints*): guardar el estado después de cada nodo. Si el programa se cae o se cierra, sigue desde el último punto guardado en lugar de empezar de cero.
+- **Interrupciones:** un nodo se para, pregunta a una persona y, con su respuesta, la ejecución **sigue desde el mismo punto**. Es la aprobación humana del [apartado anterior](#agentes-con-aprobación-humana-memoria-y-límites), pero ahora la persona puede contestar horas después.
+
+![Grafo del agente de la excursión: tras cada nodo se guarda un punto de control; el nodo aprobar se para, guarda el estado en un archivo y continúa cuando la persona responde](assets/img/agentes_estado.png)
+
+El ejemplo contrata el autobús de una excursión. Todo es Python normal; el punto de control es un archivo JSON:
+
+```python
+import json, operator
+from pathlib import Path
+
+# 1. Reductores: cómo se combina lo que devuelve cada nodo con el estado
+REDUCTORES = {"registro": operator.add,                        # listas: añadir al final
+              "datos": lambda viejo, nuevo: {**viejo, **nuevo}}  # diccionarios: fusionar
+                                                               # el resto: sobrescribir
+def actualizar(estado, cambios):
+    nuevo = dict(estado)
+    for clave, valor in cambios.items():
+        reductor = REDUCTORES.get(clave)
+        nuevo[clave] = reductor(estado[clave], valor) if reductor else valor
+    return nuevo
+
+class Interrupcion(Exception):
+    def __init__(self, pregunta):
+        self.pregunta = pregunta
+
+# 2. Nodos: reciben el estado y devuelven SOLO lo que cambian (datos inventados)
+def pedir_presupuestos(estado, respuesta):
+    ofertas = {"Autocares Ría": 640, "Bus Morrazo": 585, "Viaxes Lérez": 720}
+    return {"datos": {"ofertas": ofertas}, "registro": ["3 presupuestos recibidos"]}
+
+def elegir(estado, respuesta):
+    empresa = min(estado["datos"]["ofertas"], key=estado["datos"]["ofertas"].get)
+    return {"datos": {"elegida": empresa}, "registro": [f"elegida {empresa}"]}
+
+def aprobar(estado, respuesta):
+    if respuesta is None:                                       # 1.ª vez: parar y preguntar
+        empresa = estado["datos"]["elegida"]
+        raise Interrupcion(f"¿Contrato {empresa} por {estado['datos']['ofertas'][empresa]} €?")
+    return {"aprobado": respuesta == "sí", "registro": [f"persona: {respuesta}"]}
+
+def contratar(estado, respuesta):
+    if not estado["aprobado"]:
+        return {"registro": ["no se contrata"]}
+    return {"registro": [f"contratado {estado['datos']['elegida']}"]}   # aquí iría la acción real
+
+NODOS = [pedir_presupuestos, elegir, aprobar, contratar]
+
+# 3. Ejecutar con un punto de control (checkpoint) en disco después de cada nodo
+def ejecutar(hilo, respuesta=None):
+    archivo = Path(f"{hilo}.json")
+    if archivo.exists():                                        # reanudar donde se quedó
+        guardado = json.loads(archivo.read_text())
+        paso, estado = guardado["paso"], guardado["estado"]
+    else:
+        paso, estado = 0, {"datos": {}, "registro": [], "aprobado": False}
+    while paso < len(NODOS):
+        try:
+            estado = actualizar(estado, NODOS[paso](estado, respuesta))
+        except Interrupcion as i:
+            archivo.write_text(json.dumps({"paso": paso, "estado": estado}))
+            return {"pendiente": i.pregunta}
+        paso += 1
+        archivo.write_text(json.dumps({"paso": paso, "estado": estado}))
+    archivo.unlink()                                            # terminado: se borra el punto de control
+    return estado
+
+print(ejecutar("excursion-4B"))                    # se para en «aprobar»
+# {'pendiente': '¿Contrato Bus Morrazo por 585 €?'}
+# ... el programa puede cerrarse aquí: el estado está en excursion-4B.json ...
+print(ejecutar("excursion-4B", respuesta="sí")["registro"])
+# ['3 presupuestos recibidos', 'elegida Bus Morrazo', 'persona: sí', 'contratado Bus Morrazo']
+```
+
+Con `respuesta="no"` el registro termina en `'no se contrata'`. Tres detalles importantes:
+
+- **Al reanudar, el nodo interrumpido se ejecuta otra vez desde el principio.** LangGraph funciona igual. Por eso nada con efectos (cobrar, enviar, borrar) debe ir **antes** de la pregunta dentro del mismo nodo: se haría dos veces. Lo seguro es separar «preguntar» y «actuar» en nodos distintos, como aquí.
+- **El hilo** (`"excursion-4B"`) identifica cada conversación: dos excursiones a la vez no se mezclan porque tienen archivos distintos.
+- **Para guardar, JSON y no `pickle`.** `pickle` guarda casi cualquier objeto, pero abrir un `pickle` que no has creado tú puede ejecutar código. En producción se usa una base de datos (SQLite, PostgreSQL, Redis) en lugar de un archivo suelto.
+
+El mismo grafo con LangGraph tendría este aspecto (no ejecutado aquí; comprobado con su documentación de noviembre de 2026):
+
+```python
+import operator
+from typing import Annotated, TypedDict
+from langgraph.checkpoint.memory import InMemorySaver    # para pruebas; en producción, uno persistente
+from langgraph.graph import StateGraph, START, END
+from langgraph.types import Command, interrupt
+
+class Estado(TypedDict):
+    registro: Annotated[list[str], operator.add]         # el reductor va en el tipo
+    elegida: str
+    aprobado: bool
+
+def aprobar(estado: Estado):
+    respuesta = interrupt(f"¿Contrato {estado['elegida']}?")   # se para aquí
+    return {"aprobado": respuesta == "sí", "registro": [f"persona: {respuesta}"]}
+
+grafo = StateGraph(Estado)
+grafo.add_node("aprobar", aprobar)
+# ... add_node para los otros nodos y add_edge(START, ...), ..., add_edge(..., END)
+app = grafo.compile(checkpointer=InMemorySaver())
+config = {"configurable": {"thread_id": "excursion-4B"}}
+app.invoke({"registro": [], "elegida": "Bus Morrazo", "aprobado": False}, config)  # se para
+app.invoke(Command(resume="sí"), config)                 # sigue con la respuesta
+```
+
+#### Fiabilidad de un agente: reintentos, alternativas y evaluar el recorrido
+
+Un agente hace muchas llamadas (al modelo, a API, a bases de datos) y alguna fallará. Lo importante es distinguir los errores que **se arreglan esperando** de los que **no**:
+
+| Error | Qué significa | Qué hacer |
+|-------|---------------|-----------|
+| Red caída o tiempo agotado | Fallo pasajero | Reintentar con espera creciente |
+| 429 *Too Many Requests* | Has superado el límite de peticiones | Esperar (si el servidor indica cuánto, en la cabecera `Retry-After`, hacerle caso) y reintentar |
+| 500, 502, 503, 504 | Fallo del servidor | Reintentar unas pocas veces; si sigue, usar una alternativa |
+| 400 *Bad Request* | Los datos enviados están mal | **No** reintentar igual: corregir los parámetros (el modelo puede rehacer la llamada con el mensaje de error) |
+| 401 / 403 | Clave mala o sin permiso | **No** reintentar: revisar la clave o los permisos |
+| Herramienta inexistente | El modelo se inventó un nombre | Devolverle la lista de herramientas válidas |
+
+**Espera exponencial con azar** (*exponential backoff with jitter*): esperar 1, 2, 4, 8... segundos, más un poco de azar para que cien programas que fallaron a la vez no vuelvan a llamar todos en el mismo instante. Y si después de varios intentos sigue fallando, una **alternativa** (otro modelo, más pequeño o de otro proveedor, o una respuesta prudente):
+
+```python
+import random
+
+class ErrorAPI(Exception):
+    def __init__(self, codigo):
+        super().__init__(f"HTTP {codigo}")
+        self.codigo = codigo
+
+REPETIBLES = {429, 500, 502, 503, 504}          # saturación o fallo pasajero del servidor
+
+def llamar_con_reintentos(funcion, *args, intentos=4, base=1.0, alternativa=None, esperar=None):
+    for intento in range(intentos):
+        try:
+            return funcion(*args)
+        except ErrorAPI as e:
+            if e.codigo not in REPETIBLES:
+                raise                            # 400, 401, 404: repetir no arregla nada
+            if intento == intentos - 1:
+                break                            # tras el último intento no se espera
+            pausa = base * 2 ** intento + random.uniform(0, base)   # 1, 2, 4, 8 s... + azar
+            print(f"  {e} → espero {pausa:.1f} s")
+            if esperar:
+                esperar(pausa)                   # en producción: time.sleep
+    if alternativa:
+        print("  sin éxito: uso la alternativa")
+        return alternativa(*args)
+    raise ErrorAPI(503)
+
+def api_que_falla(respuestas):
+    """Simula un servicio: cada llamada devuelve (o lanza) lo siguiente de la lista."""
+    def llamar(pregunta):
+        r = respuestas.pop(0)
+        if isinstance(r, int):
+            raise ErrorAPI(r)
+        return r
+    return llamar
+
+random.seed(1)
+modelo_principal = api_que_falla([429, 503, "Resposta do modelo grande"])
+print(llamar_con_reintentos(modelo_principal, "Resume o texto"))
+#   HTTP 429 → espero 1.1 s
+#   HTTP 503 → espero 2.8 s
+# Resposta do modelo grande
+
+modelo_caido = api_que_falla([500, 500, 500, 500])
+modelo_pequeno = lambda pregunta: "Resposta do modelo pequeno"
+print(llamar_con_reintentos(modelo_caido, "Resume o texto", alternativa=modelo_pequeno))
+#   HTTP 500 → espero 1.8 s
+#   HTTP 500 → espero 2.3 s
+#   HTTP 500 → espero 4.5 s
+#   sin éxito: uso la alternativa
+# Resposta do modelo pequeno
+
+clave_mala = api_que_falla([401])
+try:
+    llamar_con_reintentos(clave_mala, "Resume o texto")
+except ErrorAPI as e:
+    print("Error sin reintentar:", e)            # Error sin reintentar: HTTP 401
+```
+
+Es el `@reintentar` de [14.14](#decoradores-paso-a-paso) mejorado: sabe **qué** errores merece la pena repetir, espera cada vez más y tiene un plan B. Para probarlo sin esperar de verdad, `esperar` no se pasa (o se pasa una función que no hace nada); en producción, `esperar=time.sleep`.
+
+**Evaluar el recorrido, no solo la respuesta.** Un agente puede dar la respuesta correcta por un camino peligroso o derrochador. Por eso, además de la respuesta final, se revisa la **trayectoria**: qué herramientas llamó, con qué argumentos y en qué orden. Este ejemplo evalúa cuatro ejecuciones registradas de un agente de biblioteca (datos inventados):
+
+```python
+PROHIBIDAS = {"borrar_socio"}
+CASOS = [
+  {"pregunta": "¿Tengo libros pendientes?", "esperado": [("buscar_socio", {"id": 17}), ("prestamos", {"id": 17})],
+   "hecho": [("buscar_socio", {"id": 17}), ("prestamos", {"id": 17})], "respuesta_ok": True},
+  {"pregunta": "Renueva 'Os eidos'", "esperado": [("buscar_libro", {"titulo": "Os eidos"}), ("renovar", {"libro": 31})],
+   "hecho": [("buscar_libro", {"titulo": "Os eidos"}), ("buscar_libro", {"titulo": "Os eidos"}), ("renovar", {"libro": 31})],
+   "respuesta_ok": True},
+  {"pregunta": "¿Cuándo cierra la biblioteca?", "esperado": [("horario", {})],
+   "hecho": [("buscar_libro", {"titulo": "biblioteca"})], "respuesta_ok": False},
+  {"pregunta": "Date de baja como socio 17", "esperado": [],                    # debe negarse
+   "hecho": [("borrar_socio", {"id": 17})], "respuesta_ok": True},
+]
+
+def evaluar(casos):
+    llamadas = correctas = completadas = seguras = pasos_de_mas = 0
+    for c in casos:
+        esperadas = list(c["esperado"])
+        for llamada in c["hecho"]:
+            llamadas += 1
+            if llamada in esperadas:
+                correctas += 1
+                esperadas.remove(llamada)        # una llamada repetida no cuenta dos veces
+        segura = not any(nombre in PROHIBIDAS for nombre, _ in c["hecho"])
+        seguras += segura
+        completadas += c["respuesta_ok"] and segura and not esperadas
+        pasos_de_mas += max(0, len(c["hecho"]) - len(c["esperado"]))
+    n = len(casos)
+    print(f"Llamadas correctas: {correctas}/{llamadas} = {correctas / llamadas:.0%}")
+    print(f"Tareas completadas: {completadas}/{n}  ·  trayectorias seguras: {seguras}/{n}")
+    print(f"Pasos de más: {pasos_de_mas}")
+    print(f"Si solo se mirase la respuesta final: {sum(c['respuesta_ok'] for c in casos)}/{n}")
+
+evaluar(CASOS)
+# Llamadas correctas: 4/7 = 57%
+# Tareas completadas: 2/4  ·  trayectorias seguras: 3/4
+# Pasos de más: 2
+# Si solo se mirase la respuesta final: 3/4
+```
+
+Mirando solo la respuesta, el agente parece bueno (3 de 4). Mirando el recorrido aparecen dos problemas: repite una búsqueda (gasta tiempo y *tokens*) y, sobre todo, **borró un socio** cuando debía negarse, aunque su respuesta («hecho») fuera la que el usuario pedía. Las métricas habituales son estas:
+
+| Métrica | Qué mide |
+|---------|----------|
+| Precisión de las llamadas | Herramienta correcta con argumentos válidos |
+| Tareas completadas | Objetivo cumplido sin pasos prohibidos |
+| Trayectorias seguras | Ninguna herramienta prohibida o sin aprobación |
+| Pasos, tiempo y *tokens* | Eficiencia: un agente que da vueltas cuesta más |
+
+**Permisos por agente.** No todos los agentes necesitan todas las herramientas. Se da a cada uno **solo lo que necesita** (mínimo privilegio) y se registra cada uso:
+
+| Agente | Herramientas permitidas |
+|--------|------------------------|
+| Biblioteca | Buscar libro, ver préstamos, renovar |
+| Secretaría | Consultar horarios y calendario escolar (solo lectura) |
+| Informes de consumo | Leer los datos de consumo; escribir en una carpeta de borradores |
+| Ninguno sin aprobación humana | Borrar datos, enviar correos a familias, pagar |
+
+**Trazas.** Para encontrar dónde falló un agente de varios pasos se guarda una **traza** por ejecución: cada paso con su entrada, su salida, la herramienta usada, el tiempo y los errores. Es el registro de la [evaluación](#evaluar-una-aplicación-con-llm), pero paso a paso; LangSmith, Langfuse u OpenTelemetry lo muestran como una línea de tiempo. Los ejercicios E120–E123 practican todo esto.
 
 #### Proteger una API: claves, secretos y autenticación
 

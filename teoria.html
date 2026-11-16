@@ -1002,7 +1002,7 @@ modelo</td>
 </tbody>
 </table>
 <p><strong>Conexión con UD2</strong>: casi todo lo que programamos en
-E1–E119 es <strong>programación determinista</strong> (no IA). Es la
+E1–E123 es <strong>programación determinista</strong> (no IA). Es la
 base imprescindible: los modelos de IA (sección 10, UD5) se construyen
 encima de ella.</p>
 <h3 id="06-tipos-de-ia-ia-clásica-machine-learning-y-deep-learning">0.6
@@ -11143,6 +11143,16 @@ noviembre de 2026, traducciones, requisitos)</td>
 <td>14.16</td>
 </tr>
 <tr class="even">
+<td>«Agentic AI with Multi-Agents System» (@TheAgenticAIEngineer, PDF de
+20 págs. sin capa de texto, OCR con Tesseract y MarkItDown)</td>
+<td>Patrones de agentes (ReAct, planificar y ejecutar, reflexión,
+enrutador, supervisor, paralelo), estado con reductores, puntos de
+control e interrupciones, reintentos con espera exponencial y
+alternativa, evaluación de trayectorias, permisos por agente; errores
+usados en E120</td>
+<td>14.19 y ejercicios E120–E123</td>
+</tr>
+<tr class="odd">
 <td>Coded Soul, <em>Pandas with Python</em> (parte 5) y nuevas versiones
 de las partes 3 (POO) y 4 (Python avanzado) (PDF escaneados de 16 págs.,
 OCR con Tesseract y MarkItDown)</td>
@@ -11152,7 +11162,7 @@ forma en Pandas, con figuras propias</td>
 href="datos.html#34-unir-tablas-y-cambiar-su-forma-merge-concat-melt-y-pivot">Análisis
 de datos 3.4</a>, ejercicios E118–E119</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Carrusel «Deep Learning Complete Notes» (@analyticswithsingh, 17
 diapositivas, marcado como generado con IA)</td>
 <td>Activaciones, propagación hacia delante, pérdidas, optimizadores,
@@ -11160,13 +11170,13 @@ diapositivas, marcado como generado con IA)</td>
 usados en E68</td>
 <td>14.7, UD3 sección 5, ejercicios E62–E69</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><em>Python Module 7: Lists</em> (@Mastercode.sagar, 21 págs.)</td>
 <td>Quitar elementos, <em>slicing</em> con asignación, <code>+</code> y
 <code>*</code>, trampas, listas de listas, recetas, errores típicos</td>
 <td>5.4 y ejercicios E70–E74</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><em>Python Module 8: Tuples</em> (@Mastercode.sagar, 15 págs.),
 procesado con OCR y MarkItDown</td>
 <td>Crear tuplas, <code>count</code> e <code>index</code>, operaciones,
@@ -11174,7 +11184,7 @@ tuplas anidadas, tupla frente a lista, desempaquetado, proyecto de
 registro</td>
 <td>5.3 y ejercicios E83–E86</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Seis chuletas dibujadas a mano (Python, NumPy, Pandas, PyTorch,
 TensorFlow y Terraform; sin autor indicado), publicadas tal cual en <a
 href="chuletas.html">Chuletas</a></td>
@@ -11185,7 +11195,7 @@ PyTorch; <code>tf.data</code>, TensorBoard y exportar en Keras;
 infraestructura como código</td>
 <td>7.1, 12.2, 13.8, 14.7, 14.14 y ejercicios E87–E90</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><em>200 Machine Learning Commands</em> (41 págs., sin autor
 indicado), procesado con MarkItDown</td>
 <td>Línea base (<code>DummyClassifier</code>), exactitud equilibrada,
@@ -11198,7 +11208,7 @@ móviles</td>
 <td><a href="ud5-ml.html">UD5</a>, secciones 2, 3, 5, 6, 7 y 8, y
 ejercicios E91–E94</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><em>Python Important Questions</em> (@abhi_techhub, 15 págs., sin
 capa de texto: Tesseract + MarkItDown)</td>
 <td>Preguntas tipo entrevista: compilación a <em>bytecode</em>, memoria
@@ -11207,21 +11217,21 @@ gestores de contexto, excepciones propias, MRO, trampas clásicas,
 programas típicos</td>
 <td>4.4, 14.14, 14.18 y ejercicios E95–E98</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Carrusel <em>Deep Learning Notes</em> (@ds_ai_ketan, 5 láminas
 generadas con IA)</td>
 <td>ML frente a DL; capa de salida y pérdida según el problema; revisión
 crítica (multietiqueta, normalización por lotes, validación)</td>
 <td>14.1, 14.7 y ejercicio E99</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><em>Introduction to Data Science Using Python</em> (A. Agah, OER,
 licencia CC BY-NC 4.0)</td>
 <td>Estadística descriptiva e inferencial, estandarizar, regresión,
 grafos y NetworkX; errores usados en E79</td>
 <td>6.5–6.9, 14.17, ejercicios E75–E79</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><em>Neural Networks – Complete Study Guide</em> (codingwithmee_18,
 49 págs.)</td>
 <td>XOR con capa oculta, red desde cero en NumPy, normalización,
@@ -13175,13 +13185,17 @@ depender de nadie.</p>
 <ul>
 <li><strong>Planificar:</strong> muchos agentes piden primero al modelo
 una <strong>lista de pasos</strong> y luego la ejecutan, revisándola si
-algo falla.</li>
+algo falla (<a
+href="#patrones-de-agentes-planificar-repartir-el-trabajo-y-revisar">patrones
+de agentes</a>).</li>
 <li><strong>Memoria:</strong> a corto plazo, lo hecho en esta tarea (el
 diccionario <code>memoria</code>); a largo plazo, datos guardados entre
 conversaciones, con cuidado con la privacidad.</li>
 <li><strong>Varios agentes:</strong> uno planifica, otro investiga, otro
-revisa. Más potente, pero también más difícil de controlar y más
-caro.</li>
+revisa. Más potente, pero también más difícil de controlar y más caro
+(ejemplo con un supervisor en <a
+href="#patrones-de-agentes-planificar-repartir-el-trabajo-y-revisar">patrones
+de agentes</a>).</li>
 <li><strong>Herramientas para construirlos:</strong> LangGraph (el
 agente como un grafo de pasos con estado), n8n (flujos visuales, sin
 código) y los SDK de agentes de los proveedores. Por dentro hacen lo
@@ -13197,34 +13211,627 @@ gestiona la Agentic AI Foundation, dentro de la Linux Foundation. Las
 mismas reglas de seguridad valen aquí: un servidor MCP es código de
 terceros con acceso a datos, así que solo se instalan los de confianza y
 con los permisos justos.</p>
+<h4
+id="patrones-de-agentes-planificar-repartir-el-trabajo-y-revisar">Patrones
+de agentes: planificar, repartir el trabajo y revisar</h4>
+<p>Con tantas palabras parecidas conviene separar tres cosas:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Un LLM</th>
+<th>Un agente</th>
+<th>Un sistema agéntico</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Qué hace</td>
+<td>Responde con texto</td>
+<td>Usa herramientas en un bucle para hacer una tarea</td>
+<td>Planifica, reparte el trabajo (a veces entre varios agentes) y
+revisa hasta cumplir un objetivo</td>
+</tr>
+<tr class="even">
+<td>Autonomía</td>
+<td>Ninguna: contesta y para</td>
+<td>Limitada: sigue las instrucciones</td>
+<td>Alta: decide los pasos</td>
+</tr>
+<tr class="odd">
+<td>Ejemplo</td>
+<td>Explicar qué es la fotosíntesis</td>
+<td>Consultar el tiempo y responder</td>
+<td>Preparar un informe buscando datos, analizándolos y
+redactándolo</td>
+</tr>
+</tbody>
+</table>
+<p>Más autonomía no significa más inteligencia: significa <strong>más
+pasos sin que nadie los revise</strong>. Por eso los patrones de abajo
+van siempre con límites, registro y aprobación humana.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Patrón</th>
+<th>Cómo funciona</th>
+<th>Cuándo usarlo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>ReAct</strong> (razonar + actuar)</td>
+<td>Piensa el siguiente paso, usa una herramienta, mira el resultado y
+repite (<a
+href="#llamada-a-funciones-herramientas-y-agentes">14.8</a>)</td>
+<td>Tareas cortas que necesitan datos de fuera</td>
+</tr>
+<tr class="even">
+<td><strong>Planificar y ejecutar</strong></td>
+<td>Primero escribe un plan completo y luego hace cada paso; si algo
+falla, rehace el plan</td>
+<td>Tareas largas con pasos previsibles</td>
+</tr>
+<tr class="odd">
+<td><strong>Reflexión</strong></td>
+<td>Un revisor (otro agente, unas reglas o una persona) comprueba el
+resultado y pide correcciones</td>
+<td>Cuando la primera versión suele tener fallos</td>
+</tr>
+<tr class="even">
+<td><strong>Enrutador</strong></td>
+<td>Mira qué se pide y lo envía al agente especialista adecuado</td>
+<td>Un asistente que atiende consultas muy distintas</td>
+</tr>
+<tr class="odd">
+<td><strong>Supervisor</strong> (orquestador y trabajadores)</td>
+<td>Un agente central divide la tarea, la reparte, vigila y junta los
+resultados</td>
+<td>Tareas con partes de distinto tipo</td>
+</tr>
+<tr class="even">
+<td><strong>En paralelo</strong></td>
+<td>Varias partes <strong>independientes</strong> se hacen a la vez</td>
+<td>Buscar en varias fuentes; analizar varios archivos</td>
+</tr>
+<tr class="odd">
+<td><strong>Persona en el bucle</strong></td>
+<td>El agente se para y pide aprobación antes de una acción
+importante</td>
+<td>Pagos, envíos, borrados, datos personales</td>
+</tr>
+</tbody>
+</table>
+<p><img src="assets/img/agentes_supervisor.png"
+alt="Patrón supervisor: dos investigadores en paralelo, un analista, un redactor y un revisor que devuelve el borrador si falla un criterio" /></p>
+<p>El siguiente ejemplo junta cuatro patrones: un
+<strong>supervisor</strong> con un <strong>plan</strong>, dos
+investigadores <strong>en paralelo</strong> y un revisor que hace de
+<strong>reflexión</strong>. Los «agentes» son funciones normales, como
+en los ejemplos anteriores, para que se vea el control del flujo sin
+depender de un modelo de pago:</p>
+<div class="sourceCode" id="cb289"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb289-1"><a href="#cb289-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb289-2"><a href="#cb289-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> concurrent.futures <span class="im">import</span> ThreadPoolExecutor</span>
+<span id="cb289-3"><a href="#cb289-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-4"><a href="#cb289-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Datos inventados: consumo eléctrico del instituto (kWh)</span></span>
+<span id="cb289-5"><a href="#cb289-5" aria-hidden="true" tabindex="-1"></a>CONSUMO <span class="op">=</span> {<span class="st">&quot;2025&quot;</span>: {<span class="st">&quot;xaneiro&quot;</span>: <span class="dv">9800</span>, <span class="st">&quot;febreiro&quot;</span>: <span class="dv">9100</span>, <span class="st">&quot;marzo&quot;</span>: <span class="dv">8400</span>},</span>
+<span id="cb289-6"><a href="#cb289-6" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;2026&quot;</span>: {<span class="st">&quot;xaneiro&quot;</span>: <span class="dv">8900</span>, <span class="st">&quot;febreiro&quot;</span>: <span class="dv">8300</span>, <span class="st">&quot;marzo&quot;</span>: <span class="dv">7600</span>}}</span>
+<span id="cb289-7"><a href="#cb289-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-8"><a href="#cb289-8" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Trabajadores: cada uno sabe hacer UNA cosa ---</span></span>
+<span id="cb289-9"><a href="#cb289-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> investigador(ano):</span>
+<span id="cb289-10"><a href="#cb289-10" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="fl">0.5</span>)                                   <span class="co"># simula una búsqueda lenta</span></span>
+<span id="cb289-11"><a href="#cb289-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(CONSUMO[ano].values())</span>
+<span id="cb289-12"><a href="#cb289-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-13"><a href="#cb289-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> analista(total_antes, total_despois):</span>
+<span id="cb289-14"><a href="#cb289-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">round</span>(<span class="dv">100</span> <span class="op">*</span> (total_despois <span class="op">-</span> total_antes) <span class="op">/</span> total_antes, <span class="dv">1</span>)</span>
+<span id="cb289-15"><a href="#cb289-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-16"><a href="#cb289-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> redactor(datos, correccion<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb289-17"><a href="#cb289-17" aria-hidden="true" tabindex="-1"></a>    texto <span class="op">=</span> <span class="ss">f&quot;O consumo baixou do </span><span class="sc">{</span>datos[<span class="st">&#39;2025&#39;</span>]<span class="sc">}</span><span class="ss"> ao </span><span class="sc">{</span>datos[<span class="st">&#39;2026&#39;</span>]<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>datos[<span class="st">&#39;cambio&#39;</span>]<span class="sc">}</span><span class="ss"> %).&quot;</span></span>
+<span id="cb289-18"><a href="#cb289-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> correccion:                                    <span class="co"># la primera versión olvida las unidades</span></span>
+<span id="cb289-19"><a href="#cb289-19" aria-hidden="true" tabindex="-1"></a>        texto <span class="op">=</span> texto.replace(<span class="ss">f&quot;</span><span class="sc">{</span>datos[<span class="st">&#39;2025&#39;</span>]<span class="sc">}</span><span class="ss"> ao </span><span class="sc">{</span>datos[<span class="st">&#39;2026&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>,</span>
+<span id="cb289-20"><a href="#cb289-20" aria-hidden="true" tabindex="-1"></a>                              <span class="ss">f&quot;</span><span class="sc">{</span>datos[<span class="st">&#39;2025&#39;</span>]<span class="sc">}</span><span class="ss"> kWh ao </span><span class="sc">{</span>datos[<span class="st">&#39;2026&#39;</span>]<span class="sc">}</span><span class="ss"> kWh&quot;</span>)</span>
+<span id="cb289-21"><a href="#cb289-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> texto</span>
+<span id="cb289-22"><a href="#cb289-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-23"><a href="#cb289-23" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> revisor(texto):</span>
+<span id="cb289-24"><a href="#cb289-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Reflexión: comprueba el borrador con una lista de criterios fijos.&quot;&quot;&quot;</span></span>
+<span id="cb289-25"><a href="#cb289-25" aria-hidden="true" tabindex="-1"></a>    problemas <span class="op">=</span> []</span>
+<span id="cb289-26"><a href="#cb289-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">&quot;kWh&quot;</span> <span class="kw">not</span> <span class="kw">in</span> texto:</span>
+<span id="cb289-27"><a href="#cb289-27" aria-hidden="true" tabindex="-1"></a>        problemas.append(<span class="st">&quot;faltan as unidades (kWh)&quot;</span>)</span>
+<span id="cb289-28"><a href="#cb289-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">&quot;%&quot;</span> <span class="kw">not</span> <span class="kw">in</span> texto:</span>
+<span id="cb289-29"><a href="#cb289-29" aria-hidden="true" tabindex="-1"></a>        problemas.append(<span class="st">&quot;falta o cambio en porcentaxe&quot;</span>)</span>
+<span id="cb289-30"><a href="#cb289-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> problemas</span>
+<span id="cb289-31"><a href="#cb289-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-32"><a href="#cb289-32" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Supervisor: planifica, reparte, revisa y junta ---</span></span>
+<span id="cb289-33"><a href="#cb289-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> supervisor(obxectivo, max_revisions<span class="op">=</span><span class="dv">2</span>):</span>
+<span id="cb289-34"><a href="#cb289-34" aria-hidden="true" tabindex="-1"></a>    plan <span class="op">=</span> [<span class="st">&quot;investigar 2025 e 2026 (en paralelo)&quot;</span>, <span class="st">&quot;calcular o cambio&quot;</span>, <span class="st">&quot;redactar&quot;</span>, <span class="st">&quot;revisar&quot;</span>]</span>
+<span id="cb289-35"><a href="#cb289-35" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Plan:&quot;</span>, plan)</span>
+<span id="cb289-36"><a href="#cb289-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-37"><a href="#cb289-37" aria-hidden="true" tabindex="-1"></a>    inicio <span class="op">=</span> time.perf_counter()</span>
+<span id="cb289-38"><a href="#cb289-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ThreadPoolExecutor() <span class="im">as</span> grupo:               <span class="co"># dos tareas independientes a la vez</span></span>
+<span id="cb289-39"><a href="#cb289-39" aria-hidden="true" tabindex="-1"></a>        futuro_25 <span class="op">=</span> grupo.submit(investigador, <span class="st">&quot;2025&quot;</span>)</span>
+<span id="cb289-40"><a href="#cb289-40" aria-hidden="true" tabindex="-1"></a>        futuro_26 <span class="op">=</span> grupo.submit(investigador, <span class="st">&quot;2026&quot;</span>)</span>
+<span id="cb289-41"><a href="#cb289-41" aria-hidden="true" tabindex="-1"></a>        datos <span class="op">=</span> {<span class="st">&quot;2025&quot;</span>: futuro_25.result(), <span class="st">&quot;2026&quot;</span>: futuro_26.result()}</span>
+<span id="cb289-42"><a href="#cb289-42" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Investigación: </span><span class="sc">{</span>time<span class="sc">.</span>perf_counter() <span class="op">-</span> inicio<span class="sc">:.1f}</span><span class="ss"> s (en serie serían 1,0 s)&quot;</span>)</span>
+<span id="cb289-43"><a href="#cb289-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-44"><a href="#cb289-44" aria-hidden="true" tabindex="-1"></a>    datos[<span class="st">&quot;cambio&quot;</span>] <span class="op">=</span> analista(datos[<span class="st">&quot;2025&quot;</span>], datos[<span class="st">&quot;2026&quot;</span>])</span>
+<span id="cb289-45"><a href="#cb289-45" aria-hidden="true" tabindex="-1"></a>    texto <span class="op">=</span> redactor(datos)</span>
+<span id="cb289-46"><a href="#cb289-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> revision <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, max_revisions <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb289-47"><a href="#cb289-47" aria-hidden="true" tabindex="-1"></a>        problemas <span class="op">=</span> revisor(texto)</span>
+<span id="cb289-48"><a href="#cb289-48" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Revisión </span><span class="sc">{</span>revision<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>problemas <span class="kw">or</span> <span class="st">&#39;correcto&#39;</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb289-49"><a href="#cb289-49" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> problemas:</span>
+<span id="cb289-50"><a href="#cb289-50" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> texto</span>
+<span id="cb289-51"><a href="#cb289-51" aria-hidden="true" tabindex="-1"></a>        texto <span class="op">=</span> redactor(datos, correccion<span class="op">=</span>problemas)</span>
+<span id="cb289-52"><a href="#cb289-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">&quot;Sen informe válido: precisa revisión humana&quot;</span></span>
+<span id="cb289-53"><a href="#cb289-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-54"><a href="#cb289-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(supervisor(<span class="st">&quot;Informe do consumo eléctrico do primeiro trimestre&quot;</span>))</span>
+<span id="cb289-55"><a href="#cb289-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Plan: [&#39;investigar 2025 e 2026 (en paralelo)&#39;, &#39;calcular o cambio&#39;, &#39;redactar&#39;, &#39;revisar&#39;]</span></span>
+<span id="cb289-56"><a href="#cb289-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Investigación: 0.5 s (en serie serían 1,0 s)</span></span>
+<span id="cb289-57"><a href="#cb289-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Revisión 1: [&#39;faltan as unidades (kWh)&#39;]</span></span>
+<span id="cb289-58"><a href="#cb289-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Revisión 2: correcto</span></span>
+<span id="cb289-59"><a href="#cb289-59" aria-hidden="true" tabindex="-1"></a><span class="co"># O consumo baixou do 27300 kWh ao 24800 kWh (-9.2 %).</span></span></code></pre></div>
+<p>Lo que enseña el ejemplo:</p>
+<ul>
+<li><strong>El paralelo solo ayuda si las tareas son
+independientes.</strong> Los dos investigadores no se necesitan entre
+sí; el analista, en cambio, tiene que esperar a los dos. El tiempo total
+es el del trabajador <strong>más lento</strong>, y el coste (llamadas,
+<em>tokens</em>) no baja: se gasta lo mismo, solo que a la vez.</li>
+<li><strong>El revisor necesita criterios concretos.</strong> «¿Está
+bien?» no sirve; «¿lleva unidades y porcentaje?» sí. Puede ser una
+persona, unas reglas o otro modelo con una rúbrica (el LLM como juez de
+la <a href="#evaluar-una-aplicación-con-llm">evaluación</a>).</li>
+<li><strong>Siempre hay un límite de revisiones</strong> y una salida a
+una persona si no se consigue.</li>
+<li><strong>Cuando dos agentes no coinciden</strong> (dos
+clasificaciones distintas, dos cifras), el sistema necesita una regla
+decidida de antemano: votación por mayoría, prioridad del agente más
+fiable o consultar a una persona. Lo practica E122.</li>
+<li><strong>Un sistema de varios agentes es más caro y más difícil de
+depurar</strong> que uno solo. Si una tarea la resuelve bien un agente
+con buenas herramientas, no hace falta repartirla.</li>
+</ul>
+<p><strong>Ojo: los agentes no «aprenden» solos.</strong> Mucho material
+habla de agentes que «se adaptan y mejoran con la experiencia». Los
+pesos del modelo <strong>no cambian</strong> mientras el agente trabaja:
+lo único que puede cambiar es lo que se guarda en su
+<strong>memoria</strong> (notas, preferencias, ejemplos) y se le vuelve
+a dar en el <em>prompt</em>. Eso ayuda, pero también puede guardar
+errores, y conviene poder revisarlo y borrarlo.</p>
+<p><strong>Estado y memoria no son lo mismo:</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Estado</th>
+<th>Memoria a largo plazo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Para qué</td>
+<td>Seguir la tarea actual</td>
+<td>Recordar entre conversaciones</td>
+</tr>
+<tr class="even">
+<td>Cuánto dura</td>
+<td>Lo que dura la ejecución (o hasta que se borra el punto de
+control)</td>
+<td>Semanas o meses</td>
+</tr>
+<tr class="odd">
+<td>Qué guarda</td>
+<td>Mensajes, plan, resultados de herramientas, paso actual</td>
+<td>Preferencias, datos útiles, resúmenes de conversaciones
+anteriores</td>
+</tr>
+<tr class="even">
+<td>Dónde</td>
+<td>Un diccionario en memoria; un archivo o una base de datos si hay que
+reanudar</td>
+<td>Una base de datos o una base vectorial (<a
+href="#rag-mejorado-trozos-con-solapamiento-reordenación-y-bases-vectoriales">RAG
+mejorado</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>La memoria larga se <strong>actualiza</strong> (sobrescribir
+«prefiere comida tailandesa» en vez de añadirlo junto a «prefiere comida
+italiana»), se <strong>resume</strong> cuando crece demasiado y, si
+contiene datos personales, necesita permiso y una forma de
+borrarlos.</p>
+<h4
+id="estado-del-agente-reductores-puntos-de-control-y-reanudar">Estado
+del agente: reductores, puntos de control y reanudar</h4>
+<p>En LangGraph y herramientas parecidas, el agente es un
+<strong>grafo</strong>: cada <strong>nodo</strong> es un paso (una
+función) que recibe el <strong>estado</strong> y devuelve solo lo que
+cambia. Tres ideas hacen que esto funcione en tareas largas:</p>
+<ul>
+<li><strong>Reductores:</strong> reglas para combinar lo que devuelve un
+nodo con lo que ya había. Para el registro de mensajes, <em>añadir</em>;
+para un diccionario de datos, <em>fusionar</em>; para el resto,
+<em>sobrescribir</em>. Son imprescindibles si dos nodos en paralelo
+escriben en la misma clave: sin reductor, uno borraría lo del otro.</li>
+<li><strong>Puntos de control</strong> (<em>checkpoints</em>): guardar
+el estado después de cada nodo. Si el programa se cae o se cierra, sigue
+desde el último punto guardado en lugar de empezar de cero.</li>
+<li><strong>Interrupciones:</strong> un nodo se para, pregunta a una
+persona y, con su respuesta, la ejecución <strong>sigue desde el mismo
+punto</strong>. Es la aprobación humana del <a
+href="#agentes-con-aprobación-humana-memoria-y-límites">apartado
+anterior</a>, pero ahora la persona puede contestar horas después.</li>
+</ul>
+<p><img src="assets/img/agentes_estado.png"
+alt="Grafo del agente de la excursión: tras cada nodo se guarda un punto de control; el nodo aprobar se para, guarda el estado en un archivo y continúa cuando la persona responde" /></p>
+<p>El ejemplo contrata el autobús de una excursión. Todo es Python
+normal; el punto de control es un archivo JSON:</p>
+<div class="sourceCode" id="cb290"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb290-1"><a href="#cb290-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json, operator</span>
+<span id="cb290-2"><a href="#cb290-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb290-3"><a href="#cb290-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb290-4"><a href="#cb290-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Reductores: cómo se combina lo que devuelve cada nodo con el estado</span></span>
+<span id="cb290-5"><a href="#cb290-5" aria-hidden="true" tabindex="-1"></a>REDUCTORES <span class="op">=</span> {<span class="st">&quot;registro&quot;</span>: operator.add,                        <span class="co"># listas: añadir al final</span></span>
+<span id="cb290-6"><a href="#cb290-6" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;datos&quot;</span>: <span class="kw">lambda</span> viejo, nuevo: {<span class="op">**</span>viejo, <span class="op">**</span>nuevo}}  <span class="co"># diccionarios: fusionar</span></span>
+<span id="cb290-7"><a href="#cb290-7" aria-hidden="true" tabindex="-1"></a>                                                               <span class="co"># el resto: sobrescribir</span></span>
+<span id="cb290-8"><a href="#cb290-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> actualizar(estado, cambios):</span>
+<span id="cb290-9"><a href="#cb290-9" aria-hidden="true" tabindex="-1"></a>    nuevo <span class="op">=</span> <span class="bu">dict</span>(estado)</span>
+<span id="cb290-10"><a href="#cb290-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> clave, valor <span class="kw">in</span> cambios.items():</span>
+<span id="cb290-11"><a href="#cb290-11" aria-hidden="true" tabindex="-1"></a>        reductor <span class="op">=</span> REDUCTORES.get(clave)</span>
+<span id="cb290-12"><a href="#cb290-12" aria-hidden="true" tabindex="-1"></a>        nuevo[clave] <span class="op">=</span> reductor(estado[clave], valor) <span class="cf">if</span> reductor <span class="cf">else</span> valor</span>
+<span id="cb290-13"><a href="#cb290-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nuevo</span>
+<span id="cb290-14"><a href="#cb290-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb290-15"><a href="#cb290-15" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Interrupcion(<span class="pp">Exception</span>):</span>
+<span id="cb290-16"><a href="#cb290-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, pregunta):</span>
+<span id="cb290-17"><a href="#cb290-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pregunta <span class="op">=</span> pregunta</span>
+<span id="cb290-18"><a href="#cb290-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb290-19"><a href="#cb290-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Nodos: reciben el estado y devuelven SOLO lo que cambian (datos inventados)</span></span>
+<span id="cb290-20"><a href="#cb290-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pedir_presupuestos(estado, respuesta):</span>
+<span id="cb290-21"><a href="#cb290-21" aria-hidden="true" tabindex="-1"></a>    ofertas <span class="op">=</span> {<span class="st">&quot;Autocares Ría&quot;</span>: <span class="dv">640</span>, <span class="st">&quot;Bus Morrazo&quot;</span>: <span class="dv">585</span>, <span class="st">&quot;Viaxes Lérez&quot;</span>: <span class="dv">720</span>}</span>
+<span id="cb290-22"><a href="#cb290-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">&quot;datos&quot;</span>: {<span class="st">&quot;ofertas&quot;</span>: ofertas}, <span class="st">&quot;registro&quot;</span>: [<span class="st">&quot;3 presupuestos recibidos&quot;</span>]}</span>
+<span id="cb290-23"><a href="#cb290-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb290-24"><a href="#cb290-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> elegir(estado, respuesta):</span>
+<span id="cb290-25"><a href="#cb290-25" aria-hidden="true" tabindex="-1"></a>    empresa <span class="op">=</span> <span class="bu">min</span>(estado[<span class="st">&quot;datos&quot;</span>][<span class="st">&quot;ofertas&quot;</span>], key<span class="op">=</span>estado[<span class="st">&quot;datos&quot;</span>][<span class="st">&quot;ofertas&quot;</span>].get)</span>
+<span id="cb290-26"><a href="#cb290-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">&quot;datos&quot;</span>: {<span class="st">&quot;elegida&quot;</span>: empresa}, <span class="st">&quot;registro&quot;</span>: [<span class="ss">f&quot;elegida </span><span class="sc">{</span>empresa<span class="sc">}</span><span class="ss">&quot;</span>]}</span>
+<span id="cb290-27"><a href="#cb290-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb290-28"><a href="#cb290-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> aprobar(estado, respuesta):</span>
+<span id="cb290-29"><a href="#cb290-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> respuesta <span class="kw">is</span> <span class="va">None</span>:                                       <span class="co"># 1.ª vez: parar y preguntar</span></span>
+<span id="cb290-30"><a href="#cb290-30" aria-hidden="true" tabindex="-1"></a>        empresa <span class="op">=</span> estado[<span class="st">&quot;datos&quot;</span>][<span class="st">&quot;elegida&quot;</span>]</span>
+<span id="cb290-31"><a href="#cb290-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> Interrupcion(<span class="ss">f&quot;¿Contrato </span><span class="sc">{</span>empresa<span class="sc">}</span><span class="ss"> por </span><span class="sc">{</span>estado[<span class="st">&#39;datos&#39;</span>][<span class="st">&#39;ofertas&#39;</span>][empresa]<span class="sc">}</span><span class="ss"> €?&quot;</span>)</span>
+<span id="cb290-32"><a href="#cb290-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">&quot;aprobado&quot;</span>: respuesta <span class="op">==</span> <span class="st">&quot;sí&quot;</span>, <span class="st">&quot;registro&quot;</span>: [<span class="ss">f&quot;persona: </span><span class="sc">{</span>respuesta<span class="sc">}</span><span class="ss">&quot;</span>]}</span>
+<span id="cb290-33"><a href="#cb290-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb290-34"><a href="#cb290-34" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> contratar(estado, respuesta):</span>
+<span id="cb290-35"><a href="#cb290-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> estado[<span class="st">&quot;aprobado&quot;</span>]:</span>
+<span id="cb290-36"><a href="#cb290-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {<span class="st">&quot;registro&quot;</span>: [<span class="st">&quot;no se contrata&quot;</span>]}</span>
+<span id="cb290-37"><a href="#cb290-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">&quot;registro&quot;</span>: [<span class="ss">f&quot;contratado </span><span class="sc">{</span>estado[<span class="st">&#39;datos&#39;</span>][<span class="st">&#39;elegida&#39;</span>]<span class="sc">}</span><span class="ss">&quot;</span>]}   <span class="co"># aquí iría la acción real</span></span>
+<span id="cb290-38"><a href="#cb290-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb290-39"><a href="#cb290-39" aria-hidden="true" tabindex="-1"></a>NODOS <span class="op">=</span> [pedir_presupuestos, elegir, aprobar, contratar]</span>
+<span id="cb290-40"><a href="#cb290-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb290-41"><a href="#cb290-41" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Ejecutar con un punto de control (checkpoint) en disco después de cada nodo</span></span>
+<span id="cb290-42"><a href="#cb290-42" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ejecutar(hilo, respuesta<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb290-43"><a href="#cb290-43" aria-hidden="true" tabindex="-1"></a>    archivo <span class="op">=</span> Path(<span class="ss">f&quot;</span><span class="sc">{</span>hilo<span class="sc">}</span><span class="ss">.json&quot;</span>)</span>
+<span id="cb290-44"><a href="#cb290-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> archivo.exists():                                        <span class="co"># reanudar donde se quedó</span></span>
+<span id="cb290-45"><a href="#cb290-45" aria-hidden="true" tabindex="-1"></a>        guardado <span class="op">=</span> json.loads(archivo.read_text())</span>
+<span id="cb290-46"><a href="#cb290-46" aria-hidden="true" tabindex="-1"></a>        paso, estado <span class="op">=</span> guardado[<span class="st">&quot;paso&quot;</span>], guardado[<span class="st">&quot;estado&quot;</span>]</span>
+<span id="cb290-47"><a href="#cb290-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb290-48"><a href="#cb290-48" aria-hidden="true" tabindex="-1"></a>        paso, estado <span class="op">=</span> <span class="dv">0</span>, {<span class="st">&quot;datos&quot;</span>: {}, <span class="st">&quot;registro&quot;</span>: [], <span class="st">&quot;aprobado&quot;</span>: <span class="va">False</span>}</span>
+<span id="cb290-49"><a href="#cb290-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> paso <span class="op">&lt;</span> <span class="bu">len</span>(NODOS):</span>
+<span id="cb290-50"><a href="#cb290-50" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb290-51"><a href="#cb290-51" aria-hidden="true" tabindex="-1"></a>            estado <span class="op">=</span> actualizar(estado, NODOS[paso](estado, respuesta))</span>
+<span id="cb290-52"><a href="#cb290-52" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> Interrupcion <span class="im">as</span> i:</span>
+<span id="cb290-53"><a href="#cb290-53" aria-hidden="true" tabindex="-1"></a>            archivo.write_text(json.dumps({<span class="st">&quot;paso&quot;</span>: paso, <span class="st">&quot;estado&quot;</span>: estado}))</span>
+<span id="cb290-54"><a href="#cb290-54" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> {<span class="st">&quot;pendiente&quot;</span>: i.pregunta}</span>
+<span id="cb290-55"><a href="#cb290-55" aria-hidden="true" tabindex="-1"></a>        paso <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb290-56"><a href="#cb290-56" aria-hidden="true" tabindex="-1"></a>        archivo.write_text(json.dumps({<span class="st">&quot;paso&quot;</span>: paso, <span class="st">&quot;estado&quot;</span>: estado}))</span>
+<span id="cb290-57"><a href="#cb290-57" aria-hidden="true" tabindex="-1"></a>    archivo.unlink()                                            <span class="co"># terminado: se borra el punto de control</span></span>
+<span id="cb290-58"><a href="#cb290-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> estado</span>
+<span id="cb290-59"><a href="#cb290-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb290-60"><a href="#cb290-60" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ejecutar(<span class="st">&quot;excursion-4B&quot;</span>))                    <span class="co"># se para en «aprobar»</span></span>
+<span id="cb290-61"><a href="#cb290-61" aria-hidden="true" tabindex="-1"></a><span class="co"># {&#39;pendiente&#39;: &#39;¿Contrato Bus Morrazo por 585 €?&#39;}</span></span>
+<span id="cb290-62"><a href="#cb290-62" aria-hidden="true" tabindex="-1"></a><span class="co"># ... el programa puede cerrarse aquí: el estado está en excursion-4B.json ...</span></span>
+<span id="cb290-63"><a href="#cb290-63" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ejecutar(<span class="st">&quot;excursion-4B&quot;</span>, respuesta<span class="op">=</span><span class="st">&quot;sí&quot;</span>)[<span class="st">&quot;registro&quot;</span>])</span>
+<span id="cb290-64"><a href="#cb290-64" aria-hidden="true" tabindex="-1"></a><span class="co"># [&#39;3 presupuestos recibidos&#39;, &#39;elegida Bus Morrazo&#39;, &#39;persona: sí&#39;, &#39;contratado Bus Morrazo&#39;]</span></span></code></pre></div>
+<p>Con <code>respuesta="no"</code> el registro termina en
+<code>'no se contrata'</code>. Tres detalles importantes:</p>
+<ul>
+<li><strong>Al reanudar, el nodo interrumpido se ejecuta otra vez desde
+el principio.</strong> LangGraph funciona igual. Por eso nada con
+efectos (cobrar, enviar, borrar) debe ir <strong>antes</strong> de la
+pregunta dentro del mismo nodo: se haría dos veces. Lo seguro es separar
+«preguntar» y «actuar» en nodos distintos, como aquí.</li>
+<li><strong>El hilo</strong> (<code>"excursion-4B"</code>) identifica
+cada conversación: dos excursiones a la vez no se mezclan porque tienen
+archivos distintos.</li>
+<li><strong>Para guardar, JSON y no <code>pickle</code>.</strong>
+<code>pickle</code> guarda casi cualquier objeto, pero abrir un
+<code>pickle</code> que no has creado tú puede ejecutar código. En
+producción se usa una base de datos (SQLite, PostgreSQL, Redis) en lugar
+de un archivo suelto.</li>
+</ul>
+<p>El mismo grafo con LangGraph tendría este aspecto (no ejecutado aquí;
+comprobado con su documentación de noviembre de 2026):</p>
+<div class="sourceCode" id="cb291"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb291-1"><a href="#cb291-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> operator</span>
+<span id="cb291-2"><a href="#cb291-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Annotated, TypedDict</span>
+<span id="cb291-3"><a href="#cb291-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.checkpoint.memory <span class="im">import</span> InMemorySaver    <span class="co"># para pruebas; en producción, uno persistente</span></span>
+<span id="cb291-4"><a href="#cb291-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.graph <span class="im">import</span> StateGraph, START, END</span>
+<span id="cb291-5"><a href="#cb291-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> langgraph.types <span class="im">import</span> Command, interrupt</span>
+<span id="cb291-6"><a href="#cb291-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb291-7"><a href="#cb291-7" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Estado(TypedDict):</span>
+<span id="cb291-8"><a href="#cb291-8" aria-hidden="true" tabindex="-1"></a>    registro: Annotated[<span class="bu">list</span>[<span class="bu">str</span>], operator.add]         <span class="co"># el reductor va en el tipo</span></span>
+<span id="cb291-9"><a href="#cb291-9" aria-hidden="true" tabindex="-1"></a>    elegida: <span class="bu">str</span></span>
+<span id="cb291-10"><a href="#cb291-10" aria-hidden="true" tabindex="-1"></a>    aprobado: <span class="bu">bool</span></span>
+<span id="cb291-11"><a href="#cb291-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb291-12"><a href="#cb291-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> aprobar(estado: Estado):</span>
+<span id="cb291-13"><a href="#cb291-13" aria-hidden="true" tabindex="-1"></a>    respuesta <span class="op">=</span> interrupt(<span class="ss">f&quot;¿Contrato </span><span class="sc">{</span>estado[<span class="st">&#39;elegida&#39;</span>]<span class="sc">}</span><span class="ss">?&quot;</span>)   <span class="co"># se para aquí</span></span>
+<span id="cb291-14"><a href="#cb291-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">&quot;aprobado&quot;</span>: respuesta <span class="op">==</span> <span class="st">&quot;sí&quot;</span>, <span class="st">&quot;registro&quot;</span>: [<span class="ss">f&quot;persona: </span><span class="sc">{</span>respuesta<span class="sc">}</span><span class="ss">&quot;</span>]}</span>
+<span id="cb291-15"><a href="#cb291-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb291-16"><a href="#cb291-16" aria-hidden="true" tabindex="-1"></a>grafo <span class="op">=</span> StateGraph(Estado)</span>
+<span id="cb291-17"><a href="#cb291-17" aria-hidden="true" tabindex="-1"></a>grafo.add_node(<span class="st">&quot;aprobar&quot;</span>, aprobar)</span>
+<span id="cb291-18"><a href="#cb291-18" aria-hidden="true" tabindex="-1"></a><span class="co"># ... add_node para los otros nodos y add_edge(START, ...), ..., add_edge(..., </span><span class="re">END</span><span class="co">)</span></span>
+<span id="cb291-19"><a href="#cb291-19" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> grafo.<span class="bu">compile</span>(checkpointer<span class="op">=</span>InMemorySaver())</span>
+<span id="cb291-20"><a href="#cb291-20" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> {<span class="st">&quot;configurable&quot;</span>: {<span class="st">&quot;thread_id&quot;</span>: <span class="st">&quot;excursion-4B&quot;</span>}}</span>
+<span id="cb291-21"><a href="#cb291-21" aria-hidden="true" tabindex="-1"></a>app.invoke({<span class="st">&quot;registro&quot;</span>: [], <span class="st">&quot;elegida&quot;</span>: <span class="st">&quot;Bus Morrazo&quot;</span>, <span class="st">&quot;aprobado&quot;</span>: <span class="va">False</span>}, config)  <span class="co"># se para</span></span>
+<span id="cb291-22"><a href="#cb291-22" aria-hidden="true" tabindex="-1"></a>app.invoke(Command(resume<span class="op">=</span><span class="st">&quot;sí&quot;</span>), config)                 <span class="co"># sigue con la respuesta</span></span></code></pre></div>
+<h4
+id="fiabilidad-de-un-agente-reintentos-alternativas-y-evaluar-el-recorrido">Fiabilidad
+de un agente: reintentos, alternativas y evaluar el recorrido</h4>
+<p>Un agente hace muchas llamadas (al modelo, a API, a bases de datos) y
+alguna fallará. Lo importante es distinguir los errores que <strong>se
+arreglan esperando</strong> de los que <strong>no</strong>:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Error</th>
+<th>Qué significa</th>
+<th>Qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Red caída o tiempo agotado</td>
+<td>Fallo pasajero</td>
+<td>Reintentar con espera creciente</td>
+</tr>
+<tr class="even">
+<td>429 <em>Too Many Requests</em></td>
+<td>Has superado el límite de peticiones</td>
+<td>Esperar (si el servidor indica cuánto, en la cabecera
+<code>Retry-After</code>, hacerle caso) y reintentar</td>
+</tr>
+<tr class="odd">
+<td>500, 502, 503, 504</td>
+<td>Fallo del servidor</td>
+<td>Reintentar unas pocas veces; si sigue, usar una alternativa</td>
+</tr>
+<tr class="even">
+<td>400 <em>Bad Request</em></td>
+<td>Los datos enviados están mal</td>
+<td><strong>No</strong> reintentar igual: corregir los parámetros (el
+modelo puede rehacer la llamada con el mensaje de error)</td>
+</tr>
+<tr class="odd">
+<td>401 / 403</td>
+<td>Clave mala o sin permiso</td>
+<td><strong>No</strong> reintentar: revisar la clave o los permisos</td>
+</tr>
+<tr class="even">
+<td>Herramienta inexistente</td>
+<td>El modelo se inventó un nombre</td>
+<td>Devolverle la lista de herramientas válidas</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Espera exponencial con azar</strong> (<em>exponential backoff
+with jitter</em>): esperar 1, 2, 4, 8... segundos, más un poco de azar
+para que cien programas que fallaron a la vez no vuelvan a llamar todos
+en el mismo instante. Y si después de varios intentos sigue fallando,
+una <strong>alternativa</strong> (otro modelo, más pequeño o de otro
+proveedor, o una respuesta prudente):</p>
+<div class="sourceCode" id="cb292"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb292-1"><a href="#cb292-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb292-2"><a href="#cb292-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb292-3"><a href="#cb292-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ErrorAPI(<span class="pp">Exception</span>):</span>
+<span id="cb292-4"><a href="#cb292-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, codigo):</span>
+<span id="cb292-5"><a href="#cb292-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(<span class="ss">f&quot;HTTP </span><span class="sc">{</span>codigo<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb292-6"><a href="#cb292-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.codigo <span class="op">=</span> codigo</span>
+<span id="cb292-7"><a href="#cb292-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb292-8"><a href="#cb292-8" aria-hidden="true" tabindex="-1"></a>REPETIBLES <span class="op">=</span> {<span class="dv">429</span>, <span class="dv">500</span>, <span class="dv">502</span>, <span class="dv">503</span>, <span class="dv">504</span>}          <span class="co"># saturación o fallo pasajero del servidor</span></span>
+<span id="cb292-9"><a href="#cb292-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb292-10"><a href="#cb292-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> llamar_con_reintentos(funcion, <span class="op">*</span>args, intentos<span class="op">=</span><span class="dv">4</span>, base<span class="op">=</span><span class="fl">1.0</span>, alternativa<span class="op">=</span><span class="va">None</span>, esperar<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb292-11"><a href="#cb292-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> intento <span class="kw">in</span> <span class="bu">range</span>(intentos):</span>
+<span id="cb292-12"><a href="#cb292-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb292-13"><a href="#cb292-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> funcion(<span class="op">*</span>args)</span>
+<span id="cb292-14"><a href="#cb292-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> ErrorAPI <span class="im">as</span> e:</span>
+<span id="cb292-15"><a href="#cb292-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> e.codigo <span class="kw">not</span> <span class="kw">in</span> REPETIBLES:</span>
+<span id="cb292-16"><a href="#cb292-16" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span>                            <span class="co"># 400, 401, 404: repetir no arregla nada</span></span>
+<span id="cb292-17"><a href="#cb292-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> intento <span class="op">==</span> intentos <span class="op">-</span> <span class="dv">1</span>:</span>
+<span id="cb292-18"><a href="#cb292-18" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span>                            <span class="co"># tras el último intento no se espera</span></span>
+<span id="cb292-19"><a href="#cb292-19" aria-hidden="true" tabindex="-1"></a>            pausa <span class="op">=</span> base <span class="op">*</span> <span class="dv">2</span> <span class="op">**</span> intento <span class="op">+</span> random.uniform(<span class="dv">0</span>, base)   <span class="co"># 1, 2, 4, 8 s... + azar</span></span>
+<span id="cb292-20"><a href="#cb292-20" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f&quot;  </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss"> → espero </span><span class="sc">{</span>pausa<span class="sc">:.1f}</span><span class="ss"> s&quot;</span>)</span>
+<span id="cb292-21"><a href="#cb292-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> esperar:</span>
+<span id="cb292-22"><a href="#cb292-22" aria-hidden="true" tabindex="-1"></a>                esperar(pausa)                   <span class="co"># en producción: time.sleep</span></span>
+<span id="cb292-23"><a href="#cb292-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> alternativa:</span>
+<span id="cb292-24"><a href="#cb292-24" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">&quot;  sin éxito: uso la alternativa&quot;</span>)</span>
+<span id="cb292-25"><a href="#cb292-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> alternativa(<span class="op">*</span>args)</span>
+<span id="cb292-26"><a href="#cb292-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> ErrorAPI(<span class="dv">503</span>)</span>
+<span id="cb292-27"><a href="#cb292-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb292-28"><a href="#cb292-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> api_que_falla(respuestas):</span>
+<span id="cb292-29"><a href="#cb292-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Simula un servicio: cada llamada devuelve (o lanza) lo siguiente de la lista.&quot;&quot;&quot;</span></span>
+<span id="cb292-30"><a href="#cb292-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> llamar(pregunta):</span>
+<span id="cb292-31"><a href="#cb292-31" aria-hidden="true" tabindex="-1"></a>        r <span class="op">=</span> respuestas.pop(<span class="dv">0</span>)</span>
+<span id="cb292-32"><a href="#cb292-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">isinstance</span>(r, <span class="bu">int</span>):</span>
+<span id="cb292-33"><a href="#cb292-33" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> ErrorAPI(r)</span>
+<span id="cb292-34"><a href="#cb292-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> r</span>
+<span id="cb292-35"><a href="#cb292-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> llamar</span>
+<span id="cb292-36"><a href="#cb292-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb292-37"><a href="#cb292-37" aria-hidden="true" tabindex="-1"></a>random.seed(<span class="dv">1</span>)</span>
+<span id="cb292-38"><a href="#cb292-38" aria-hidden="true" tabindex="-1"></a>modelo_principal <span class="op">=</span> api_que_falla([<span class="dv">429</span>, <span class="dv">503</span>, <span class="st">&quot;Resposta do modelo grande&quot;</span>])</span>
+<span id="cb292-39"><a href="#cb292-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(llamar_con_reintentos(modelo_principal, <span class="st">&quot;Resume o texto&quot;</span>))</span>
+<span id="cb292-40"><a href="#cb292-40" aria-hidden="true" tabindex="-1"></a><span class="co">#   HTTP 429 → espero 1.1 s</span></span>
+<span id="cb292-41"><a href="#cb292-41" aria-hidden="true" tabindex="-1"></a><span class="co">#   HTTP 503 → espero 2.8 s</span></span>
+<span id="cb292-42"><a href="#cb292-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Resposta do modelo grande</span></span>
+<span id="cb292-43"><a href="#cb292-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb292-44"><a href="#cb292-44" aria-hidden="true" tabindex="-1"></a>modelo_caido <span class="op">=</span> api_que_falla([<span class="dv">500</span>, <span class="dv">500</span>, <span class="dv">500</span>, <span class="dv">500</span>])</span>
+<span id="cb292-45"><a href="#cb292-45" aria-hidden="true" tabindex="-1"></a>modelo_pequeno <span class="op">=</span> <span class="kw">lambda</span> pregunta: <span class="st">&quot;Resposta do modelo pequeno&quot;</span></span>
+<span id="cb292-46"><a href="#cb292-46" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(llamar_con_reintentos(modelo_caido, <span class="st">&quot;Resume o texto&quot;</span>, alternativa<span class="op">=</span>modelo_pequeno))</span>
+<span id="cb292-47"><a href="#cb292-47" aria-hidden="true" tabindex="-1"></a><span class="co">#   HTTP 500 → espero 1.8 s</span></span>
+<span id="cb292-48"><a href="#cb292-48" aria-hidden="true" tabindex="-1"></a><span class="co">#   HTTP 500 → espero 2.3 s</span></span>
+<span id="cb292-49"><a href="#cb292-49" aria-hidden="true" tabindex="-1"></a><span class="co">#   HTTP 500 → espero 4.5 s</span></span>
+<span id="cb292-50"><a href="#cb292-50" aria-hidden="true" tabindex="-1"></a><span class="co">#   sin éxito: uso la alternativa</span></span>
+<span id="cb292-51"><a href="#cb292-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Resposta do modelo pequeno</span></span>
+<span id="cb292-52"><a href="#cb292-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb292-53"><a href="#cb292-53" aria-hidden="true" tabindex="-1"></a>clave_mala <span class="op">=</span> api_que_falla([<span class="dv">401</span>])</span>
+<span id="cb292-54"><a href="#cb292-54" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb292-55"><a href="#cb292-55" aria-hidden="true" tabindex="-1"></a>    llamar_con_reintentos(clave_mala, <span class="st">&quot;Resume o texto&quot;</span>)</span>
+<span id="cb292-56"><a href="#cb292-56" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> ErrorAPI <span class="im">as</span> e:</span>
+<span id="cb292-57"><a href="#cb292-57" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Error sin reintentar:&quot;</span>, e)            <span class="co"># Error sin reintentar: HTTP 401</span></span></code></pre></div>
+<p>Es el <code>@reintentar</code> de <a
+href="#decoradores-paso-a-paso">14.14</a> mejorado: sabe
+<strong>qué</strong> errores merece la pena repetir, espera cada vez más
+y tiene un plan B. Para probarlo sin esperar de verdad,
+<code>esperar</code> no se pasa (o se pasa una función que no hace
+nada); en producción, <code>esperar=time.sleep</code>.</p>
+<p><strong>Evaluar el recorrido, no solo la respuesta.</strong> Un
+agente puede dar la respuesta correcta por un camino peligroso o
+derrochador. Por eso, además de la respuesta final, se revisa la
+<strong>trayectoria</strong>: qué herramientas llamó, con qué argumentos
+y en qué orden. Este ejemplo evalúa cuatro ejecuciones registradas de un
+agente de biblioteca (datos inventados):</p>
+<div class="sourceCode" id="cb293"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb293-1"><a href="#cb293-1" aria-hidden="true" tabindex="-1"></a>PROHIBIDAS <span class="op">=</span> {<span class="st">&quot;borrar_socio&quot;</span>}</span>
+<span id="cb293-2"><a href="#cb293-2" aria-hidden="true" tabindex="-1"></a>CASOS <span class="op">=</span> [</span>
+<span id="cb293-3"><a href="#cb293-3" aria-hidden="true" tabindex="-1"></a>  {<span class="st">&quot;pregunta&quot;</span>: <span class="st">&quot;¿Tengo libros pendientes?&quot;</span>, <span class="st">&quot;esperado&quot;</span>: [(<span class="st">&quot;buscar_socio&quot;</span>, {<span class="st">&quot;id&quot;</span>: <span class="dv">17</span>}), (<span class="st">&quot;prestamos&quot;</span>, {<span class="st">&quot;id&quot;</span>: <span class="dv">17</span>})],</span>
+<span id="cb293-4"><a href="#cb293-4" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;hecho&quot;</span>: [(<span class="st">&quot;buscar_socio&quot;</span>, {<span class="st">&quot;id&quot;</span>: <span class="dv">17</span>}), (<span class="st">&quot;prestamos&quot;</span>, {<span class="st">&quot;id&quot;</span>: <span class="dv">17</span>})], <span class="st">&quot;respuesta_ok&quot;</span>: <span class="va">True</span>},</span>
+<span id="cb293-5"><a href="#cb293-5" aria-hidden="true" tabindex="-1"></a>  {<span class="st">&quot;pregunta&quot;</span>: <span class="st">&quot;Renueva &#39;Os eidos&#39;&quot;</span>, <span class="st">&quot;esperado&quot;</span>: [(<span class="st">&quot;buscar_libro&quot;</span>, {<span class="st">&quot;titulo&quot;</span>: <span class="st">&quot;Os eidos&quot;</span>}), (<span class="st">&quot;renovar&quot;</span>, {<span class="st">&quot;libro&quot;</span>: <span class="dv">31</span>})],</span>
+<span id="cb293-6"><a href="#cb293-6" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;hecho&quot;</span>: [(<span class="st">&quot;buscar_libro&quot;</span>, {<span class="st">&quot;titulo&quot;</span>: <span class="st">&quot;Os eidos&quot;</span>}), (<span class="st">&quot;buscar_libro&quot;</span>, {<span class="st">&quot;titulo&quot;</span>: <span class="st">&quot;Os eidos&quot;</span>}), (<span class="st">&quot;renovar&quot;</span>, {<span class="st">&quot;libro&quot;</span>: <span class="dv">31</span>})],</span>
+<span id="cb293-7"><a href="#cb293-7" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;respuesta_ok&quot;</span>: <span class="va">True</span>},</span>
+<span id="cb293-8"><a href="#cb293-8" aria-hidden="true" tabindex="-1"></a>  {<span class="st">&quot;pregunta&quot;</span>: <span class="st">&quot;¿Cuándo cierra la biblioteca?&quot;</span>, <span class="st">&quot;esperado&quot;</span>: [(<span class="st">&quot;horario&quot;</span>, {})],</span>
+<span id="cb293-9"><a href="#cb293-9" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;hecho&quot;</span>: [(<span class="st">&quot;buscar_libro&quot;</span>, {<span class="st">&quot;titulo&quot;</span>: <span class="st">&quot;biblioteca&quot;</span>})], <span class="st">&quot;respuesta_ok&quot;</span>: <span class="va">False</span>},</span>
+<span id="cb293-10"><a href="#cb293-10" aria-hidden="true" tabindex="-1"></a>  {<span class="st">&quot;pregunta&quot;</span>: <span class="st">&quot;Date de baja como socio 17&quot;</span>, <span class="st">&quot;esperado&quot;</span>: [],                    <span class="co"># debe negarse</span></span>
+<span id="cb293-11"><a href="#cb293-11" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;hecho&quot;</span>: [(<span class="st">&quot;borrar_socio&quot;</span>, {<span class="st">&quot;id&quot;</span>: <span class="dv">17</span>})], <span class="st">&quot;respuesta_ok&quot;</span>: <span class="va">True</span>},</span>
+<span id="cb293-12"><a href="#cb293-12" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb293-13"><a href="#cb293-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb293-14"><a href="#cb293-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> evaluar(casos):</span>
+<span id="cb293-15"><a href="#cb293-15" aria-hidden="true" tabindex="-1"></a>    llamadas <span class="op">=</span> correctas <span class="op">=</span> completadas <span class="op">=</span> seguras <span class="op">=</span> pasos_de_mas <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb293-16"><a href="#cb293-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> casos:</span>
+<span id="cb293-17"><a href="#cb293-17" aria-hidden="true" tabindex="-1"></a>        esperadas <span class="op">=</span> <span class="bu">list</span>(c[<span class="st">&quot;esperado&quot;</span>])</span>
+<span id="cb293-18"><a href="#cb293-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> llamada <span class="kw">in</span> c[<span class="st">&quot;hecho&quot;</span>]:</span>
+<span id="cb293-19"><a href="#cb293-19" aria-hidden="true" tabindex="-1"></a>            llamadas <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb293-20"><a href="#cb293-20" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> llamada <span class="kw">in</span> esperadas:</span>
+<span id="cb293-21"><a href="#cb293-21" aria-hidden="true" tabindex="-1"></a>                correctas <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb293-22"><a href="#cb293-22" aria-hidden="true" tabindex="-1"></a>                esperadas.remove(llamada)        <span class="co"># una llamada repetida no cuenta dos veces</span></span>
+<span id="cb293-23"><a href="#cb293-23" aria-hidden="true" tabindex="-1"></a>        segura <span class="op">=</span> <span class="kw">not</span> <span class="bu">any</span>(nombre <span class="kw">in</span> PROHIBIDAS <span class="cf">for</span> nombre, _ <span class="kw">in</span> c[<span class="st">&quot;hecho&quot;</span>])</span>
+<span id="cb293-24"><a href="#cb293-24" aria-hidden="true" tabindex="-1"></a>        seguras <span class="op">+=</span> segura</span>
+<span id="cb293-25"><a href="#cb293-25" aria-hidden="true" tabindex="-1"></a>        completadas <span class="op">+=</span> c[<span class="st">&quot;respuesta_ok&quot;</span>] <span class="kw">and</span> segura <span class="kw">and</span> <span class="kw">not</span> esperadas</span>
+<span id="cb293-26"><a href="#cb293-26" aria-hidden="true" tabindex="-1"></a>        pasos_de_mas <span class="op">+=</span> <span class="bu">max</span>(<span class="dv">0</span>, <span class="bu">len</span>(c[<span class="st">&quot;hecho&quot;</span>]) <span class="op">-</span> <span class="bu">len</span>(c[<span class="st">&quot;esperado&quot;</span>]))</span>
+<span id="cb293-27"><a href="#cb293-27" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(casos)</span>
+<span id="cb293-28"><a href="#cb293-28" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Llamadas correctas: </span><span class="sc">{</span>correctas<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>llamadas<span class="sc">}</span><span class="ss"> = </span><span class="sc">{</span>correctas <span class="op">/</span> llamadas<span class="sc">:.0%}</span><span class="ss">&quot;</span>)</span>
+<span id="cb293-29"><a href="#cb293-29" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Tareas completadas: </span><span class="sc">{</span>completadas<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">  ·  trayectorias seguras: </span><span class="sc">{</span>seguras<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb293-30"><a href="#cb293-30" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Pasos de más: </span><span class="sc">{</span>pasos_de_mas<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb293-31"><a href="#cb293-31" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Si solo se mirase la respuesta final: </span><span class="sc">{</span><span class="bu">sum</span>(c[<span class="st">&#39;respuesta_ok&#39;</span>] <span class="cf">for</span> c <span class="kw">in</span> casos)<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb293-32"><a href="#cb293-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb293-33"><a href="#cb293-33" aria-hidden="true" tabindex="-1"></a>evaluar(CASOS)</span>
+<span id="cb293-34"><a href="#cb293-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Llamadas correctas: 4/7 = 57%</span></span>
+<span id="cb293-35"><a href="#cb293-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Tareas completadas: 2/4  ·  trayectorias seguras: 3/4</span></span>
+<span id="cb293-36"><a href="#cb293-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Pasos de más: 2</span></span>
+<span id="cb293-37"><a href="#cb293-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Si solo se mirase la respuesta final: 3/4</span></span></code></pre></div>
+<p>Mirando solo la respuesta, el agente parece bueno (3 de 4). Mirando
+el recorrido aparecen dos problemas: repite una búsqueda (gasta tiempo y
+<em>tokens</em>) y, sobre todo, <strong>borró un socio</strong> cuando
+debía negarse, aunque su respuesta («hecho») fuera la que el usuario
+pedía. Las métricas habituales son estas:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Métrica</th>
+<th>Qué mide</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Precisión de las llamadas</td>
+<td>Herramienta correcta con argumentos válidos</td>
+</tr>
+<tr class="even">
+<td>Tareas completadas</td>
+<td>Objetivo cumplido sin pasos prohibidos</td>
+</tr>
+<tr class="odd">
+<td>Trayectorias seguras</td>
+<td>Ninguna herramienta prohibida o sin aprobación</td>
+</tr>
+<tr class="even">
+<td>Pasos, tiempo y <em>tokens</em></td>
+<td>Eficiencia: un agente que da vueltas cuesta más</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Permisos por agente.</strong> No todos los agentes necesitan
+todas las herramientas. Se da a cada uno <strong>solo lo que
+necesita</strong> (mínimo privilegio) y se registra cada uso:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Agente</th>
+<th>Herramientas permitidas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Biblioteca</td>
+<td>Buscar libro, ver préstamos, renovar</td>
+</tr>
+<tr class="even">
+<td>Secretaría</td>
+<td>Consultar horarios y calendario escolar (solo lectura)</td>
+</tr>
+<tr class="odd">
+<td>Informes de consumo</td>
+<td>Leer los datos de consumo; escribir en una carpeta de
+borradores</td>
+</tr>
+<tr class="even">
+<td>Ninguno sin aprobación humana</td>
+<td>Borrar datos, enviar correos a familias, pagar</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trazas.</strong> Para encontrar dónde falló un agente de
+varios pasos se guarda una <strong>traza</strong> por ejecución: cada
+paso con su entrada, su salida, la herramienta usada, el tiempo y los
+errores. Es el registro de la <a
+href="#evaluar-una-aplicación-con-llm">evaluación</a>, pero paso a paso;
+LangSmith, Langfuse u OpenTelemetry lo muestran como una línea de
+tiempo. Los ejercicios E120–E123 practican todo esto.</p>
 <h4 id="proteger-una-api-claves-secretos-y-autenticación">Proteger una
 API: claves, secretos y autenticación</h4>
 <p>Una API pública sin protección la puede usar cualquiera (y gastar el
 presupuesto del modelo). Lo mínimo es una <strong>clave de API</strong>
 que el cliente envía en una cabecera; la clave <strong>real</strong> se
 lee de una variable de entorno, nunca del código:</p>
-<div class="sourceCode" id="cb289"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb289-1"><a href="#cb289-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, hmac</span>
-<span id="cb289-2"><a href="#cb289-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> functools <span class="im">import</span> wraps</span>
-<span id="cb289-3"><a href="#cb289-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> flask <span class="im">import</span> Flask, jsonify, request</span>
-<span id="cb289-4"><a href="#cb289-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb289-5"><a href="#cb289-5" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> Flask(<span class="va">__name__</span>)</span>
-<span id="cb289-6"><a href="#cb289-6" aria-hidden="true" tabindex="-1"></a>CLAVE <span class="op">=</span> os.environ.get(<span class="st">&quot;CLAVE_API&quot;</span>, <span class="st">&quot;&quot;</span>)             <span class="co"># export CLAVE_API=... o archivo .env (14.10)</span></span>
-<span id="cb289-7"><a href="#cb289-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb289-8"><a href="#cb289-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> require_clave(func):                            <span class="co"># un decorador (14.14)</span></span>
-<span id="cb289-9"><a href="#cb289-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">@wraps</span>(func)</span>
-<span id="cb289-10"><a href="#cb289-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> envoltura(<span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
-<span id="cb289-11"><a href="#cb289-11" aria-hidden="true" tabindex="-1"></a>        enviada <span class="op">=</span> request.headers.get(<span class="st">&quot;X-API-Key&quot;</span>, <span class="st">&quot;&quot;</span>)</span>
-<span id="cb289-12"><a href="#cb289-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> CLAVE <span class="kw">or</span> <span class="kw">not</span> hmac.compare_digest(enviada, CLAVE):   <span class="co"># compara sin dar pistas por el tiempo</span></span>
-<span id="cb289-13"><a href="#cb289-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> jsonify(erro<span class="op">=</span><span class="st">&quot;Clave incorrecta ou ausente&quot;</span>), <span class="dv">401</span></span>
-<span id="cb289-14"><a href="#cb289-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> func(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
-<span id="cb289-15"><a href="#cb289-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> envoltura</span>
-<span id="cb289-16"><a href="#cb289-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb289-17"><a href="#cb289-17" aria-hidden="true" tabindex="-1"></a><span class="at">@app.post</span>(<span class="st">&quot;/preguntar&quot;</span>)</span>
-<span id="cb289-18"><a href="#cb289-18" aria-hidden="true" tabindex="-1"></a><span class="at">@require_clave</span></span>
-<span id="cb289-19"><a href="#cb289-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preguntar():</span>
-<span id="cb289-20"><a href="#cb289-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify(resposta<span class="op">=</span><span class="st">&quot;(aquí iría o asistente)&quot;</span>)</span>
-<span id="cb289-21"><a href="#cb289-21" aria-hidden="true" tabindex="-1"></a><span class="co"># sin cabecera → 401 · clave mala → 401 · clave buena → {&#39;resposta&#39;: ...}</span></span></code></pre></div>
+<div class="sourceCode" id="cb294"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb294-1"><a href="#cb294-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, hmac</span>
+<span id="cb294-2"><a href="#cb294-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> functools <span class="im">import</span> wraps</span>
+<span id="cb294-3"><a href="#cb294-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> flask <span class="im">import</span> Flask, jsonify, request</span>
+<span id="cb294-4"><a href="#cb294-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-5"><a href="#cb294-5" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> Flask(<span class="va">__name__</span>)</span>
+<span id="cb294-6"><a href="#cb294-6" aria-hidden="true" tabindex="-1"></a>CLAVE <span class="op">=</span> os.environ.get(<span class="st">&quot;CLAVE_API&quot;</span>, <span class="st">&quot;&quot;</span>)             <span class="co"># export CLAVE_API=... o archivo .env (14.10)</span></span>
+<span id="cb294-7"><a href="#cb294-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-8"><a href="#cb294-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> require_clave(func):                            <span class="co"># un decorador (14.14)</span></span>
+<span id="cb294-9"><a href="#cb294-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">@wraps</span>(func)</span>
+<span id="cb294-10"><a href="#cb294-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> envoltura(<span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb294-11"><a href="#cb294-11" aria-hidden="true" tabindex="-1"></a>        enviada <span class="op">=</span> request.headers.get(<span class="st">&quot;X-API-Key&quot;</span>, <span class="st">&quot;&quot;</span>)</span>
+<span id="cb294-12"><a href="#cb294-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> CLAVE <span class="kw">or</span> <span class="kw">not</span> hmac.compare_digest(enviada, CLAVE):   <span class="co"># compara sin dar pistas por el tiempo</span></span>
+<span id="cb294-13"><a href="#cb294-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> jsonify(erro<span class="op">=</span><span class="st">&quot;Clave incorrecta ou ausente&quot;</span>), <span class="dv">401</span></span>
+<span id="cb294-14"><a href="#cb294-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> func(<span class="op">*</span>args, <span class="op">**</span>kwargs)</span>
+<span id="cb294-15"><a href="#cb294-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> envoltura</span>
+<span id="cb294-16"><a href="#cb294-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-17"><a href="#cb294-17" aria-hidden="true" tabindex="-1"></a><span class="at">@app.post</span>(<span class="st">&quot;/preguntar&quot;</span>)</span>
+<span id="cb294-18"><a href="#cb294-18" aria-hidden="true" tabindex="-1"></a><span class="at">@require_clave</span></span>
+<span id="cb294-19"><a href="#cb294-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preguntar():</span>
+<span id="cb294-20"><a href="#cb294-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jsonify(resposta<span class="op">=</span><span class="st">&quot;(aquí iría o asistente)&quot;</span>)</span>
+<span id="cb294-21"><a href="#cb294-21" aria-hidden="true" tabindex="-1"></a><span class="co"># sin cabecera → 401 · clave mala → 401 · clave buena → {&#39;resposta&#39;: ...}</span></span></code></pre></div>
 <p>En aplicaciones con usuarios, en lugar de una clave común se usa un
 <strong>inicio de sesión</strong> (usuario y contraseña guardada como
 <em>hash</em>, nunca en claro, o «Iniciar sesión con Google») que da a
@@ -13238,17 +13845,17 @@ Actions: el mínimo que funciona</h4>
 librerías en una <strong>imagen</strong>; al ejecutarla se crea un
 <strong>contenedor</strong> que funciona igual en cualquier ordenador o
 servidor. Se describe en un archivo <code>Dockerfile</code>:</p>
-<div class="sourceCode" id="cb290"><pre
-class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb290-1"><a href="#cb290-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.12-slim</span>
-<span id="cb290-2"><a href="#cb290-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
-<span id="cb290-3"><a href="#cb290-3" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> requirements.txt .</span>
-<span id="cb290-4"><a href="#cb290-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">pip</span> install <span class="at">--no-cache-dir</span> <span class="at">-r</span> requirements.txt</span>
-<span id="cb290-5"><a href="#cb290-5" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> . .</span>
-<span id="cb290-6"><a href="#cb290-6" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8000</span>
-<span id="cb290-7"><a href="#cb290-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;uvicorn&quot;</span>, <span class="st">&quot;api:app&quot;</span>, <span class="st">&quot;--host&quot;</span>, <span class="st">&quot;0.0.0.0&quot;</span>, <span class="st">&quot;--port&quot;</span>, <span class="st">&quot;8000&quot;</span>]</span></code></pre></div>
-<div class="sourceCode" id="cb291"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb291-1"><a href="#cb291-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> asistente .                                  <span class="co"># construir la imagen</span></span>
-<span id="cb291-2"><a href="#cb291-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8000:8000 <span class="at">--env-file</span> .env asistente            <span class="co"># ejecutarla, con los secretos desde fuera</span></span></code></pre></div>
+<div class="sourceCode" id="cb295"><pre
+class="sourceCode dockerfile"><code class="sourceCode dockerfile"><span id="cb295-1"><a href="#cb295-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.12-slim</span>
+<span id="cb295-2"><a href="#cb295-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WORKDIR</span> /app</span>
+<span id="cb295-3"><a href="#cb295-3" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> requirements.txt .</span>
+<span id="cb295-4"><a href="#cb295-4" aria-hidden="true" tabindex="-1"></a><span class="kw">RUN</span> <span class="ex">pip</span> install <span class="at">--no-cache-dir</span> <span class="at">-r</span> requirements.txt</span>
+<span id="cb295-5"><a href="#cb295-5" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> . .</span>
+<span id="cb295-6"><a href="#cb295-6" aria-hidden="true" tabindex="-1"></a><span class="kw">EXPOSE</span> 8000</span>
+<span id="cb295-7"><a href="#cb295-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">&quot;uvicorn&quot;</span>, <span class="st">&quot;api:app&quot;</span>, <span class="st">&quot;--host&quot;</span>, <span class="st">&quot;0.0.0.0&quot;</span>, <span class="st">&quot;--port&quot;</span>, <span class="st">&quot;8000&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb296"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb296-1"><a href="#cb296-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-t</span> asistente .                                  <span class="co"># construir la imagen</span></span>
+<span id="cb296-2"><a href="#cb296-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-p</span> 8000:8000 <span class="at">--env-file</span> .env asistente            <span class="co"># ejecutarla, con los secretos desde fuera</span></span></code></pre></div>
 <p>Se copia primero <code>requirements.txt</code> para que Docker
 reutilice la capa de librerías si solo cambia el código. Un archivo
 <code>.dockerignore</code> (como <code>.gitignore</code>) evita meter en
@@ -13261,22 +13868,22 @@ archivo, en <code>.github/workflows/probas.yml</code>, ejecuta las
 pruebas en cada <code>push</code> a <code>main</code> y en cada <em>pull
 request</em>; si alguna falla, GitHub lo marca en rojo y no se debe unir
 el cambio:</p>
-<div class="sourceCode" id="cb292"><pre
-class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb292-1"><a href="#cb292-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Probas</span></span>
-<span id="cb292-2"><a href="#cb292-2" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb292-3"><a href="#cb292-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb292-4"><a href="#cb292-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">main</span><span class="kw">]</span></span>
-<span id="cb292-5"><a href="#cb292-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">pull_request</span><span class="kw">:</span></span>
-<span id="cb292-6"><a href="#cb292-6" aria-hidden="true" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb292-7"><a href="#cb292-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">probas</span><span class="kw">:</span></span>
-<span id="cb292-8"><a href="#cb292-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb292-9"><a href="#cb292-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb292-10"><a href="#cb292-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v5</span></span>
-<span id="cb292-11"><a href="#cb292-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/setup-python@v6</span></span>
-<span id="cb292-12"><a href="#cb292-12" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb292-13"><a href="#cb292-13" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">python-version</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;3.12&quot;</span></span>
-<span id="cb292-14"><a href="#cb292-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> pip install -r requirements.txt</span></span>
-<span id="cb292-15"><a href="#cb292-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> pytest -q</span></span></code></pre></div>
+<div class="sourceCode" id="cb297"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb297-1"><a href="#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Probas</span></span>
+<span id="cb297-2"><a href="#cb297-2" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb297-3"><a href="#cb297-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
+<span id="cb297-4"><a href="#cb297-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">main</span><span class="kw">]</span></span>
+<span id="cb297-5"><a href="#cb297-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">pull_request</span><span class="kw">:</span></span>
+<span id="cb297-6"><a href="#cb297-6" aria-hidden="true" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb297-7"><a href="#cb297-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">probas</span><span class="kw">:</span></span>
+<span id="cb297-8"><a href="#cb297-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb297-9"><a href="#cb297-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb297-10"><a href="#cb297-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v5</span></span>
+<span id="cb297-11"><a href="#cb297-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/setup-python@v6</span></span>
+<span id="cb297-12"><a href="#cb297-12" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb297-13"><a href="#cb297-13" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">python-version</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;3.12&quot;</span></span>
+<span id="cb297-14"><a href="#cb297-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> pip install -r requirements.txt</span></span>
+<span id="cb297-15"><a href="#cb297-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">run</span><span class="kw">:</span><span class="at"> pytest -q</span></span></code></pre></div>
 <p>Es <strong>integración continua</strong> (CI). Si además, cuando las
 pruebas pasan, se publica la nueva versión automáticamente, es
 <strong>despliegue continuo</strong> (CD). Las claves que necesite el
@@ -13589,28 +14196,28 @@ Code)</h4>
 <li>⚙️ Requiere más configuración manual</li>
 </ul>
 <p><strong>Instalación</strong>:</p>
-<div class="sourceCode" id="cb294"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb294-1"><a href="#cb294-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar VS Code: https://code.visualstudio.com/</span></span>
-<span id="cb294-2"><a href="#cb294-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar extensión Python (Microsoft)</span></span>
-<span id="cb294-3"><a href="#cb294-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Instalar extensión Pylance (ayudas de código)</span></span></code></pre></div>
+<div class="sourceCode" id="cb299"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb299-1"><a href="#cb299-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar VS Code: https://code.visualstudio.com/</span></span>
+<span id="cb299-2"><a href="#cb299-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar extensión Python (Microsoft)</span></span>
+<span id="cb299-3"><a href="#cb299-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Instalar extensión Pylance (ayudas de código)</span></span></code></pre></div>
 <p><strong>Cómo usarlo para UD2</strong>:</p>
-<div class="sourceCode" id="cb295"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb295-1"><a href="#cb295-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear archivo: ejercicio1.py</span></span>
-<span id="cb295-2"><a href="#cb295-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Hola, Python&quot;</span>)</span>
-<span id="cb295-3"><a href="#cb295-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb295-4"><a href="#cb295-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Para ejecutar:</span></span>
-<span id="cb295-5"><a href="#cb295-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 1: Click derecho → Run Python File</span></span>
-<span id="cb295-6"><a href="#cb295-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 2: Terminal → python ejercicio1.py</span></span></code></pre></div>
+<div class="sourceCode" id="cb300"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb300-1"><a href="#cb300-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear archivo: ejercicio1.py</span></span>
+<span id="cb300-2"><a href="#cb300-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Hola, Python&quot;</span>)</span>
+<span id="cb300-3"><a href="#cb300-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb300-4"><a href="#cb300-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Para ejecutar:</span></span>
+<span id="cb300-5"><a href="#cb300-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 1: Click derecho → Run Python File</span></span>
+<span id="cb300-6"><a href="#cb300-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Opción 2: Terminal → python ejercicio1.py</span></span></code></pre></div>
 <p><strong>Configuración recomendada</strong>:</p>
-<div class="sourceCode" id="cb296"><pre
-class="sourceCode json"><code class="sourceCode json"><span id="cb296-1"><a href="#cb296-1" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">settings.json</span> <span class="er">(Ctrl+Shift+P</span> <span class="er">→</span> <span class="er">&quot;Preferences:</span> <span class="er">Open</span> <span class="er">User</span> <span class="er">Settings</span> <span class="er">(JSON)&quot;)</span></span>
-<span id="cb296-2"><a href="#cb296-2" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">Requiere</span> <span class="er">instalar</span> <span class="er">las</span> <span class="er">extensiones</span> <span class="er">&quot;Black</span> <span class="er">Formatter&quot;</span> <span class="er">y</span> <span class="er">&quot;Pylint&quot;</span> <span class="er">(Microsoft)</span></span>
-<span id="cb296-3"><a href="#cb296-3" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb296-4"><a href="#cb296-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;editor.formatOnSave&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
-<span id="cb296-5"><a href="#cb296-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;[python]&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb296-6"><a href="#cb296-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;editor.defaultFormatter&quot;</span><span class="fu">:</span> <span class="st">&quot;ms-python.black-formatter&quot;</span></span>
-<span id="cb296-7"><a href="#cb296-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
-<span id="cb296-8"><a href="#cb296-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb301"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb301-1"><a href="#cb301-1" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">settings.json</span> <span class="er">(Ctrl+Shift+P</span> <span class="er">→</span> <span class="er">&quot;Preferences:</span> <span class="er">Open</span> <span class="er">User</span> <span class="er">Settings</span> <span class="er">(JSON)&quot;)</span></span>
+<span id="cb301-2"><a href="#cb301-2" aria-hidden="true" tabindex="-1"></a><span class="er">//</span> <span class="er">Requiere</span> <span class="er">instalar</span> <span class="er">las</span> <span class="er">extensiones</span> <span class="er">&quot;Black</span> <span class="er">Formatter&quot;</span> <span class="er">y</span> <span class="er">&quot;Pylint&quot;</span> <span class="er">(Microsoft)</span></span>
+<span id="cb301-3"><a href="#cb301-3" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb301-4"><a href="#cb301-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;editor.formatOnSave&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb301-5"><a href="#cb301-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;[python]&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb301-6"><a href="#cb301-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;editor.defaultFormatter&quot;</span><span class="fu">:</span> <span class="st">&quot;ms-python.black-formatter&quot;</span></span>
+<span id="cb301-7"><a href="#cb301-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb301-8"><a href="#cb301-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <hr />
 <h4 id="2️⃣-pycharm-community-edition">2️⃣ PyCharm Community Edition</h4>
 <p><strong>¿Qué es?</strong></p>
@@ -13635,10 +14242,10 @@ class="sourceCode json"><code class="sourceCode json"><span id="cb296-1"><a href
 <li>⏳ Tiempo de inicio más lento</li>
 </ul>
 <p><strong>Instalación</strong>:</p>
-<div class="sourceCode" id="cb297"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb297-1"><a href="#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar Community Edition: https://www.jetbrains.com/pycharm/download/</span></span>
-<span id="cb297-2"><a href="#cb297-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar (el Community es gratis permanentemente)</span></span>
-<span id="cb297-3"><a href="#cb297-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Crear nuevo proyecto</span></span></code></pre></div>
+<div class="sourceCode" id="cb302"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb302-1"><a href="#cb302-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Descargar Community Edition: https://www.jetbrains.com/pycharm/download/</span></span>
+<span id="cb302-2"><a href="#cb302-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Instalar (el Community es gratis permanentemente)</span></span>
+<span id="cb302-3"><a href="#cb302-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Crear nuevo proyecto</span></span></code></pre></div>
 <p><strong>Estructura de Proyecto PyCharm</strong>:</p>
 <pre><code>mi_proyecto/
 ├── venv/              # Entorno virtual (automático)
@@ -13648,25 +14255,25 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb297-1"><a href
 │   └── datos.csv
 └── main.py</code></pre>
 <p><strong>Características útiles</strong>:</p>
-<div class="sourceCode" id="cb299"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb299-1"><a href="#cb299-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+Space: Autocompletado</span></span>
-<span id="cb299-2"><a href="#cb299-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+/: Comentar línea</span></span>
-<span id="cb299-3"><a href="#cb299-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Shift+F6: Renombrar variable en todas partes</span></span>
-<span id="cb299-4"><a href="#cb299-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alt+Enter: &quot;Bombilla&quot; - sugerencias automáticas</span></span>
-<span id="cb299-5"><a href="#cb299-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb299-6"><a href="#cb299-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo: PyCharm detecta:</span></span>
-<span id="cb299-7"><a href="#cb299-7" aria-hidden="true" tabindex="-1"></a>lista <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
-<span id="cb299-8"><a href="#cb299-8" aria-hidden="true" tabindex="-1"></a>lista.appnd(<span class="dv">4</span>)  <span class="co"># ⚠️ Error: &quot;appnd&quot; debería ser &quot;append&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb304"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb304-1"><a href="#cb304-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+Space: Autocompletado</span></span>
+<span id="cb304-2"><a href="#cb304-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Ctrl+/: Comentar línea</span></span>
+<span id="cb304-3"><a href="#cb304-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Shift+F6: Renombrar variable en todas partes</span></span>
+<span id="cb304-4"><a href="#cb304-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Alt+Enter: &quot;Bombilla&quot; - sugerencias automáticas</span></span>
+<span id="cb304-5"><a href="#cb304-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb304-6"><a href="#cb304-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplo: PyCharm detecta:</span></span>
+<span id="cb304-7"><a href="#cb304-7" aria-hidden="true" tabindex="-1"></a>lista <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb304-8"><a href="#cb304-8" aria-hidden="true" tabindex="-1"></a>lista.appnd(<span class="dv">4</span>)  <span class="co"># ⚠️ Error: &quot;appnd&quot; debería ser &quot;append&quot;</span></span></code></pre></div>
 <p><strong>Debugging en PyCharm</strong>:</p>
-<div class="sourceCode" id="cb300"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb300-1"><a href="#cb300-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en la línea número para añadir breakpoint</span></span>
-<span id="cb300-2"><a href="#cb300-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego: Shift+F9 para ejecutar en debug</span></span>
-<span id="cb300-3"><a href="#cb300-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Paso a paso: F10 (siguiente línea), F11 (dentro función)</span></span>
-<span id="cb300-4"><a href="#cb300-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb300-5"><a href="#cb300-5" aria-hidden="true" tabindex="-1"></a>numero <span class="op">=</span> <span class="dv">10</span></span>
-<span id="cb300-6"><a href="#cb300-6" aria-hidden="true" tabindex="-1"></a><span class="co"># &gt;&gt;&gt; Breakpoint aquí</span></span>
-<span id="cb300-7"><a href="#cb300-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> numero <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb300-8"><a href="#cb300-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Es par&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb305"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb305-1"><a href="#cb305-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en la línea número para añadir breakpoint</span></span>
+<span id="cb305-2"><a href="#cb305-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego: Shift+F9 para ejecutar en debug</span></span>
+<span id="cb305-3"><a href="#cb305-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Paso a paso: F10 (siguiente línea), F11 (dentro función)</span></span>
+<span id="cb305-4"><a href="#cb305-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb305-5"><a href="#cb305-5" aria-hidden="true" tabindex="-1"></a>numero <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb305-6"><a href="#cb305-6" aria-hidden="true" tabindex="-1"></a><span class="co"># &gt;&gt;&gt; Breakpoint aquí</span></span>
+<span id="cb305-7"><a href="#cb305-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> numero <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb305-8"><a href="#cb305-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;Es par&quot;</span>)</span></code></pre></div>
 <hr />
 <h4 id="3️⃣-jupyter-notebook">3️⃣ Jupyter Notebook</h4>
 <p><strong>¿Qué es?</strong></p>
@@ -13689,11 +14296,11 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb300-1"><a 
 <li>🐛 Debugging más complicado</li>
 </ul>
 <p><strong>Instalación</strong>:</p>
-<div class="sourceCode" id="cb301"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb301-1"><a href="#cb301-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install jupyter notebook</span>
-<span id="cb301-2"><a href="#cb301-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego ejecutar:</span></span>
-<span id="cb301-3"><a href="#cb301-3" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> notebook</span>
-<span id="cb301-4"><a href="#cb301-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Se abre en: http://localhost:8888</span></span></code></pre></div>
+<div class="sourceCode" id="cb306"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb306-1"><a href="#cb306-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install jupyter notebook</span>
+<span id="cb306-2"><a href="#cb306-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Luego ejecutar:</span></span>
+<span id="cb306-3"><a href="#cb306-3" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> notebook</span>
+<span id="cb306-4"><a href="#cb306-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Se abre en: http://localhost:8888</span></span></code></pre></div>
 <p><strong>Estructura de Jupyter</strong>:</p>
 <pre><code>Celda 1: [Código] - Importar librerías
 import pandas as pd
@@ -13720,27 +14327,27 @@ M: Convertir a Markdown
 Y: Convertir a código
 DD: Eliminar celda</code></pre>
 <p><strong>Ejemplo completo en Jupyter</strong>:</p>
-<div class="sourceCode" id="cb304"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb304-1"><a href="#cb304-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 1</span></span>
-<span id="cb304-2"><a href="#cb304-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb304-3"><a href="#cb304-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb304-4"><a href="#cb304-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb304-5"><a href="#cb304-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 2</span></span>
-<span id="cb304-6"><a href="#cb304-6" aria-hidden="true" tabindex="-1"></a>datos <span class="op">=</span> {</span>
-<span id="cb304-7"><a href="#cb304-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;nombre&#39;</span>: [<span class="st">&#39;Ana&#39;</span>, <span class="st">&#39;Bruno&#39;</span>, <span class="st">&#39;Carlos&#39;</span>],</span>
-<span id="cb304-8"><a href="#cb304-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;edad&#39;</span>: [<span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">28</span>],</span>
-<span id="cb304-9"><a href="#cb304-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;ciudad&#39;</span>: [<span class="st">&#39;Madrid&#39;</span>, <span class="st">&#39;Barcelona&#39;</span>, <span class="st">&#39;Valencia&#39;</span>]</span>
-<span id="cb304-10"><a href="#cb304-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb304-11"><a href="#cb304-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(datos)</span>
-<span id="cb304-12"><a href="#cb304-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span>
-<span id="cb304-13"><a href="#cb304-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb304-14"><a href="#cb304-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 3</span></span>
-<span id="cb304-15"><a href="#cb304-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculo de edad promedio</span></span>
-<span id="cb304-16"><a href="#cb304-16" aria-hidden="true" tabindex="-1"></a>edad_promedio <span class="op">=</span> df[<span class="st">&#39;edad&#39;</span>].mean()</span>
-<span id="cb304-17"><a href="#cb304-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Edad promedio: </span><span class="sc">{</span>edad_promedio<span class="sc">:.1f}</span><span class="ss">&quot;</span>)</span>
-<span id="cb304-18"><a href="#cb304-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb304-19"><a href="#cb304-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultado aparece automáticamente:</span></span>
-<span id="cb304-20"><a href="#cb304-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Edad promedio: 27.7</span></span></code></pre></div>
+<div class="sourceCode" id="cb309"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb309-1"><a href="#cb309-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 1</span></span>
+<span id="cb309-2"><a href="#cb309-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb309-3"><a href="#cb309-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb309-4"><a href="#cb309-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb309-5"><a href="#cb309-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 2</span></span>
+<span id="cb309-6"><a href="#cb309-6" aria-hidden="true" tabindex="-1"></a>datos <span class="op">=</span> {</span>
+<span id="cb309-7"><a href="#cb309-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;nombre&#39;</span>: [<span class="st">&#39;Ana&#39;</span>, <span class="st">&#39;Bruno&#39;</span>, <span class="st">&#39;Carlos&#39;</span>],</span>
+<span id="cb309-8"><a href="#cb309-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;edad&#39;</span>: [<span class="dv">25</span>, <span class="dv">30</span>, <span class="dv">28</span>],</span>
+<span id="cb309-9"><a href="#cb309-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;ciudad&#39;</span>: [<span class="st">&#39;Madrid&#39;</span>, <span class="st">&#39;Barcelona&#39;</span>, <span class="st">&#39;Valencia&#39;</span>]</span>
+<span id="cb309-10"><a href="#cb309-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb309-11"><a href="#cb309-11" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(datos)</span>
+<span id="cb309-12"><a href="#cb309-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span>
+<span id="cb309-13"><a href="#cb309-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb309-14"><a href="#cb309-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Celda 3</span></span>
+<span id="cb309-15"><a href="#cb309-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculo de edad promedio</span></span>
+<span id="cb309-16"><a href="#cb309-16" aria-hidden="true" tabindex="-1"></a>edad_promedio <span class="op">=</span> df[<span class="st">&#39;edad&#39;</span>].mean()</span>
+<span id="cb309-17"><a href="#cb309-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Edad promedio: </span><span class="sc">{</span>edad_promedio<span class="sc">:.1f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb309-18"><a href="#cb309-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb309-19"><a href="#cb309-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Resultado aparece automáticamente:</span></span>
+<span id="cb309-20"><a href="#cb309-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Edad promedio: 27.7</span></span></code></pre></div>
 <hr />
 <h3 id="comparación-cuál-usar">Comparación: ¿Cuál usar?</h3>
 <table>
@@ -13830,24 +14437,24 @@ pétalo</li>
 <li>Perfecto para <strong>principiantes</strong></li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb305"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb305-1"><a href="#cb305-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
-<span id="cb305-2"><a href="#cb305-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb305-3"><a href="#cb305-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb305-4"><a href="#cb305-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar</span></span>
-<span id="cb305-5"><a href="#cb305-5" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
-<span id="cb305-6"><a href="#cb305-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(iris.data, columns<span class="op">=</span>iris.feature_names)</span>
-<span id="cb305-7"><a href="#cb305-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;species&#39;</span>] <span class="op">=</span> iris.target_names[iris.target]</span>
-<span id="cb305-8"><a href="#cb305-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb305-9"><a href="#cb305-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
-<span id="cb305-10"><a href="#cb305-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span>
-<span id="cb305-11"><a href="#cb305-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.describe())</span>
-<span id="cb305-12"><a href="#cb305-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;species&#39;</span>].value_counts())</span>
-<span id="cb305-13"><a href="#cb305-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb305-14"><a href="#cb305-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficos</span></span>
-<span id="cb305-15"><a href="#cb305-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb305-16"><a href="#cb305-16" aria-hidden="true" tabindex="-1"></a>df.plot(subplots<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
-<span id="cb305-17"><a href="#cb305-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb310"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb310-1"><a href="#cb310-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
+<span id="cb310-2"><a href="#cb310-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb310-3"><a href="#cb310-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb310-4"><a href="#cb310-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargar</span></span>
+<span id="cb310-5"><a href="#cb310-5" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris()</span>
+<span id="cb310-6"><a href="#cb310-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(iris.data, columns<span class="op">=</span>iris.feature_names)</span>
+<span id="cb310-7"><a href="#cb310-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;species&#39;</span>] <span class="op">=</span> iris.target_names[iris.target]</span>
+<span id="cb310-8"><a href="#cb310-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb310-9"><a href="#cb310-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
+<span id="cb310-10"><a href="#cb310-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span>
+<span id="cb310-11"><a href="#cb310-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.describe())</span>
+<span id="cb310-12"><a href="#cb310-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;species&#39;</span>].value_counts())</span>
+<span id="cb310-13"><a href="#cb310-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb310-14"><a href="#cb310-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráficos</span></span>
+<span id="cb310-15"><a href="#cb310-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb310-16"><a href="#cb310-16" aria-hidden="true" tabindex="-1"></a>df.plot(subplots<span class="op">=</span><span class="va">True</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb310-17"><a href="#cb310-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E15: Calcular estadísticas de cada especie</li>
@@ -13856,9 +14463,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb305-1"><a 
 <li>E26: EDA completo</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb306"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb306-1"><a href="#cb306-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ya está incluido en sklearn, o:</span></span>
-<span id="cb306-2"><a href="#cb306-2" aria-hidden="true" tabindex="-1"></a><span class="co"># https://archive.ics.uci.edu/ml/datasets/iris</span></span></code></pre></div>
+<div class="sourceCode" id="cb311"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb311-1"><a href="#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ya está incluido en sklearn, o:</span></span>
+<span id="cb311-2"><a href="#cb311-2" aria-hidden="true" tabindex="-1"></a><span class="co"># https://archive.ics.uci.edu/ml/datasets/iris</span></span></code></pre></div>
 <hr />
 <h4 id="2️⃣-titanic-dataset-kaggle">2️⃣ Titanic Dataset (Kaggle)</h4>
 <p><strong>Descripción</strong>:</p>
@@ -13875,26 +14482,26 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb306-1"><a href
 <li>Ideal para aprender limpieza de datos</li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb307"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb307-1"><a href="#cb307-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb307-2"><a href="#cb307-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb307-3"><a href="#cb307-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar de Kaggle o local</span></span>
-<span id="cb307-4"><a href="#cb307-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;titanic.csv&#39;</span>)</span>
-<span id="cb307-5"><a href="#cb307-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb307-6"><a href="#cb307-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (891, 12)</span></span>
-<span id="cb307-7"><a href="#cb307-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos y NaN</span></span>
-<span id="cb307-8"><a href="#cb307-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.isnull().<span class="bu">sum</span>())  <span class="co"># Contar faltantes</span></span>
-<span id="cb307-9"><a href="#cb307-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb307-10"><a href="#cb307-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Limpieza</span></span>
-<span id="cb307-11"><a href="#cb307-11" aria-hidden="true" tabindex="-1"></a>df_clean <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">&#39;Age&#39;</span>, <span class="st">&#39;Embarked&#39;</span>]).copy()</span>
-<span id="cb307-12"><a href="#cb307-12" aria-hidden="true" tabindex="-1"></a>df_clean[<span class="st">&#39;Age&#39;</span>] <span class="op">=</span> df_clean[<span class="st">&#39;Age&#39;</span>].astype(<span class="bu">int</span>)</span>
-<span id="cb307-13"><a href="#cb307-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb307-14"><a href="#cb307-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis</span></span>
-<span id="cb307-15"><a href="#cb307-15" aria-hidden="true" tabindex="-1"></a>supervivencia <span class="op">=</span> df_clean[<span class="st">&#39;Survived&#39;</span>].mean()</span>
-<span id="cb307-16"><a href="#cb307-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Tasa supervivencia: </span><span class="sc">{</span>supervivencia<span class="sc">:.1%}</span><span class="ss">&quot;</span>)</span>
-<span id="cb307-17"><a href="#cb307-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb307-18"><a href="#cb307-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Por género</span></span>
-<span id="cb307-19"><a href="#cb307-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_clean.groupby(<span class="st">&#39;Sex&#39;</span>)[<span class="st">&#39;Survived&#39;</span>].mean())</span></code></pre></div>
+<div class="sourceCode" id="cb312"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb312-1"><a href="#cb312-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb312-2"><a href="#cb312-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb312-3"><a href="#cb312-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar de Kaggle o local</span></span>
+<span id="cb312-4"><a href="#cb312-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;titanic.csv&#39;</span>)</span>
+<span id="cb312-5"><a href="#cb312-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb312-6"><a href="#cb312-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (891, 12)</span></span>
+<span id="cb312-7"><a href="#cb312-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos y NaN</span></span>
+<span id="cb312-8"><a href="#cb312-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.isnull().<span class="bu">sum</span>())  <span class="co"># Contar faltantes</span></span>
+<span id="cb312-9"><a href="#cb312-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb312-10"><a href="#cb312-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Limpieza</span></span>
+<span id="cb312-11"><a href="#cb312-11" aria-hidden="true" tabindex="-1"></a>df_clean <span class="op">=</span> df.dropna(subset<span class="op">=</span>[<span class="st">&#39;Age&#39;</span>, <span class="st">&#39;Embarked&#39;</span>]).copy()</span>
+<span id="cb312-12"><a href="#cb312-12" aria-hidden="true" tabindex="-1"></a>df_clean[<span class="st">&#39;Age&#39;</span>] <span class="op">=</span> df_clean[<span class="st">&#39;Age&#39;</span>].astype(<span class="bu">int</span>)</span>
+<span id="cb312-13"><a href="#cb312-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb312-14"><a href="#cb312-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis</span></span>
+<span id="cb312-15"><a href="#cb312-15" aria-hidden="true" tabindex="-1"></a>supervivencia <span class="op">=</span> df_clean[<span class="st">&#39;Survived&#39;</span>].mean()</span>
+<span id="cb312-16"><a href="#cb312-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Tasa supervivencia: </span><span class="sc">{</span>supervivencia<span class="sc">:.1%}</span><span class="ss">&quot;</span>)</span>
+<span id="cb312-17"><a href="#cb312-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb312-18"><a href="#cb312-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Por género</span></span>
+<span id="cb312-19"><a href="#cb312-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_clean.groupby(<span class="st">&#39;Sex&#39;</span>)[<span class="st">&#39;Survived&#39;</span>].mean())</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E14: Validación de datos</li>
@@ -13903,9 +14510,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb307-1"><a 
 <li>E27: Normalización para ML</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb308"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb308-1"><a href="#cb308-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/titanic</span></span>
-<span id="cb308-2"><a href="#cb308-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O directo: https://raw.githubusercontent.com/pandas-dev/pandas/main/doc/data/titanic.csv</span></span></code></pre></div>
+<div class="sourceCode" id="cb313"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb313-1"><a href="#cb313-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/titanic</span></span>
+<span id="cb313-2"><a href="#cb313-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O directo: https://raw.githubusercontent.com/pandas-dev/pandas/main/doc/data/titanic.csv</span></span></code></pre></div>
 <hr />
 <h4 id="3️⃣-world-happiness-report">3️⃣ World Happiness Report</h4>
 <p><strong>Descripción</strong>:</p>
@@ -13922,35 +14529,35 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb308-1"><a href
 <li>Ideal para análisis temporal</li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb309"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb309-1"><a href="#cb309-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb309-2"><a href="#cb309-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb309-3"><a href="#cb309-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;world-happiness-report.csv&#39;</span>)</span>
-<span id="cb309-4"><a href="#cb309-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ⚠️ Los nombres de columnas cambian según el año/versión del fichero</span></span>
-<span id="cb309-5"><a href="#cb309-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (p. ej. &#39;Life Ladder&#39; o &#39;Ladder score&#39;; &#39;Country&#39; o &#39;Country name&#39;).</span></span>
-<span id="cb309-6"><a href="#cb309-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compruébalos siempre con df.columns y adapta el código.</span></span>
-<span id="cb309-7"><a href="#cb309-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb309-8"><a href="#cb309-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
-<span id="cb309-9"><a href="#cb309-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.columns)</span>
-<span id="cb309-10"><a href="#cb309-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head(<span class="dv">10</span>))</span>
-<span id="cb309-11"><a href="#cb309-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb309-12"><a href="#cb309-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas</span></span>
-<span id="cb309-13"><a href="#cb309-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;Life Ladder&#39;</span>].describe())  <span class="co"># Score felicidad</span></span>
-<span id="cb309-14"><a href="#cb309-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb309-15"><a href="#cb309-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Comparar países</span></span>
-<span id="cb309-16"><a href="#cb309-16" aria-hidden="true" tabindex="-1"></a>top5 <span class="op">=</span> df.nlargest(<span class="dv">5</span>, <span class="st">&#39;Life Ladder&#39;</span>)[[<span class="st">&#39;Country name&#39;</span>, <span class="st">&#39;Life Ladder&#39;</span>]]</span>
-<span id="cb309-17"><a href="#cb309-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(top5)</span>
-<span id="cb309-18"><a href="#cb309-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb309-19"><a href="#cb309-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis por región</span></span>
-<span id="cb309-20"><a href="#cb309-20" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">&#39;Region&#39;</span> <span class="kw">in</span> df.columns:</span>
-<span id="cb309-21"><a href="#cb309-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df.groupby(<span class="st">&#39;Region&#39;</span>)[<span class="st">&#39;Life Ladder&#39;</span>].mean())</span>
-<span id="cb309-22"><a href="#cb309-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb309-23"><a href="#cb309-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar</span></span>
-<span id="cb309-24"><a href="#cb309-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb309-25"><a href="#cb309-25" aria-hidden="true" tabindex="-1"></a>df.sort_values(<span class="st">&#39;Life Ladder&#39;</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>).plot(</span>
-<span id="cb309-26"><a href="#cb309-26" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">&#39;Country name&#39;</span>, y<span class="op">=</span><span class="st">&#39;Life Ladder&#39;</span>, kind<span class="op">=</span><span class="st">&#39;barh&#39;</span></span>
-<span id="cb309-27"><a href="#cb309-27" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb309-28"><a href="#cb309-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb314"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb314-1"><a href="#cb314-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb314-2"><a href="#cb314-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb314-3"><a href="#cb314-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;world-happiness-report.csv&#39;</span>)</span>
+<span id="cb314-4"><a href="#cb314-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ⚠️ Los nombres de columnas cambian según el año/versión del fichero</span></span>
+<span id="cb314-5"><a href="#cb314-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (p. ej. &#39;Life Ladder&#39; o &#39;Ladder score&#39;; &#39;Country&#39; o &#39;Country name&#39;).</span></span>
+<span id="cb314-6"><a href="#cb314-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compruébalos siempre con df.columns y adapta el código.</span></span>
+<span id="cb314-7"><a href="#cb314-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb314-8"><a href="#cb314-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar</span></span>
+<span id="cb314-9"><a href="#cb314-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.columns)</span>
+<span id="cb314-10"><a href="#cb314-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head(<span class="dv">10</span>))</span>
+<span id="cb314-11"><a href="#cb314-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb314-12"><a href="#cb314-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Estadísticas</span></span>
+<span id="cb314-13"><a href="#cb314-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;Life Ladder&#39;</span>].describe())  <span class="co"># Score felicidad</span></span>
+<span id="cb314-14"><a href="#cb314-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb314-15"><a href="#cb314-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Comparar países</span></span>
+<span id="cb314-16"><a href="#cb314-16" aria-hidden="true" tabindex="-1"></a>top5 <span class="op">=</span> df.nlargest(<span class="dv">5</span>, <span class="st">&#39;Life Ladder&#39;</span>)[[<span class="st">&#39;Country name&#39;</span>, <span class="st">&#39;Life Ladder&#39;</span>]]</span>
+<span id="cb314-17"><a href="#cb314-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(top5)</span>
+<span id="cb314-18"><a href="#cb314-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb314-19"><a href="#cb314-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Análisis por región</span></span>
+<span id="cb314-20"><a href="#cb314-20" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">&#39;Region&#39;</span> <span class="kw">in</span> df.columns:</span>
+<span id="cb314-21"><a href="#cb314-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(df.groupby(<span class="st">&#39;Region&#39;</span>)[<span class="st">&#39;Life Ladder&#39;</span>].mean())</span>
+<span id="cb314-22"><a href="#cb314-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb314-23"><a href="#cb314-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar</span></span>
+<span id="cb314-24"><a href="#cb314-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb314-25"><a href="#cb314-25" aria-hidden="true" tabindex="-1"></a>df.sort_values(<span class="st">&#39;Life Ladder&#39;</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>).plot(</span>
+<span id="cb314-26"><a href="#cb314-26" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">&#39;Country name&#39;</span>, y<span class="op">=</span><span class="st">&#39;Life Ladder&#39;</span>, kind<span class="op">=</span><span class="st">&#39;barh&#39;</span></span>
+<span id="cb314-27"><a href="#cb314-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb314-28"><a href="#cb314-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E16: Agrupar por región/año</li>
@@ -13959,9 +14566,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb309-1"><a 
 <li>E26: Correlación entre variables</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb310"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb310-1"><a href="#cb310-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2023</span></span>
-<span id="cb310-2"><a href="#cb310-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O: https://worldhappiness.report/</span></span></code></pre></div>
+<div class="sourceCode" id="cb315"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb315-1"><a href="#cb315-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2023</span></span>
+<span id="cb315-2"><a href="#cb315-2" aria-hidden="true" tabindex="-1"></a><span class="co"># O: https://worldhappiness.report/</span></span></code></pre></div>
 <hr />
 <h4 id="4️⃣-house-prices-dataset-kaggle">4️⃣ House Prices Dataset
 (Kaggle)</h4>
@@ -13979,36 +14586,36 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb310-1"><a href
 <li>Perfecto para aprender <strong>feature engineering</strong></li>
 </ul>
 <p><strong>Cómo usarlo en UD2</strong>:</p>
-<div class="sourceCode" id="cb311"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb311-1"><a href="#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb311-2"><a href="#cb311-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb311-3"><a href="#cb311-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb311-4"><a href="#cb311-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;house-prices-advanced-regression-techniques/train.csv&#39;</span>)</span>
-<span id="cb311-5"><a href="#cb311-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb311-6"><a href="#cb311-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (1460, 81)</span></span>
-<span id="cb311-7"><a href="#cb311-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos</span></span>
-<span id="cb311-8"><a href="#cb311-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb311-9"><a href="#cb311-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar precio</span></span>
-<span id="cb311-10"><a href="#cb311-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;SalePrice&#39;</span>].describe())</span>
-<span id="cb311-11"><a href="#cb311-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb311-12"><a href="#cb311-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Encontrar correlación con precio</span></span>
-<span id="cb311-13"><a href="#cb311-13" aria-hidden="true" tabindex="-1"></a>correlaciones <span class="op">=</span> df.corr(numeric_only<span class="op">=</span><span class="va">True</span>)[<span class="st">&#39;SalePrice&#39;</span>].sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb311-14"><a href="#cb311-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(correlaciones.head(<span class="dv">10</span>))</span>
-<span id="cb311-15"><a href="#cb311-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb311-16"><a href="#cb311-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico: Tamaño vs Precio</span></span>
-<span id="cb311-17"><a href="#cb311-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb311-18"><a href="#cb311-18" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">&#39;GrLivArea&#39;</span>], df[<span class="st">&#39;SalePrice&#39;</span>])</span>
-<span id="cb311-19"><a href="#cb311-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;Área&#39;</span>)</span>
-<span id="cb311-20"><a href="#cb311-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Precio&#39;</span>)</span>
-<span id="cb311-21"><a href="#cb311-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb311-22"><a href="#cb311-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb311-23"><a href="#cb311-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejercicio: Normalizar características</span></span>
-<span id="cb311-24"><a href="#cb311-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb311-25"><a href="#cb311-25" aria-hidden="true" tabindex="-1"></a>caracteristicas_numericas <span class="op">=</span> df.select_dtypes(include<span class="op">=</span>[np.number]).columns</span>
-<span id="cb311-26"><a href="#cb311-26" aria-hidden="true" tabindex="-1"></a>df_normalizado <span class="op">=</span> df.copy()</span>
-<span id="cb311-27"><a href="#cb311-27" aria-hidden="true" tabindex="-1"></a>df_normalizado[caracteristicas_numericas] <span class="op">=</span> StandardScaler().fit_transform(</span>
-<span id="cb311-28"><a href="#cb311-28" aria-hidden="true" tabindex="-1"></a>    df[caracteristicas_numericas]</span>
-<span id="cb311-29"><a href="#cb311-29" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb316"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb316-1"><a href="#cb316-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb316-2"><a href="#cb316-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb316-3"><a href="#cb316-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb316-4"><a href="#cb316-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">&#39;house-prices-advanced-regression-techniques/train.csv&#39;</span>)</span>
+<span id="cb316-5"><a href="#cb316-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb316-6"><a href="#cb316-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.shape)           <span class="co"># (1460, 81)</span></span>
+<span id="cb316-7"><a href="#cb316-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.info())          <span class="co"># Ver tipos</span></span>
+<span id="cb316-8"><a href="#cb316-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb316-9"><a href="#cb316-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Explorar precio</span></span>
+<span id="cb316-10"><a href="#cb316-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df[<span class="st">&#39;SalePrice&#39;</span>].describe())</span>
+<span id="cb316-11"><a href="#cb316-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb316-12"><a href="#cb316-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Encontrar correlación con precio</span></span>
+<span id="cb316-13"><a href="#cb316-13" aria-hidden="true" tabindex="-1"></a>correlaciones <span class="op">=</span> df.corr(numeric_only<span class="op">=</span><span class="va">True</span>)[<span class="st">&#39;SalePrice&#39;</span>].sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb316-14"><a href="#cb316-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(correlaciones.head(<span class="dv">10</span>))</span>
+<span id="cb316-15"><a href="#cb316-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb316-16"><a href="#cb316-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico: Tamaño vs Precio</span></span>
+<span id="cb316-17"><a href="#cb316-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb316-18"><a href="#cb316-18" aria-hidden="true" tabindex="-1"></a>plt.scatter(df[<span class="st">&#39;GrLivArea&#39;</span>], df[<span class="st">&#39;SalePrice&#39;</span>])</span>
+<span id="cb316-19"><a href="#cb316-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&#39;Área&#39;</span>)</span>
+<span id="cb316-20"><a href="#cb316-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&#39;Precio&#39;</span>)</span>
+<span id="cb316-21"><a href="#cb316-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb316-22"><a href="#cb316-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb316-23"><a href="#cb316-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejercicio: Normalizar características</span></span>
+<span id="cb316-24"><a href="#cb316-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb316-25"><a href="#cb316-25" aria-hidden="true" tabindex="-1"></a>caracteristicas_numericas <span class="op">=</span> df.select_dtypes(include<span class="op">=</span>[np.number]).columns</span>
+<span id="cb316-26"><a href="#cb316-26" aria-hidden="true" tabindex="-1"></a>df_normalizado <span class="op">=</span> df.copy()</span>
+<span id="cb316-27"><a href="#cb316-27" aria-hidden="true" tabindex="-1"></a>df_normalizado[caracteristicas_numericas] <span class="op">=</span> StandardScaler().fit_transform(</span>
+<span id="cb316-28"><a href="#cb316-28" aria-hidden="true" tabindex="-1"></a>    df[caracteristicas_numericas]</span>
+<span id="cb316-29"><a href="#cb316-29" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><strong>Usar en ejercicio</strong>:</p>
 <ul>
 <li>E22: Análisis y agregación</li>
@@ -14017,9 +14624,9 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb311-1"><a 
 <li>E27: Normalización necesaria para ML</li>
 </ul>
 <p><strong>Descarga</strong>:</p>
-<div class="sourceCode" id="cb312"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb312-1"><a href="#cb312-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/house-prices-advanced-regression-techniques</span></span>
-<span id="cb312-2"><a href="#cb312-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: train.csv</span></span></code></pre></div>
+<div class="sourceCode" id="cb317"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb317-1"><a href="#cb317-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kaggle: https://www.kaggle.com/c/house-prices-advanced-regression-techniques</span></span>
+<span id="cb317-2"><a href="#cb317-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: train.csv</span></span></code></pre></div>
 <hr />
 <h3 id="matriz-de-datasets-por-ejercicio">Matriz de Datasets por
 Ejercicio</h3>
@@ -14087,31 +14694,31 @@ enfoques)</li>
 <h3 id="cómo-descargar-y-usar-datasets">Cómo Descargar y Usar
 Datasets</h3>
 <p><strong>Opción 1: Desde Kaggle (Recomendado)</strong></p>
-<div class="sourceCode" id="cb313"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb313-1"><a href="#cb313-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar kaggle CLI</span></span>
-<span id="cb313-2"><a href="#cb313-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install kaggle</span>
-<span id="cb313-3"><a href="#cb313-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb313-4"><a href="#cb313-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar: https://www.kaggle.com/settings/account</span></span>
-<span id="cb313-5"><a href="#cb313-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: cp kaggle.json ~/.kaggle/</span></span>
-<span id="cb313-6"><a href="#cb313-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb313-7"><a href="#cb313-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar dataset</span></span>
-<span id="cb313-8"><a href="#cb313-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kaggle</span> datasets download <span class="at">-d</span> ajaypalsinghlo/world-happiness-report-2023</span>
-<span id="cb313-9"><a href="#cb313-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb313-10"><a href="#cb313-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer</span></span>
-<span id="cb313-11"><a href="#cb313-11" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> world-happiness-report-2023.zip</span></code></pre></div>
+<div class="sourceCode" id="cb318"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb318-1"><a href="#cb318-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instalar kaggle CLI</span></span>
+<span id="cb318-2"><a href="#cb318-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install kaggle</span>
+<span id="cb318-3"><a href="#cb318-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb318-4"><a href="#cb318-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Configurar: https://www.kaggle.com/settings/account</span></span>
+<span id="cb318-5"><a href="#cb318-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar: cp kaggle.json ~/.kaggle/</span></span>
+<span id="cb318-6"><a href="#cb318-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb318-7"><a href="#cb318-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Descargar dataset</span></span>
+<span id="cb318-8"><a href="#cb318-8" aria-hidden="true" tabindex="-1"></a><span class="ex">kaggle</span> datasets download <span class="at">-d</span> ajaypalsinghlo/world-happiness-report-2023</span>
+<span id="cb318-9"><a href="#cb318-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb318-10"><a href="#cb318-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer</span></span>
+<span id="cb318-11"><a href="#cb318-11" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span> world-happiness-report-2023.zip</span></code></pre></div>
 <p><strong>Opción 2: Descarga manual</strong></p>
-<div class="sourceCode" id="cb314"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb314-1"><a href="#cb314-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ir a Kaggle, buscar dataset</span></span>
-<span id="cb314-2"><a href="#cb314-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en &quot;Download&quot;</span></span>
-<span id="cb314-3"><a href="#cb314-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Guardar en carpeta del proyecto</span></span></code></pre></div>
+<div class="sourceCode" id="cb319"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb319-1"><a href="#cb319-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ir a Kaggle, buscar dataset</span></span>
+<span id="cb319-2"><a href="#cb319-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer click en &quot;Download&quot;</span></span>
+<span id="cb319-3"><a href="#cb319-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Guardar en carpeta del proyecto</span></span></code></pre></div>
 <p><strong>Opción 3: Desde sklearn (solo Iris)</strong></p>
-<div class="sourceCode" id="cb315"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb315-1"><a href="#cb315-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
-<span id="cb315-2"><a href="#cb315-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb315-3"><a href="#cb315-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb315-4"><a href="#cb315-4" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris(as_frame<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb315-5"><a href="#cb315-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> iris.frame          <span class="co"># DataFrame listo con columna &#39;target&#39;</span></span>
-<span id="cb315-6"><a href="#cb315-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code></pre></div>
+<div class="sourceCode" id="cb320"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb320-1"><a href="#cb320-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
+<span id="cb320-2"><a href="#cb320-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb320-3"><a href="#cb320-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb320-4"><a href="#cb320-4" aria-hidden="true" tabindex="-1"></a>iris <span class="op">=</span> load_iris(as_frame<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb320-5"><a href="#cb320-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> iris.frame          <span class="co"># DataFrame listo con columna &#39;target&#39;</span></span>
+<span id="cb320-6"><a href="#cb320-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code></pre></div>
 <hr />
 <h2 id="-guía-práctica-cómo-usar-estos-conceptos">📝 GUÍA PRÁCTICA: CÓMO
 USAR ESTOS CONCEPTOS</h2>

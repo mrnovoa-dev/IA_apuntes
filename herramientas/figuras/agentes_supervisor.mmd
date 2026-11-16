@@ -1,0 +1,17 @@
+flowchart TB
+  U([Persona:<br/>«Informe do consumo<br/>eléctrico»]) --> S{{Supervisor<br/>planifica y reparte}}
+  S -->|en paralelo| I1[Investigador<br/>datos 2025]
+  S -->|en paralelo| I2[Investigador<br/>datos 2026]
+  I1 --> A[Analista<br/>calcula el cambio]
+  I2 --> A
+  A --> R[Redactor<br/>escribe el borrador]
+  R --> V{Revisor<br/>¿cumple los criterios?}
+  V -->|no: faltan las unidades| R
+  V -->|sí| F([Informe final])
+  V -.->|tras 2 intentos| H([Revisión humana])
+  classDef sup fill:#fde68a,stroke:#b45309,color:#111
+  classDef trab fill:#dbeafe,stroke:#1d4ed8,color:#111
+  classDef rev fill:#dcfce7,stroke:#15803d,color:#111
+  class S sup
+  class I1,I2,A,R trab
+  class V rev

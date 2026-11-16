@@ -1,0 +1,11 @@
+flowchart TB
+  P[pedir_presupuestos] -->|guarda punto de control| E[elegir]
+  E -->|guarda punto de control| AP{aprobar}
+  AP -->|1. pausa y pregunta| D[(excursion-4B.json<br/>paso 2 + estado<br/><br/>«¿Contrato Bus Morrazo<br/>por 585 €?»)]
+  D -->|2. responde «sí»| AP
+  AP -->|guarda punto de control| C[contratar]
+  C --> FIN([fin: se borra<br/>el punto de control])
+  classDef pausa fill:#fee2e2,stroke:#b91c1c,color:#111
+  classDef disco fill:#f3f4f6,stroke:#374151,color:#111
+  class AP pausa
+  class D disco

@@ -17,6 +17,7 @@
   --pen: #2747C4;          /* bolígrafo: enlaces y foco */
   --marker: #EEF85A;       /* subrayador: «estás aquí» */
   --marker-ink: #18233F;
+  --resalte: rgb(238 248 90 / .85); /* subrayador detrás de un título */
   --red: #C02A36;          /* rotulador rojo: avisos y errores */
   --shadow: 0 1px 0 rgb(24 35 63 / .06), 0 8px 24px -12px rgb(24 35 63 / .25);
   /* Colores de las unidades */
@@ -36,7 +37,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not(:has(> head > meta[name="color-scheme"][content="light"])) {
     --paper: #15211C; --surface: #1C2B25; --sunk: #23352D; --grid: #2A3E35; --line: #374C42;
-    --ink: #E9EFE6; --muted: #A8B7AC; --pen: #A9C2FF; --marker: #DCEA4C; --marker-ink: #15211C; --red: #FF8F96;
+    --ink: #E9EFE6; --muted: #A8B7AC; --pen: #A9C2FF; --marker: #DCEA4C; --marker-ink: #15211C; --red: #FF8F96; --resalte: rgb(220 234 76 / .28);
     --shadow: 0 1px 0 rgb(0 0 0 / .3), 0 10px 28px -14px rgb(0 0 0 / .7);
     --c-datos: #7FA8F2; --c-visual: #4CC7B4; --c-ml: #B392EE; --c-dl: #F27D9E; --c-texto: #F2A35C; --c-auto: #E58FC9;
   }
@@ -44,7 +45,7 @@
 :root:has(> head > meta[name="color-scheme"][content="dark"]) {
   color-scheme: dark;
   --paper: #15211C; --surface: #1C2B25; --sunk: #23352D; --grid: #2A3E35; --line: #374C42;
-  --ink: #E9EFE6; --muted: #A8B7AC; --pen: #A9C2FF; --marker: #DCEA4C; --marker-ink: #15211C; --red: #FF8F96;
+  --ink: #E9EFE6; --muted: #A8B7AC; --pen: #A9C2FF; --marker: #DCEA4C; --marker-ink: #15211C; --red: #FF8F96; --resalte: rgb(220 234 76 / .28);
   --shadow: 0 1px 0 rgb(0 0 0 / .3), 0 10px 28px -14px rgb(0 0 0 / .7);
   --c-datos: #7FA8F2; --c-visual: #4CC7B4; --c-ml: #B392EE; --c-dl: #F27D9E; --c-texto: #F2A35C; --c-auto: #E58FC9;
 }
@@ -377,5 +378,116 @@
     body { background: #fff; color: #000; font-size: 11pt; }
     article.content pre { white-space: pre-wrap; border-color: #999; }
     a { color: inherit; }
+  }
+}
+
+/* ---------- Hojas visuales (Git y agentes): fichas sobre papel cuadriculado ---------- */
+@layer components {
+  .hoja { container-type: inline-size; position: relative; margin: 1.6em 0 2em; padding: 18px 18px 20px 30px;
+    border: 2px solid var(--ink); border-radius: var(--r-lg); background-color: var(--paper);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 22px 22px; }
+  .hoja::before { content: ""; position: absolute; inset-block: 0; inset-inline-start: 16px; border-inline-start: 2px solid color-mix(in oklab, var(--red) 55%, transparent); }
+  .hoja-titulo { margin: 0; font-family: var(--font-display); font-weight: 850; font-stretch: 115%; font-size: 1.45rem; line-height: 1.15; }
+  .hoja-titulo, .ficha h5 { inline-size: fit-content; padding-inline: 4px; margin-inline-start: -4px;
+    background: linear-gradient(transparent 58%, var(--resalte) 58%); }
+  .hoja-nota { margin: 4px 0 14px; color: var(--muted); font-size: .95rem; }
+  .hoja-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 14px; margin-block-start: 12px; }
+  .ficha { min-inline-size: 0; background: var(--surface); border: 1.5px solid var(--ink); border-radius: var(--r); padding: 12px 14px 14px; box-shadow: 3px 3px 0 var(--line); }
+  .ficha.ancha { grid-column: 1 / -1; }
+  .ficha h5 { margin: 0 0 10px; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; line-height: 1.25; color: var(--ink); }
+  .ficha :is(p, li, dd) { max-inline-size: none; }
+  .ficha-pie { margin: 10px 0 0; font-size: .92rem; color: var(--muted); }
+  .hoja code.cmd { display: inline-block; margin: 2px 4px 2px 0; padding: 2px 8px; border-radius: 4px; font: 600 .8rem/1.6 var(--font-mono);
+    background: color-mix(in oklab, var(--paper) 12%, #0B1220); color: #EEF2F8; white-space: normal; overflow-wrap: anywhere; max-inline-size: 100%; }
+  .hoja code.cmd::before { content: "$ "; color: #EEF85A; }
+  .hoja figcaption code.cmd::before { content: none; }
+
+  .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .vs > div { border-block-start: 3px solid var(--ink); padding-block-start: 6px; }
+  .vs > div + div { border-block-start-color: var(--pen); }
+  .vs ul { margin: 4px 0 0; padding-inline-start: 1.1em; font-size: .9rem; }
+  .vs li { margin-block: 2px; }
+  .vocab { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; font-size: .9rem; }
+  .vocab dt { font-weight: 800; font-family: var(--font-display); }
+  .vocab dd { margin: 0; color: var(--ink); }
+  .vocab :is(dt, dd) { padding-block: 3px; border-block-end: 1px dashed var(--line); }
+
+  .semaforo { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .semaforo li { display: flex; flex-wrap: wrap; gap: 2px 8px; align-items: center; padding: 6px 8px; border-radius: var(--r);
+    border-inline-start: 4px solid var(--c-visual); background: color-mix(in oklab, var(--c-visual) 8%, var(--surface)); font-size: .88rem; }
+  .semaforo li.medio { border-inline-start-color: var(--c-texto); background: color-mix(in oklab, var(--c-texto) 9%, var(--surface)); }
+  .semaforo li.no { border-inline-start-color: var(--red); background: color-mix(in oklab, var(--red) 8%, var(--surface)); }
+  .semaforo .marca { margin-inline-start: auto; font-weight: 800; font-size: .8rem; color: var(--c-visual); white-space: nowrap; }
+  .semaforo .medio .marca { color: var(--c-texto); }
+  .semaforo .no .marca { color: var(--red); }
+  .semaforo .que { flex-basis: 100%; color: var(--muted); }
+
+  .flujo { list-style: none; counter-reset: paso; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .flujo li { counter-increment: paso; position: relative; padding: 4px 0 8px 38px; font-size: .9rem; }
+  .flujo li::before { content: counter(paso); position: absolute; inset-inline-start: 0; inset-block-start: 2px; inline-size: 26px; block-size: 26px;
+    display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: var(--paper); font: 800 .85rem/1 var(--font-display); }
+  .flujo li:not(:last-child)::after { content: ""; position: absolute; inset-inline-start: 12px; inset-block: 30px 0; border-inline-start: 2px dotted var(--line); }
+  .flujo .paso { display: block; font-weight: 700; margin-block-end: 2px; }
+
+  .ramas, .patrones { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 12px 18px; }
+  .patrones { grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); }
+  .hoja figure { margin: 0; }
+  .hoja figcaption { font-size: .88rem; color: var(--ink); margin-block-start: 4px; }
+  .hoja .riesgo { display: block; color: var(--red); font-weight: 600; margin-block-start: 2px; }
+
+  /* SVG: todos los colores salen de las variables, así cambian con el modo oscuro */
+  .sv { display: block; inline-size: 100%; block-size: auto; overflow: visible; }
+  .sv-v { display: none; max-inline-size: 380px; margin-inline: auto; }
+  @container (inline-size < 600px) { .sv-h { display: none; } .sv-v { display: block; } }
+  .sv-mini { max-inline-size: 220px; }
+  .sv-caja { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
+  .sv-caja-nube { fill: color-mix(in oklab, var(--pen) 10%, var(--surface)); stroke-dasharray: 6 4; }
+  .sv-caja-ml { fill: color-mix(in oklab, var(--c-ml) 12%, var(--surface)); stroke: var(--c-ml); }
+  .sv-caja-ok { fill: color-mix(in oklab, var(--c-visual) 12%, var(--surface)); stroke: var(--c-visual); }
+  .sv text { font-family: var(--font-body); fill: var(--ink); }
+  .sv .sv-tit { font-weight: 700; font-size: 14px; }
+  .sv .sv-sub { font-size: 12px; fill: var(--muted); }
+  .sv .sv-zona { font-family: var(--font-display); font-weight: 800; font-size: 13px; fill: var(--muted); }
+  .sv .sv-ord { font-family: var(--font-mono); font-weight: 700; font-size: 13px; fill: var(--pen); }
+  .sv .sv-ord-vuelta { fill: var(--c-visual); }
+  .sv .sv-et { font-size: 12px; fill: var(--muted); }
+  .ramas .sv .sv-et { font-size: 13.5px; }
+  .ramas .sv :is(.sv-n-txt, .sv-n-txt-ink, .sv-n-txt-ml, .sv-n-txt-tenue) { font-size: 12px; }
+  .sv .sv-et-rama { fill: var(--c-ml); }
+  .sv .sv-et-tenue { opacity: .7; }
+  .sv .sv-et-ok { fill: var(--c-visual); font-weight: 800; }
+  .sv .sv-et-no { fill: var(--red); font-weight: 700; }
+  .sv-llave { fill: none; stroke: var(--muted); stroke-width: 1.5; }
+  [class^="sv-l-"] { fill: none; stroke-width: 2.2; }
+  .sv-l-pen { stroke: var(--pen); } .sv-l-vuelta { stroke: var(--c-visual); } .sv-l-ml { stroke: var(--c-ml); }
+  .sv-l-tinta { stroke: var(--ink); } .sv-l-rojo { stroke: var(--red); stroke-dasharray: 6 4; }
+  .sv-l-copia { stroke: var(--c-ml); stroke-dasharray: 5 4; }
+  .sv-punta-pen { fill: var(--pen); } .sv-punta-vuelta { fill: var(--c-visual); } .sv-punta-ml { fill: var(--c-ml); }
+  .sv-punta-tinta { fill: var(--ink); } .sv-punta-rojo { fill: var(--red); }
+  .sv-r-main { fill: none; stroke: var(--ink); stroke-width: 3; }
+  .sv-r-rama { fill: none; stroke: var(--c-ml); stroke-width: 3; }
+  .sv-r-tenue { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 4 4; opacity: .6; }
+  .sv-n-main { fill: var(--ink); } .sv-n-rama { fill: var(--c-ml); }
+  .sv-n-union { fill: var(--marker); stroke: var(--ink); stroke-width: 2.5; }
+  .sv-n-nuevo { fill: var(--surface); stroke: var(--c-ml); stroke-width: 3; }
+  .sv-n-tenue { fill: var(--surface); stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 3 3; opacity: .7; }
+  .sv .sv-n-txt { fill: var(--surface); font-weight: 800; font-size: 11px; }
+  .sv .sv-n-txt-ink { fill: var(--marker-ink); font-weight: 800; font-size: 11px; }
+  .sv .sv-n-txt-ml { fill: var(--c-ml); font-weight: 800; font-size: 11px; }
+  .sv .sv-n-txt-tenue { fill: var(--muted); font-size: 11px; }
+}
+@layer utilities {
+  @media print {
+    .hoja { background: #fff; border-color: #000; }
+    .ficha { break-inside: avoid; box-shadow: none; }
+    .hoja code.cmd { background: #eee; color: #000; }
+    .hoja code.cmd::before { color: #000; }
+  }
+  @media (forced-colors: active) {
+    .hoja-titulo, .ficha h5 { background: none; text-decoration: underline; }
+    .hoja code.cmd { border: 1px solid CanvasText; }
+    .sv-caja, .sv-r-main, .sv-r-rama, [class^="sv-l-"] { stroke: CanvasText; }
+    .sv text { fill: CanvasText; }
   }
 }

@@ -310,6 +310,173 @@ def hoja_agentes():
     return "\n".join(h)
 
 
+# ---------- Pandas ----------
+def tabla(x, y, cab, filas, anchos, alto=26, clases=None, pref=""):
+    """Tabla pequeña: cabecera + filas; clases[i] colorea la fila i (o celda si es lista)."""
+    s = ""
+    cx = x
+    for c, w in zip(cab, anchos):
+        s += f'<rect x="{cx}" y="{y}" width="{w}" height="{alto}" class="sv-t-cab"/>'
+        s += f'<text x="{cx + w / 2}" y="{y + alto / 2 + 4}" class="sv-t-txt sv-t-txtcab" text-anchor="middle">{escape(c)}</text>'
+        cx += w
+    for i, fila in enumerate(filas):
+        cx = x
+        yy = y + alto * (i + 1)
+        for j, (v, w) in enumerate(zip(fila, anchos)):
+            k = (clases or [None] * len(filas))[i]
+            if isinstance(k, list):
+                k = k[j]
+            s += f'<rect x="{cx}" y="{yy}" width="{w}" height="{alto}" class="sv-t-celda {k or ""}"/>'
+            s += f'<text x="{cx + w / 2}" y="{yy + alto / 2 + 4}" class="sv-t-txt" text-anchor="middle">{escape(str(v))}</text>'
+            cx += w
+    return s
+
+
+GB_DESC = ("La tabla de notas se separa en dos grupos, A y B; a cada grupo se le aplica la media; los resultados "
+           "se juntan en una tabla nueva con una fila por grupo: A 7,0 y B 6,5.")
+NOTAS = [("A", "8"), ("A", "6"), ("B", "5"), ("A", "7"), ("B", "8")]
+
+
+def groupby_h():
+    p = "pgh"
+    cls = ["sv-g-a" if g == "A" else "sv-g-b" for g, _ in NOTAS]
+    b = texto(185, 16, "1 · Separar", "sv-zona") + texto(400, 16, "2 · Aplicar", "sv-zona") + texto(585, 16, "3 · Juntar", "sv-zona")
+    b += tabla(10, 40, ["grupo", "nota"], NOTAS, [60, 60], clases=cls)
+    b += tabla(240, 24, ["grupo", "nota"], [r for r in NOTAS if r[0] == "A"], [60, 60], clases=["sv-g-a"] * 3)
+    b += tabla(240, 146, ["grupo", "nota"], [r for r in NOTAS if r[0] == "B"], [60, 60], clases=["sv-g-b"] * 2)
+    b += linea("M134,110 L236,80", p) + linea("M134,150 L236,186", p)
+    b += linea("M364,89 H436", p) + texto(400, 81, "mean()", "sv-ord")
+    b += linea("M364,198 H436", p) + texto(400, 190, "mean()", "sv-ord")
+    b += caja(440, 66, 110, 46, "A → 7,0", cls="sv-caja sv-g-a")
+    b += caja(440, 175, 110, 46, "B → 6,5", cls="sv-caja sv-g-b")
+    b += linea("M554,89 L606,130", p) + linea("M554,198 L606,152", p)
+    b += tabla(610, 104, ["grupo", "nota"], [("A", "7,0"), ("B", "6,5")], [60, 60], clases=["sv-g-a", "sv-g-b"])
+    return svg(p, "0 0 740 236", "groupby: separar, aplicar y juntar", GB_DESC, b, "sv-h")
+
+
+def groupby_v():
+    p = "pgv"
+    cls = ["sv-g-a" if g == "A" else "sv-g-b" for g, _ in NOTAS]
+    b = texto(10, 22, "1 · Separar", "sv-zona", "start")
+    b += tabla(120, 30, ["grupo", "nota"], NOTAS, [60, 60], clases=cls)
+    b += linea("M150,190 L95,226", p) + linea("M210,190 L265,226", p)
+    b += tabla(30, 230, ["grupo", "nota"], [r for r in NOTAS if r[0] == "A"], [60, 60], clases=["sv-g-a"] * 3)
+    b += tabla(210, 230, ["grupo", "nota"], [r for r in NOTAS if r[0] == "B"], [60, 60], clases=["sv-g-b"] * 2)
+    b += texto(180, 360, "2 · Aplicar mean()", "sv-zona")
+    b += linea("M90,338 V372", p) + linea("M270,312 V372", p)
+    b += caja(30, 376, 120, 42, "A → 7,0", cls="sv-caja sv-g-a") + caja(210, 376, 120, 42, "B → 6,5", cls="sv-caja sv-g-b")
+    b += texto(180, 446, "3 · Juntar", "sv-zona")
+    b += linea("M90,422 L160,460", p) + linea("M270,422 L200,460", p)
+    b += tabla(120, 464, ["grupo", "nota"], [("A", "7,0"), ("B", "6,5")], [60, 60], clases=["sv-g-a", "sv-g-b"])
+    return svg(p, "0 0 360 548", "groupby: separar, aplicar y juntar", GB_DESC, b, "sv-v")
+
+
+MP_DESC = ("Tabla ancha con una columna por materia (alumno, mates, física) y tabla larga con una fila por alumno y "
+           "materia (alumno, materia, nota). melt pasa de la ancha a la larga; pivot, de la larga a la ancha.")
+ANCHA = [("Uxía", "8", "7"), ("Brais", "6", "9")]
+LARGA = [("Uxía", "mates", "8"), ("Uxía", "física", "7"), ("Brais", "mates", "6"), ("Brais", "física", "9")]
+CL_ANCHA = [[None, "sv-g-a", "sv-g-b"]] * 2
+CL_LARGA = [[None, "sv-g-a", "sv-g-a"], [None, "sv-g-b", "sv-g-b"]] * 2
+
+
+def meltpivot_h():
+    p = "pmh"
+    b = texto(130, 30, "Ancha: una columna por materia", "sv-zona")
+    b += tabla(10, 46, ["alumno", "mates", "física"], ANCHA, [80, 80, 80], clases=CL_ANCHA)
+    b += texto(598, 18, "Larga: una fila por dato", "sv-zona")
+    b += tabla(470, 28, ["alumno", "materia", "nota"], LARGA, [85, 85, 85], clases=CL_LARGA)
+    b += linea("M264,72 H462", p) + texto(363, 64, "melt", "sv-ord")
+    b += linea("M462,112 H264", p, "vuelta") + texto(363, 132, "pivot", "sv-ord sv-ord-vuelta")
+    return svg(p, "0 0 740 166", "melt y pivot", MP_DESC, b, "sv-h")
+
+
+def meltpivot_v():
+    p = "pmv"
+    b = texto(180, 20, "Ancha: una columna por materia", "sv-zona")
+    b += tabla(60, 30, ["alumno", "mates", "física"], ANCHA, [80, 80, 80], clases=CL_ANCHA)
+    b += linea("M150,112 V176", p) + texto(140, 150, "melt", "sv-ord", "end")
+    b += linea("M210,176 V112", p, "vuelta") + texto(220, 150, "pivot", "sv-ord sv-ord-vuelta", "start")
+    b += texto(180, 196, "Larga: una fila por dato", "sv-zona")
+    b += tabla(52, 206, ["alumno", "materia", "nota"], LARGA, [85, 85, 85], clases=CL_LARGA)
+    return svg(p, "0 0 360 340", "melt y pivot", MP_DESC, b, "sv-v")
+
+
+TEMP = {"original": [11, None, None, 14, 15, None, 13], "ffill": [11, 11, 11, 14, 15, 15, 13],
+        "bfill": [11, 14, 14, 14, 15, 13, 13], "interpolate": [11, 12, 13, 14, 15, 14, 13]}
+
+
+def huecos_svg(metodo):
+    p = "ph" + metodo[:3]
+    xs = [22 + 32 * i for i in range(7)]
+    y = lambda v: 100 - (v - 10) * 14
+    vals = TEMP[metodo]
+    b = '<path d="M10,108 H226" class="sv-llave"/>'
+    b += "".join(texto(x, 124, f"{8 + i}h", "sv-et") for i, x in enumerate(xs))
+    pts = " ".join(f"{x},{y(v)}" for x, v in zip(xs, vals))
+    b += f'<polyline points="{pts}" class="sv-l-tenue"/>'
+    for x, v, o in zip(xs, vals, TEMP["original"]):
+        if o is None:
+            b += f'<circle cx="{x}" cy="{y(v)}" r="6" class="sv-n-nuevo"/>'
+        else:
+            b += f'<circle cx="{x}" cy="{y(v)}" r="5" class="sv-n-main"/>'
+    desc = f"Temperaturas de 8 a 14 h con huecos a las 9, 10 y 13 h rellenados con {metodo}: " + ", ".join(str(v) for v in vals) + "."
+    return svg(p, "0 0 236 132", metodo, desc, b, "sv-tab")
+
+
+LOC_FILAS = [("0", "Uxía", "8"), ("1", "Brais", "6"), ("2", "Noa", "7"), ("3", "Iago", "5")]
+
+
+def loc_svg(tipo):
+    p = "pl" + tipo
+    marca = {"loc": {1, 2}, "iloc": {1}}[tipo]
+    cls = [["sv-t-idx"] + (["sv-g-sel"] * 2 if i in marca else [None, None]) for i in range(4)]
+    b = tabla(20, 10, ["", "alumno", "nota"], LOC_FILAS, [40, 80, 60], clases=cls)
+    desc = {"loc": "df.loc[1:2] selecciona las filas con etiqueta 1 y 2: el final se incluye.",
+            "iloc": "df.iloc[1:2] selecciona solo la fila en la posición 1: el final no se incluye."}[tipo]
+    return svg(p, "0 0 220 142", f"df.{tipo}[1:2]", desc, b, "sv-tab")
+
+
+def hoja_pandas():
+    guardar = [("no", "✗ no cambia df", "df.dropna()", "devuelve una tabla nueva y la tira si no la guardas"),
+               ("ok", "✓ cambia df", "df = df.dropna()", "guarda el resultado en la misma variable"),
+               ("ok", "✓ cambia df", 'df["total"] = df["a"] + df["b"]', "crear o cambiar una columna entera"),
+               ("ok", "✓ cambia df", 'df.loc[df["nota"] < 5, "estado"] = "suspenso"', "cambiar solo algunas filas"),
+               ("no", "✗ no cambia df", 'df[df["nota"] < 5]["estado"] = "suspenso"', "asignación encadenada: en pandas 3 no hace nada")]
+    merge_filas = [("inner", ["2", "3"], "solo las claves que están en las dos"),
+                   ("left", ["1", "2", "3"], "todas las de la izquierda; la 1 sin pareja queda con NaN"),
+                   ("right", ["2", "3", "4"], "todas las de la derecha"),
+                   ("outer", ["1", "2", "3", "4"], "todas; NaN donde falta pareja")]
+    def chip(k):
+        c = "izq" if k == "1" else "der" if k == "4" else "ambas"
+        return f'<span class="clave {c}">{k}</span>'
+    h = ['<section class="hoja" aria-labelledby="hoja-pd-t">',
+         '<p class="hoja-titulo" id="hoja-pd-t">Pandas en una hoja</p>',
+         '<p class="hoja-nota">Las operaciones que más cuesta imaginar, dibujadas. Abajo, cada una con su código.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>groupby: separar, aplicar y juntar</h5>', groupby_h(), groupby_v(),
+         f'<p class="ficha-pie">{cmd("df.groupby(\"grupo\")[\"nota\"].mean()")} Con <code>.agg()</code> sale una fila por grupo; con <code>.transform()</code>, una por fila original.</p></div>',
+         '<div class="ficha ancha"><h5>Ancha o larga: melt y pivot</h5>', meltpivot_h(), meltpivot_v(),
+         f'<p class="ficha-pie">{cmd("df.melt(id_vars=\"alumno\", var_name=\"materia\", value_name=\"nota\")")} {cmd("larga.pivot(index=\"alumno\", columns=\"materia\", values=\"nota\")")} Los gráficos de Seaborn y <code>groupby</code> suelen querer la larga; para leer, la ancha.</p></div>',
+         '<div class="ficha"><h5>merge: qué filas quedan</h5>',
+         '<p class="ficha-pie" style="margin-block:0 8px">Claves a la izquierda: <span class="clave izq">1</span><span class="clave ambas">2</span><span class="clave ambas">3</span> · a la derecha: <span class="clave ambas">2</span><span class="clave ambas">3</span><span class="clave der">4</span></p>',
+         '<dl class="vocab">', "".join(f'<dt><code>how="{h_}"</code></dt><dd>{"".join(chip(k) for k in ks)}<br><small>{q}</small></dd>' for h_, ks, q in merge_filas),
+         '</dl></div>',
+         '<div class="ficha"><h5>loc incluye el final; iloc, no</h5><div class="ramas">',
+         f'<figure>{loc_svg("loc")}<figcaption>{cmd("df.loc[1:2]")} etiquetas 1 y 2</figcaption></figure>',
+         f'<figure>{loc_svg("iloc")}<figcaption>{cmd("df.iloc[1:2]")} solo la posición 1</figcaption></figure>',
+         '</div><p class="ficha-pie">Con el índice por defecto parecen iguales, pero no lo son. Para un solo valor: <code>df.at[1, "nota"]</code>.</p></div>',
+         '<div class="ficha ancha"><h5>Rellenar huecos en datos ordenados</h5><div class="ramas">',
+         f'<figure>{huecos_svg("ffill")}<figcaption>{cmd("ffill()")} repite el último valor. Solo usa el pasado.</figcaption></figure>',
+         f'<figure>{huecos_svg("bfill")}<figcaption>{cmd("bfill()")} copia el siguiente: usa el futuro.</figcaption></figure>',
+         f'<figure>{huecos_svg("interpolate")}<figcaption>{cmd("interpolate()")} línea recta entre vecinos: también necesita el siguiente.</figcaption></figure>',
+         '</div><p class="ficha-pie">Puntos llenos: datos medidos. Huecos: valores inventados por el método.</p></div>',
+         '<div class="ficha ancha"><h5>¿Se guarda el cambio?</h5><ul class="semaforo">',
+         "".join(f'<li class="{c}">{cmd(o)}<span class="marca">{m}</span><span class="que">{q}</span></li>' for c, m, o, q in guardar),
+         '</ul></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -322,5 +489,6 @@ if __name__ == "__main__":
     t = TEORIA.read_text(encoding="utf-8")
     t = insertar(t, "git", hoja_git())
     t = insertar(t, "agentes", hoja_agentes())
+    t = insertar(t, "pandas", hoja_pandas())
     TEORIA.write_text(t, encoding="utf-8")
     print("hojas insertadas")

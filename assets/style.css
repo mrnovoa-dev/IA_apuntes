@@ -491,3 +491,23 @@
     .sv text { fill: CanvasText; }
   }
 }
+
+/* ---------- Hoja de Pandas: tablas dibujadas y claves de merge ---------- */
+@layer components {
+  .sv-t-cab { fill: var(--sunk); stroke: var(--ink); stroke-width: 1.5; }
+  .sv-t-celda { fill: var(--surface); stroke: var(--line); stroke-width: 1; }
+  .sv .sv-t-txt { font-family: var(--font-mono); font-size: 13px; fill: var(--ink); }
+  .sv .sv-t-txtcab { font-family: var(--font-body); font-weight: 700; }
+  .sv-g-a { fill: color-mix(in oklab, var(--c-datos) 22%, var(--surface)); }
+  .sv-g-b { fill: color-mix(in oklab, var(--c-texto) 24%, var(--surface)); }
+  .sv-caja.sv-g-a { stroke: var(--c-datos); } .sv-caja.sv-g-b { stroke: var(--c-texto); }
+  .sv-g-sel { fill: var(--resalte); stroke: var(--ink); stroke-width: 1.5; }
+  .sv-t-idx { fill: var(--sunk); }
+  .sv-l-tenue { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 3; }
+  .clave { display: inline-grid; place-items: center; min-inline-size: 1.7em; margin: 1px 3px 1px 0; padding: 0 6px; border-radius: 5px;
+    font: 700 .85rem/1.6 var(--font-mono); border: 1.5px solid var(--ink); background: var(--surface); }
+  .clave.izq { background: color-mix(in oklab, var(--c-datos) 25%, var(--surface)); border-color: var(--c-datos); }
+  .clave.der { background: color-mix(in oklab, var(--c-texto) 28%, var(--surface)); border-color: var(--c-texto); }
+  .hoja .vocab small { color: var(--muted); font-size: .85rem; }
+  .sv-tab { max-inline-size: 260px; }
+}

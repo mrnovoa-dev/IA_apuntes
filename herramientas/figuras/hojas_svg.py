@@ -477,6 +477,109 @@ def hoja_pandas():
     return "\n".join(h)
 
 
+# ---------- LLM: del prompt a la respuesta ----------
+LLM_DESC = ("La pregunta se trocea en tokens, cada token se convierte en un vector (tabla de embeddings más posición), "
+            "pasa por N bloques de atención y red feed-forward, sale una puntuación (logit) por cada token posible, "
+            "softmax con temperatura las convierte en probabilidades, se elige un token con muestreo y top-p, "
+            "y el token nuevo se añade al texto y se repite.")
+LLM_PASOS = [("Pregunta", "«…devolver un libro?»", "sv-caja"), ("Tokens", "trozos → números", "sv-caja"),
+             ("Vectores", "tabla + posición", "sv-caja"), ("Bloques × N", "atención → FFN", "sv-caja sv-caja-ml"),
+             ("Logits", "puntuación por token", "sv-caja"), ("Probabilidades", "softmax + temperatura", "sv-caja"),
+             ("Elegir", "muestreo, top-p", "sv-caja"), ("Token nuevo", "«15»", "sv-caja sv-caja-ok")]
+
+
+def llm_h():
+    p = "lh"
+    b = ""
+    for i, (tt, s, c) in enumerate(LLM_PASOS[:4]):
+        b += caja(10 + 190 * i, 40, 150, 58, tt, s, c)
+    for i, (tt, s, c) in enumerate(LLM_PASOS[4:]):
+        b += caja(580 - 190 * i, 190, 150, 58, tt, s, c)
+    for i in range(3):
+        b += linea(f"M{164 + 190 * i},69 H{196 + 190 * i}", p)
+        b += linea(f"M{576 - 190 * i},219 H{544 - 190 * i}", p)
+    b += linea("M655,102 V186", p)
+    b += linea("M85,186 V150 H275 V102", p, "vuelta") + texto(180, 142, "se añade y se repite", "sv-et")
+    b += texto(655, 30, "una vez por capa", "sv-et sv-et-rama")
+    return svg(p, "0 0 740 256", "Del prompt a la respuesta", LLM_DESC, b, "sv-h")
+
+
+def llm_v():
+    p = "lv"
+    b = ""
+    for i, (tt, s, c) in enumerate(LLM_PASOS):
+        b += caja(50, 16 + 80 * i, 200, 56, tt, s, c)
+        if i < 7:
+            b += linea(f"M150,{76 + 80 * i} V{92 + 80 * i}", p)
+    b += linea("M48,604 H24 V124 H46", p, "vuelta") + texto(16, 370, "se añade y se repite", "sv-et", rot=-90)
+    return svg(p, "0 0 262 680", "Del prompt a la respuesta", LLM_DESC, b, "sv-v")
+
+
+TEMPS = {0.5: [86.7, 11.7, 1.6], 1.0: [66.5, 24.5, 9.0], 2.0: [50.6, 30.7, 18.6]}
+
+
+def temp_svg(tt):
+    p = "lt" + str(tt).replace(".", "")
+    b = '<path d="M14,120 H222" class="sv-llave"/>'
+    for i, (c, v) in enumerate(zip(["15", "30", "7"], TEMPS[tt])):
+        x = 34 + 64 * i
+        h = v * 0.95
+        b += f'<rect x="{x}" y="{120 - h}" width="44" height="{h}" rx="3" class="{"sv-barra-1" if i == 0 else "sv-barra"}"/>'
+        b += texto(x + 22, 114 - h, f"{v:.1f} %".replace(".", ","), "sv-et")
+        b += texto(x + 22, 138, c, "sv-ord")
+    desc = f"Con temperatura {tt}: 15 tiene {TEMPS[tt][0]} %, 30 tiene {TEMPS[tt][1]} % y 7 tiene {TEMPS[tt][2]} %."
+    return svg(p, "0 0 236 146", f"Temperatura {tt}", desc, b, "sv-tab")
+
+
+def kv_svg():
+    p = "lk"
+    b = texto(10, 16, "Prefill: toda la pregunta a la vez", "sv-zona", "start")
+    b += '<rect x="6" y="24" width="112" height="26" rx="4" class="sv-llave"/>'
+    for j in range(6):
+        b += f'<rect x="{10 + 18 * j}" y="29" width="14" height="16" rx="2" class="sv-kv"/>'
+    b += texto(128, 42, "6 filas de K y V", "sv-et", "start")
+    b += texto(10, 80, "Decode: un token por paso", "sv-zona", "start")
+    for i in range(4):
+        y = 92 + 28 * i
+        for j in range(6 + i):
+            b += f'<rect x="{10 + 18 * j}" y="{y}" width="14" height="16" rx="2" class="sv-kv"/>'
+        x = 10 + 18 * (6 + i)
+        b += f'<rect x="{x}" y="{y}" width="14" height="16" rx="2" class="sv-kv-nuevo"/>'
+        b += texto(x + 24, y + 13, f"paso {i + 1}: +1 fila", "sv-et", "start")
+    b += texto(10, 214, "Azul: en la caché · naranja: token nuevo", "sv-et", "start")
+    return svg(p, "0 0 300 222", "Caché KV", "En el prefill se calculan a la vez las K y V de los 6 tokens de la pregunta. En cada paso del decode solo se calcula la fila del token nuevo y se añade a la caché, que crece de 6 a 10 filas.", b, "sv-kvfig")
+
+
+def hoja_llm():
+    fases = [("Preentrenamiento", "predecir el siguiente token en billones de tokens de texto", "pesos cambian"),
+             ("Ajuste supervisado (SFT)", "ejemplos de pregunta → buena respuesta", "pesos cambian"),
+             ("Preferencias (RLHF, DPO)", "entre dos respuestas, cuál es mejor", "pesos cambian"),
+             ("Uso (inferencia)", "responde a tu conversación", "pesos fijos")]
+    confundir = [("Parámetros", "los pesos que se aprenden al entrenar"),
+                 ("Ajustes de generación", "temperatura, top-p, longitud: los eliges al usarlo"),
+                 ("Ventana de contexto", "lo que el modelo ve en esta respuesta; no es memoria permanente"),
+                 ("Caché KV", "reutiliza cálculos dentro de una respuesta"),
+                 ("Caché de respuestas", "guarda respuestas enteras; la monta la aplicación"),
+                 ("Probabilidad", "lo frecuente en los textos de entrenamiento, no lo verdadero")]
+    h = ['<section class="hoja" aria-labelledby="hoja-llm-t">',
+         '<p class="hoja-titulo" id="hoja-llm-t">Un LLM en una hoja</p>',
+         '<p class="hoja-nota">Del <i>prompt</i> a la respuesta, con el ejemplo «¿Cantos días teño para devolver un libro?». Los detalles, en la sección 10.10.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>Del <i>prompt</i> a la respuesta, token a token</h5>', llm_h(), llm_v(),
+         '<p class="ficha-pie">El modelo nunca escribe la respuesta de golpe: da la vuelta al circuito una vez por cada token.</p></div>',
+         '<div class="ficha ancha"><h5>Logits → probabilidades: lo que cambia la temperatura</h5><div class="ramas">',
+         "".join(f'<figure>{temp_svg(tt)}<figcaption>Temperatura {str(tt).replace(".", ",")}{" (más previsible)" if tt < 1 else " (más variada)" if tt > 1 else ""}</figcaption></figure>' for tt in TEMPS),
+         '</div><p class="ficha-pie">Logits 2, 1 y 0 para «15», «30» y «7». La temperatura cambia lo aleatorio de la elección, no lo verdadero de la respuesta.</p></div>',
+         '<div class="ficha"><h5>De texto a asistente</h5><ol class="flujo">',
+         "".join(f'<li><span class="paso">{escape(tt)}</span>{escape(d)} <span class="pesos{" fijos" if "fijos" in pz else ""}">{pz}</span></li>' for tt, d, pz in fases),
+         '</ol></div>',
+         f'<div class="ficha"><h5>Prefill, decode y caché KV</h5>{kv_svg()}<p class="ficha-pie">Sin caché, cada paso recalcularía K y V de todo el texto. El resultado es el mismo; el trabajo, no.</p></div>',
+         '<div class="ficha ancha"><h5>No confundir</h5><dl class="vocab">',
+         "".join(f"<dt>{tt}</dt><dd>{d}</dd>" for tt, d in confundir), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -491,4 +594,8 @@ if __name__ == "__main__":
     t = insertar(t, "agentes", hoja_agentes())
     t = insertar(t, "pandas", hoja_pandas())
     TEORIA.write_text(t, encoding="utf-8")
+    UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
+    if UD4.exists():
+        u = UD4.read_text(encoding="utf-8")
+        UD4.write_text(insertar(u, "llm", hoja_llm()), encoding="utf-8")
     print("hojas insertadas")

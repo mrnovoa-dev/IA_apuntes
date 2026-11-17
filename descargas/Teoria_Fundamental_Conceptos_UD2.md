@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E134 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E136 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -5317,7 +5317,7 @@ Un **agente** repite este ciclo varias veces hasta cumplir un objetivo: **pensar
 
 Los modelos **multimodales** trabajan con varios tipos de datos a la vez: texto, imagen, audio, vídeo o documentos escaneados. La idea técnica es la misma que en el resto de la sección: cada tipo de dato se convierte en vectores (*embeddings*) en un **espacio común**, de forma que la foto de un gato y la frase «un gato» queden cerca (es lo que hace CLIP). Usos: explicar un gráfico, transcribir y resumir una clase, leer un formulario escaneado (OCR, UD3) o describir una imagen a una persona ciega. Retos: más cálculo, más datos para entrenar, alucinaciones también sobre lo que «ve» y **privacidad** si las imágenes muestran personas o documentos personales.
 
-Los ejercicios E42–E46 de la página de [ejercicios](ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46) practican todo esto en Python.
+Los ejercicios E42–E46 de la página de [ejercicios](ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46-y-e135e136) practican todo esto en Python.
 
 ---
 
@@ -6388,6 +6388,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *RAG Cheat Sheet* (T. Khan, PDF de 24 págs. hecho con Canva; 12 de contenido y 12 de publicidad; texto con MarkItDown y código leído de las imágenes) | k, umbral y MMR, coseno frente a L2, estrategias *stuff*, *map-reduce* y *refine*, LangChain 1.x | 14.19 (RAG mejorado) y ejercicios E113–E114 |
 | *Python Module 9: Dictionaries* (@Mastercode.sagar, PDF escaneado de 16 págs., OCR con Tesseract y MarkItDown), chuleta «NumPy Complete Cheatsheet» (@thedataguy16, 11 láminas) y carrusel «12 Machine Learning Algorithms» (@code.withnarayan, 20 láminas, generado con IA) | Diccionarios a fondo, NumPy a fondo (difusión, vistas, trampas), fichas de árbol, Naive Bayes, SVM, boosting y jerárquico con figuras propias | 5.2, 7.1, [Algoritmos](algoritmos.html), ejercicios E115–E116 y A4–A5 |
 | «10 GitHub repos for AI/ML eng beginners» (@marina.wyss, PDF de 3 págs. hecho con Canva) | Diez repositorios revisados uno a uno (licencia, actividad en noviembre de 2026, traducciones, requisitos) | 14.16 |
+| «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |
 | «100 Most Used Pandas Functions in Data Science» (PDF de 12 págs., sin autoría) | Casi todo ya estaba en 7.3 y 14.3. Se añaden huecos en datos ordenados (`ffill`, `bfill`, `interpolate` y la fuga que provocan), `diff`, `pct_change`, `rank`, `idxmin`, `reindex`, `transform`, `explode`, `crosstab`, `unstack`, Parquet y `to_sql`, ocho trampas nuevas en la tabla de errores y la hoja visual «Pandas en una hoja». Corrige `resample("M")` de 14.3, que falla en pandas 3. Errores usados en E133 | 7.3 y 14.3; ejercicios E133–E134 |
 | «Git & GitHub Complete Quick Revision Notes» (@_coder_star, carrusel de 10 láminas que la propia publicación marca como «Contenido generado con IA») | Niveles de configuración, `git diff --staged`, ramas y remotos, *fork* frente a *clone*, `git bisect`, `git clean`, `.gitignore` con archivos ya seguidos, y la hoja visual «Git en una hoja» (figuras propias inspiradas en el formato de fichas); errores usados en E130 | 14.19 «Git y GitHub» y «Git a fondo»; ejercicios E130–E131 |
 | «AI Agent vs Agentic AI Notes» (APT AI, PDF de 5 págs. sin capa de texto, OCR con Tesseract) | Escala de autonomía con el flujo fijo, fallos encadenados y coste, formas de comunicación entre agentes, estado de las bibliotecas (AutoGen en modo mantenimiento) y la hoja «Agentes en una hoja»; errores usados en E132 | 14.19 «¿Agente, sistema agéntico o varios agentes?»; ejercicio E132 |

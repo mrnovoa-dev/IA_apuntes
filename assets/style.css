@@ -511,3 +511,15 @@
   .hoja .vocab small { color: var(--muted); font-size: .85rem; }
   .sv-tab { max-inline-size: 260px; }
 }
+
+/* ---------- Hoja de LLM: barras de probabilidad, caché KV y fases ---------- */
+@layer components {
+  .sv-barra { fill: color-mix(in oklab, var(--pen) 25%, var(--surface)); stroke: var(--pen); stroke-width: 1.5; }
+  .sv-barra-1 { fill: var(--pen); }
+  .sv-kv { fill: color-mix(in oklab, var(--pen) 30%, var(--surface)); stroke: var(--pen); stroke-width: 1; }
+  .sv-kv-nuevo { fill: var(--c-texto); stroke: var(--ink); stroke-width: 1.5; }
+  .sv-kvfig { max-inline-size: 460px; }
+  .flujo .pesos { display: inline-block; margin-inline-start: 4px; padding: 0 6px; border-radius: 4px; font-size: .78rem; font-weight: 700;
+    color: var(--c-ml); border: 1.5px solid var(--c-ml); }
+  .flujo .pesos.fijos { color: var(--c-visual); border-color: var(--c-visual); }
+}

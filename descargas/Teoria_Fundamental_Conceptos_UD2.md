@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E138 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E140 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -3590,6 +3590,98 @@ plt.show()
 
 **Conclusión**: se aprende primero Matplotlib (E23) para entender cómo se construye un gráfico, y después Seaborn para ganar rapidez en el análisis exploratorio (E26).
 
+#### Más allá de Matplotlib y Seaborn: ¿qué librería según dónde se vea el gráfico?
+
+Matplotlib y Seaborn hacen **imágenes**: sirven para un PDF, unos apuntes o un informe. Si el gráfico se va a ver en una **página web** y conviene hacer zoom o ver el valor de cada barra, hay librerías que generan gráficos **interactivos**. La pregunta útil no es cuál es mejor, sino **dónde se va a ver** el gráfico.
+
+<!-- hoja:graficos -->
+<section class="hoja" aria-labelledby="hoja-gr-t">
+<p class="hoja-titulo" id="hoja-gr-t">Gráficos en una hoja</p>
+<p class="hoja-nota">La pregunta no es qué librería es mejor, sino dónde se va a ver el gráfico.</p>
+<div class="hoja-grid">
+<div class="ficha ancha"><h5>¿Dónde se va a ver?</h5><dl class="vocab">
+<dt>En papel o en PDF</dt><dd>Matplotlib (y Seaborn para gráficos estadísticos). PNG con <code>dpi=300</code> o, mejor, PDF o SVG</dd><dt>Explorando datos en un cuaderno</dt><dd>Seaborn para ir rápido; Plotly si necesitas zoom o ver cada punto</dd><dt>En una web, con zoom y valores</dt><dd>Plotly o Altair; Bokeh es otra opción</dd><dt>En una web sencilla, sin JavaScript grande</dt><dd>Un SVG: Pygal (con valores al pasar el ratón) o el SVG de Matplotlib</dd><dt>Una aplicación con controles</dt><dd>Streamlit o Dash, que dibujan con estas mismas librerías</dd>
+</dl></div>
+<div class="ficha"><h5>Cuánto ocupa el mismo gráfico</h5><svg class="sv sv-tam" viewBox="0 0 370 240" role="img" aria-labelledby="gt-t gt-d"><title id="gt-t">Cuánto ocupa el mismo gráfico</title><desc id="gt-d">Lo que ocupa el mismo gráfico de barras: Altair (HTML) 2.2 KB, Plotly con cdn 8.4 KB, Pygal (SVG) 18.7 KB, Matplotlib SVG 24.6 KB, Seaborn PNG 45.4 KB, Matplotlib PNG 50.9 KB, Plotly completo 4711.2 KB.</desc><defs><marker id="gt-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="gt-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="gt-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="gt-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="gt-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><text x="124" y="29" class="sv-et" text-anchor="end">Altair (HTML)</text><rect x="132" y="16" width="45.6" height="18" rx="3" class="sv-barra"/><text x="183.642371147955" y="29" class="sv-et" text-anchor="start">2,2 KB</text><text x="124" y="59" class="sv-et" text-anchor="end">Plotly con cdn</text><rect x="132" y="46" width="65.4" height="18" rx="3" class="sv-barra"/><text x="203.42549572610397" y="59" class="sv-et" text-anchor="start">8,4 KB</text><text x="124" y="89" class="sv-et" text-anchor="end">Pygal (SVG)</text><rect x="132" y="76" width="77.2" height="18" rx="3" class="sv-barra"/><text x="215.24261462224098" y="89" class="sv-et" text-anchor="start">18,7 KB</text><text x="124" y="119" class="sv-et" text-anchor="end">Matplotlib SVG</text><rect x="132" y="106" width="81.3" height="18" rx="3" class="sv-barra"/><text x="219.29179364151491" y="119" class="sv-et" text-anchor="start">24,6 KB</text><text x="124" y="149" class="sv-et" text-anchor="end">Seaborn PNG</text><rect x="132" y="136" width="90.3" height="18" rx="3" class="sv-barra"/><text x="228.33989899714152" y="149" class="sv-et" text-anchor="start">45,4 KB</text><text x="124" y="179" class="sv-et" text-anchor="end">Matplotlib PNG</text><rect x="132" y="166" width="92.0" height="18" rx="3" class="sv-barra"/><text x="230.0284045994498" y="179" class="sv-et" text-anchor="start">50,9 KB</text><text x="124" y="209" class="sv-et" text-anchor="end">Plotly completo</text><rect x="132" y="196" width="158.9" height="18" rx="3" class="sv-barra-mala"/><text x="296.8864724045948" y="209" class="sv-et" text-anchor="start">4,7 MB</text><text x="132" y="232" class="sv-et" text-anchor="start">Escala logarítmica: cada marca es 10 veces más</text></svg><p class="ficha-pie">Medido con el código de abajo: Matplotlib 3.11, Plotly 7.1, Altair 6.3 y Pygal 3.1.</p></div>
+<div class="ficha"><h5>Vectorial o mapa de bits</h5><svg class="sv sv-tab" viewBox="0 0 260 130" role="img" aria-labelledby="gv-t gv-d"><title id="gv-t">Vectorial frente a mapa de bits</title><desc id="gv-d">El mismo círculo ampliado: en SVG el borde sigue siendo una línea limpia; en PNG se ven los cuadraditos de los píxeles.</desc><defs><marker id="gv-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="gv-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="gv-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="gv-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="gv-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><circle cx="62" cy="58" r="40" class="sv-vec"/><text x="62" y="122" class="sv-et" text-anchor="middle">SVG: nítido</text><rect x="188" y="8" width="10" height="10" class="sv-pix"/><rect x="198" y="8" width="10" height="10" class="sv-pix"/><rect x="168" y="18" width="10" height="10" class="sv-pix"/><rect x="178" y="18" width="10" height="10" class="sv-pix"/><rect x="188" y="18" width="10" height="10" class="sv-pix"/><rect x="198" y="18" width="10" height="10" class="sv-pix"/><rect x="208" y="18" width="10" height="10" class="sv-pix"/><rect x="218" y="18" width="10" height="10" class="sv-pix"/><rect x="158" y="28" width="10" height="10" class="sv-pix"/><rect x="168" y="28" width="10" height="10" class="sv-pix"/><rect x="218" y="28" width="10" height="10" class="sv-pix"/><rect x="228" y="28" width="10" height="10" class="sv-pix"/><rect x="158" y="38" width="10" height="10" class="sv-pix"/><rect x="228" y="38" width="10" height="10" class="sv-pix"/><rect x="148" y="48" width="10" height="10" class="sv-pix"/><rect x="158" y="48" width="10" height="10" class="sv-pix"/><rect x="228" y="48" width="10" height="10" class="sv-pix"/><rect x="238" y="48" width="10" height="10" class="sv-pix"/><rect x="148" y="58" width="10" height="10" class="sv-pix"/><rect x="158" y="58" width="10" height="10" class="sv-pix"/><rect x="228" y="58" width="10" height="10" class="sv-pix"/><rect x="238" y="58" width="10" height="10" class="sv-pix"/><rect x="158" y="68" width="10" height="10" class="sv-pix"/><rect x="228" y="68" width="10" height="10" class="sv-pix"/><rect x="158" y="78" width="10" height="10" class="sv-pix"/><rect x="168" y="78" width="10" height="10" class="sv-pix"/><rect x="218" y="78" width="10" height="10" class="sv-pix"/><rect x="228" y="78" width="10" height="10" class="sv-pix"/><rect x="168" y="88" width="10" height="10" class="sv-pix"/><rect x="178" y="88" width="10" height="10" class="sv-pix"/><rect x="188" y="88" width="10" height="10" class="sv-pix"/><rect x="198" y="88" width="10" height="10" class="sv-pix"/><rect x="208" y="88" width="10" height="10" class="sv-pix"/><rect x="218" y="88" width="10" height="10" class="sv-pix"/><rect x="188" y="98" width="10" height="10" class="sv-pix"/><rect x="198" y="98" width="10" height="10" class="sv-pix"/><text x="198" y="122" class="sv-et" text-anchor="middle">PNG: píxeles</text></svg><p class="ficha-pie"><b>SVG</b> y <b>PDF</b> guardan formas: se amplían sin perder nitidez y el texto se puede buscar. <b>PNG</b> guarda píxeles: va bien para fotos y mapas de calor con muchos puntos.</p></div>
+<div class="ficha ancha"><h5>¿Necesita internet al abrirlo?</h5><ul class="semaforo">
+<li class="ok"><code class="cmd">PNG, PDF y SVG de Matplotlib</code><span class="marca">✓ no</span><span class="que">todo va dentro del archivo</span></li><li class="medio"><code class="cmd">SVG de Pygal</code><span class="marca">⚠ en parte</span><span class="que">se ve sin internet, pero los valores al pasar el ratón cargan un script de kozea.github.io; con <code>js=[]</code> no lo pide</span></li><li class="ok"><code class="cmd">Plotly con write_html()</code><span class="marca">✓ no</span><span class="que">lleva dentro todo plotly.js: 4,7 MB</span></li><li class="no"><code class="cmd">Plotly con include_plotlyjs=&quot;cdn&quot;</code><span class="marca">✗ sí</span><span class="que">pesa 8 KB, pero descarga plotly.js de cdn.plot.ly al abrirlo</span></li><li class="no"><code class="cmd">HTML de Altair</code><span class="marca">✗ sí</span><span class="que">descarga Vega de cdn.jsdelivr.net al abrirlo</span></li>
+</ul><p class="ficha-pie">Cargar un script de otro servidor también le dice a ese servidor quién abre la página: en una web del centro, mejor que todo vaya dentro.</p></div>
+</div></section>
+<!-- /hoja:graficos -->
+
+| Librería | Qué produce | Interactiva | Va bien para | Ojo |
+|----------|-------------|-------------|--------------|-----|
+| **Matplotlib** | PNG, PDF, SVG | En la ventana de escritorio y en Jupyter con `%matplotlib widget` (paquete `ipympl`); el archivo guardado, no | Informes, apuntes, publicaciones; cambiar cualquier detalle | Mucho código para gráficos complejos |
+| **Seaborn** | Lo mismo (usa Matplotlib) | No | Gráficos estadísticos a partir de un DataFrame | Para retocar detalles hay que bajar a Matplotlib |
+| **Plotly** | HTML con JavaScript | Sí: zoom, paneo, valores, 3D | Explorar datos, webs, Dash y Streamlit | El HTML completo pesa 4,7 MB; la imagen estática necesita `kaleido` y Chrome |
+| **Altair** | Especificación Vega-Lite (JSON) y HTML | Sí, ligera | Explorar con código corto y declarativo | Da `MaxRowsError` con más de 5000 filas; el HTML carga Vega de internet |
+| **Pygal** | SVG | Sí, básica: valores al pasar el ratón, ocultar series | Gráficos vectoriales sencillos en una web | Los valores al pasar el ratón cargan un script de otro servidor |
+| **Bokeh** | HTML con JavaScript | Sí | Webs y paneles con muchos datos | No probado aquí |
+
+El mismo gráfico con las cinco primeras, para comparar. Plotly, Altair y Pygal están en Colab o se instalan con `pip`; lo que ocupa cada archivo depende de la versión (aquí: Matplotlib 3.11, Seaborn 0.13, Plotly 7.1, Altair 6.3, Pygal 3.1, noviembre de 2026):
+
+```python
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pygal                      # en Colab: !pip install pygal
+import plotly.express as px
+import altair as alt
+
+meses = ["sep", "oct", "nov", "dic", "ene"]
+prestamos = pd.DataFrame({"mes": meses * 2,
+                          "curso": ["1.º BAC"] * 5 + ["2.º BAC"] * 5,
+                          "libros": [40, 55, 62, 30, 48, 25, 31, 44, 20, 37]})
+
+# Matplotlib: control total de cada detalle; imagen o PDF
+fig, ax = plt.subplots(figsize=(6, 3.5))
+x = np.arange(len(meses))
+for i, (curso, g) in enumerate(prestamos.groupby("curso")):
+    ax.bar(x + (i - 0.5) * 0.4, g["libros"], width=0.4, label=curso)
+ax.set_xticks(x, meses); ax.set_title("Préstamos de la biblioteca"); ax.legend()
+fig.savefig("out/mpl.png", dpi=300)
+fig.savefig("out/mpl.svg")
+
+# Seaborn: lo mismo en una línea, a partir del DataFrame
+plt.figure(figsize=(6, 3.5))                                     # figura nueva: si no, dibuja encima
+sns.barplot(data=prestamos, x="mes", y="libros", hue="curso").figure.savefig("out/sns.png", dpi=300)
+
+# Pygal: SVG que muestra el valor al pasar el ratón
+barras = pygal.Bar(title="Préstamos de la biblioteca", x_labels=meses)
+for curso, g in prestamos.groupby("curso"):
+    barras.add(curso, g["libros"].tolist())
+barras.render_to_file("out/pygal.svg")
+
+# Plotly: página web con zoom, paneo y valores al pasar el ratón
+f = px.bar(prestamos, x="mes", y="libros", color="curso", barmode="group")
+f.write_html("out/plotly_completo.html")                         # lleva dentro todo plotly.js
+f.write_html("out/plotly_cdn.html", include_plotlyjs="cdn")      # lo descarga de internet al abrir
+
+# Altair: describe el gráfico (Vega-Lite) y el navegador lo dibuja
+alt.Chart(prestamos).mark_bar().encode(x="mes", y="libros", color="curso", xOffset="curso").save("out/altair.html")
+
+for nombre in sorted(os.listdir("out")):
+    print(f"{nombre:<21}{os.path.getsize('out/' + nombre) / 1024:>8.1f} KB")
+# altair.html               2.2 KB
+# mpl.png                  50.9 KB
+# mpl.svg                  24.6 KB
+# plotly_cdn.html           8.4 KB
+# plotly_completo.html   4711.2 KB
+# pygal.svg                18.7 KB
+# sns.png                  45.4 KB
+```
+
+Lo que no se ve en una tabla comparativa:
+
+- **El archivo de Plotly pesa 4,7 MB** porque lleva dentro toda la biblioteca plotly.js. Con `include_plotlyjs="cdn"` baja a 8 KB, pero entonces **necesita internet** para dibujarse.
+- **Altair y Pygal también cargan código de internet**: Altair, la biblioteca Vega desde cdn.jsdelivr.net; Pygal, el script de los valores al pasar el ratón desde kozea.github.io (con `pygal.Bar(js=[])` no lo pide y el SVG funciona sin conexión, sin esos valores). Cada carga le dice a ese servidor quién abre la página: en una web del centro conviene que todo vaya dentro.
+- **Altair se niega a pasar de 5000 filas** (`MaxRowsError`), porque mete todos los datos en el HTML. Se puede quitar el límite con `alt.data_transformers.disable_max_rows()`, pero es mejor resumir antes con Pandas: nadie distingue 50 000 puntos en un gráfico.
+- **SVG o PNG.** El SVG guarda formas y se amplía sin perder nitidez; el PNG guarda píxeles y va bien con muchísimos puntos o con fotos. Para que un SVG interactivo funcione en una web hay que insertarlo con `<object>`, `<embed>` o directamente en el HTML, no con `<img>`.
+- **Accesibilidad.** Cualquier gráfico necesita un texto alternativo que diga lo importante («En noviembre, 1.º BAC sacó 62 libros, el máximo») y colores que se distingan sin depender solo del color.
+
 #### scikit-learn frente a PyTorch
 
 | Aspecto | scikit-learn | PyTorch |
@@ -6490,6 +6582,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *RAG Cheat Sheet* (T. Khan, PDF de 24 págs. hecho con Canva; 12 de contenido y 12 de publicidad; texto con MarkItDown y código leído de las imágenes) | k, umbral y MMR, coseno frente a L2, estrategias *stuff*, *map-reduce* y *refine*, LangChain 1.x | 14.19 (RAG mejorado) y ejercicios E113–E114 |
 | *Python Module 9: Dictionaries* (@Mastercode.sagar, PDF escaneado de 16 págs., OCR con Tesseract y MarkItDown), chuleta «NumPy Complete Cheatsheet» (@thedataguy16, 11 láminas) y carrusel «12 Machine Learning Algorithms» (@code.withnarayan, 20 láminas, generado con IA) | Diccionarios a fondo, NumPy a fondo (difusión, vistas, trampas), fichas de árbol, Naive Bayes, SVM, boosting y jerárquico con figuras propias | 5.2, 7.1, [Algoritmos](algoritmos.html), ejercicios E115–E116 y A4–A5 |
 | «10 GitHub repos for AI/ML eng beginners» (@marina.wyss, PDF de 3 págs. hecho con Canva) | Diez repositorios revisados uno a uno (licencia, actividad en noviembre de 2026, traducciones, requisitos) | 14.16 |
+| «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |
 | «100 Most Used Pandas Functions in Data Science» (PDF de 12 págs., sin autoría) | Casi todo ya estaba en 7.3 y 14.3. Se añaden huecos en datos ordenados (`ffill`, `bfill`, `interpolate` y la fuga que provocan), `diff`, `pct_change`, `rank`, `idxmin`, `reindex`, `transform`, `explode`, `crosstab`, `unstack`, Parquet y `to_sql`, ocho trampas nuevas en la tabla de errores y la hoja visual «Pandas en una hoja». Corrige `resample("M")` de 14.3, que falla en pandas 3. Errores usados en E133 | 7.3 y 14.3; ejercicios E133–E134 |

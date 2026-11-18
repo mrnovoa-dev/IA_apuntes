@@ -718,6 +718,67 @@ def hoja_trocear():
     return "\n".join(h)
 
 
+# ---------- Librerías de gráficos ----------
+TAMANOS = [("Altair (HTML)", 2.2), ("Plotly con cdn", 8.4), ("Pygal (SVG)", 18.7), ("Matplotlib SVG", 24.6),
+           ("Seaborn PNG", 45.4), ("Matplotlib PNG", 50.9), ("Plotly completo", 4711.2)]
+
+
+def tamanos_svg():
+    import math
+    p = "gt"
+    b = ""
+    for i, (et, kb) in enumerate(TAMANOS):
+        y = 14 + 30 * i
+        w = 34 * math.log10(kb * 10)               # escala logarítmica: 0,1 KB → 0
+        b += texto(124, y + 15, et, "sv-et", "end")
+        b += f'<rect x="132" y="{y + 2}" width="{w:.1f}" height="18" rx="3" class="{"sv-barra-mala" if kb > 1000 else "sv-barra"}"/>'
+        etiqueta = f"{kb:,.1f} KB".replace(",", " ").replace(".", ",") if kb < 1000 else "4,7 MB"
+        b += texto(138 + w, y + 15, etiqueta, "sv-et", "start")
+    b += texto(132, 232, "Escala logarítmica: cada marca es 10 veces más", "sv-et", "start")
+    desc = "Lo que ocupa el mismo gráfico de barras: " + ", ".join(f"{e} {k} KB" for e, k in TAMANOS) + "."
+    return svg(p, "0 0 370 240", "Cuánto ocupa el mismo gráfico", desc, b, "sv-tam")
+
+
+def vector_svg():
+    p = "gv"
+    b = '<circle cx="62" cy="58" r="40" class="sv-vec"/>' + texto(62, 122, "SVG: nítido", "sv-et")
+    pts = []
+    for yy in range(8, 108, 10):                     # cuadrícula centrada en (198, 58)
+        for xx in range(148, 248, 10):
+            d = ((xx + 5 - 198) ** 2 + (yy + 5 - 58) ** 2) ** 0.5
+            if 34 <= d <= 46:
+                pts.append(f'<rect x="{xx}" y="{yy}" width="10" height="10" class="sv-pix"/>')
+    b += "".join(pts) + texto(198, 122, "PNG: píxeles", "sv-et")
+    return svg(p, "0 0 260 130", "Vectorial frente a mapa de bits",
+               "El mismo círculo ampliado: en SVG el borde sigue siendo una línea limpia; en PNG se ven los cuadraditos de los píxeles.", b, "sv-tab")
+
+
+def hoja_graficos():
+    donde = [("En papel o en PDF", "Matplotlib (y Seaborn para gráficos estadísticos). PNG con <code>dpi=300</code> o, mejor, PDF o SVG"),
+             ("Explorando datos en un cuaderno", "Seaborn para ir rápido; Plotly si necesitas zoom o ver cada punto"),
+             ("En una web, con zoom y valores", "Plotly o Altair; Bokeh es otra opción"),
+             ("En una web sencilla, sin JavaScript grande", "Un SVG: Pygal (con valores al pasar el ratón) o el SVG de Matplotlib"),
+             ("Una aplicación con controles", "Streamlit o Dash, que dibujan con estas mismas librerías")]
+    internet = [("ok", "✓ no", "PNG, PDF y SVG de Matplotlib", "todo va dentro del archivo"),
+                ("medio", "⚠ en parte", "SVG de Pygal", "se ve sin internet, pero los valores al pasar el ratón cargan un script de kozea.github.io; con <code>js=[]</code> no lo pide"),
+                ("ok", "✓ no", "Plotly con write_html()", "lleva dentro todo plotly.js: 4,7 MB"),
+                ("no", "✗ sí", "Plotly con include_plotlyjs=\"cdn\"", "pesa 8 KB, pero descarga plotly.js de cdn.plot.ly al abrirlo"),
+                ("no", "✗ sí", "HTML de Altair", "descarga Vega de cdn.jsdelivr.net al abrirlo")]
+    h = ['<section class="hoja" aria-labelledby="hoja-gr-t">',
+         '<p class="hoja-titulo" id="hoja-gr-t">Gráficos en una hoja</p>',
+         '<p class="hoja-nota">La pregunta no es qué librería es mejor, sino dónde se va a ver el gráfico.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>¿Dónde se va a ver?</h5><dl class="vocab">',
+         "".join(f"<dt>{a}</dt><dd>{b}</dd>" for a, b in donde), '</dl></div>',
+         f'<div class="ficha"><h5>Cuánto ocupa el mismo gráfico</h5>{tamanos_svg()}<p class="ficha-pie">Medido con el código de abajo: Matplotlib 3.11, Plotly 7.1, Altair 6.3 y Pygal 3.1.</p></div>',
+         f'<div class="ficha"><h5>Vectorial o mapa de bits</h5>{vector_svg()}<p class="ficha-pie"><b>SVG</b> y <b>PDF</b> guardan formas: se amplían sin perder nitidez y el texto se puede buscar. <b>PNG</b> guarda píxeles: va bien para fotos y mapas de calor con muchos puntos.</p></div>',
+         '<div class="ficha ancha"><h5>¿Necesita internet al abrirlo?</h5><ul class="semaforo">',
+         "".join(f'<li class="{c}"><code class="cmd">{escape(o)}</code><span class="marca">{m}</span><span class="que">{q}</span></li>' for c, m, o, q in internet),
+         '</ul><p class="ficha-pie">Cargar un script de otro servidor también le dice a ese servidor quién abre la página: en una web del centro, mejor que todo vaya dentro.</p></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -733,6 +794,7 @@ if __name__ == "__main__":
     t = insertar(t, "pandas", hoja_pandas())
     t = insertar(t, "slm", hoja_slm())
     t = insertar(t, "trocear", hoja_trocear())
+    t = insertar(t, "graficos", hoja_graficos())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

@@ -538,3 +538,19 @@
   .trozo.t1 { background: color-mix(in oklab, var(--c-texto) 24%, var(--surface)); }
   .trozo.t2 { background: color-mix(in oklab, var(--c-visual) 30%, var(--surface)); }
 }
+
+/* ---------- Hoja de gráficos ---------- */
+@layer components {
+  .sv-tam { max-inline-size: 420px; }
+  .sv-barra-mala { fill: color-mix(in oklab, var(--red) 35%, var(--surface)); stroke: var(--red); stroke-width: 1.5; }
+  .sv-vec { fill: none; stroke: var(--pen); stroke-width: 6; }
+  .sv-pix { fill: var(--pen); }
+  .hoja .semaforo code.cmd::before { content: none; }
+}
+@layer components {
+  @container (inline-size < 480px) {
+    .vocab { grid-template-columns: 1fr; gap: 0; }
+    .vocab dt { border-block-end: 0; padding-block-end: 0; }
+    .vocab dd { padding-block-start: 0; margin-block-end: 6px; }
+  }
+}

@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E136 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E138 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -5272,6 +5272,108 @@ TF-IDF solo encuentra **palabras iguales** («préstamos» con «préstamos»); 
 
 Se suele empezar por el prompt, añadir RAG si faltan datos y dejar el ajuste fino para el final. Se pueden combinar.
 
+**Tres formas de alucinar, y qué hacer con cada una.**
+
+| Tipo | Ejemplo en el instituto | Qué ayuda |
+|------|------------------------|-----------|
+| **Dato falso** | «El plazo de matrícula termina el 30 de junio» (era el 15) | Darle el documento (RAG) y pedir que cite de dónde lo saca |
+| **Fuente o cita inventada** | Un artículo de la LOMLOE que no existe, o un libro con autor y título inventados | Comprobar cada referencia; pedir que diga «no lo sé» si no la encuentra |
+| **Contradicción** | Dice que la biblioteca abre por la tarde y, dos respuestas después, que no | Pedir respuestas cortas que se puedan revisar; volver a preguntar y comparar |
+
+El ajuste fino **no** es buena manera de enseñarle datos nuevos. Sirve para el estilo, el formato o una tarea concreta. Un estudio de Google de 2024 (Gekhman y otros) encontró que ajustar un modelo con hechos que no conocía **aumenta** las alucinaciones. Para datos, mejor RAG. Y las tablas de «tasa de alucinación» miden una tarea concreta: por ejemplo, la de Vectara mide si un modelo inventa al **resumir un documento que se le da**, no si acierta preguntas generales.
+
+#### Modelos pequeños y locales: cuantizar, destilar y usarlos en tu ordenador
+
+Un **modelo de lenguaje pequeño** (*SLM*, *small language model*) es un LLM con pocos parámetros. No hay una frontera oficial: en 2026 se suele llamar pequeño a lo que va de unos cientos de millones a unos **10 000 millones** de parámetros, frente a los cientos de miles de millones de los grandes. Lo que los hace pequeños es el **número de parámetros**, no los datos: muchos se entrenan con billones de tokens, a menudo elegidos con más cuidado o generados por un modelo grande.
+
+<!-- hoja:slm -->
+<section class="hoja" aria-labelledby="hoja-slm-t">
+<p class="hoja-titulo" id="hoja-slm-t">Modelos pequeños en una hoja</p>
+<div class="hoja-grid">
+<div class="ficha ancha"><h5>Cuánto ocupa un modelo de 8000 millones de parámetros</h5><svg class="sv sv-memoria sv-h" viewBox="0 0 590 222" role="img" aria-labelledby="sm-t sm-d"><title id="sm-t">Memoria de un modelo de 8000 millones de parámetros</title><desc id="sm-d">Solo los pesos: 32 GB con 32 bits, 16 GB con 16 bits, 8 GB con 8 bits y 4 GB con 4 bits. Solo la versión de 4 bits deja sitio en un portátil de 8 GB.</desc><defs><marker id="sm-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="sm-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="sm-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="sm-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="sm-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><path d="M40,196 H460" class="sv-llave"/><rect x="70" y="29.599999999999994" width="56" height="166.4" rx="3" class="sv-barra"/><text x="98" y="23.599999999999994" class="sv-et" text-anchor="middle">32 GB</text><text x="98" y="214" class="sv-ord" text-anchor="middle">32 bits</text><rect x="170" y="112.8" width="56" height="83.2" rx="3" class="sv-barra"/><text x="198" y="106.8" class="sv-et" text-anchor="middle">16 GB</text><text x="198" y="214" class="sv-ord" text-anchor="middle">16 bits</text><rect x="270" y="154.4" width="56" height="41.6" rx="3" class="sv-barra-1"/><text x="298" y="148.4" class="sv-et" text-anchor="middle">8 GB</text><text x="298" y="214" class="sv-ord" text-anchor="middle">8 bits</text><rect x="370" y="175.2" width="56" height="20.8" rx="3" class="sv-barra-1"/><text x="398" y="169.2" class="sv-et" text-anchor="middle">4 GB</text><text x="398" y="214" class="sv-ord" text-anchor="middle">4 bits</text><path d="M40,154.4 H468" class="sv-l-rojo"/><text x="474" y="150.4" class="sv-et sv-et-no" text-anchor="start">8 GB de RAM:</text><text x="474" y="166.4" class="sv-et sv-et-no" text-anchor="start">portátil sencillo</text></svg><svg class="sv sv-v" viewBox="0 0 300 228" role="img" aria-labelledby="smv-t smv-d"><title id="smv-t">Memoria de un modelo de 8000 millones de parámetros</title><desc id="smv-d">Solo los pesos: 32 GB con 32 bits, 16 GB con 16 bits, 8 GB con 8 bits y 4 GB con 4 bits. Solo la versión de 4 bits deja sitio en un portátil de 8 GB.</desc><defs><marker id="smv-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="smv-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="smv-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="smv-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="smv-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><path d="M10,176 H290" class="sv-llave"/><rect x="22" y="28.80000000000001" width="46" height="147.2" rx="3" class="sv-barra"/><text x="45" y="22.80000000000001" class="sv-et" text-anchor="middle">32 GB</text><text x="45" y="194" class="sv-ord" text-anchor="middle">32 bits</text><rect x="92" y="102.4" width="46" height="73.6" rx="3" class="sv-barra"/><text x="115" y="96.4" class="sv-et" text-anchor="middle">16 GB</text><text x="115" y="194" class="sv-ord" text-anchor="middle">16 bits</text><rect x="162" y="139.2" width="46" height="36.8" rx="3" class="sv-barra-1"/><text x="185" y="133.2" class="sv-et" text-anchor="middle">8 GB</text><text x="185" y="194" class="sv-ord" text-anchor="middle">8 bits</text><rect x="232" y="157.6" width="46" height="18.4" rx="3" class="sv-barra-1"/><text x="255" y="151.6" class="sv-et" text-anchor="middle">4 GB</text><text x="255" y="194" class="sv-ord" text-anchor="middle">4 bits</text><path d="M10,139.2 H290" class="sv-l-rojo"/><text x="150" y="218" class="sv-et sv-et-no" text-anchor="middle">Línea roja: 8 GB de RAM (portátil sencillo)</text></svg><p class="ficha-pie">Solo los pesos; el contexto ocupa más. Con 4 bits cabe en un portátil; con 16, no.</p></div>
+<div class="ficha ancha"><h5>Tres formas de encoger un modelo</h5><div class="ramas">
+<figure><svg class="sv sv-tab" viewBox="0 0 200 112" role="img" aria-labelledby="sedes-t sedes-d"><title id="sedes-t">destilar</title><desc id="sedes-d">Un modelo grande, el profesor, enseña a uno pequeño, el alumno, que aprende a imitar sus respuestas.</desc><defs><marker id="sedes-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="sedes-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="sedes-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="sedes-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="sedes-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><circle cx="50" cy="55" r="38" class="sv-n-rama"/><text x="50" y="59" class="sv-n-txt" text-anchor="middle">profesor</text><circle cx="166" cy="55" r="27" class="sv-n-main"/><text x="166" y="59" class="sv-n-txt" text-anchor="middle">alumno</text><path d="M92,55 H134" class="sv-l-ml" marker-end="url(#sedes-ml)"/><text x="113" y="46" class="sv-et" text-anchor="middle">imita</text></svg><figcaption><b>Destilar.</b> Un modelo pequeño aprende a imitar a uno grande.</figcaption></figure>
+<figure><svg class="sv sv-tab" viewBox="0 0 200 112" role="img" aria-labelledby="secua-t secua-d"><title id="secua-t">cuantizar</title><desc id="secua-d">Tres pesos decimales se guardan como enteros pequeños, 13, menos 5 y 9, multiplicados por una escala común.</desc><defs><marker id="secua-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="secua-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="secua-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="secua-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="secua-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><text x="100" y="34" class="sv-ord" text-anchor="middle">0,02137  −0,00841  0,01502</text><path d="M100,44 V64" class="sv-l-pen" marker-end="url(#secua-pen)"/><text x="100" y="86" class="sv-ord sv-ord-vuelta" text-anchor="middle">13   −5   9</text><text x="100" y="104" class="sv-et" text-anchor="middle">× escala 0,00164</text></svg><figcaption><b>Cuantizar.</b> Cada peso, con menos bits.</figcaption></figure>
+<figure><svg class="sv sv-tab" viewBox="0 0 200 112" role="img" aria-labelledby="sepod-t sepod-d"><title id="sepod-t">podar</title><desc id="sepod-d">Una red con nueve conexiones de las que se quitan cuatro, las que menos aportan.</desc><defs><marker id="sepod-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="sepod-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="sepod-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="sepod-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="sepod-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><path d="M36,20 L164,20" class="sv-r-main"/><path d="M36,20 L164,55" class="sv-r-main"/><path d="M36,20 L164,90" class="sv-r-tenue"/><path d="M36,55 L164,20" class="sv-r-tenue"/><path d="M36,55 L164,55" class="sv-r-main"/><path d="M36,55 L164,90" class="sv-r-main"/><path d="M36,90 L164,20" class="sv-r-main"/><path d="M36,90 L164,55" class="sv-r-tenue"/><path d="M36,90 L164,90" class="sv-r-tenue"/><circle cx="30" cy="20" r="8" class="sv-n-main"/><circle cx="170" cy="20" r="8" class="sv-n-main"/><circle cx="30" cy="55" r="8" class="sv-n-main"/><circle cx="170" cy="55" r="8" class="sv-n-main"/><circle cx="30" cy="90" r="8" class="sv-n-main"/><circle cx="170" cy="90" r="8" class="sv-n-main"/></svg><figcaption><b>Podar.</b> Quitar las conexiones que menos aportan.</figcaption></figure>
+</div></div>
+<div class="ficha"><h5>¿En tu ordenador o en la nube?</h5><div class="vs">
+<div><b>Modelo local</b><ul><li>Las preguntas no salen del centro</li><li>Gratis después de descargarlo</li><li>Funciona sin internet</li><li>Sabe menos y alucina más</li></ul></div>
+<div><b>Servicio en la nube</b><ul><li>Más capaz y rápido</li><li>Cuenta y edad mínima (18 en las API)</li><li>Se paga por token</li><li>Los datos salen a otra empresa</li></ul></div>
+</div></div>
+<div class="ficha"><h5>Probarlo en clase</h5><ol class="flujo">
+<li><span class="paso">Elegir un modelo de 1000 a 4000 millones</span>y leer su licencia</li>
+<li><span class="paso">Instalar Ollama o LM Studio</span>lo hace antes el profesor</li>
+<li><span class="paso">Ejecutarlo</span><code class="cmd">ollama run llama3.2:3b</code></li>
+<li><span class="paso">Ponerlo a prueba</span>preguntas del centro, en gallego, y anotar los errores</li>
+</ol></div>
+</div></section>
+<!-- /hoja:slm -->
+
+**Por qué importan en clase.** Un modelo pequeño **se ejecuta en tu ordenador**: las preguntas no salen del centro, no hay que crear cuentas, no cuesta dinero por uso y funciona sin internet. Es la forma de trabajar con modelos de lenguaje con menores de edad, porque las API comerciales exigen **18 años**. Pero sabe menos, se equivoca más en preguntas difíciles y en un portátil va más despacio.
+
+**Cuánta memoria hace falta.** Los pesos ocupan **parámetros × bytes por parámetro**. Con 16 bits (2 bytes), un modelo de 8000 millones necesita 16 GB solo para los pesos, más lo que ocupe el contexto ([caché KV](ud4-lenguaje.html#1010-el-transformer-por-dentro)):
+
+```python
+# Memoria solo para los pesos: parámetros × bytes por parámetro (sin contar el contexto)
+bytes_por = {"32 bits": 4, "16 bits": 2, "8 bits": 1, "4 bits": 0.5}
+print("miles de millones" + "".join(f"{k:>10}" for k in bytes_por))
+for n in [1, 3, 8, 70]:                               # n mil millones de parámetros
+    print(f"{n:>16} " + "".join(f"{n * b:>7.1f} GB" for b in bytes_por.values()))
+# miles de millones   32 bits   16 bits    8 bits    4 bits
+#                1     4.0 GB    2.0 GB    1.0 GB    0.5 GB
+#                3    12.0 GB    6.0 GB    3.0 GB    1.5 GB
+#                8    32.0 GB   16.0 GB    8.0 GB    4.0 GB
+#               70   280.0 GB  140.0 GB   70.0 GB   35.0 GB
+```
+
+**Cómo se hacen pequeños.**
+
+| Técnica | Qué hace | Coste |
+|---------|----------|-------|
+| **Destilación** | Un modelo grande (el «profesor») genera respuestas o probabilidades y uno pequeño (el «alumno») aprende a imitarlas | Hay que entrenar el alumno |
+| **Cuantización** | Guarda cada peso con menos bits: enteros de 8 o 4 bits en vez de decimales de 16 | Algo de precisión; casi nada con 8 bits |
+| **Poda** | Quita las conexiones o capas que menos aportan | Suele requerir reentrenar un poco |
+
+La cuantización es la que más se usa al descargar un modelo. Así funciona por dentro:
+
+```python
+import numpy as np
+
+rng = np.random.default_rng(1)
+w = rng.normal(0, 0.02, 10_000).astype(np.float32)     # pesos de una capa (inventados)
+
+def cuantizar(w, bits):
+    maximo = 2 ** (bits - 1) - 1                      # 127 con 8 bits, 7 con 4 bits
+    escala = np.abs(w).max() / maximo                 # un solo número para todo el bloque
+    q = np.round(w / escala).astype(np.int8)          # lo que se guarda: enteros pequeños
+    return q * escala                                 # lo que se usa al calcular
+
+for bits in [8, 4]:
+    error = np.abs(cuantizar(w, bits) - w).mean() / np.abs(w).mean()
+    print(f"{bits} bits: error medio {error:.1%} · ocupa {w.size * bits // 8:,} bytes en vez de {w.nbytes:,}")
+
+w_raro = w.copy(); w_raro[0] = 1.0                    # un solo peso enorme…
+error = np.abs(cuantizar(w_raro, 4)[1:] - w_raro[1:]).mean() / np.abs(w_raro[1:]).mean()
+print(f"4 bits con un peso atípico: error medio {error:.1%}")
+bloques = np.concatenate([cuantizar(b, 4) for b in np.split(w_raro, range(32, w_raro.size, 32))])
+error = np.abs(bloques[1:] - w_raro[1:]).mean() / np.abs(w_raro[1:]).mean()
+print(f"4 bits por bloques de 32: error medio {error:.1%}")
+# 8 bits: error medio 1.0% · ocupa 10,000 bytes en vez de 40,000
+# 4 bits: error medio 17.7% · ocupa 5,000 bytes en vez de 40,000
+# 4 bits con un peso atípico: error medio 100.0%
+# 4 bits por bloques de 32: error medio 10.5%
+```
+
+Con 8 bits el error es pequeño; con 4 bits, mucho mayor, y **un solo peso atípico** lo estropea todo, porque obliga a usar una escala enorme y los pesos normales se redondean a 0. Por eso los formatos reales cuantizan **por bloques** pequeños, cada uno con su propia escala (y guardan esas escalas, que también ocupan). Los nombres como `Q4_K_M` o `Q8_0` de los archivos GGUF indican los bits y la forma de agrupar. Un modelo de 8000 millones en `Q4_K_M` ocupa unos 5 GB y cabe en un portátil con 16 GB de RAM.
+
+**Cómo probarlo.** Estado en noviembre de 2026; los nombres cambian cada pocos meses:
+
+- **Ollama** (línea de órdenes y una API local compatible con la de OpenAI), **LM Studio** (aplicación con ventanas, sin terminal) o **llama.cpp** (el motor que usan muchas otras). Ejemplo: `ollama run llama3.2:3b`.
+- Modelos pequeños abiertos frecuentes: Llama 3.2 (1000 y 3000 millones), Gemma 3 (1000 y 4000 millones), Phi-4-mini (3800 millones), Qwen 3 (de 600 millones a 8000 millones) y SmolLM. Algunos tienen licencia libre (Apache 2.0, MIT) y otros una licencia propia que hay que leer y aceptar.
+- En el aula, lo instala y lo prueba antes el profesor. Se comprueba qué responde a preguntas del centro (y en gallego, donde los pequeños fallan más) y cuántos tokens por segundo da el ordenador.
+
+Un modelo pequeño también **alucina**, y más que uno grande. Si le das los documentos con [RAG](#rag-paso-a-paso), mejora mucho en preguntas sobre ellos.
+
 #### Llamada a funciones, herramientas y agentes
 
 Un LLM solo produce texto. Para **hacer** cosas, la aplicación le describe unas **herramientas** (nombre, para qué sirven, qué parámetros piden) y el modelo responde con un JSON que dice **qué herramienta usar y con qué datos**. Es el programa, no el modelo, quien la ejecuta y le devuelve el resultado.
@@ -5317,7 +5419,7 @@ Un **agente** repite este ciclo varias veces hasta cumplir un objetivo: **pensar
 
 Los modelos **multimodales** trabajan con varios tipos de datos a la vez: texto, imagen, audio, vídeo o documentos escaneados. La idea técnica es la misma que en el resto de la sección: cada tipo de dato se convierte en vectores (*embeddings*) en un **espacio común**, de forma que la foto de un gato y la frase «un gato» queden cerca (es lo que hace CLIP). Usos: explicar un gráfico, transcribir y resumir una clase, leer un formulario escaneado (OCR, UD3) o describir una imagen a una persona ciega. Retos: más cálculo, más datos para entrenar, alucinaciones también sobre lo que «ve» y **privacidad** si las imágenes muestran personas o documentos personales.
 
-Los ejercicios E42–E46 de la página de [ejercicios](ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46-y-e135e136) practican todo esto en Python.
+Los ejercicios E42–E46 de la página de [ejercicios](ejercicios.html#bloque-h--ia-generativa-por-dentro-con-python-e42e46-y-e135e138) practican todo esto en Python.
 
 ---
 
@@ -6388,6 +6490,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *RAG Cheat Sheet* (T. Khan, PDF de 24 págs. hecho con Canva; 12 de contenido y 12 de publicidad; texto con MarkItDown y código leído de las imágenes) | k, umbral y MMR, coseno frente a L2, estrategias *stuff*, *map-reduce* y *refine*, LangChain 1.x | 14.19 (RAG mejorado) y ejercicios E113–E114 |
 | *Python Module 9: Dictionaries* (@Mastercode.sagar, PDF escaneado de 16 págs., OCR con Tesseract y MarkItDown), chuleta «NumPy Complete Cheatsheet» (@thedataguy16, 11 láminas) y carrusel «12 Machine Learning Algorithms» (@code.withnarayan, 20 láminas, generado con IA) | Diccionarios a fondo, NumPy a fondo (difusión, vistas, trampas), fichas de árbol, Naive Bayes, SVM, boosting y jerárquico con figuras propias | 5.2, 7.1, [Algoritmos](algoritmos.html), ejercicios E115–E116 y A4–A5 |
 | «10 GitHub repos for AI/ML eng beginners» (@marina.wyss, PDF de 3 págs. hecho con Canva) | Diez repositorios revisados uno a uno (licencia, actividad en noviembre de 2026, traducciones, requisitos) | 14.16 |
+| «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |
 | «100 Most Used Pandas Functions in Data Science» (PDF de 12 págs., sin autoría) | Casi todo ya estaba en 7.3 y 14.3. Se añaden huecos en datos ordenados (`ffill`, `bfill`, `interpolate` y la fuga que provocan), `diff`, `pct_change`, `rank`, `idxmin`, `reindex`, `transform`, `explode`, `crosstab`, `unstack`, Parquet y `to_sql`, ocho trampas nuevas en la tabla de errores y la hoja visual «Pandas en una hoja». Corrige `resample("M")` de 14.3, que falla en pandas 3. Errores usados en E133 | 7.3 y 14.3; ejercicios E133–E134 |
 | «Git & GitHub Complete Quick Revision Notes» (@_coder_star, carrusel de 10 láminas que la propia publicación marca como «Contenido generado con IA») | Niveles de configuración, `git diff --staged`, ramas y remotos, *fork* frente a *clone*, `git bisect`, `git clean`, `.gitignore` con archivos ya seguidos, y la hoja visual «Git en una hoja» (figuras propias inspiradas en el formato de fichas); errores usados en E130 | 14.19 «Git y GitHub» y «Git a fondo»; ejercicios E130–E131 |
@@ -7078,6 +7181,67 @@ for t in trocear(norma):
 ```
 
 En la práctica se trocea por párrafos o frases (sin cortar a mitad) con unos cientos de *tokens* por trozo, y se guarda de qué documento y página sale cada uno para poder **citarlo**.
+
+**Formas de trocear.** El troceo por número de caracteres es el más sencillo, pero corta palabras y frases. Comparado con dos alternativas:
+
+<!-- hoja:trocear -->
+<section class="hoja" aria-labelledby="hoja-tro-t">
+<p class="hoja-titulo" id="hoja-tro-t">El mismo texto, troceado de tres formas</p>
+<div class="hoja-grid"><div class="ficha ancha">
+<div class="trozos-fila"><p class="trozos-nombre"><b>Fijo, 60 caracteres</b> · 4 trozos · parte «Quen», «unha» y «biblioteca»</p><p class="trozos"><span class="trozo t0"><b>1</b>Os préstamos duran quince días. Pódense renovar unha vez. ⏎  ⏎ Q</span><span class="trozo t1"><b>2</b>uen devolva tarde un libro non poderá levar outro durante un</span><span class="trozo t2"><b>3</b>ha semana. Os dicionarios só se consultan na sala. ⏎  ⏎ A biblio</span><span class="trozo t0"><b>4</b>teca abre no recreo e pola tarde, de 16:00 a 18:00.</span></p></div><div class="trozos-fila"><p class="trozos-nombre"><b>Por frases, hasta 110</b> · 3 trozos · frases enteras, pero junta dos de párrafos distintos</p><p class="trozos"><span class="trozo t0"><b>1</b>Os préstamos duran quince días. Pódense renovar unha vez.</span><span class="trozo t1"><b>2</b>Quen devolva tarde un libro non poderá levar outro durante unha semana.</span><span class="trozo t2"><b>3</b>Os dicionarios só se consultan na sala. A biblioteca abre no recreo e pola tarde, de 16:00 a 18:00.</span></p></div><div class="trozos-fila"><p class="trozos-nombre"><b>Recursivo, hasta 110</b> · 4 trozos · respeta los párrafos; si no caben, corta por frases</p><p class="trozos"><span class="trozo t0"><b>1</b>Os préstamos duran quince días. Pódense renovar unha vez.</span><span class="trozo t1"><b>2</b>Quen devolva tarde un libro non poderá levar outro durante unha semana.</span><span class="trozo t2"><b>3</b>Os dicionarios só se consultan na sala.</span><span class="trozo t0"><b>4</b>A biblioteca abre no recreo e pola tarde, de 16:00 a 18:00.</span></p></div>
+<p class="ficha-pie">Cada color es un trozo; ⏎ marca un salto de párrafo. Es la salida real del código de abajo.</p></div></div></section>
+<!-- /hoja:trocear -->
+
+```python
+import re
+
+normas = ("Os préstamos duran quince días. Pódense renovar unha vez.\n\n"
+          "Quen devolva tarde un libro non poderá levar outro durante unha semana. "
+          "Os dicionarios só se consultan na sala.\n\n"
+          "A biblioteca abre no recreo e pola tarde, de 16:00 a 18:00.")
+
+def fijo(texto, n=60):                        # cada n caracteres, corte donde caiga
+    return [texto[i:i + n] for i in range(0, len(texto), n)]
+
+def por_frases(texto, maximo=110):            # frases enteras, agrupadas hasta un tamaño
+    frases = re.split(r"(?<=[.!?])\s+", texto.replace("\n", " "))
+    trozos, actual = [], ""
+    for f in frases:
+        if actual and len(actual) + 1 + len(f) > maximo:
+            trozos.append(actual); actual = f
+        else:
+            actual = f"{actual} {f}".strip()
+    return trozos + [actual]
+
+def recursivo(texto, maximo=110, seps=(r"\n\n", r"(?<=[.!?]) ", " ")):  # párrafos, luego frases, luego palabras
+    if len(texto) <= maximo or not seps:
+        return [texto.strip()]
+    trozos = []
+    for parte in re.split(seps[0], texto):
+        trozos += recursivo(parte, maximo, seps[1:])
+    return [t for t in trozos if t]
+
+def corta_palabras(trozos, texto):             # ¿aparece algún trozo de palabra que no existe en el texto?
+    palabras = set(re.findall(r"\w+", texto))
+    return any(p not in palabras for t in trozos for p in re.findall(r"\w+", t))
+
+for nombre, f in [("fijo", fijo), ("por frases", por_frases), ("recursivo", recursivo)]:
+    t = f(normas)
+    print(f"{nombre}: {len(t)} trozos · corta palabras: {corta_palabras(t, normas)} · primero: {t[0]!r}")
+# fijo: 4 trozos · corta palabras: True · primero: 'Os préstamos duran quince días. Pódense renovar unha vez.\n\nQ'
+# por frases: 3 trozos · corta palabras: False · primero: 'Os préstamos duran quince días. Pódense renovar unha vez.'
+# recursivo: 4 trozos · corta palabras: False · primero: 'Os préstamos duran quince días. Pódense renovar unha vez.'
+```
+
+| Estrategia | Cómo corta | Cuándo |
+|------------|-----------|--------|
+| **Fijo** | Cada *n* caracteres o tokens, caiga donde caiga | Para empezar; con solapamiento para no perder lo partido |
+| **Por frases** | Frases enteras, juntando varias hasta un tamaño máximo | Textos corridos: normas, apuntes |
+| **Recursivo** | Primero por párrafos; si un párrafo es muy largo, por frases; si no, por palabras | La opción por defecto de muchas bibliotecas (LangChain) |
+| **Semántico** | Calcula *embeddings* de cada frase y corta donde **cambia el tema**: donde dos frases seguidas se parecen poco | Documentos que mezclan temas sin títulos claros; más caro |
+| **Por estructura** | Por títulos, secciones, filas de una tabla o etiquetas HTML | Documentos con estructura: un reglamento con artículos |
+
+Algunas guías llaman «troceado semántico» a cortar por frases, pero no es lo mismo: cortar por frases solo mira la puntuación, y el semántico mira el **significado**.
 
 **Reordenación (*reranking*).** La búsqueda con *embeddings* es rápida porque compara vectores calculados por separado para la pregunta y para cada trozo; por eso a veces se equivoca en el orden. La solución habitual es en dos pasos: recuperar rápido unos 20 candidatos y **reordenarlos** con un modelo más lento y preciso (un *cross-encoder*) que lee la pregunta y cada trozo **juntos**; al modelo de lenguaje solo se le pasan los 3–5 mejores.
 

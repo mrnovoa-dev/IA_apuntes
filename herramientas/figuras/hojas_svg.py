@@ -580,6 +580,144 @@ def hoja_llm():
     return "\n".join(h)
 
 
+# ---------- Modelos pequeños (SLM) ----------
+def memoria_svg():
+    p = "sm"
+    datos = [("32 bits", 32), ("16 bits", 16), ("8 bits", 8), ("4 bits", 4)]
+    esc = 5.2                                   # px por GB
+    base = 196
+    b = f'<path d="M40,{base} H460" class="sv-llave"/>'
+    for i, (et, gb) in enumerate(datos):
+        x = 70 + 100 * i
+        h = gb * esc
+        b += f'<rect x="{x}" y="{base - h}" width="56" height="{h}" rx="3" class="{"sv-barra-1" if gb <= 8 else "sv-barra"}"/>'
+        b += texto(x + 28, base - h - 6, f"{gb} GB", "sv-et")
+        b += texto(x + 28, base + 18, et, "sv-ord")
+    y8 = base - 8 * esc
+    b += f'<path d="M40,{y8} H468" class="sv-l-rojo"/>' + texto(474, y8 - 4, "8 GB de RAM:", "sv-et sv-et-no", "start")
+    b += texto(474, y8 + 12, "portátil sencillo", "sv-et sv-et-no", "start")
+    return svg(p, "0 0 590 222", "Memoria de un modelo de 8000 millones de parámetros", MEM_DESC, b, "sv-memoria sv-h")
+
+
+MEM_DESC = ("Solo los pesos: 32 GB con 32 bits, 16 GB con 16 bits, 8 GB con 8 bits y 4 GB con 4 bits. "
+            "Solo la versión de 4 bits deja sitio en un portátil de 8 GB.")
+
+
+def memoria_v():
+    p = "smv"
+    esc, base = 4.6, 176
+    b = f'<path d="M10,{base} H290" class="sv-llave"/>'
+    for i, (et, gb) in enumerate([("32 bits", 32), ("16 bits", 16), ("8 bits", 8), ("4 bits", 4)]):
+        x = 22 + 70 * i
+        h = gb * esc
+        b += f'<rect x="{x}" y="{base - h}" width="46" height="{h}" rx="3" class="{"sv-barra-1" if gb <= 8 else "sv-barra"}"/>'
+        b += texto(x + 23, base - h - 6, f"{gb} GB", "sv-et")
+        b += texto(x + 23, base + 18, et, "sv-ord")
+    y8 = base - 8 * esc
+    b += f'<path d="M10,{y8} H290" class="sv-l-rojo"/>'
+    b += texto(150, 218, "Línea roja: 8 GB de RAM (portátil sencillo)", "sv-et sv-et-no")
+    return svg(p, "0 0 300 228", "Memoria de un modelo de 8000 millones de parámetros", MEM_DESC, b, "sv-v")
+
+
+def encoger_svg(tipo):
+    p = "se" + tipo[:3]
+    if tipo == "destilar":
+        b = '<circle cx="50" cy="55" r="38" class="sv-n-rama"/>' + texto(50, 59, "profesor", "sv-n-txt")
+        b += '<circle cx="166" cy="55" r="27" class="sv-n-main"/>' + texto(166, 59, "alumno", "sv-n-txt")
+        b += linea("M92,55 H134", p, "ml") + texto(113, 46, "imita", "sv-et")
+        desc = "Un modelo grande, el profesor, enseña a uno pequeño, el alumno, que aprende a imitar sus respuestas."
+    elif tipo == "cuantizar":
+        b = texto(100, 34, "0,02137  −0,00841  0,01502", "sv-ord")
+        b += linea("M100,44 V64", p)
+        b += texto(100, 86, "13   −5   9", "sv-ord sv-ord-vuelta") + texto(100, 104, "× escala 0,00164", "sv-et")
+        desc = "Tres pesos decimales se guardan como enteros pequeños, 13, menos 5 y 9, multiplicados por una escala común."
+    else:
+        xs1, xs2 = [30, 30, 30], [170, 170, 170]
+        ys = [20, 55, 90]
+        b = ""
+        quitar = {(0, 2), (1, 0), (2, 1), (2, 2)}
+        for i, y1 in enumerate(ys):
+            for j, y2 in enumerate(ys):
+                cls = "sv-r-tenue" if (i, j) in quitar else "sv-r-main"
+                b += f'<path d="M36,{y1} L164,{y2}" class="{cls}"/>'
+        for y in ys:
+            b += f'<circle cx="30" cy="{y}" r="8" class="sv-n-main"/><circle cx="170" cy="{y}" r="8" class="sv-n-main"/>'
+        desc = "Una red con nueve conexiones de las que se quitan cuatro, las que menos aportan."
+    return svg(p, "0 0 200 112", tipo, desc, b, "sv-tab")
+
+
+def hoja_slm():
+    h = ['<section class="hoja" aria-labelledby="hoja-slm-t">',
+         '<p class="hoja-titulo" id="hoja-slm-t">Modelos pequeños en una hoja</p>',
+         '<div class="hoja-grid">',
+         f'<div class="ficha ancha"><h5>Cuánto ocupa un modelo de 8000 millones de parámetros</h5>{memoria_svg()}{memoria_v()}'
+         '<p class="ficha-pie">Solo los pesos; el contexto ocupa más. Con 4 bits cabe en un portátil; con 16, no.</p></div>',
+         '<div class="ficha ancha"><h5>Tres formas de encoger un modelo</h5><div class="ramas">',
+         f'<figure>{encoger_svg("destilar")}<figcaption><b>Destilar.</b> Un modelo pequeño aprende a imitar a uno grande.</figcaption></figure>',
+         f'<figure>{encoger_svg("cuantizar")}<figcaption><b>Cuantizar.</b> Cada peso, con menos bits.</figcaption></figure>',
+         f'<figure>{encoger_svg("podar")}<figcaption><b>Podar.</b> Quitar las conexiones que menos aportan.</figcaption></figure>',
+         '</div></div>',
+         '<div class="ficha"><h5>¿En tu ordenador o en la nube?</h5><div class="vs">',
+         '<div><b>Modelo local</b><ul><li>Las preguntas no salen del centro</li><li>Gratis después de descargarlo</li><li>Funciona sin internet</li><li>Sabe menos y alucina más</li></ul></div>',
+         '<div><b>Servicio en la nube</b><ul><li>Más capaz y rápido</li><li>Cuenta y edad mínima (18 en las API)</li><li>Se paga por token</li><li>Los datos salen a otra empresa</li></ul></div>',
+         '</div></div>',
+         '<div class="ficha"><h5>Probarlo en clase</h5><ol class="flujo">',
+         '<li><span class="paso">Elegir un modelo de 1000 a 4000 millones</span>y leer su licencia</li>',
+         f'<li><span class="paso">Instalar Ollama o LM Studio</span>lo hace antes el profesor</li>',
+         f'<li><span class="paso">Ejecutarlo</span>{cmd("ollama run llama3.2:3b")}</li>',
+         '<li><span class="paso">Ponerlo a prueba</span>preguntas del centro, en gallego, y anotar los errores</li>',
+         '</ol></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
+# ---------- Trocear para RAG (usa las mismas funciones que el ejemplo de la teoría) ----------
+import re as _re
+NORMAS = ("Os préstamos duran quince días. Pódense renovar unha vez.\n\n"
+          "Quen devolva tarde un libro non poderá levar outro durante unha semana. "
+          "Os dicionarios só se consultan na sala.\n\n"
+          "A biblioteca abre no recreo e pola tarde, de 16:00 a 18:00.")
+
+
+def _fijo(t, n=60):
+    return [t[i:i + n] for i in range(0, len(t), n)]
+
+
+def _frases(t, maximo=110):
+    fr = _re.split(r"(?<=[.!?])\s+", t.replace("\n", " "))
+    out, act = [], ""
+    for f in fr:
+        if act and len(act) + 1 + len(f) > maximo:
+            out.append(act); act = f
+        else:
+            act = f"{act} {f}".strip()
+    return out + [act]
+
+
+def _recursivo(t, maximo=110, seps=(r"\n\n", r"(?<=[.!?]) ", " ")):
+    if len(t) <= maximo or not seps:
+        return [t.strip()]
+    out = []
+    for parte in _re.split(seps[0], t):
+        out += _recursivo(parte, maximo, seps[1:])
+    return [x for x in out if x]
+
+
+def hoja_trocear():
+    filas = []
+    for nombre, f, nota in [("Fijo, 60 caracteres", _fijo, "parte «Quen», «unha» y «biblioteca»"),
+                            ("Por frases, hasta 110", _frases, "frases enteras, pero junta dos de párrafos distintos"),
+                            ("Recursivo, hasta 110", _recursivo, "respeta los párrafos; si no caben, corta por frases")]:
+        tr = f(NORMAS)
+        spans = "".join(f'<span class="trozo t{i % 3}"><b>{i + 1}</b>{escape(x.replace(chr(10), " ⏎ "))}</span>' for i, x in enumerate(tr))
+        filas.append(f'<div class="trozos-fila"><p class="trozos-nombre"><b>{nombre}</b> · {len(tr)} trozos · {nota}</p><p class="trozos">{spans}</p></div>')
+    h = ['<section class="hoja" aria-labelledby="hoja-tro-t">',
+         '<p class="hoja-titulo" id="hoja-tro-t">El mismo texto, troceado de tres formas</p>',
+         '<div class="hoja-grid"><div class="ficha ancha">', "".join(filas),
+         '<p class="ficha-pie">Cada color es un trozo; ⏎ marca un salto de párrafo. Es la salida real del código de abajo.</p></div></div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -593,6 +731,8 @@ if __name__ == "__main__":
     t = insertar(t, "git", hoja_git())
     t = insertar(t, "agentes", hoja_agentes())
     t = insertar(t, "pandas", hoja_pandas())
+    t = insertar(t, "slm", hoja_slm())
+    t = insertar(t, "trocear", hoja_trocear())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

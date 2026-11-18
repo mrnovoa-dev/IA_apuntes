@@ -523,3 +523,18 @@
     color: var(--c-ml); border: 1.5px solid var(--c-ml); }
   .flujo .pesos.fijos { color: var(--c-visual); border-color: var(--c-visual); }
 }
+
+/* ---------- Hojas de modelos pequeños y troceado ---------- */
+@layer components {
+  .sv-memoria { max-inline-size: 640px; }
+  .trozos-fila + .trozos-fila { margin-block-start: 12px; }
+  .trozos-nombre { margin: 0 0 4px; font-size: .9rem; color: var(--muted); }
+  .trozos-nombre b { color: var(--ink); }
+  .trozos { margin: 0; font: .9rem/2 var(--font-mono); }
+  .trozo { padding: 2px 4px; border-radius: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; margin-inline-end: 2px; }
+  .trozo b { display: inline-block; min-inline-size: 1.3em; margin-inline-end: 4px; font: 800 .72rem/1.4 var(--font-display); text-align: center;
+    border-radius: 50%; background: var(--ink); color: var(--paper); }
+  .trozo.t0 { background: color-mix(in oklab, var(--c-datos) 34%, var(--surface)); }
+  .trozo.t1 { background: color-mix(in oklab, var(--c-texto) 24%, var(--surface)); }
+  .trozo.t2 { background: color-mix(in oklab, var(--c-visual) 30%, var(--surface)); }
+}

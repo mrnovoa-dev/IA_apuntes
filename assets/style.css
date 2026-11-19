@@ -554,3 +554,16 @@
     .vocab dd { padding-block-start: 0; margin-block-end: 6px; }
   }
 }
+
+/* ---------- Hoja de Python ---------- */
+@layer components {
+  .sv-cpu { fill: var(--pen); }
+  .sv-espera { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 4 3; }
+  .sv-ta { fill: var(--pen); } .sv-tb { fill: var(--c-ml); } .sv-tc { fill: var(--c-visual); }
+  .tabla-ficha { overflow-x: auto; }
+  .tabla-ficha table { inline-size: 100%; border-collapse: collapse; font-size: .9rem; margin: 0; }
+  .tabla-ficha :is(th, td) { padding: 5px 8px; border-block-end: 1px dashed var(--line); text-align: start; }
+  .tabla-ficha thead th { font-family: var(--font-display); font-weight: 800; border-block-end: 2px solid var(--ink); }
+  .tabla-ficha tbody th { font-family: var(--font-display); font-weight: 800; }
+}
+@layer components { .tabla-ficha code { white-space: nowrap; } }

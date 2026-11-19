@@ -779,6 +779,105 @@ def hoja_graficos():
     return "\n".join(h)
 
 
+# ---------- Python: ejecución, colecciones, concurrencia y herramientas ----------
+EJ_PASOS = [("notas.py", "tu código"), ("Compilador", "lo traduce"), ("Bytecode", ".pyc en __pycache__"),
+            ("Máquina virtual", "lo ejecuta"), ("Salida", "lo que ves")]
+EJ_DESC = ("El archivo notas.py pasa por el compilador, que lo traduce a bytecode (archivos .pyc en la carpeta __pycache__); "
+           "la máquina virtual de Python ejecuta ese bytecode y produce la salida. Compilador y máquina virtual forman el intérprete, CPython.")
+
+
+def ejecucion_h():
+    p = "pyh"
+    b = '<path d="M155,30 V22 H585 V30" class="sv-llave"/>' + texto(370, 15, "el intérprete (CPython)", "sv-zona")
+    for i, (tt, s) in enumerate(EJ_PASOS):
+        cls = "sv-caja sv-caja-ok" if i == 4 else ("sv-caja sv-caja-ml" if i in (1, 3) else "sv-caja")
+        b += caja(10 + 150 * i, 40, 125, 56, tt, s, cls)
+        if i < 4:
+            b += linea(f"M{139 + 150 * i},68 H{156 + 150 * i}", p)
+    b += texto(370, 126, "Sí se compila, pero a bytecode y no a código máquina: por eso no sale un .exe", "sv-et")
+    return svg(p, "0 0 745 136", "Cómo se ejecuta un programa de Python", EJ_DESC, b, "sv-h")
+
+
+def ejecucion_v():
+    p = "pyv"
+    b = ""
+    for i, (tt, s) in enumerate(EJ_PASOS):
+        cls = "sv-caja sv-caja-ok" if i == 4 else ("sv-caja sv-caja-ml" if i in (1, 3) else "sv-caja")
+        b += caja(40, 12 + 72 * i, 200, 52, tt, s, cls)
+        if i < 4:
+            b += linea(f"M140,{68 + 72 * i} V{80 + 72 * i}", p)
+    b += '<path d="M248,84 H262 V280 H248" class="sv-llave"/>' + texto(274, 182, "intérprete", "sv-zona", rot=90)
+    b += texto(140, 384, "Se compila a bytecode, no a código máquina", "sv-et")
+    return svg(p, "0 0 290 394", "Cómo se ejecuta un programa de Python", EJ_DESC, b, "sv-v")
+
+
+def concurrencia_svg(tipo):
+    p = "pc" + tipo[:3]
+    b = ""
+    x0 = 66
+    if tipo == "hilos":
+        carriles = ["hilo 1", "hilo 2", "hilo 3"]
+        tramos = [[("c", 0, 20), ("e", 20, 80), ("c", 80, 100)],
+                  [("c", 20, 40), ("e", 40, 110), ("c", 110, 130)],
+                  [("c", 40, 60), ("e", 60, 130), ("c", 130, 150)]]
+    elif tipo == "procesos":
+        carriles = ["núcleo 1", "núcleo 2", "núcleo 3"]
+        tramos = [[("c", 0, 150)], [("c", 0, 150)], [("c", 0, 150)]]
+    else:
+        carriles = ["1 hilo"]
+        tramos = [[("a", 0, 20), ("b", 20, 40), ("c3", 40, 60), ("a", 80, 100), ("b", 100, 120), ("c3", 120, 140)]]
+    for i, (nom, tr) in enumerate(zip(carriles, tramos)):
+        y = 14 + 30 * i
+        b += texto(x0 - 6, y + 13, nom, "sv-et", "end")
+        b += f'<path d="M{x0},{y + 9} H{x0 + 156}" class="sv-llave"/>'
+        for k, a, z in tr:
+            cls = {"c": "sv-cpu", "e": "sv-espera", "a": "sv-ta", "b": "sv-tb", "c3": "sv-tc"}[k]
+            if k == "e":
+                b += f'<path d="M{x0 + a},{y + 9} H{x0 + z}" class="{cls}"/>'
+            else:
+                b += f'<rect x="{x0 + a}" y="{y}" width="{z - a}" height="18" rx="2" class="{cls}"/>'
+    if tipo == "asyncio":
+        for k, letra in enumerate("ABCABC"):
+            b += texto(x0 + 10 + 20 * k + (20 if k > 2 else 0), 27, letra, "sv-n-txt")
+        b += texto(x0 + 70, 52, "← await: espera →", "sv-et")
+    b += f'<path d="M{x0},104 H{x0 + 156}" class="sv-llave"/>' + texto(x0 + 156, 118, "tiempo →", "sv-et", "end")
+    desc = {"hilos": "Tres hilos de un mismo proceso: calculan por turnos, nunca dos a la vez, y esperan a la red al mismo tiempo.",
+            "procesos": "Tres procesos en tres núcleos calculando a la vez durante todo el tiempo.",
+            "asyncio": "Un solo hilo que alterna las tareas A, B y C; cada una cede el turno con await mientras espera."}[tipo]
+    return svg(p, "0 0 230 124", tipo, desc, b, "sv-tab")
+
+
+def hoja_python():
+    colecciones = [("Lista", "[1, 2, 2]", "✓", "✓", "✓", "por posición"),
+                   ("Tupla", "(1, 2, 2)", "✓", "✗", "✓", "por posición"),
+                   ("Conjunto", "{1, 2}", "✗", "✓", "✗", "no: se recorre o se pregunta «in»"),
+                   ("Diccionario", '{"a": 1}', "✓ desde 3.7", "✓", "claves no", "por clave")]
+    filas = "".join(f"<tr><th>{n}</th><td><code>{escape(e)}</code></td><td>{o}</td><td>{m}</td><td>{d}</td><td>{a}</td></tr>"
+                    for n, e, o, m, d, a in colecciones)
+    herramientas = [("Crear el proyecto", ["uv init proyecto"]), ("Añadir librerías", ["uv add requests"]),
+                    ("Revisar y dar formato", ["ruff check --fix", "ruff format"]),
+                    ("Comprobar tipos", ["mypy ."]), ("Probar", ["uv run pytest"]),
+                    ("Guardar la versión", ['git commit -m "…"'])]
+    h = ['<section class="hoja" aria-labelledby="hoja-py-t">',
+         '<p class="hoja-titulo" id="hoja-py-t">Python en una hoja</p>',
+         '<p class="hoja-nota">Cuatro ideas que muchas chuletas cuentan mal. Versión actual: Python 3.15 (octubre de 2026).</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>Cómo se ejecuta tu programa</h5>', ejecucion_h(), ejecucion_v(),
+         '<p class="ficha-pie">«Interpretado, sin compilación» es falso: CPython compila a bytecode y lo guarda en <code>__pycache__</code> para no repetirlo.</p></div>',
+         f'<div class="ficha ancha"><h5>Las cuatro colecciones</h5><div class="tabla-ficha"><table><thead><tr><th></th><th>Ejemplo</th><th>Ordenada</th><th>Modificable</th><th>Duplicados</th><th>Acceso</th></tr></thead><tbody>{filas}</tbody></table></div>'
+         '<p class="ficha-pie">Los diccionarios <b>sí</b> conservan el orden de inserción desde Python 3.7; muchas tablas todavía dicen que no.</p></div>',
+         '<div class="ficha ancha"><h5>Tres formas de hacer varias cosas a la vez</h5><div class="ramas">',
+         f'<figure>{concurrencia_svg("hilos")}<figcaption><b>Hilos</b> (<code>threading</code>). Se turnan para calcular (el GIL) y esperan a la vez: descargas, ficheros, red.</figcaption></figure>',
+         f'<figure>{concurrencia_svg("procesos")}<figcaption><b>Procesos</b> (<code>multiprocessing</code>). Un núcleo cada uno, calculan de verdad a la vez: cálculos pesados.</figcaption></figure>',
+         f'<figure>{concurrencia_svg("asyncio")}<figcaption><b><code>asyncio</code></b>. Un solo hilo; cada tarea cede el turno con <code>await</code> mientras espera: miles de conexiones.</figcaption></figure>',
+         '</div><p class="ficha-pie">Bloque azul: calcular. Línea discontinua: esperar (red, disco).</p></div>',
+         '<div class="ficha ancha"><h5>Las herramientas de un proyecto, en orden</h5><ol class="flujo">',
+         "".join(f'<li><span class="paso">{escape(a)}</span>{"".join(cmd(c) for c in cs)}</li>' for a, cs in herramientas),
+         '</ol></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -795,6 +894,7 @@ if __name__ == "__main__":
     t = insertar(t, "slm", hoja_slm())
     t = insertar(t, "trocear", hoja_trocear())
     t = insertar(t, "graficos", hoja_graficos())
+    t = insertar(t, "python", hoja_python())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

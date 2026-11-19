@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E140 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E142 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -5852,17 +5852,114 @@ Ejercicios inspirados en las colecciones adjuntas, ordenados según los ejercici
 
 Síntesis de *Python Complete Notes: Beginner to Advanced* (Achal Singh, TheAutomationEngineer). Las 18 fichas del material repasan lo que ya está en las secciones 1–5 (variables, operadores, condicionales, bucles, funciones, cadenas y colecciones) y añaden lo siguiente.
 
+<!-- hoja:python -->
+<section class="hoja" aria-labelledby="hoja-py-t">
+<p class="hoja-titulo" id="hoja-py-t">Python en una hoja</p>
+<p class="hoja-nota">Cuatro ideas que muchas chuletas cuentan mal. Versión actual: Python 3.15 (octubre de 2026).</p>
+<div class="hoja-grid">
+<div class="ficha ancha"><h5>Cómo se ejecuta tu programa</h5>
+<svg class="sv sv-h" viewBox="0 0 745 136" role="img" aria-labelledby="pyh-t pyh-d"><title id="pyh-t">Cómo se ejecuta un programa de Python</title><desc id="pyh-d">El archivo notas.py pasa por el compilador, que lo traduce a bytecode (archivos .pyc en la carpeta __pycache__); la máquina virtual de Python ejecuta ese bytecode y produce la salida. Compilador y máquina virtual forman el intérprete, CPython.</desc><defs><marker id="pyh-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="pyh-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="pyh-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="pyh-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="pyh-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><path d="M155,30 V22 H585 V30" class="sv-llave"/><text x="370" y="15" class="sv-zona" text-anchor="middle">el intérprete (CPython)</text><rect x="10" y="40" width="125" height="56" rx="8" class="sv-caja"/><text x="72.5" y="65.0" class="sv-tit" text-anchor="middle">notas.py</text><text x="72.5" y="82.0" class="sv-sub" text-anchor="middle">tu código</text><path d="M139,68 H156" class="sv-l-pen" marker-end="url(#pyh-pen)"/><rect x="160" y="40" width="125" height="56" rx="8" class="sv-caja sv-caja-ml"/><text x="222.5" y="65.0" class="sv-tit" text-anchor="middle">Compilador</text><text x="222.5" y="82.0" class="sv-sub" text-anchor="middle">lo traduce</text><path d="M289,68 H306" class="sv-l-pen" marker-end="url(#pyh-pen)"/><rect x="310" y="40" width="125" height="56" rx="8" class="sv-caja"/><text x="372.5" y="65.0" class="sv-tit" text-anchor="middle">Bytecode</text><text x="372.5" y="82.0" class="sv-sub" text-anchor="middle">.pyc en __pycache__</text><path d="M439,68 H456" class="sv-l-pen" marker-end="url(#pyh-pen)"/><rect x="460" y="40" width="125" height="56" rx="8" class="sv-caja sv-caja-ml"/><text x="522.5" y="65.0" class="sv-tit" text-anchor="middle">Máquina virtual</text><text x="522.5" y="82.0" class="sv-sub" text-anchor="middle">lo ejecuta</text><path d="M589,68 H606" class="sv-l-pen" marker-end="url(#pyh-pen)"/><rect x="610" y="40" width="125" height="56" rx="8" class="sv-caja sv-caja-ok"/><text x="672.5" y="65.0" class="sv-tit" text-anchor="middle">Salida</text><text x="672.5" y="82.0" class="sv-sub" text-anchor="middle">lo que ves</text><text x="370" y="126" class="sv-et" text-anchor="middle">Sí se compila, pero a bytecode y no a código máquina: por eso no sale un .exe</text></svg>
+<svg class="sv sv-v" viewBox="0 0 290 394" role="img" aria-labelledby="pyv-t pyv-d"><title id="pyv-t">Cómo se ejecuta un programa de Python</title><desc id="pyv-d">El archivo notas.py pasa por el compilador, que lo traduce a bytecode (archivos .pyc en la carpeta __pycache__); la máquina virtual de Python ejecuta ese bytecode y produce la salida. Compilador y máquina virtual forman el intérprete, CPython.</desc><defs><marker id="pyv-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="pyv-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="pyv-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="pyv-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="pyv-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><rect x="40" y="12" width="200" height="52" rx="8" class="sv-caja"/><text x="140.0" y="35.0" class="sv-tit" text-anchor="middle">notas.py</text><text x="140.0" y="52.0" class="sv-sub" text-anchor="middle">tu código</text><path d="M140,68 V80" class="sv-l-pen" marker-end="url(#pyv-pen)"/><rect x="40" y="84" width="200" height="52" rx="8" class="sv-caja sv-caja-ml"/><text x="140.0" y="107.0" class="sv-tit" text-anchor="middle">Compilador</text><text x="140.0" y="124.0" class="sv-sub" text-anchor="middle">lo traduce</text><path d="M140,140 V152" class="sv-l-pen" marker-end="url(#pyv-pen)"/><rect x="40" y="156" width="200" height="52" rx="8" class="sv-caja"/><text x="140.0" y="179.0" class="sv-tit" text-anchor="middle">Bytecode</text><text x="140.0" y="196.0" class="sv-sub" text-anchor="middle">.pyc en __pycache__</text><path d="M140,212 V224" class="sv-l-pen" marker-end="url(#pyv-pen)"/><rect x="40" y="228" width="200" height="52" rx="8" class="sv-caja sv-caja-ml"/><text x="140.0" y="251.0" class="sv-tit" text-anchor="middle">Máquina virtual</text><text x="140.0" y="268.0" class="sv-sub" text-anchor="middle">lo ejecuta</text><path d="M140,284 V296" class="sv-l-pen" marker-end="url(#pyv-pen)"/><rect x="40" y="300" width="200" height="52" rx="8" class="sv-caja sv-caja-ok"/><text x="140.0" y="323.0" class="sv-tit" text-anchor="middle">Salida</text><text x="140.0" y="340.0" class="sv-sub" text-anchor="middle">lo que ves</text><path d="M248,84 H262 V280 H248" class="sv-llave"/><text x="274" y="182" class="sv-zona" text-anchor="middle" transform="rotate(90 274 182)">intérprete</text><text x="140" y="384" class="sv-et" text-anchor="middle">Se compila a bytecode, no a código máquina</text></svg>
+<p class="ficha-pie">«Interpretado, sin compilación» es falso: CPython compila a bytecode y lo guarda en <code>__pycache__</code> para no repetirlo.</p></div>
+<div class="ficha ancha"><h5>Las cuatro colecciones</h5><div class="tabla-ficha"><table><thead><tr><th></th><th>Ejemplo</th><th>Ordenada</th><th>Modificable</th><th>Duplicados</th><th>Acceso</th></tr></thead><tbody><tr><th>Lista</th><td><code>[1, 2, 2]</code></td><td>✓</td><td>✓</td><td>✓</td><td>por posición</td></tr><tr><th>Tupla</th><td><code>(1, 2, 2)</code></td><td>✓</td><td>✗</td><td>✓</td><td>por posición</td></tr><tr><th>Conjunto</th><td><code>{1, 2}</code></td><td>✗</td><td>✓</td><td>✗</td><td>no: se recorre o se pregunta «in»</td></tr><tr><th>Diccionario</th><td><code>{&quot;a&quot;: 1}</code></td><td>✓ desde 3.7</td><td>✓</td><td>claves no</td><td>por clave</td></tr></tbody></table></div><p class="ficha-pie">Los diccionarios <b>sí</b> conservan el orden de inserción desde Python 3.7; muchas tablas todavía dicen que no.</p></div>
+<div class="ficha ancha"><h5>Tres formas de hacer varias cosas a la vez</h5><div class="ramas">
+<figure><svg class="sv sv-tab" viewBox="0 0 230 124" role="img" aria-labelledby="pchil-t pchil-d"><title id="pchil-t">hilos</title><desc id="pchil-d">Tres hilos de un mismo proceso: calculan por turnos, nunca dos a la vez, y esperan a la red al mismo tiempo.</desc><defs><marker id="pchil-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="pchil-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="pchil-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="pchil-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="pchil-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><text x="60" y="27" class="sv-et" text-anchor="end">hilo 1</text><path d="M66,23 H222" class="sv-llave"/><rect x="66" y="14" width="20" height="18" rx="2" class="sv-cpu"/><path d="M86,23 H146" class="sv-espera"/><rect x="146" y="14" width="20" height="18" rx="2" class="sv-cpu"/><text x="60" y="57" class="sv-et" text-anchor="end">hilo 2</text><path d="M66,53 H222" class="sv-llave"/><rect x="86" y="44" width="20" height="18" rx="2" class="sv-cpu"/><path d="M106,53 H176" class="sv-espera"/><rect x="176" y="44" width="20" height="18" rx="2" class="sv-cpu"/><text x="60" y="87" class="sv-et" text-anchor="end">hilo 3</text><path d="M66,83 H222" class="sv-llave"/><rect x="106" y="74" width="20" height="18" rx="2" class="sv-cpu"/><path d="M126,83 H196" class="sv-espera"/><rect x="196" y="74" width="20" height="18" rx="2" class="sv-cpu"/><path d="M66,104 H222" class="sv-llave"/><text x="222" y="118" class="sv-et" text-anchor="end">tiempo →</text></svg><figcaption><b>Hilos</b> (<code>threading</code>). Se turnan para calcular (el GIL) y esperan a la vez: descargas, ficheros, red.</figcaption></figure>
+<figure><svg class="sv sv-tab" viewBox="0 0 230 124" role="img" aria-labelledby="pcpro-t pcpro-d"><title id="pcpro-t">procesos</title><desc id="pcpro-d">Tres procesos en tres núcleos calculando a la vez durante todo el tiempo.</desc><defs><marker id="pcpro-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="pcpro-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="pcpro-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="pcpro-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="pcpro-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><text x="60" y="27" class="sv-et" text-anchor="end">núcleo 1</text><path d="M66,23 H222" class="sv-llave"/><rect x="66" y="14" width="150" height="18" rx="2" class="sv-cpu"/><text x="60" y="57" class="sv-et" text-anchor="end">núcleo 2</text><path d="M66,53 H222" class="sv-llave"/><rect x="66" y="44" width="150" height="18" rx="2" class="sv-cpu"/><text x="60" y="87" class="sv-et" text-anchor="end">núcleo 3</text><path d="M66,83 H222" class="sv-llave"/><rect x="66" y="74" width="150" height="18" rx="2" class="sv-cpu"/><path d="M66,104 H222" class="sv-llave"/><text x="222" y="118" class="sv-et" text-anchor="end">tiempo →</text></svg><figcaption><b>Procesos</b> (<code>multiprocessing</code>). Un núcleo cada uno, calculan de verdad a la vez: cálculos pesados.</figcaption></figure>
+<figure><svg class="sv sv-tab" viewBox="0 0 230 124" role="img" aria-labelledby="pcasy-t pcasy-d"><title id="pcasy-t">asyncio</title><desc id="pcasy-d">Un solo hilo que alterna las tareas A, B y C; cada una cede el turno con await mientras espera.</desc><defs><marker id="pcasy-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="pcasy-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="pcasy-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="pcasy-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="pcasy-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><text x="60" y="27" class="sv-et" text-anchor="end">1 hilo</text><path d="M66,23 H222" class="sv-llave"/><rect x="66" y="14" width="20" height="18" rx="2" class="sv-ta"/><rect x="86" y="14" width="20" height="18" rx="2" class="sv-tb"/><rect x="106" y="14" width="20" height="18" rx="2" class="sv-tc"/><rect x="146" y="14" width="20" height="18" rx="2" class="sv-ta"/><rect x="166" y="14" width="20" height="18" rx="2" class="sv-tb"/><rect x="186" y="14" width="20" height="18" rx="2" class="sv-tc"/><text x="76" y="27" class="sv-n-txt" text-anchor="middle">A</text><text x="96" y="27" class="sv-n-txt" text-anchor="middle">B</text><text x="116" y="27" class="sv-n-txt" text-anchor="middle">C</text><text x="156" y="27" class="sv-n-txt" text-anchor="middle">A</text><text x="176" y="27" class="sv-n-txt" text-anchor="middle">B</text><text x="196" y="27" class="sv-n-txt" text-anchor="middle">C</text><text x="136" y="52" class="sv-et" text-anchor="middle">← await: espera →</text><path d="M66,104 H222" class="sv-llave"/><text x="222" y="118" class="sv-et" text-anchor="end">tiempo →</text></svg><figcaption><b><code>asyncio</code></b>. Un solo hilo; cada tarea cede el turno con <code>await</code> mientras espera: miles de conexiones.</figcaption></figure>
+</div><p class="ficha-pie">Bloque azul: calcular. Línea discontinua: esperar (red, disco).</p></div>
+<div class="ficha ancha"><h5>Las herramientas de un proyecto, en orden</h5><ol class="flujo">
+<li><span class="paso">Crear el proyecto</span><code class="cmd">uv init proyecto</code></li><li><span class="paso">Añadir librerías</span><code class="cmd">uv add requests</code></li><li><span class="paso">Revisar y dar formato</span><code class="cmd">ruff check --fix</code><code class="cmd">ruff format</code></li><li><span class="paso">Comprobar tipos</span><code class="cmd">mypy .</code></li><li><span class="paso">Probar</span><code class="cmd">uv run pytest</code></li><li><span class="paso">Guardar la versión</span><code class="cmd">git commit -m &quot;…&quot;</code></li>
+</ol></div>
+</div></section>
+<!-- /hoja:python -->
+
 #### Estilo y organización de un proyecto
 
 | Práctica | Cómo |
 |----------|------|
-| **PEP 8** (guía de estilo oficial) | 4 espacios de sangría, líneas de 79–99 caracteres, espacios alrededor de los operadores. Herramientas: `black`, `flake8`, `pylint` |
+| **PEP 8** (guía de estilo oficial) | 4 espacios de sangría, líneas de 79–99 caracteres, espacios alrededor de los operadores. Herramientas: `ruff` (revisa y da formato; ver abajo), `black`, `flake8`, `pylint` |
 | **Nombres** | `variable_y_funcion` (snake_case) · `NombreDeClase` (PascalCase) · `CONSTANTE` (MAYÚSCULAS) · `modulo.py` |
 | **Estructura** | `src/` para el código, `tests/` para las pruebas, `README.md`, `requirements.txt`, `.gitignore` |
 | **Entorno virtual** | `python -m venv .venv`; no se sube a GitHub (va en `.gitignore`) |
 | **Dependencias** | `pip freeze > requirements.txt` y `pip install -r requirements.txt` |
-| **Módulos y paquetes** | Un archivo `.py` es un **módulo**; una carpeta de módulos es un **paquete** (con `__init__.py`). `import modulo` o `from modulo import funcion` |
+| **Módulos y paquetes** | Un archivo `.py` es un **módulo**; una carpeta de módulos es un **paquete**. Desde Python 3.3 el archivo `__init__.py` es **opcional**, pero se suele poner: marca la carpeta como paquete normal y en él puede ir código que se ejecuta al importarlo. `import modulo` o `from modulo import funcion` |
 | **Funciones pequeñas** | Una función hace una sola cosa, con un *docstring* (`"""…"""`) que explica qué hace. Principio **DRY**: no repetir código |
+
+#### Herramientas del proyecto: uv, Ruff y anotaciones de tipo
+
+**uv** es un gestor de paquetes y entornos escrito en Rust, de la empresa Astral, mucho más rápido que `pip`. Hace en una sola herramienta lo de `pip`, `venv` y más. `pip` y `venv` siguen funcionando igual de bien: uv es una alternativa, no una obligación.
+
+| Para… | Con pip y venv | Con uv |
+|-------|----------------|--------|
+| Empezar un proyecto | crear la carpeta y `python -m venv .venv` | `uv init proyecto` (crea `pyproject.toml`, `main.py`, `.gitignore` y un repositorio Git) |
+| Añadir una librería | `pip install requests` y apuntarla en `requirements.txt` | `uv add requests` (la apunta en `pyproject.toml` y fija las versiones en `uv.lock`) |
+| Ejecutar | activar el entorno y `python main.py` | `uv run main.py` (crea el entorno si falta) |
+| Instalar en otro ordenador | `pip install -r requirements.txt` | `uv sync` |
+
+Comprobado con uv 0.11: `uv init` y `uv run main.py` funcionan sin internet; `uv add` necesita conexión para descargar.
+
+**Ruff** (también de Astral) revisa el código (*linter*) y le da formato. Sustituye a varias herramientas clásicas: Flake8 (revisar), Black (formato) e isort (ordenar los `import`). Con un archivo escrito a toda prisa:
+
+```python
+import os, sys
+def media( notas ):
+    total=0
+    for n in notas : total+=n
+    return total/len(notas)
+```
+
+```bash
+ruff check notas.py           # I001 Import block is un-sorted · F401 `os` imported but unused · F401 `sys` …
+ruff check --fix notas.py     # quita las importaciones que sobran
+ruff format notas.py          # espacios, líneas en blanco y sangría al estilo PEP 8
+```
+
+Tras `ruff format`, la función queda como `def media(notas):` con `total = 0`, un bucle en dos líneas y dos líneas en blanco entre funciones. Flake8, con el mismo archivo, da 19 avisos de estilo (E201, E225, E302…). Ruff no los da porque **los arregla** al formatear. Comprobado con Ruff 0.16 y Flake8 7.4. En VS Code, la extensión de Ruff lo hace al guardar.
+
+**Anotaciones de tipo** (*type hints*). Se puede indicar qué tipo espera cada parámetro y qué devuelve la función: `def suma(a: int, b: int) -> int:`. Ayudan a leer el código y el editor avisa de errores mientras escribes. Pero **Python no las comprueba** al ejecutar:
+
+```python
+def suma(a: int, b: int) -> int:
+    return a + b
+
+print(suma("Ola, ", "Brais"))     # Ola, Brais  (no da error: concatena dos textos)
+```
+
+Para que se comprueben hace falta un **comprobador de tipos** como **mypy** (o el del editor). Con este ejemplo, mypy diría algo como `error: Argument 1 to "suma" has incompatible type "str"; expected "int"`. No lo he podido ejecutar aquí, porque mypy necesita un módulo compilado que no se puede instalar en este entorno. Anotaciones frecuentes: `list[int]`, `dict[str, float]`, `str | None` (texto o nada) y `-> None` (no devuelve nada).
+
+#### Programas para la terminal: `argparse` y `if __name__ == "__main__"`
+
+Un *script* que recibe datos desde la terminal, con ayuda automática y comprobación de tipos:
+
+```python
+"""Calcula la media de unas notas desde la terminal."""
+import argparse
+
+
+def media(notas: list[float]) -> float:
+    return sum(notas) / len(notas)
+
+
+def main() -> None:
+    p = argparse.ArgumentParser(description="Media de notas del alumnado")
+    p.add_argument("notas", type=float, nargs="+", help="una o más notas")
+    p.add_argument("--decimales", type=int, default=1, help="decimales del resultado (1 por defecto)")
+    args = p.parse_args()
+    print(f"Media: {media(args.notas):.{args.decimales}f}")
+
+
+if __name__ == "__main__":    # solo se ejecuta al lanzarlo, no al importarlo
+    main()
+```
+
+```bash
+python media_notas.py 7 5.5 9                  # Media: 7.2
+python media_notas.py 7 5.5 9 --decimales 2    # Media: 7.17
+python media_notas.py 7 siete                  # error: argument notas: invalid float value: 'siete'
+python media_notas.py --help                   # usage: media_notas.py [-h] [--decimales DECIMALES] notas [notas ...]
+```
+
+`if __name__ == "__main__":` hace que `main()` se ejecute solo al lanzar el archivo. Si otro programa hace `import media_notas`, puede usar `media()` sin que se ponga a leer la terminal.
 
 #### Errores frecuentes que conviene evitar
 
@@ -6180,6 +6277,97 @@ for cosa in [Perro(), Robot()]:
 - **No hay atributos privados de verdad.** `_saldo` (un guion) es un aviso entre programadores; `__pin` (dos guiones) cambia el nombre a `_Cuenta__pin` para evitar choques en clases hijas, pero se puede leer igual. Para controlar el acceso se usan propiedades (`@property`, más arriba).
 - **Tipado de pato** (*duck typing*): «si anda como un pato y hace cua, es un pato». Python no comprueba de qué clase es un objeto, sino si tiene el método que se le pide. Así funciona scikit-learn: cualquier objeto con `fit` y `predict` sirve en un *pipeline*. Cuando sí se quiere obligar a que existan ciertos métodos, se usa una clase abstracta (`abc`).
 
+#### Métodos especiales y `dataclasses`
+
+Los **métodos especiales** (*dunder*, de *double underscore*) son los que van entre dos guiones bajos. Python los llama solo cuando usas `print`, `len`, `==`, `<`, `+` o `sorted` con tus objetos:
+
+```python
+class Prestamos:
+    """Libros que tiene prestados un alumno."""
+    def __init__(self, alumno, libros):
+        self.alumno, self.libros = alumno, list(libros)
+
+    def __repr__(self):                  # para quien programa: cómo recrear el objeto
+        return f"Prestamos({self.alumno!r}, {self.libros!r})"
+
+    def __str__(self):                   # para quien lee: lo que sale con print
+        return f"{self.alumno} tiene {len(self)} libros"
+
+    def __len__(self):                   # len(p)
+        return len(self.libros)
+
+    def __eq__(self, otro):              # p1 == p2
+        return self.alumno == otro.alumno and self.libros == otro.libros
+
+    def __lt__(self, otro):              # p1 < p2, y así sorted() sabe ordenar
+        return len(self) < len(otro)
+
+    def __add__(self, otro):             # p1 + p2: juntar los de un mismo alumno
+        return Prestamos(self.alumno, self.libros + otro.libros)
+
+uxia = Prestamos("Uxía", ["Rayuela", "O lapis do carpinteiro"])
+brais = Prestamos("Brais", ["Momo"])
+print(uxia)
+print(repr(brais))
+print(len(uxia), uxia == Prestamos("Uxía", ["Rayuela", "O lapis do carpinteiro"]))
+print([p.alumno for p in sorted([uxia, brais])])
+print(uxia + Prestamos("Uxía", ["Memorias dun neno labrego"]))
+# Uxía tiene 2 libros
+# Prestamos('Brais', ['Momo'])
+# 2 True
+# ['Brais', 'Uxía']
+# Uxía tiene 3 libros
+```
+
+| Método | Lo llama | Para qué |
+|--------|----------|----------|
+| `__init__` | `Prestamos(...)` | Dar valores iniciales |
+| `__repr__` | `repr(p)`, la consola, las listas | Para quien programa: cómo recrear el objeto |
+| `__str__` | `print(p)`, `str(p)`, f-strings | Para quien lee; si falta, se usa `__repr__` |
+| `__len__` | `len(p)` | Tamaño |
+| `__eq__` | `p1 == p2` | Igualdad por contenido; sin él, solo es igual a sí mismo |
+| `__lt__` | `p1 < p2`, `sorted`, `max` | Ordenar |
+| `__add__` | `p1 + p2` | Sumar o juntar |
+
+Muchas clases solo guardan datos, y escribir `__init__`, `__repr__` y `__eq__` a mano cada vez es repetitivo. **`@dataclass`** los escribe por ti a partir de los campos anotados:
+
+```python
+from dataclasses import dataclass, field, FrozenInstanceError
+
+@dataclass                               # escribe __init__, __repr__ y __eq__ por ti
+class Prestamos:
+    alumno: str
+    libros: list[str] = field(default_factory=list)   # una lista nueva para cada objeto
+
+@dataclass(frozen=True, order=True)      # inmutable y ordenable (por los campos, en orden)
+class Libro:
+    paxinas: int
+    titulo: str
+
+p = Prestamos("Noa")
+p.libros.append("Momo")
+print(p, Prestamos("Iago"))
+print(sorted([Libro(320, "Rayuela"), Libro(180, "Momo")]))
+try:
+    Libro(180, "Momo").paxinas = 200
+except FrozenInstanceError as e:
+    print("FrozenInstanceError:", e)
+try:
+    @dataclass
+    class Mal:
+        libros: list = []                # el error clásico: una lista compartida
+except ValueError as e:
+    print("ValueError:", e)
+# Prestamos(alumno='Noa', libros=['Momo']) Prestamos(alumno='Iago', libros=[])
+# [Libro(paxinas=180, titulo='Momo'), Libro(paxinas=320, titulo='Rayuela')]
+# FrozenInstanceError: cannot assign to field 'paxinas'
+# ValueError: mutable default <class 'list'> for field libros is not allowed: use default_factory
+```
+
+- `field(default_factory=list)` crea una lista **nueva** para cada objeto. Con `= []` la lista se compartiría entre todos (la misma trampa que el [argumento por defecto mutable](#errores-frecuentes-que-conviene-evitar)), y por eso `dataclass` da error.
+- `frozen=True` hace el objeto **inmutable**: sirve como clave de diccionario o elemento de un conjunto.
+- `order=True` añade `<`, `>`… comparando los campos **en el orden en que se escriben**: por eso `paxinas` va primero.
+
 #### Herencia múltiple y orden de búsqueda (MRO)
 
 Una clase puede heredar de varias. Cuando se llama a un método, Python lo busca en un orden fijo, el **MRO** (*Method Resolution Order*), que se calcula con un algoritmo llamado **linealización C3**: primero la propia clase, después sus padres de izquierda a derecha, sin repetir ninguna y sin que un padre aparezca antes que sus hijas.
@@ -6334,6 +6522,8 @@ def tres():
 ```
 
 Con el orden cambiado, `(3 * 2) + 1 = 7`: el orden importa.
+
+**Ojo con «se aplican de abajo arriba».** Eso pasa al **definir** la función: primero `@mais_un` envuelve a `tres` y después `@dobre` envuelve el resultado. Al **llamarla**, el código de las envolturas que va antes de `func(...)` se ejecuta al revés, **de arriba abajo**: entra primero en la de `@dobre`, que es la de fuera. Con dos decoradores que imprimen al aplicarse y al entrar, sale `aplico decorador2`, `aplico decorador1` y, al llamar, `entro en decorador1`, `entro en decorador2`.
 
 **Decoradores que ya usas sin saberlo:**
 
@@ -6582,6 +6772,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *RAG Cheat Sheet* (T. Khan, PDF de 24 págs. hecho con Canva; 12 de contenido y 12 de publicidad; texto con MarkItDown y código leído de las imágenes) | k, umbral y MMR, coseno frente a L2, estrategias *stuff*, *map-reduce* y *refine*, LangChain 1.x | 14.19 (RAG mejorado) y ejercicios E113–E114 |
 | *Python Module 9: Dictionaries* (@Mastercode.sagar, PDF escaneado de 16 págs., OCR con Tesseract y MarkItDown), chuleta «NumPy Complete Cheatsheet» (@thedataguy16, 11 láminas) y carrusel «12 Machine Learning Algorithms» (@code.withnarayan, 20 láminas, generado con IA) | Diccionarios a fondo, NumPy a fondo (difusión, vistas, trampas), fichas de árbol, Naive Bayes, SVM, boosting y jerárquico con figuras propias | 5.2, 7.1, [Algoritmos](algoritmos.html), ejercicios E115–E116 y A4–A5 |
 | «10 GitHub repos for AI/ML eng beginners» (@marina.wyss, PDF de 3 págs. hecho con Canva) | Diez repositorios revisados uno a uno (licencia, actividad en noviembre de 2026, traducciones, requisitos) | 14.16 |
+| «Programming Fundamentals – Python. Complete Handwritten Notes» (@abhi_techhub, PDF de 20 págs. sin capa de texto, OCR con Tesseract) | Casi todo ya estaba en las secciones 1–5 y 14.14. Se añaden en 14.14 «Herramientas del proyecto: uv, Ruff y anotaciones de tipo», «Programas para la terminal: argparse», «Métodos especiales y dataclasses», el orden real al encadenar decoradores y la hoja visual «Python en una hoja»; se corrige `__init__.py` (opcional desde 3.3) en dos tablas. Errores usados en E141 | 14.14; ejercicios E141–E142 |
 | «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |
@@ -6763,7 +6954,7 @@ Las mismas preguntas aparecen una y otra vez en exámenes, entrevistas de práct
 | Copia superficial y profunda | `copy()` comparte lo de dentro; `deepcopy()` lo duplica todo | [5.4](#54-listas-a-fondo-más-métodos-copias-y-alias) |
 | ¿Cómo gestiona Python la memoria? | Recuento de referencias + recolector de basura para los ciclos | [Cómo ejecuta Python...](#cómo-ejecuta-python-tu-programa-y-cómo-gestiona-la-memoria) |
 | GIL; hilos, procesos o `asyncio` | Un solo hilo ejecuta Python a la vez. Hilos o `asyncio` para esperar (red, archivos); procesos para calcular | [Concurrencia](#concurrencia-hilos-procesos-y-asyncio) |
-| Módulo y paquete | Módulo: un archivo `.py`. Paquete: una carpeta de módulos (con `__init__.py`) | [5.7](#57-funciones-integradas-y-módulos-útiles) |
+| Módulo y paquete | Módulo: un archivo `.py`. Paquete: una carpeta de módulos (`__init__.py` es opcional desde Python 3.3, pero se suele poner) | [5.7](#57-funciones-integradas-y-módulos-útiles) |
 | Entorno virtual | Una carpeta con su propio Python y sus librerías para cada proyecto: `python -m venv venv` y activarlo | [Estilo y organización](#estilo-y-organización-de-un-proyecto) |
 | Modos de `open()` | `"r"` leer, `"w"` escribir (¡borra lo que había!), `"a"` añadir al final, `"x"` crear (error si ya existe), `"b"` binario | [5.9](#59-de-python-puro-a-una-tabla-de-datos), [14.10](#1410-automatización-con-python) |
 
@@ -6796,7 +6987,7 @@ print(0.1 + 0.2 == 0.3)           # 6. False: los decimales no son exactos (2.2)
 print({True: "a", 1: "b", 1.0: "c"})   # 7. {True: 'c'}: True == 1 == 1.0 tienen el mismo hash: es la misma clave
 ```
 
-Los ejercicios [E95–E98](ejercicios.html#bloque-s--python-a-fondo-preguntas-tipo-entrevista-e95e98) practican estas preguntas, los programas clásicos de las entrevistas (palíndromos, anagramas, primos...) y la revisión crítica de una hoja de «preguntas importantes de Python».
+Los ejercicios [E95–E98](ejercicios.html#bloque-s--python-a-fondo-preguntas-tipo-entrevista-e95e98-y-e141e142) practican estas preguntas, los programas clásicos de las entrevistas (palíndromos, anagramas, primos...) y la revisión crítica de una hoja de «preguntas importantes de Python».
 
 ### 14.19 De prototipo a aplicación: herramientas de ingeniería de IA
 

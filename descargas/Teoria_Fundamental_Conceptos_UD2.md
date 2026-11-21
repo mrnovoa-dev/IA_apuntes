@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E144 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E146 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -1016,6 +1016,33 @@ if not tiene_licencia:
     print("Necesita licencia")
 ```
 
+**`match` y `case` (desde Python 3.10).** Cuando hay que comparar un valor con muchas posibilidades, `match` es más claro que una cadena de `elif`. Además de valores sueltos, reconoce **formas**: una lista de dos palabras, una opción u otra (`|`) o un caso con condición (`if`). El caso `_` recoge todo lo demás, como el `else`:
+
+```python
+def responder(orden):
+    match orden.split():
+        case ["salir" | "sair"]:
+            return "Adeus"
+        case ["ir", destino]:
+            return f"Voy a {destino}"
+        case ["nota", valor] if valor.isdigit() and int(valor) <= 10:
+            return f"Nota guardada: {valor}"
+        case ["nota", _]:
+            return "La nota debe ser un número de 0 a 10"
+        case _:
+            return "No entiendo la orden"
+
+for o in ["sair", "ir biblioteca", "nota 8", "nota once", "bailar"]:
+    print(f"{o!r:16} → {responder(o)}")
+# 'sair'           → Adeus
+# 'ir biblioteca'  → Voy a biblioteca
+# 'nota 8'         → Nota guardada: 8
+# 'nota once'      → La nota debe ser un número de 0 a 10
+# 'bailar'         → No entiendo la orden
+```
+
+Se comprueban los casos **en orden** y se ejecuta solo el primero que encaja, así que el caso general (`["nota", _]`) va después del más concreto. Si no hay `case _` y nada encaja, no pasa nada: no da error.
+
 [Referencia: Control de flujo](https://docs.python.org/3/tutorial/controlflow.html)
 
 ### 3.2 Bucles (for y while)
@@ -1056,6 +1083,20 @@ for i in range(5):
     if i == 2:
         continue  # Salta i=2
     print(i)  # Imprime 0, 1, 3, 4
+```
+
+**El operador morsa `:=` (desde Python 3.8)** asigna un valor y lo devuelve en la misma expresión. Sirve para no repetir una llamada: leer hasta que llegue «fin», o calcular algo una vez y usarlo en la condición y dentro del `if`. Si hace el código más difícil de leer, mejor dos líneas:
+
+```python
+entradas = iter(["7", "9", "fin", "5"])          # en clase sería input("Nota: ")
+notas = []
+while (texto := next(entradas)) != "fin":
+    notas.append(int(texto))
+print(notas)                                      # [7, 9]
+
+lecturas = [12.5, 13.1, 40.2, 12.9]
+if (maximo := max(lecturas)) > 30:
+    print(f"Aviso: el sensor marcó {maximo}")     # Aviso: el sensor marcó 40.2
 ```
 
 [Referencia: Bucles](https://docs.python.org/3/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops)
@@ -1965,7 +2006,7 @@ print(filas[0]["cuota"] + filas[1]["cuota"])         # 3020  ← ¡se juntan dos
 print(sum(int(f["cuota"]) for f in filas))           # 80
 ```
 
-**Todo lo que sale de un CSV es texto**: `'30' + '20'` da `'3020'`. Hay que convertir con `int()` o `float()` antes de operar. Con tildes, indica siempre `encoding="utf-8"`.
+**Todo lo que sale de un CSV es texto**: `'30' + '20'` da `'3020'`. Hay que convertir con `int()` o `float()` antes de operar. Con tildes, indica siempre `encoding="utf-8"`. Desde Python 3.15 (octubre de 2026) UTF-8 ya es lo predeterminado al abrir archivos de texto, también en Windows, pero escribirlo sigue siendo buena idea: el mismo programa funcionará igual con versiones anteriores, que en Windows leían «Café» como «CafÃ©».
 
 **Limpiar valores sucios fila a fila.** Los datos reales llegan con errores. En lugar de que el programa se pare en la primera fila mala, se captura **el error concreto** y se marca el valor como desconocido (`None`), para revisarlo después:
 
@@ -5886,6 +5927,114 @@ print(factorial(5), fib(50), busqueda_binaria([1, 3, 5, 7, 9, 11], 7))   # 120 1
 | O(n log n) | Casi lineal | `sorted()` | 10 000 pasos |
 | O(n²) | Cuadrática | Dos bucles anidados | 1 000 000 pasos |
 
+#### Tres problemas clásicos: dos que suman, cambio de monedas, pila y cola
+
+Aparecen en todas las listas de «programas que hay que saber» y en las entrevistas de trabajo. Lo interesante no es memorizarlos, sino ver qué idea los resuelve: **guardar lo ya visto en un diccionario**, **apuntar resultados parciales** y **elegir la estructura de datos adecuada**.
+
+<!-- hoja:algoritmos -->
+<section class="hoja" aria-labelledby="hoja-alg-t">
+<p class="hoja-titulo" id="hoja-alg-t">Algoritmos clásicos en una hoja</p>
+<p class="hoja-nota">Tres problemas de entrevista y la estructura de datos que los resuelve. Todo calculado con el código de esta sección.</p>
+<div class="hoja-grid">
+<div class="ficha ancha"><h5>Cambio de 11 € con monedas de 1, 5, 6, 9</h5>
+<ul class="semaforo">
+<li class="no"><b>Voraz</b><span class="marca">✗ 3 monedas</span><span class="que">siempre la más grande que quepa: 9 + 1 + 1</span></li>
+<li><b>Programación dinámica</b><span class="marca">✓ 2 monedas</span><span class="que">apunta el mejor resultado para cada cantidad: 5 + 6</span></li>
+</ul>
+<p class="ficha-pie">La tabla <code>mejor</code>: cuántas monedas hacen falta como mínimo para cada cantidad, y la última moneda que se añadió.</p><div class="celdas"><div><small>0 €</small><b>0</b><small>—</small></div><div><small>1 €</small><b>1</b><small>+1</small></div><div><small>2 €</small><b>2</b><small>+1</small></div><div><small>3 €</small><b>3</b><small>+1</small></div><div><small>4 €</small><b>4</b><small>+1</small></div><div><small>5 €</small><b>1</b><small>+5</small></div><div><small>6 €</small><b>1</b><small>+6</small></div><div><small>7 €</small><b>2</b><small>+1</small></div><div><small>8 €</small><b>3</b><small>+1</small></div><div><small>9 €</small><b>1</b><small>+9</small></div><div><small>10 €</small><b>2</b><small>+1</small></div><div class="fin"><small>11 €</small><b>2</b><small>+5</small></div></div>
+<p class="ficha-pie">Para 11: la última moneda es 6, y 11 − 6 = 5 se hace con una moneda de 5. Con euros (1, 2, 5, 10…) la voraz sí acierta siempre.</p></div>
+<div class="ficha"><h5>Dos que suman 25</h5><div class="tabla-ficha"><table><thead><tr><th>i</th><th>n</th><th>Falta</th><th>¿Está?</th><th>Anoto</th></tr></thead><tbody><tr><td>0</td><td>12</td><td>13</td><td>✗</td><td>12→0</td></tr><tr><td>1</td><td>7</td><td>18</td><td>✗</td><td>7→1</td></tr><tr><td>2</td><td>30</td><td>-5</td><td>✗</td><td>30→2</td></tr><tr><td>3</td><td>3</td><td>22</td><td>✗</td><td>3→3</td></tr><tr><td>4</td><td>18</td><td>7</td><td>✓ en 1</td><td></td></tr></tbody></table></div>
+<p class="ficha-pie">Una sola pasada: el diccionario recuerda lo que ya vi. Probar todas las parejas, con 5000 números, son 12,5 millones de sumas.</p></div>
+<div class="ficha"><h5>¿Qué tarda y qué no?</h5><dl class="vocab">
+<dt><code>x in lista</code></dt><dd>recorre la lista: más datos, más tiempo</dd><dt><code>x in conjunto o dict</code></dt><dd>salta directo: casi igual con 10 que con 10 millones</dd><dt><code>lista.append / pop()</code></dt><dd>rápido: trabaja por el final</dd><dt><code>lista.pop(0)</code></dt><dd>lento: mueve todos los demás</dd><dt><code>deque.popleft()</code></dt><dd>rápido: hecho para colas</dd><dt><code>sorted(lista)</code></dt><dd>más que recorrerla una vez, menos que comparar todas las parejas</dd>
+</dl></div>
+<div class="ficha ancha"><h5>Pila y cola</h5><svg class="sv sv-h" viewBox="0 0 740 196" role="img" aria-labelledby="pc-t pc-d"><title id="pc-t">Pila y cola</title><desc id="pc-d">Pila: se apilan abrir, escribir y borrar; lo último que entra, borrar, es lo primero que sale. Cola: Uxía, Brais y Noa esperan; entra gente por el final y sale primero Uxía, que llegó antes.</desc><defs><marker id="pc-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="pc-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="pc-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="pc-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="pc-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><text x="80" y="18" class="sv-tit" text-anchor="middle">Pila (LIFO)</text><rect x="30" y="150" width="100" height="30" rx="6" class="sv-caja"/><text x="80" y="170" class="sv-sub" text-anchor="middle">abrir</text><rect x="30" y="114" width="100" height="30" rx="6" class="sv-caja"/><text x="80" y="134" class="sv-sub" text-anchor="middle">escribir</text><rect x="30" y="78" width="100" height="30" rx="6" class="sv-caja sv-caja-ok"/><text x="80" y="98" class="sv-sub" text-anchor="middle">borrar</text><path d="M30,186 H130" class="sv-llave"/><path d="M160,92 V62 H112" class="sv-l-tinta" marker-end="url(#pc-tinta)"/><text x="165" y="98" class="sv-et" text-anchor="start">entra</text><path d="M112,46 H180 V28" class="sv-l-rojo" marker-end="url(#pc-rojo)"/><text x="186" y="32" class="sv-et sv-et-no" text-anchor="start">sale el último</text><text x="530" y="18" class="sv-tit" text-anchor="middle">Cola (FIFO)</text><rect x="430" y="96" width="70" height="34" rx="6" class="sv-caja sv-caja-ok"/><text x="465" y="118" class="sv-sub" text-anchor="middle">Uxía</text><rect x="510" y="96" width="70" height="34" rx="6" class="sv-caja"/><text x="545" y="118" class="sv-sub" text-anchor="middle">Brais</text><rect x="590" y="96" width="70" height="34" rx="6" class="sv-caja"/><text x="625" y="118" class="sv-sub" text-anchor="middle">Noa</text><path d="M700,113 H674" class="sv-l-tinta" marker-end="url(#pc-tinta)"/><text x="700" y="150" class="sv-et" text-anchor="end">entra al final</text><path d="M428,113 H384" class="sv-l-rojo" marker-end="url(#pc-rojo)"/><text x="384" y="150" class="sv-et sv-et-no" text-anchor="start">sale el primero</text></svg><svg class="sv sv-v" viewBox="0 0 340 306" role="img" aria-labelledby="pcv-t pcv-d"><title id="pcv-t">Pila y cola</title><desc id="pcv-d">Pila: lo último que entra, borrar, es lo primero que sale. Cola: entra gente por el final y sale primero Uxía, que llegó antes.</desc><defs><marker id="pcv-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="pcv-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="pcv-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="pcv-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="pcv-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><text x="110" y="18" class="sv-tit" text-anchor="middle">Pila (LIFO)</text><rect x="60" y="150" width="110" height="30" rx="6" class="sv-caja"/><text x="115" y="170" class="sv-sub" text-anchor="middle">abrir</text><rect x="60" y="114" width="110" height="30" rx="6" class="sv-caja"/><text x="115" y="134" class="sv-sub" text-anchor="middle">escribir</text><rect x="60" y="78" width="110" height="30" rx="6" class="sv-caja sv-caja-ok"/><text x="115" y="98" class="sv-sub" text-anchor="middle">borrar</text><path d="M215,92 V62 H174" class="sv-l-tinta" marker-end="url(#pcv-tinta)"/><text x="220" y="98" class="sv-et" text-anchor="start">entra</text><path d="M174,46 H235 V30" class="sv-l-rojo" marker-end="url(#pcv-rojo)"/><text x="242" y="34" class="sv-et sv-et-no" text-anchor="start">sale el último</text><text x="150" y="222" class="sv-tit" text-anchor="middle">Cola (FIFO)</text><rect x="60" y="240" width="70" height="34" rx="6" class="sv-caja sv-caja-ok"/><text x="95" y="262" class="sv-sub" text-anchor="middle">Uxía</text><rect x="140" y="240" width="70" height="34" rx="6" class="sv-caja"/><text x="175" y="262" class="sv-sub" text-anchor="middle">Brais</text><rect x="220" y="240" width="70" height="34" rx="6" class="sv-caja"/><text x="255" y="262" class="sv-sub" text-anchor="middle">Noa</text><path d="M326,257 H304" class="sv-l-tinta" marker-end="url(#pcv-tinta)"/><text x="300" y="296" class="sv-et" text-anchor="end">entra al final</text><path d="M58,257 H20" class="sv-l-rojo" marker-end="url(#pcv-rojo)"/><text x="14" y="296" class="sv-et sv-et-no" text-anchor="start">sale el primero</text></svg><p class="ficha-pie">Pila: <code>append</code> y <code>pop()</code> de una lista (deshacer, llamadas a funciones). Cola: <code>deque</code> con <code>append</code> y <code>popleft()</code> (turnos, recorrido en anchura).</p></div>
+</div></section>
+<!-- /hoja:algoritmos -->
+
+**Dos que suman.** Dada una lista y un objetivo, encontrar las posiciones de dos números que sumen el objetivo. Probar todas las parejas funciona, pero con muchos datos se hace eterno. Con un diccionario basta una pasada: para cada número, se mira si su «pareja» (objetivo − n) ya apareció.
+
+```python
+import time
+
+def dos_que_suman_lento(nums, objetivo):          # prueba todas las parejas: O(n²)
+    for i in range(len(nums)):
+        for j in range(i + 1, len(nums)):
+            if nums[i] + nums[j] == objetivo:
+                return [i, j]
+    return []
+
+def dos_que_suman(nums, objetivo):                # una pasada con diccionario: O(n)
+    vistos = {}                                   # valor → posición
+    for i, n in enumerate(nums):
+        if objetivo - n in vistos:
+            return [vistos[objetivo - n], i]
+        vistos[n] = i
+    return []
+
+precios = [12, 7, 30, 3, 18]
+print(dos_que_suman(precios, 25))                 # [1, 4]: 7 + 18
+
+grande = list(range(5_000))
+for f in (dos_que_suman_lento, dos_que_suman):
+    t = time.perf_counter()
+    f(grande, 9_997)                              # la pareja está al final
+    print(f.__name__, f"{time.perf_counter() - t:.3f} s")
+# dos_que_suman_lento 0.6 s (unos 12,5 millones de sumas)
+# dos_que_suman 0.001 s  (5000 consultas al diccionario)
+```
+
+Los tiempos dependen del ordenador, pero la proporción no: con el doble de datos, la versión lenta tarda unas cuatro veces más y la rápida, el doble. Es la diferencia entre O(n²) y O(n) de la tabla anterior.
+
+**Cambio de monedas.** ¿Cuántas monedas hacen falta como mínimo para pagar una cantidad? La idea intuitiva, **voraz** (*greedy*), es coger siempre la moneda más grande que quepa. Con euros funciona, pero con otras monedas falla. La **programación dinámica** resuelve antes todas las cantidades pequeñas y las apunta en una tabla: para cada cantidad x, prueba cada moneda m y mira cuántas hacían falta para x − m.
+
+```python
+def cambio_voraz(cantidad, monedas):             # siempre la moneda más grande que quepa
+    usadas = []
+    for m in sorted(monedas, reverse=True):
+        while cantidad >= m:
+            usadas.append(m)
+            cantidad -= m
+    return usadas
+
+def cambio_minimo(cantidad, monedas):            # programación dinámica
+    INF = float("inf")
+    mejor = [0] + [INF] * cantidad                # mejor[x] = mínimo de monedas para x
+    for x in range(1, cantidad + 1):
+        for m in monedas:
+            if m <= x and mejor[x - m] + 1 < mejor[x]:
+                mejor[x] = mejor[x - m] + 1
+    return mejor[cantidad] if mejor[cantidad] != INF else -1, mejor
+
+print(cambio_voraz(11, [1, 5, 6, 9]))             # [9, 1, 1]: 3 monedas
+n, tabla = cambio_minimo(11, [1, 5, 6, 9])
+print(n, tabla)                                   # 2 [0, 1, 2, 3, 4, 1, 1, 2, 3, 1, 2, 2]
+print(cambio_voraz(11, [1, 2, 5, 10]))            # [10, 1]: con euros, la voraz acierta
+```
+
+**Pila y cola.** Una **pila** saca primero lo último que entró (*LIFO*): es el botón de deshacer, o cómo Python apila las llamadas de una función recursiva (4.9). Una **cola** saca primero lo que entró antes (*FIFO*): turnos, mensajes, la búsqueda en anchura de la UD1. Para la pila basta una lista (`append` y `pop()`), pero para la cola hay que usar `collections.deque`: `lista.pop(0)` mueve todos los elementos cada vez.
+
+```python
+from collections import deque
+
+pila = []                          # pila (LIFO): el último que entra sale primero
+for paso in ["abrir", "escribir", "borrar"]:
+    pila.append(paso)              # deshacer = sacar el último
+print(pila.pop(), pila)            # borrar ['abrir', 'escribir']
+
+cola = deque()                     # cola (FIFO): el primero que entra sale primero
+for nombre in ["Uxía", "Brais", "Noa"]:
+    cola.append(nombre)            # turnos de la impresora del aula
+print(cola.popleft(), list(cola))  # Uxía ['Brais', 'Noa']
+
+historial = deque(maxlen=3)        # solo guarda los 3 últimos
+for t in [18.2, 18.5, 19.1, 19.4]:
+    historial.append(t)
+print(list(historial))             # [18.5, 19.1, 19.4]
+```
+
+Las **listas enlazadas** (cada elemento apunta al siguiente) aparecen mucho en otros lenguajes y en entrevistas. En Python casi nunca hacen falta: la lista y `deque` ya hacen ese trabajo, y más rápido.
+
 **Representación de datos** (de *Más de 400 ejercicios de programación*): un ordenador lo guarda todo en bits. Con `n` bits se representan 2ⁿ valores (16 bits → 0 a 65 535). Python lo muestra con `bin(10)` → `'0b1010'`, `int("1010", 2)` → `10` y `hex(255)` → `'0xff'`.
 
 ---
@@ -6060,6 +6209,76 @@ print(añadir(1), añadir(2))      # [1] [2]
 | `==` frente a `is` | `==` compara valores; `is` comprueba si son **el mismo objeto** | `a == b` para comparar; `x is None` para None |
 
 > **Una corrección al material:** la ficha 2 afirma que Python no hace conversiones automáticas de tipo. Las hace en casos seguros: `3 + 2.5` da `5.5` (int → float) y `True + 1` da `2`. Lo que **no** hace es mezclar tipos incompatibles: `"3" + 2` da `TypeError`, y entonces hay que convertir a mano con `int("3")`.
+
+#### Código de ejemplo que no conviene copiar tal cual
+
+En las listas de «150 programas básicos» que circulan por internet hay programas que funcionan, pero que harían daño en un programa de verdad. Estos son los más frecuentes:
+
+| Programa de ejemplo | Problema | Mejor |
+|---------------------|----------|-------|
+| Calculadora con `eval(texto)` | `eval` ejecuta **cualquier** código de Python que escriba el usuario: borrar archivos, leer contraseñas… | Analizar la expresión con `ast` y permitir solo números y operadores |
+| `except:` sin tipo | Esconde todos los errores, también los que no esperabas (`10 / 0` sale como «expresión no válida») | Capturar solo las excepciones concretas (`ValueError`, `ZeroDivisionError`) |
+| Contraseñas con `random` | `random` es **predecible**: sirve para juegos y simulaciones, no para claves | `secrets` |
+| Validar correos o URL con una expresión regular corta | Acepta cosas raras (`a..b@-.-.co`) y, sin `$` al final, todo lo que venga detrás de una URL válida | `urllib.parse` para URL; para correos, comprobar lo básico y enviar un correo de confirmación |
+| `int(input())` sin protección | Si escriben «siete», el programa se cae | `try / except ValueError` y volver a preguntar |
+| `__len__` para el módulo de un vector | `len()` tiene que devolver un entero: el módulo de (1, 2), 2,236, sale como 2 | `__abs__` y `abs(v)` (14.14, métodos especiales) |
+| El más frecuente con `max(set(s), key=s.count)` | Si hay empate, el resultado **cambia de una ejecución a otra**: el orden de un conjunto de letras varía cada vez | `Counter(s).most_common(1)`: en un empate gana el que aparece antes |
+| `time.time()` para medir | Puede saltar si el reloj del sistema se ajusta | `time.perf_counter()` |
+
+```python
+import ast, operator, secrets, string
+from urllib.parse import urlparse
+
+# 1. Calculadora sin eval: solo números y + - * / ** y paréntesis
+OPS = {ast.Add: operator.add, ast.Sub: operator.sub, ast.Mult: operator.mul,
+       ast.Div: operator.truediv, ast.Pow: operator.pow, ast.USub: operator.neg}
+
+def calcular(texto):
+    def valor(nodo):
+        if isinstance(nodo, ast.Constant) and type(nodo.value) in (int, float):
+            return nodo.value
+        if isinstance(nodo, ast.BinOp) and type(nodo.op) in OPS:
+            return OPS[type(nodo.op)](valor(nodo.left), valor(nodo.right))
+        if isinstance(nodo, ast.UnaryOp) and type(nodo.op) in OPS:
+            return OPS[type(nodo.op)](valor(nodo.operand))
+        raise ValueError("solo se admiten números y + - * / **")
+    return valor(ast.parse(texto, mode="eval").body)
+
+print(calcular("2 + 3 * 4"), calcular("(7 + 8.5) / 2"))   # 14 7.75
+for malo in ['__import__("os").getcwd()', "10 / 0"]:
+    try:
+        calcular(malo)
+    except (ValueError, ZeroDivisionError) as e:
+        print(type(e).__name__, "→", e)
+# ValueError → solo se admiten números y + - * / **
+# ZeroDivisionError → division by zero
+
+# 2. Contraseñas con secrets (random es predecible: sirve para juegos, no para claves)
+def contrasena(longitud=14):
+    grupos = [string.ascii_lowercase, string.ascii_uppercase, string.digits, "!#$%&*+-?@"]
+    todos = "".join(grupos)
+    while True:
+        c = "".join(secrets.choice(todos) for _ in range(longitud))
+        if all(any(ch in g for ch in c) for g in grupos):    # al menos uno de cada tipo
+            return c
+
+c = contrasena()
+print(len(c), any(ch.isdigit() for ch in c), any(ch.isupper() for ch in c))   # 14 True True
+
+# 3. Comprobar una URL separándola en partes, no con una expresión regular
+def es_url_web(texto):
+    partes = urlparse(texto)
+    return partes.scheme in ("http", "https") and "." in partes.netloc and " " not in texto
+
+for u in ["https://www.edu.xunta.gal/portal", "https://ejemplo.com <script>", "ftp://a.b", "www.sin-esquema.gal"]:
+    print(f"{u!r}: {es_url_web(u)}")
+# 'https://www.edu.xunta.gal/portal': True
+# 'https://ejemplo.com <script>': False
+# 'ftp://a.b': False
+# 'www.sin-esquema.gal': False
+```
+
+La calculadora solo acepta lo que está en la lista blanca `OPS`. Todo lo demás (llamadas a funciones, nombres, atributos) da `ValueError`. La contraseña cambia en cada ejecución; por eso el ejemplo muestra solo que tiene 14 caracteres y de todos los tipos.
 
 #### Excepciones completas: `try / except / else / finally` y `raise`
 
@@ -6846,6 +7065,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | «10 GitHub repos for AI/ML eng beginners» (@marina.wyss, PDF de 3 págs. hecho con Canva) | Diez repositorios revisados uno a uno (licencia, actividad en noviembre de 2026, traducciones, requisitos) | 14.16 |
 | «Programming Fundamentals – Python. Complete Handwritten Notes» (@abhi_techhub, PDF de 20 págs. sin capa de texto, OCR con Tesseract) | Casi todo ya estaba en las secciones 1–5 y 14.14. Se añaden en 14.14 «Herramientas del proyecto: uv, Ruff y anotaciones de tipo», «Programas para la terminal: argparse», «Métodos especiales y dataclasses», el orden real al encadenar decoradores y la hoja visual «Python en una hoja»; se corrige `__init__.py` (opcional desde 3.3) en dos tablas. Errores usados en E141 | 14.14; ejercicios E141–E142 |
 | Carrusel «Neural Networks – Complete Handwritten Study Handbook» (@aditechnova18, 16 láminas, marcado como generado con IA) | Casi todo ya estaba en 14.7. Se añadieron la hoja «Una red neuronal en una hoja», la nota sobre la neurona biológica, la regularización L1 y L2 con números, el redondeo de los pasos por época y la nota sobre los lotes en potencias de 2. Sus errores (pasos por época, Adam sin corrección del sesgo, «menos pérdida = mejor modelo»…) están en E143, y sus cuentas, en E144 | [14.7](#147-redes-neuronales-desde-cero), [E143–E144](ejercicios.html#bloque-aa--aprendizaje-profundo-con-criterio-e117-y-e143e144) |
+| «150+ Basic Python Programs» (PDF de 37 págs., sin autor; 150 programas comentados) | Casi todo ya estaba en las secciones 1–5, 14.12 y 14.14. Se añadieron `match`/`case` (3.1), el operador morsa (3.2), la nota sobre UTF-8 en Python 3.15 (5.9), «Tres problemas clásicos» con la hoja «Algoritmos clásicos en una hoja» (14.12) y «Código de ejemplo que no conviene copiar tal cual» (14.14). Sus errores están en E145 y la práctica, en E146 | [3.1](#31-condicionales-ifelifelse), [14.12](#1412-algoritmia-pensar-antes-de-programar), [14.14](#1414-buenas-prácticas-de-python-y-conceptos-avanzados), [E145–E146](ejercicios.html#bloque-s--python-a-fondo-preguntas-tipo-entrevista-e95e98-e141e142-y-e145e146) |
 | «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |
@@ -7060,7 +7280,7 @@ print(0.1 + 0.2 == 0.3)           # 6. False: los decimales no son exactos (2.2)
 print({True: "a", 1: "b", 1.0: "c"})   # 7. {True: 'c'}: True == 1 == 1.0 tienen el mismo hash: es la misma clave
 ```
 
-Los ejercicios [E95–E98](ejercicios.html#bloque-s--python-a-fondo-preguntas-tipo-entrevista-e95e98-y-e141e142) practican estas preguntas, los programas clásicos de las entrevistas (palíndromos, anagramas, primos...) y la revisión crítica de una hoja de «preguntas importantes de Python».
+Los ejercicios [E95–E98](ejercicios.html#bloque-s--python-a-fondo-preguntas-tipo-entrevista-e95e98-e141e142-y-e145e146) practican estas preguntas, los programas clásicos de las entrevistas (palíndromos, anagramas, primos...) y la revisión crítica de una hoja de «preguntas importantes de Python».
 
 ### 14.19 De prototipo a aplicación: herramientas de ingeniería de IA
 

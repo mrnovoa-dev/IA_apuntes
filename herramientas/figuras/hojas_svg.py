@@ -1037,6 +1037,111 @@ def hoja_redes():
     return "\n".join(h)
 
 
+# ---------- Algoritmos clásicos ----------
+def _cambio_tabla(cantidad, monedas):
+    INF = float("inf")
+    mejor = [0] + [INF] * cantidad
+    ultima = [0] * (cantidad + 1)
+    for x in range(1, cantidad + 1):
+        for m in monedas:
+            if m <= x and mejor[x - m] + 1 < mejor[x]:
+                mejor[x], ultima[x] = mejor[x - m] + 1, m
+    return mejor, ultima
+
+
+def _voraz(cantidad, monedas):
+    usadas = []
+    for m in sorted(monedas, reverse=True):
+        while cantidad >= m:
+            usadas.append(m)
+            cantidad -= m
+    return usadas
+
+
+def pila_cola_svg():
+    p = "pc"
+    b = texto(80, 18, "Pila (LIFO)", "sv-tit")
+    for i, t in enumerate(["abrir", "escribir", "borrar"]):
+        y = 150 - 36 * i
+        b += f'<rect x="30" y="{y}" width="100" height="30" rx="6" class="sv-caja{" sv-caja-ok" if i == 2 else ""}"/>' + texto(80, y + 20, t, "sv-sub")
+    b += f'<path d="M30,{186} H130" class="sv-llave"/>'
+    b += linea("M160,92 V62 H112", p, "tinta") + texto(165, 98, "entra", "sv-et", "start")
+    b += linea("M112,46 H180 V28", p, "rojo") + texto(186, 32, "sale el último", "sv-et sv-et-no", "start")
+    b += texto(530, 18, "Cola (FIFO)", "sv-tit")
+    for i, t in enumerate(["Uxía", "Brais", "Noa"]):
+        x = 430 + 80 * i
+        b += f'<rect x="{x}" y="96" width="70" height="34" rx="6" class="sv-caja{" sv-caja-ok" if i == 0 else ""}"/>' + texto(x + 35, 118, t, "sv-sub")
+    b += linea("M700,113 H674", p, "tinta") + texto(700, 150, "entra al final", "sv-et", "end")
+    b += linea("M428,113 H384", p, "rojo") + texto(384, 150, "sale el primero", "sv-et sv-et-no", "start")
+    desc = ("Pila: se apilan abrir, escribir y borrar; lo último que entra, borrar, es lo primero que sale. "
+            "Cola: Uxía, Brais y Noa esperan; entra gente por el final y sale primero Uxía, que llegó antes.")
+    return svg(p, "0 0 740 196", "Pila y cola", desc, b, "sv-h")
+
+
+def pila_cola_v():
+    p = "pcv"
+    b = texto(110, 18, "Pila (LIFO)", "sv-tit")
+    for i, t in enumerate(["abrir", "escribir", "borrar"]):
+        y = 150 - 36 * i
+        b += f'<rect x="60" y="{y}" width="110" height="30" rx="6" class="sv-caja{" sv-caja-ok" if i == 2 else ""}"/>' + texto(115, y + 20, t, "sv-sub")
+    b += linea("M215,92 V62 H174", p, "tinta") + texto(220, 98, "entra", "sv-et", "start")
+    b += linea("M174,46 H235 V30", p, "rojo") + texto(242, 34, "sale el último", "sv-et sv-et-no", "start")
+    b += texto(150, 222, "Cola (FIFO)", "sv-tit")
+    for i, t in enumerate(["Uxía", "Brais", "Noa"]):
+        x = 60 + 80 * i
+        b += f'<rect x="{x}" y="240" width="70" height="34" rx="6" class="sv-caja{" sv-caja-ok" if i == 0 else ""}"/>' + texto(x + 35, 262, t, "sv-sub")
+    b += linea("M326,257 H304", p, "tinta") + texto(300, 296, "entra al final", "sv-et", "end")
+    b += linea("M58,257 H20", p, "rojo") + texto(14, 296, "sale el primero", "sv-et sv-et-no", "start")
+    desc = ("Pila: lo último que entra, borrar, es lo primero que sale. "
+            "Cola: entra gente por el final y sale primero Uxía, que llegó antes.")
+    return svg(p, "0 0 340 306", "Pila y cola", desc, b, "sv-v")
+
+
+def hoja_algoritmos():
+    cantidad, monedas = 11, [1, 5, 6, 9]
+    mejor, ultima = _cambio_tabla(cantidad, monedas)
+    voraz = _voraz(cantidad, monedas)
+    usadas, x = [], cantidad
+    while x:
+        usadas.append(ultima[x]); x -= ultima[x]
+    celdas = "".join(
+        f'<div{" class=\"fin\"" if i == cantidad else ""}><small>{i} €</small><b>{v}</b>'
+        f'<small>{"—" if i == 0 else "+" + str(ultima[i])}</small></div>' for i, v in enumerate(mejor))
+    nums, obj = [12, 7, 30, 3, 18], 25
+    vistos, filas = {}, []
+    for i, n in enumerate(nums):
+        busca = obj - n
+        esta = busca in vistos
+        filas.append(f"<tr><td>{i}</td><td>{n}</td><td>{busca}</td><td>{'✓ en ' + str(vistos[busca]) if esta else '✗'}</td>"
+                     f"<td>{'' if esta else f'{n}→{i}'}</td></tr>")
+        if esta:
+            break
+        vistos[n] = i
+    costes = [("x in lista", "recorre la lista: más datos, más tiempo"),
+              ("x in conjunto o dict", "salta directo: casi igual con 10 que con 10 millones"),
+              ("lista.append / pop()", "rápido: trabaja por el final"),
+              ("lista.pop(0)", "lento: mueve todos los demás"),
+              ("deque.popleft()", "rápido: hecho para colas"),
+              ("sorted(lista)", "más que recorrerla una vez, menos que comparar todas las parejas")]
+    h = ['<section class="hoja" aria-labelledby="hoja-alg-t">',
+         '<p class="hoja-titulo" id="hoja-alg-t">Algoritmos clásicos en una hoja</p>',
+         '<p class="hoja-nota">Tres problemas de entrevista y la estructura de datos que los resuelve. Todo calculado con el código de esta sección.</p>',
+         '<div class="hoja-grid">',
+         f'<div class="ficha ancha"><h5>Cambio de {cantidad} € con monedas de {", ".join(map(str, monedas))}</h5>',
+         '<ul class="semaforo">',
+         f'<li class="no"><b>Voraz</b><span class="marca">✗ {len(voraz)} monedas</span><span class="que">siempre la más grande que quepa: {" + ".join(map(str, voraz))}</span></li>',
+         f'<li><b>Programación dinámica</b><span class="marca">✓ {mejor[cantidad]} monedas</span><span class="que">apunta el mejor resultado para cada cantidad: {" + ".join(map(str, sorted(usadas)))}</span></li>',
+         '</ul>',
+         f'<p class="ficha-pie">La tabla <code>mejor</code>: cuántas monedas hacen falta como mínimo para cada cantidad, y la última moneda que se añadió.</p><div class="celdas">{celdas}</div>',
+         '<p class="ficha-pie">Para 11: la última moneda es 6, y 11 − 6 = 5 se hace con una moneda de 5. Con euros (1, 2, 5, 10…) la voraz sí acierta siempre.</p></div>',
+         f'<div class="ficha"><h5>Dos que suman {obj}</h5><div class="tabla-ficha"><table><thead><tr><th>i</th><th>n</th><th>Falta</th><th>¿Está?</th><th>Anoto</th></tr></thead><tbody>{"".join(filas)}</tbody></table></div>',
+         f'<p class="ficha-pie">Una sola pasada: el diccionario recuerda lo que ya vi. Probar todas las parejas, con 5000 números, son 12,5 millones de sumas.</p></div>',
+         '<div class="ficha"><h5>¿Qué tarda y qué no?</h5><dl class="vocab">', "".join(f"<dt><code>{a}</code></dt><dd>{d}</dd>" for a, d in costes), '</dl></div>',
+         f'<div class="ficha ancha"><h5>Pila y cola</h5>{pila_cola_svg()}{pila_cola_v()}<p class="ficha-pie">Pila: <code>append</code> y <code>pop()</code> de una lista (deshacer, llamadas a funciones). Cola: <code>deque</code> con <code>append</code> y <code>popleft()</code> (turnos, recorrido en anchura).</p></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -1055,6 +1160,7 @@ if __name__ == "__main__":
     t = insertar(t, "graficos", hoja_graficos())
     t = insertar(t, "python", hoja_python())
     t = insertar(t, "redes", hoja_redes())
+    t = insertar(t, "algoritmos", hoja_algoritmos())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

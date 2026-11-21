@@ -8,6 +8,7 @@ Uso:  python3 herramientas/figuras/hojas_svg.py
 Reescribe lo que haya entre <!-- hoja:NOMBRE --> y <!-- /hoja:NOMBRE --> en la teoría.
 Importante (gfm): ningún bloque puede llevar líneas en blanco dentro.
 """
+import math
 from html import escape
 from pathlib import Path
 
@@ -878,6 +879,164 @@ def hoja_python():
     return "\n".join(h)
 
 
+# ---------- Redes neuronales ----------
+NEU_DESC = ("Tres entradas (1, 2 y 3) se multiplican por sus pesos (0,2, 0,4 y 0,2) y se suman con el sesgo 0: "
+            "z = 1,6. La sigmoide convierte z en la salida 0,832.")
+
+
+def neurona_h():
+    p = "nh"
+    b = ""
+    for i, (v, w) in enumerate([("1,0", "0,2"), ("2,0", "0,4"), ("3,0", "0,2")]):
+        y = 40 + 55 * i
+        b += texto(14, y + 4, v, "sv-et", "start") + nodo(62, y, f"x{i + 1}")
+        b += linea(f"M75,{y} L{300},{95 + (i - 1) * 14}", p, "tinta")
+        yl = y + (95 + (i - 1) * 14 - y) * (150 - 75) / (300 - 75)
+        b += texto(150, yl - 7, f"w{i + 1} = {w}", "sv-ord")
+    b += texto(334, 18, "sesgo b = 0", "sv-et") + linea("M334,24 V55", p, "tinta")
+    b += '<circle cx="334" cy="95" r="34" class="sv-caja"/>' + texto(334, 104, "Σ", "sv-tit")
+    b += texto(334, 150, "z = 1·0,2 + 2·0,4 + 3·0,2 + 0", "sv-et") + texto(334, 168, "= 1,6", "sv-ord")
+    b += linea("M370,95 H426", p) + caja(430, 66, 130, 58, "Activación", "sigmoide f(z)")
+    b += linea("M562,95 H596", p) + caja(600, 66, 130, 58, "Salida", "ŷ = f(1,6) = 0,832", "sv-caja sv-caja-ok")
+    return svg(p, "0 0 740 180", "Una neurona por dentro", NEU_DESC, b, "sv-h")
+
+
+def neurona_v():
+    p = "nv"
+    b = ""
+    for i, (v, w) in enumerate([("1,0", "0,2"), ("2,0", "0,4"), ("3,0", "0,2")]):
+        x = 60 + 90 * i
+        b += texto(x, 16, v, "sv-et") + nodo(x, 36, f"x{i + 1}")
+        b += linea(f"M{x},49 L{150 + (i - 1) * 16},{140}", p, "tinta")
+        b += [texto(88, 96, f"w1={w}", "sv-ord", "end"), texto(158, 72, f"w2={w}", "sv-ord", "start"),
+              texto(212, 96, f"w3={w}", "sv-ord", "start")][i]
+    b += '<circle cx="150" cy="172" r="30" class="sv-caja"/>' + texto(150, 181, "Σ", "sv-tit")
+    b += linea("M262,172 H184", p, "tinta") + texto(262, 162, "b = 0", "sv-et", "end")
+    b += texto(150, 222, "z = 0,2 + 0,8 + 0,6 + 0 = 1,6", "sv-et")
+    b += linea("M150,230 V254", p) + caja(70, 258, 160, 56, "Activación", "sigmoide f(z)")
+    b += linea("M150,316 V340", p) + caja(70, 344, 160, 56, "Salida", "ŷ = 0,832", "sv-caja sv-caja-ok")
+    return svg(p, "0 0 300 410", "Una neurona por dentro", NEU_DESC, b, "sv-v")
+
+
+BUCLE_DESC = ("Cada iteración repite cuatro pasos con un lote de datos: hacia delante se calcula la predicción, "
+              "la pérdida mide el error, hacia atrás se calcula el gradiente de cada peso y se actualizan los pesos. "
+              "Después se vuelve a empezar con el lote siguiente.")
+
+
+def bucle_svg():
+    p = "nb"
+    b = caja(10, 14, 156, 60, "1 · Hacia delante", "predicción ŷ")
+    b += caja(194, 14, 156, 60, "2 · Pérdida", "cuánto se equivoca")
+    b += caja(194, 166, 156, 60, "3 · Hacia atrás", "gradiente de cada peso", "sv-caja sv-caja-ml")
+    b += caja(10, 166, 156, 60, "4 · Actualizar", "w ← w − η · gradiente", "sv-caja sv-caja-ok")
+    b += linea("M168,44 H190", p) + linea("M272,76 V162", p) + linea("M192,196 H170", p) + linea("M88,164 V78", p, "vuelta")
+    b += texto(180, 114, "una vuelta", "sv-et") + texto(180, 130, "por lote", "sv-et")
+    return svg(p, "0 0 360 236", "El bucle de entrenamiento", BUCLE_DESC, b, "sv-bucle")
+
+
+def _curva(f, x0, x1, y0, y1, n=81, ancho=200, alto=120, m=14):
+    pts = []
+    for k in range(n):
+        x = x0 + (x1 - x0) * k / (n - 1)
+        y = f(x)
+        px = m + (ancho - 2 * m) * (x - x0) / (x1 - x0)
+        py = alto - m - (alto - 2 * m) * (y - y0) / (y1 - y0)
+        pts.append(f"{px:.1f},{py:.1f}")
+    return "M" + " L".join(pts)
+
+
+ACTIVACIONES = [
+    ("sigmoide", lambda z: 1 / (1 + math.exp(-z)), -0.2, 1.2, "salida entre 0 y 1", "Última capa en clasificación binaria"),
+    ("tanh", math.tanh, -1.2, 1.2, "salida entre −1 y 1", "Centrada en 0; RNN y redes antiguas"),
+    ("ReLU", lambda z: max(0.0, z), -1.2, 4.2, "0 si z < 0; z si no", "Capas ocultas: la más usada"),
+    ("Leaky ReLU", lambda z: z if z > 0 else 0.1 * z, -1.2, 4.2, "pendiente pequeña si z < 0", "Evita neuronas «muertas»"),
+]
+
+
+def activacion_svg(i):
+    nombre, f, y0, y1, rango, _ = ACTIVACIONES[i]
+    p = f"na{i}"
+    m, W, H = 14, 200, 120
+    ycero = H - m - (H - 2 * m) * (0 - y0) / (y1 - y0)
+    b = f'<path d="M{m},{ycero:.1f} H{W - m} M{W / 2},{m} V{H - m}" class="sv-llave"/>'
+    for nivel in ((1,) if i == 0 else (1, -1) if i == 1 else ()):
+        if True:
+            yy = H - m - (H - 2 * m) * (nivel - y0) / (y1 - y0)
+            b += f'<path d="M{m},{yy:.1f} H{W - m}" class="sv-r-tenue"/>' + texto(W - m, yy - 4, str(nivel).replace("-", "−"), "sv-et", "end")
+    b += f'<path d="{_curva(f, -4, 4, y0, y1)}" class="sv-l-pen"/>'
+    desc = f"Gráfica de {nombre} entre z = −4 y z = 4: {rango}."
+    return svg(p, f"0 0 {W} {H}", nombre, desc, b, "sv-mini")
+
+
+def tasa_svg(eta):
+    p = "nt" + str(eta).replace(".", "")
+    m, W, H = 14, 200, 120
+    w, ws = 0.0, [0.0]
+    for _ in range(20):
+        w = w - eta * 2 * (w - 3)
+        ws.append(w)
+    y0, y1 = -4, 10
+    def py(v):
+        return H - m - (H - 2 * m) * (v - y0) / (y1 - y0)
+    fuera = next((k for k, v in enumerate(ws) if not y0 <= v <= y1), None)
+    vis = ws if fuera is None else ws[:fuera + 1]
+    pts = " L".join(f"{m + (W - 2 * m) * k / 20:.1f},{py(v):.1f}" for k, v in enumerate(vis))
+    b = f'<clipPath id="{p}-c"><rect x="{m}" y="{m}" width="{W - 2 * m}" height="{H - 2 * m}"/></clipPath>'
+    b += f'<path d="M{m},{py(0):.1f} H{W - m}" class="sv-llave"/>'
+    b += f'<path d="M{m},{py(3):.1f} H{W - m}" class="sv-r-tenue"/>' + texto(W - m, py(3) - 4, "mínimo: w = 3", "sv-et", "end")
+    b += f'<path d="M{pts}" class="sv-l-pen" clip-path="url(#{p}-c)"/>'
+    if fuera is not None:
+        b += texto(m + (W - 2 * m) * fuera / 20 + 8, m + 14, f"paso {fuera}: w ≈ {ws[fuera]:.1f}, se sale".replace(".", ","), "sv-et sv-et-no", "start")
+    b += texto(m, H - 1, "pasos 0 → 20", "sv-et", "start")
+    desc = f"Valor de w en 20 pasos de descenso de gradiente sobre (w − 3)² con η = {eta}: termina en {ws[-1]:.2f}."
+    return svg(p, f"0 0 {W} {H + 4}", f"Tasa de aprendizaje {eta}", desc, b, "sv-mini")
+
+
+def hoja_redes():
+    salidas = [("Regresión (un número)", "ninguna (lineal)", "MSE o MAE"),
+               ("Sí / no", "sigmoide", "entropía cruzada binaria"),
+               ("Una clase entre varias", "softmax", "entropía cruzada categórica"),
+               ("Varias etiquetas a la vez", "una sigmoide por etiqueta", "entropía cruzada binaria")]
+    filas = "".join(f"<tr><td>{a}</td><td>{b}</td><td>{c}</td></tr>" for a, b, c in salidas)
+    contra = [("Más datos", "lo que mejor funciona, si se puede"),
+              ("L2", "castiga los pesos grandes: los encoge todos"),
+              ("L1", "castiga cualquier peso: deja muchos en 0"),
+              ("Dropout", "apaga neuronas al azar, solo al entrenar"),
+              ("Parada temprana", "para cuando la validación deja de mejorar")]
+    confundir = [("Época", "una pasada por todos los datos de entrenamiento"),
+                 ("Lote", "los ejemplos de un paso: 1000 datos en lotes de 32 son 32 lotes, el último de 8"),
+                 ("Iteración", "un paso de actualización, uno por lote"),
+                 ("Parámetro", "lo que aprende la red: pesos y sesgos"),
+                 ("Hiperparámetro", "lo que eliges tú: η, capas, tamaño de lote, épocas"),
+                 ("Validación", "datos para decidir mientras entrenas"),
+                 ("Prueba", "datos que solo se miran al final"),
+                 ("Pérdida", "lo que se minimiza (BCE, MSE…)"),
+                 ("Métrica", "lo que se informa (exactitud, F1…)")]
+    h = ['<section class="hoja" aria-labelledby="hoja-nn-t">',
+         '<p class="hoja-titulo" id="hoja-nn-t">Una red neuronal en una hoja</p>',
+         '<p class="hoja-nota">Las piezas, cómo aprende y cómo se controla. Todos los números salen del código de esta sección.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>Una neurona por dentro</h5>', neurona_h(), neurona_v(),
+         '<p class="ficha-pie">Multiplicar, sumar y activar. Una red son muchas neuronas así, en capas.</p></div>',
+         f'<div class="ficha"><h5>El bucle de entrenamiento</h5>{bucle_svg()}<p class="ficha-pie">La propagación hacia delante no cambia ningún peso: solo el paso 4 lo hace.</p></div>',
+         f'<div class="ficha"><h5>¿Qué salida y qué pérdida?</h5><div class="tabla-ficha"><table><thead><tr><th>Problema</th><th>Última capa</th><th>Pérdida</th></tr></thead><tbody>{filas}</tbody></table></div>'
+         '<p class="ficha-pie">En las capas ocultas, casi siempre ReLU.</p></div>',
+         '<div class="ficha ancha"><h5>Funciones de activación</h5><div class="ramas cuatro">',
+         "".join(f'<figure>{activacion_svg(i)}<figcaption><b>{n}</b>: {r}. {u}.</figcaption></figure>' for i, (n, _f, _a, _b, r, u) in enumerate(ACTIVACIONES)),
+         '</div></div>',
+         '<div class="ficha ancha"><h5>La tasa de aprendizaje η</h5><div class="ramas">',
+         f'<figure>{tasa_svg(0.01)}<figcaption><b>η = 0,01</b>. Demasiado pequeña: en 20 pasos ni se acerca.</figcaption></figure>',
+         f'<figure>{tasa_svg(0.1)}<figcaption><b>η = 0,1</b>. Adecuada: llega al mínimo sin pasarse.</figcaption></figure>',
+         f'<figure>{tasa_svg(1.1)}<figcaption><b>η = 1,1</b>. Demasiado grande: cada paso se pasa más y diverge.</figcaption></figure>',
+         '</div><p class="ficha-pie">Minimizando (w − 3)² desde w = 0. La línea discontinua es el mínimo.</p></div>',
+         '<div class="ficha"><h5>Contra el sobreajuste</h5><dl class="vocab">',
+         "".join(f"<dt>{a}</dt><dd>{d}</dd>" for a, d in contra), '</dl></div>',
+         '<div class="ficha"><h5>No confundir</h5><dl class="vocab">',
+         "".join(f"<dt>{a}</dt><dd>{d}</dd>" for a, d in confundir), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -895,6 +1054,7 @@ if __name__ == "__main__":
     t = insertar(t, "trocear", hoja_trocear())
     t = insertar(t, "graficos", hoja_graficos())
     t = insertar(t, "python", hoja_python())
+    t = insertar(t, "redes", hoja_redes())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

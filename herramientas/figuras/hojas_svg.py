@@ -1223,6 +1223,118 @@ def hoja_inferencia():
     return "\n".join(h)
 
 
+# ---------- Visión artificial: el recorrido completo ----------
+VIS_DESC = ("Entrenamiento, una vez: fotos con etiqueta, preparar y aumentar, red base más cabeza, "
+            "comparar con la etiqueta y ajustar los pesos, en bucle. Uso, con cada foto nueva: la misma "
+            "preparación sin aumento, la red ya entrenada da una salida y una persona decide.")
+
+
+def vision_h():
+    p = "vh"
+    b = texto(10, 18, "ENTRENAR · una vez, con fotos etiquetadas", "sv-zona", "start")
+    xs = [10, 158, 306, 454, 602]
+    filas1 = [("Fotos + etiquetas", "«coche», cajas…"), ("Preparar", "tamaño, 0–1, + aumento"),
+              ("Red base + cabeza", "extrae rasgos → tarea"), ("Pérdida", "¿cuánto falla?"),
+              ("Ajustar pesos", "retropropagación")]
+    for i, (t, sub) in enumerate(filas1):
+        cls = "sv-caja sv-caja-ml" if i == 2 else "sv-caja"
+        b += caja(xs[i], 28, 128, 56, t, sub, cls)
+        if i:
+            b += linea(f"M{xs[i] - 18},56 H{xs[i] - 4}", p)
+    b += linea("M666,88 V104 H400 V88", p, "vuelta") + texto(533, 118, "en bucle, por lotes y épocas", "sv-et")
+    b += texto(10, 150, "USAR · con cada foto nueva", "sv-zona", "start")
+    filas2 = [("Foto nueva", "nunca vista"), ("Preparar igual", "sin aumento"),
+              ("Red entrenada", "pesos fijos"), ("Salida", "clases, cajas, máscaras"),
+              ("Decidir", "una persona revisa")]
+    for i, (t, sub) in enumerate(filas2):
+        cls = "sv-caja sv-caja-ml" if i == 2 else ("sv-caja sv-caja-ok" if i == 4 else "sv-caja")
+        b += caja(xs[i], 160, 128, 56, t, sub, cls)
+        if i:
+            b += linea(f"M{xs[i] - 18},188 H{xs[i] - 4}", p)
+    b += linea("M340,88 V156", p, "tinta") + texto(332, 132, "los pesos aprendidos", "sv-et", "end")
+    return svg(p, "0 0 740 226", "El recorrido de un sistema de visión", VIS_DESC, b, "sv-h")
+
+
+def vision_v():
+    p = "vv"
+    b = texto(10, 16, "ENTRENAR · una vez", "sv-zona", "start")
+    pasos1 = [("Fotos + etiquetas", "«coche», cajas…"), ("Preparar", "tamaño, 0–1, + aumento"),
+              ("Red base + cabeza", "rasgos → tarea"), ("Pérdida", "¿cuánto falla?"), ("Ajustar pesos", "retropropagación")]
+    y = 24
+    for i, (t, sub) in enumerate(pasos1):
+        b += caja(40, y, 200, 50, t, sub, "sv-caja sv-caja-ml" if i == 2 else "sv-caja")
+        if i < 4:
+            b += linea(f"M140,{y + 52} V{y + 62}", p)
+        y += 64
+    b += linea("M242,{0} H262 V{1} H244".format(24 + 4 * 64 + 25, 24 + 2 * 64 + 25), p, "vuelta") + texto(270, 24 + 3 * 64 + 30, "bucle", "sv-et", "start")
+    y0 = 24 + 5 * 64 + 16
+    b += texto(10, y0, "USAR · cada foto nueva", "sv-zona", "start")
+    pasos2 = [("Foto nueva", "nunca vista"), ("Preparar igual", "sin aumento"), ("Red entrenada", "pesos fijos"),
+              ("Salida", "clases, cajas, máscaras"), ("Decidir", "una persona revisa")]
+    y = y0 + 8
+    for i, (t, sub) in enumerate(pasos2):
+        cls = "sv-caja sv-caja-ml" if i == 2 else ("sv-caja sv-caja-ok" if i == 4 else "sv-caja")
+        b += caja(40, y, 200, 50, t, sub, cls)
+        if i < 4:
+            b += linea(f"M140,{y + 52} V{y + 62}", p)
+        y += 64
+    return svg(p, f"0 0 300 {y + 4}", "El recorrido de un sistema de visión", VIS_DESC, b, "sv-v")
+
+
+def _rejilla_svg(nombre, matriz, titulo, desc):
+    filas, cols = len(matriz), len(matriz[0])
+    t = 20
+    b = ""
+    for f in range(filas):
+        for c in range(cols):
+            v = matriz[f][c]
+            cls = "sv-barra" if v else "sv-llave"
+            b += f'<rect x="{2 + c * t}" y="{2 + f * t}" width="{t - 2}" height="{t - 2}" rx="2" class="{cls}"/>'
+            if v and nombre == "vi":
+                b += texto(2 + c * t + (t - 2) / 2, 2 + f * t + 14, str(v), "sv-et", "middle")
+    return svg(nombre, f"0 0 {cols * t + 4} {filas * t + 4}", titulo, desc, b, "sv-mini")
+
+
+def hoja_vision():
+    import numpy as np
+    from scipy import ndimage
+    sem = np.zeros((8, 12), dtype=int)
+    sem[1:4, 1:5] = 1
+    sem[4:7, 7:11] = 1
+    inst, n = ndimage.label(sem)
+    semantica = _rejilla_svg("vs", sem.tolist(), "Segmentación semántica",
+                             "Rejilla de 8 por 12 píxeles: todos los píxeles de coche tienen la misma clase, sin distinguir cuántos coches hay.")
+    instancias = _rejilla_svg("vi", inst.tolist(), "Segmentación de instancias",
+                              f"La misma rejilla con cada coche numerado aparte: {n} coches, el 1 y el 2.")
+    tareas = [("Clasificar", "una etiqueta para toda la foto: «hay un coche» (0,90)"),
+              ("Detectar", "una caja, una clase y una puntuación por objeto"),
+              ("Segmentación semántica", "una clase para cada píxel: «coche», «calzada», «cielo»"),
+              ("Segmentación de instancias", "una máscara para cada objeto: coche 1, coche 2"),
+              ("Postura", "puntos clave del cuerpo: hombros, codos, rodillas")]
+    confundir = [("Aumento de datos", "girar, recortar, cambiar el brillo: solo al entrenar"),
+                 ("Normalizar", "igual al entrenar y al usar, con los valores del entrenamiento"),
+                 ("Entrenar", "cambia los pesos; necesita etiquetas"),
+                 ("Usar (inferencia)", "los pesos no cambian; la foto nueva no enseña nada al modelo"),
+                 ("Puntuación 0,90", "lo seguro que está el modelo, no la probabilidad de acertar"),
+                 ("RGB o BGR", "OpenCV guarda los colores al revés que casi todas las demás librerías")]
+    h = ['<section class="hoja" aria-labelledby="hoja-vis-t">',
+         '<p class="hoja-titulo" id="hoja-vis-t">La visión artificial en una hoja</p>',
+         '<p class="hoja-nota">De los píxeles a una decisión: qué pasa al entrenar, qué pasa al usar el modelo y qué tareas se pueden hacer con la misma red.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>Entrenar una vez, usar muchas</h5>', vision_h(), vision_v(),
+         '<p class="ficha-pie">Lo que pasa del entrenamiento al uso son los <b>pesos</b>. La preparación de las fotos tiene que ser la misma en los dos, salvo el aumento de datos.</p></div>',
+         '<div class="ficha"><h5>Una red base, varias cabezas</h5><dl class="vocab">',
+         "".join(f"<dt>{a}</dt><dd>{d}</dd>" for a, d in tareas),
+         '</dl><p class="ficha-pie">La red base (<i>backbone</i>) saca los rasgos de la imagen; cada tarea solo cambia la última parte (la <b>cabeza</b>). YOLO tiene versiones para cajas, máscaras, clases y postura.</p></div>',
+         f'<div class="ficha"><h5>¿Cuántos coches hay?</h5><div class="ramas"><figure>{semantica}<figcaption><b>Semántica</b>: 24 píxeles de «coche».</figcaption></figure>'
+         f'<figure>{instancias}<figcaption><b>Instancias</b>: {n} coches, numerados 1 y 2, cada uno con su máscara.</figcaption></figure></div>'
+         '<p class="ficha-pie">Con la semántica no se pueden contar los coches si se tocan; con instancias, sí.</p></div>',
+         '<div class="ficha ancha"><h5>No confundir</h5><dl class="vocab">',
+         "".join(f"<dt>{a}</dt><dd>{d}</dd>" for a, d in confundir), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -1248,4 +1360,8 @@ if __name__ == "__main__":
     if UD4.exists():
         u = UD4.read_text(encoding="utf-8")
         UD4.write_text(insertar(u, "llm", hoja_llm()), encoding="utf-8")
+    UD3 = RAIZ / "contenidos" / "ud3-vision.md"
+    if UD3.exists():
+        u = UD3.read_text(encoding="utf-8")
+        UD3.write_text(insertar(u, "vision", hoja_vision()), encoding="utf-8")
     print("hojas insertadas")

@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E146 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E149 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -2262,6 +2262,129 @@ El valor exacto de la binomial es 0,078 (`scipy.stats.binom.sf(4, 10, 0.25)`); l
 - **Independencia.** La binomial supone que un intento no influye en el siguiente. Si una pregunta da pistas para otra, ya no vale.
 - **La falacia del jugador.** Después de cinco caras seguidas, la sexta sigue teniendo probabilidad 1/2: la moneda no recuerda.
 - Las probabilidades que da un clasificador ([UD5](ud5-ml.html)) o un modelo de lenguaje ([14.8](#148-ia-generativa-y-modelos-de-lenguaje-llm)) solo son fiables si el modelo está **calibrado**.
+
+### 6.11 De la muestra a la población: intervalos de confianza y errores
+
+Casi nunca se puede medir a toda la población: se mide una **muestra** y se quiere decir algo del total. Esta sección explica cuánto se puede fiar uno de esa conclusión.
+
+<!-- hoja:inferencia -->
+<section class="hoja" aria-labelledby="hoja-inf-t">
+<p class="hoja-titulo" id="hoja-inf-t">De la muestra a la población en una hoja</p>
+<p class="hoja-nota">Una muestra pequeña dice algo de toda la población, pero con un margen de error. Todo simulado con el código de esta sección.</p>
+<div class="hoja-grid">
+<div class="ficha ancha"><h5>Teorema central del límite: las medias se vuelven normales</h5><div class="ramas">
+<figure><svg class="sv sv-mini" viewBox="0 0 200 120" role="img" aria-labelledby="tcl1-t tcl1-d"><title id="tcl1-t">Medias de muestras de tamaño 1</title><desc id="tcl1-d">Histograma de 20 000 medias de muestras de 1 esperas del autobús. Desviación de las medias: 9.7 minutos.</desc><defs><marker id="tcl1-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="tcl1-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="tcl1-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="tcl1-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="tcl1-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><path d="M14,106 H186" class="sv-llave"/><rect x="14.5" y="24.0" width="6.2" height="82.0" class="sv-barra"/><rect x="21.7" y="37.6" width="6.2" height="68.4" class="sv-barra"/><rect x="28.8" y="47.8" width="6.2" height="58.2" class="sv-barra"/><rect x="36.0" y="54.6" width="6.2" height="51.4" class="sv-barra"/><rect x="43.2" y="63.1" width="6.2" height="42.9" class="sv-barra"/><rect x="50.3" y="70.1" width="6.2" height="35.9" class="sv-barra"/><rect x="57.5" y="75.9" width="6.2" height="30.1" class="sv-barra"/><rect x="64.7" y="80.5" width="6.2" height="25.5" class="sv-barra"/><rect x="71.8" y="84.5" width="6.2" height="21.5" class="sv-barra"/><rect x="79.0" y="87.2" width="6.2" height="18.8" class="sv-barra"/><rect x="86.2" y="91.2" width="6.2" height="14.8" class="sv-barra"/><rect x="93.3" y="93.4" width="6.2" height="12.6" class="sv-barra"/><rect x="100.5" y="95.1" width="6.2" height="10.9" class="sv-barra"/><rect x="107.7" y="96.7" width="6.2" height="9.3" class="sv-barra"/><rect x="114.8" y="97.8" width="6.2" height="8.2" class="sv-barra"/><rect x="122.0" y="99.6" width="6.2" height="6.4" class="sv-barra"/><rect x="129.2" y="100.6" width="6.2" height="5.4" class="sv-barra"/><rect x="136.3" y="101.3" width="6.2" height="4.7" class="sv-barra"/><rect x="143.5" y="102.0" width="6.2" height="4.0" class="sv-barra"/><rect x="150.7" y="102.3" width="6.2" height="3.7" class="sv-barra"/><rect x="157.8" y="102.9" width="6.2" height="3.1" class="sv-barra"/><rect x="165.0" y="104.2" width="6.2" height="1.8" class="sv-barra"/><rect x="172.2" y="104.0" width="6.2" height="2.0" class="sv-barra"/><rect x="179.3" y="104.3" width="6.2" height="1.7" class="sv-barra"/><path d="M57.0,14 V106" class="sv-r-tenue"/><text x="61.0" y="22" class="sv-et" text-anchor="start">media real 10</text><text x="14" y="119" class="sv-et" text-anchor="start">0</text><text x="186" y="119" class="sv-et" text-anchor="end">40 min</text></svg><figcaption><b>Muestras de 1</b>: las medias varían 9.7 min (es la población: muy asimétrica).</figcaption></figure><figure><svg class="sv sv-mini" viewBox="0 0 200 120" role="img" aria-labelledby="tcl5-t tcl5-d"><title id="tcl5-t">Medias de muestras de tamaño 5</title><desc id="tcl5-d">Histograma de 20 000 medias de muestras de 5 esperas del autobús. Desviación de las medias: 4.4 minutos.</desc><defs><marker id="tcl5-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="tcl5-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="tcl5-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="tcl5-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="tcl5-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><path d="M14,106 H186" class="sv-llave"/><rect x="14.5" y="105.1" width="6.2" height="0.9" class="sv-barra"/><rect x="21.7" y="91.7" width="6.2" height="14.3" class="sv-barra"/><rect x="28.8" y="62.1" width="6.2" height="43.9" class="sv-barra"/><rect x="36.0" y="34.6" width="6.2" height="71.4" class="sv-barra"/><rect x="43.2" y="24.0" width="6.2" height="82.0" class="sv-barra"/><rect x="50.3" y="24.7" width="6.2" height="81.3" class="sv-barra"/><rect x="57.5" y="36.3" width="6.2" height="69.7" class="sv-barra"/><rect x="64.7" y="52.1" width="6.2" height="53.9" class="sv-barra"/><rect x="71.8" y="67.3" width="6.2" height="38.7" class="sv-barra"/><rect x="79.0" y="81.6" width="6.2" height="24.4" class="sv-barra"/><rect x="86.2" y="89.6" width="6.2" height="16.4" class="sv-barra"/><rect x="93.3" y="96.0" width="6.2" height="10.0" class="sv-barra"/><rect x="100.5" y="99.2" width="6.2" height="6.8" class="sv-barra"/><rect x="107.7" y="102.7" width="6.2" height="3.3" class="sv-barra"/><rect x="114.8" y="103.8" width="6.2" height="2.2" class="sv-barra"/><rect x="122.0" y="104.9" width="6.2" height="1.1" class="sv-barra"/><path d="M57.0,14 V106" class="sv-r-tenue"/><text x="61.0" y="22" class="sv-et" text-anchor="start">media real 10</text><text x="14" y="119" class="sv-et" text-anchor="start">0</text><text x="186" y="119" class="sv-et" text-anchor="end">40 min</text></svg><figcaption><b>Muestras de 5</b>: las medias varían 4.4 min.</figcaption></figure><figure><svg class="sv sv-mini" viewBox="0 0 200 120" role="img" aria-labelledby="tcl30-t tcl30-d"><title id="tcl30-t">Medias de muestras de tamaño 30</title><desc id="tcl30-d">Histograma de 20 000 medias de muestras de 30 esperas del autobús. Desviación de las medias: 1.8 minutos.</desc><defs><marker id="tcl30-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="tcl30-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="tcl30-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="tcl30-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="tcl30-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><path d="M14,106 H186" class="sv-llave"/><rect x="36.0" y="100.6" width="6.2" height="5.4" class="sv-barra"/><rect x="43.2" y="65.7" width="6.2" height="40.3" class="sv-barra"/><rect x="50.3" y="24.0" width="6.2" height="82.0" class="sv-barra"/><rect x="57.5" y="33.2" width="6.2" height="72.8" class="sv-barra"/><rect x="64.7" y="73.4" width="6.2" height="32.6" class="sv-barra"/><rect x="71.8" y="98.5" width="6.2" height="7.5" class="sv-barra"/><rect x="79.0" y="104.6" width="6.2" height="1.4" class="sv-barra"/><path d="M57.0,14 V106" class="sv-r-tenue"/><text x="61.0" y="22" class="sv-et" text-anchor="start">media real 10</text><text x="14" y="119" class="sv-et" text-anchor="start">0</text><text x="186" y="119" class="sv-et" text-anchor="end">40 min</text></svg><figcaption><b>Muestras de 30</b>: las medias varían 1.8 min.</figcaption></figure>
+</div><p class="ficha-pie">Esperas del autobús de 10 minutos de media. Con muestras de 30, las medias forman una campana estrecha alrededor de 10, aunque la población no sea normal.</p></div>
+<div class="ficha"><h5>¿Qué significa «95 %»?</h5><svg class="sv sv-ic" viewBox="0 0 360 250" role="img" aria-labelledby="tic-t tic-d"><title id="tic-t">Veinte intervalos del 95 %</title><desc id="tic-d">Veinte intervalos de confianza del 95 % calculados con veinte muestras distintas de 40 alumnos. 19 contienen la media real de 60 minutos y 1 no.</desc><defs><marker id="tic-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="tic-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="tic-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="tic-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="tic-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><path d="M180.0,12 V228" class="sv-llave"/><text x="180.0" y="244" class="sv-et" text-anchor="middle">media real: 60 min</text><path d="M134.6,16.0 H268.8" class="sv-l-pen"/><circle cx="201.7" cy="16.0" r="2.5" class="sv-n-main"/><path d="M123.9,26.5 H296.5" class="sv-l-pen"/><circle cx="210.2" cy="26.5" r="2.5" class="sv-n-main"/><path d="M121.8,37.0 H243.3" class="sv-l-pen"/><circle cx="182.6" cy="37.0" r="2.5" class="sv-n-main"/><path d="M104.5,47.5 H245.8" class="sv-l-pen"/><circle cx="175.2" cy="47.5" r="2.5" class="sv-n-main"/><path d="M119.7,58.0 H268.0" class="sv-l-pen"/><circle cx="193.9" cy="58.0" r="2.5" class="sv-n-main"/><path d="M113.4,68.5 H244.2" class="sv-l-pen"/><circle cx="178.8" cy="68.5" r="2.5" class="sv-n-main"/><path d="M86.1,79.0 H213.0" class="sv-l-pen"/><circle cx="149.5" cy="79.0" r="2.5" class="sv-n-main"/><path d="M85.0,89.5 H245.5" class="sv-l-pen"/><circle cx="165.3" cy="89.5" r="2.5" class="sv-n-main"/><path d="M145.6,100.0 H338.9" class="sv-l-pen"/><circle cx="242.2" cy="100.0" r="2.5" class="sv-n-main"/><path d="M90.7,110.5 H263.6" class="sv-l-pen"/><circle cx="177.1" cy="110.5" r="2.5" class="sv-n-main"/><path d="M184.3,121.0 H365.3" class="sv-l-rojo"/><circle cx="274.8" cy="121.0" r="2.5" class="sv-n-main"/><text x="178.25034185386346" y="125.0" class="sv-et sv-et-no" text-anchor="end">✗ no la contiene</text><path d="M128.2,131.5 H319.6" class="sv-l-pen"/><circle cx="223.9" cy="131.5" r="2.5" class="sv-n-main"/><path d="M98.5,142.0 H290.2" class="sv-l-pen"/><circle cx="194.4" cy="142.0" r="2.5" class="sv-n-main"/><path d="M91.4,152.5 H221.2" class="sv-l-pen"/><circle cx="156.3" cy="152.5" r="2.5" class="sv-n-main"/><path d="M94.8,163.0 H236.3" class="sv-l-pen"/><circle cx="165.5" cy="163.0" r="2.5" class="sv-n-main"/><path d="M73.4,173.5 H240.1" class="sv-l-pen"/><circle cx="156.8" cy="173.5" r="2.5" class="sv-n-main"/><path d="M62.1,184.0 H197.3" class="sv-l-pen"/><circle cx="129.7" cy="184.0" r="2.5" class="sv-n-main"/><path d="M103.0,194.5 H271.3" class="sv-l-pen"/><circle cx="187.2" cy="194.5" r="2.5" class="sv-n-main"/><path d="M158.3,205.0 H314.6" class="sv-l-pen"/><circle cx="236.5" cy="205.0" r="2.5" class="sv-n-main"/><path d="M129.6,215.5 H267.1" class="sv-l-pen"/><circle cx="198.3" cy="215.5" r="2.5" class="sv-n-main"/></svg><p class="ficha-pie">Cada línea es el intervalo de una muestra distinta. A la larga, unos 95 de cada 100 contienen la media real; aquí fallan 1 de 20. Para una muestra concreta no se sabe si acertó.</p></div>
+<div class="ficha"><h5>Sesgos al recoger datos</h5><dl class="vocab">
+<dt>Selección</dt><dd>la muestra no se parece a la población: encuesta solo al alumnado de la biblioteca</dd><dt>No respuesta</dt><dd>contestan sobre todo los más interesados o los más enfadados</dd><dt>Supervivencia</dt><dd>solo ves los casos que llegaron al final: los negocios que no cerraron</dd><dt>Voluntarios</dt><dd>quien se apunta a un estudio ya es distinto de quien no</dd>
+</dl></div>
+<div class="ficha ancha"><h5>Dos formas de equivocarse</h5><ul class="semaforo"><li class="no"><b>No hay efecto, y digo que sí</b><span class="marca">✗ tipo I</span><span class="que">falso positivo: pasa un 5 % de las veces (α)</span></li><li class="no"><b>Hay efecto, y digo «no hay pruebas»</b><span class="marca">✗ tipo II</span><span class="que">falso negativo: frecuente con muestras pequeñas</span></li><li><b>Hay efecto, y lo detecto</b><span class="marca">✓ potencia</span><span class="que">se busca que sea al menos del 80 %</span></li><li><b>No hay efecto, y no lo afirmo</b><span class="marca">✓ acierto</span><span class="que">«no significativo» no demuestra que no haya efecto</span></li></ul><p class="ficha-pie">Con una diferencia real de media desviación, 12 alumnos por grupo la detectan solo 1 de cada 5 veces; 64, unas 4 de cada 5.</p></div>
+<div class="ficha ancha"><h5>Escalas de medida</h5><dl class="vocab">
+<dt>Nominal</dt><dd>solo nombres: concello, color favorito. Se cuentan (moda)</dd><dt>Ordinal</dt><dd>tienen orden: insuficiente < bien < notable. Mediana, pero no restar</dd><dt>Intervalo</dt><dd>restar tiene sentido, pero el 0 no es «nada»: 20 ºC no es el doble de 10 ºC</dd><dt>Razón</dt><dd>cero real: minutos, alturas, euros. 40 min sí es el doble de 20</dd>
+</dl></div>
+</div></section>
+<!-- /hoja:inferencia -->
+
+**Escalas de medida.** Antes de calcular, hay que saber qué tipo de dato es, porque no todas las operaciones tienen sentido:
+
+| Escala | Ejemplo | Qué se puede hacer |
+|--------|---------|--------------------|
+| **Nominal** | Concello, deporte favorito | Contar y la moda |
+| **Ordinal** | Insuficiente < bien < notable; muy poco < poco < mucho | Además, ordenar y la mediana. La «distancia» entre categorías no está definida |
+| **De intervalo** | Temperatura en ºC, año | Además, restar y la media. El 0 no significa «nada»: 20 ºC no es el doble de 10 ºC |
+| **De razón** | Minutos de estudio, altura, euros | Todo, también dividir: 40 minutos es el doble de 20 |
+
+**El teorema central del límite.** Si se toman muchas muestras de tamaño *n* y se calcula la media de cada una, esas medias forman una campana (una normal) aunque la población no lo sea, y varían cada vez menos: su desviación es σ/√n. Por eso funcionan muchas pruebas estadísticas con datos que no son normales. Se ve muy bien simulando las esperas de un autobús, que son muy asimétricas:
+
+```python
+import numpy as np
+rng = np.random.default_rng(1)
+
+# Población muy asimétrica: minutos de espera del bus (casi siempre poco, a veces mucho)
+espera = rng.exponential(scale=10, size=1_000_000)
+print(round(espera.mean(), 1), round(espera.std(), 1))          # 10.0 10.0
+
+for n in (1, 5, 30):
+    medias = rng.choice(espera, size=(20_000, n)).mean(axis=1)   # 20 000 muestras de tamaño n
+    asim = ((medias - medias.mean()) ** 3).mean() / medias.std() ** 3
+    print(f"n={n:2}: media {medias.mean():.1f}, desviación {medias.std():.2f} "
+          f"(σ/√n = {10 / np.sqrt(n):.2f}), asimetría {asim:.2f}")
+# n= 1: media 10.0, desviación 10.01 (σ/√n = 10.00), asimetría 1.97
+# n= 5: media 10.0, desviación 4.45 (σ/√n = 4.47), asimetría 0.88
+# n=30: media 10.0, desviación 1.81 (σ/√n = 1.83), asimetría 0.35
+```
+
+La asimetría baja de 2 a 0,35 y la dispersión de las medias coincide con σ/√n. Se suele decir que «con 30 basta», pero es solo una regla práctica: con poblaciones muy asimétricas (los ingresos, las visitas a una web) hace falta bastante más.
+
+**Intervalos de confianza.** Una media de la muestra casi nunca coincide con la de la población. El intervalo de confianza da un margen: «la media está, con un 95 % de confianza, entre 44,8 y 60,8 minutos». Se puede calcular con la fórmula de la *t* de Student o, sin fórmulas, **remuestreando** la propia muestra muchas veces (*bootstrap*):
+
+```python
+import numpy as np
+from scipy import stats
+rng = np.random.default_rng(7)
+
+# Minutos de estudio diario de 40 alumnos (inventados)
+minutos = rng.gamma(shape=4, scale=15, size=40).round()
+media = minutos.mean()
+ee = minutos.std(ddof=1) / np.sqrt(len(minutos))                  # error estándar de la media
+bajo, alto = stats.t.interval(0.95, df=len(minutos) - 1, loc=media, scale=ee)
+print(f"media {media:.1f} min, IC 95 %: [{bajo:.1f}, {alto:.1f}]")   # media 52.8 min, IC 95 %: [44.8, 60.8]
+
+# El mismo intervalo sin fórmulas: remuestreo (bootstrap)
+remuestras = rng.choice(minutos, size=(10_000, len(minutos))).mean(axis=1)
+print("bootstrap:", np.percentile(remuestras, [2.5, 97.5]).round(1))   # bootstrap: [45.5 60.6]
+
+# ¿Qué significa «95 %»? Repetimos el estudio 1000 veces con una población conocida (media 60)
+aciertos = 0
+for _ in range(1000):
+    m = rng.gamma(shape=4, scale=15, size=40)
+    b, a = stats.t.interval(0.95, df=39, loc=m.mean(), scale=m.std(ddof=1) / np.sqrt(40))
+    aciertos += b <= 60 <= a
+print(aciertos / 1000)                                             # 0.946: el intervalo acierta unas 95 de cada 100 veces
+```
+
+**Qué significa ese 95 %:** si se repitiera el estudio muchas veces, unos 95 de cada 100 intervalos contendrían la media real (en la simulación, 946 de 1000). **No** quiere decir que haya un 95 % de probabilidad de que la media esté dentro de *este* intervalo concreto: la media real es fija; el que cambia de una muestra a otra es el intervalo. Con el cuádruple de datos, el intervalo se estrecha a la mitad (√4 = 2).
+
+**Dos formas de equivocarse.** Un contraste de hipótesis (6.9) puede fallar de dos maneras:
+
+| | En realidad no hay efecto | En realidad sí hay efecto |
+|--|---------------------------|---------------------------|
+| **Digo que hay efecto** (p < 0,05) | **Error de tipo I** (falso positivo) | Acierto: la **potencia** |
+| **Digo que no hay pruebas** | Acierto | **Error de tipo II** (falso negativo) |
+
+Si no hay efecto, el umbral α = 0,05 hace que se cometa un error de tipo I un 5 % de las veces. La **potencia** es la probabilidad de detectar un efecto que sí existe, y depende sobre todo del tamaño de la muestra:
+
+```python
+import numpy as np
+from scipy import stats
+rng = np.random.default_rng(3)
+
+def tasa_significativos(diferencia, n, repeticiones=5000):
+    """Proporción de experimentos con p < 0,05 si la diferencia real entre grupos es `diferencia`."""
+    a = rng.normal(0, 1, size=(repeticiones, n))
+    b = rng.normal(diferencia, 1, size=(repeticiones, n))
+    p = stats.ttest_ind(a, b, axis=1, equal_var=False).pvalue
+    return (p < 0.05).mean()
+
+print("sin diferencia, n=20:", tasa_significativos(0, 20))          # 0.0484: error de tipo I ≈ α
+for n in (12, 30, 64):
+    print(f"diferencia 0,5 desviaciones, n={n}:", tasa_significativos(0.5, n))   # potencia
+# diferencia 0,5 desviaciones, n=12: 0.2122
+# diferencia 0,5 desviaciones, n=30: 0.4806
+# diferencia 0,5 desviaciones, n=64: 0.803
+```
+
+Con 12 alumnos por grupo, una diferencia real de media desviación solo se detecta 1 de cada 5 veces. Por eso el tamaño de la muestra se decide **antes** del estudio (se suele buscar una potencia del 80 %), y por eso un «no significativo» con pocos datos no demuestra nada. Si se hacen 20 contrastes sin efecto real, lo esperable es que uno salga «significativo» por azar.
+
+**Sesgos al recoger datos.** Ninguna fórmula arregla una muestra mal recogida:
+
+- **Selección:** la muestra no se parece a la población (una encuesta sobre hábitos de lectura hecha solo en la biblioteca).
+- **No respuesta:** contestan sobre todo los más interesados o los más enfadados.
+- **Supervivencia:** solo se ven los casos que llegaron al final. En la Segunda Guerra Mundial se estudiaron los impactos de bala de los aviones que **volvían**; había que reforzar justo las zonas sin impactos, porque los aviones tocados ahí no regresaban.
+- **Voluntarios:** quien se apunta a un estudio ya es distinto de quien no.
+
+El remedio es elegir la muestra **al azar** y, si hay grupos de tamaños distintos (cursos, concellos), hacer un **muestreo estratificado**: escoger al azar dentro de cada grupo, en proporción a su tamaño. Las pruebas A/B de la [UD5](ud5-ml.html#probar-con-personas-reales-la-prueba-ab) usan estas mismas ideas. Se practica en [E148](ejercicios.html#bloque-af--guías-y-chuletas-con-criterio-e147e149) y en [Análisis de datos, D2.9](datos.html).
 
 [Referencia: Estadística](https://es.wikipedia.org/wiki/Estad%C3%ADstica_descriptiva)
 
@@ -4981,6 +5104,29 @@ Los pesos no pueden empezar todos en 0: todas las neuronas de una capa calcular�
 - **He** (varianza 2 / n_entradas) es la adecuada con ReLU.
 - **Glorot o Xavier** (varianza 2 / (n_entradas + n_salidas)) es la adecuada con sigmoide o tanh, y la que usa Keras por defecto en las capas `Dense`.
 
+**Gradientes que se desvanecen o explotan.** El gradiente de la primera capa se obtiene multiplicando un factor por cada capa que hay detrás. Si esos factores son menores que 1, el producto se hace minúsculo y las primeras capas casi no aprenden (**desvanecimiento**). Si son mayores que 1, se dispara (**explosión**): un solo paso mueve tanto los pesos que la pérdida salta a `nan`. Pasa sobre todo en las RNN, donde el mismo peso se multiplica una vez por cada palabra de la frase. Contra el desvanecimiento sirven ReLU, una buena inicialización, la normalización y las conexiones residuales. Contra la explosión, el **recorte del gradiente** (*gradient clipping*): si el vector del gradiente es demasiado largo, se encoge sin cambiar su dirección.
+
+```python
+import numpy as np
+
+# El gradiente de la primera capa es un producto de muchos factores, uno por capa
+for factor in (0.5, 1.0, 1.5):
+    print(f"factor {factor}: tras 50 capas, {factor ** 50:.3g}")
+# factor 0.5: tras 50 capas, 8.88e-16   ← se desvanece
+# factor 1.0: tras 50 capas, 1          ← estable
+# factor 1.5: tras 50 capas, 6.38e+08   ← explota
+
+def recortar(gradiente, norma_max=1.0):
+    """Recorte por norma: si el vector es demasiado largo, se encoge sin cambiar su dirección."""
+    norma = np.linalg.norm(gradiente)
+    return gradiente * (norma_max / norma) if norma > norma_max else gradiente
+
+g = np.array([300.0, -400.0])                  # norma 500: un paso así rompería el entrenamiento
+print(recortar(g), np.linalg.norm(recortar(g)))  # [ 0.6 -0.8] 1.0
+```
+
+En Keras basta con `keras.optimizers.Adam(clipnorm=1.0)` y en PyTorch, `torch.nn.utils.clip_grad_norm_(modelo.parameters(), 1.0)` antes de `optimizer.step()` (estas dos líneas no se han ejecutado aquí). Los Transformer grandes casi siempre se entrenan con recorte.
+
 #### Entrenar en Keras: épocas, validación, *dropout* y *early stopping*
 
 ```python
@@ -6280,6 +6426,120 @@ for u in ["https://www.edu.xunta.gal/portal", "https://ejemplo.com <script>", "f
 
 La calculadora solo acepta lo que está en la lista blanca `OPS`. Todo lo demás (llamadas a funciones, nombres, atributos) da `ValueError`. La contraseña cambia en cada ejecución; por eso el ejemplo muestra solo que tiene 14 caracteres y de todos los tipos.
 
+#### Funciones de Python poco conocidas que sí conviene conocer
+
+Están en todas las listas de «trucos que casi nadie usa». Algunas sirven de verdad en programas de clase:
+
+| Qué | Para qué | Desde |
+|-----|----------|-------|
+| `def f(a, b, /, *, c=1)` | Lo que va antes de `/` solo se pasa por posición; lo que va después de `*`, solo por nombre | 3.8 |
+| `next(it, valor)` | Pedir el siguiente elemento sin que salte `StopIteration` si no quedan | siempre |
+| `iter(función, centinela)` | Llamar a una función una y otra vez hasta que devuelva el centinela | siempre |
+| `zip(..., strict=True)` | Error si las listas no tienen la misma longitud, en vez de cortar sin avisar | 3.10 |
+| `contextlib.suppress(Error)` | Ignorar **a propósito** un error concreto (nunca todos) | 3.4 |
+| `__slots__` | Objetos más ligeros cuando hay cientos de miles | siempre |
+| `ExceptionGroup` y `except*` | Lanzar y tratar varios errores a la vez | 3.11 |
+| `__init_subclass__` | Que la clase madre se entere de cada clase hija (registros de «plugins») | 3.6 |
+
+```python
+import io, sys, tracemalloc
+from contextlib import suppress
+
+# 1. Parámetros solo por posición (/) y solo por nombre (*)
+def nota_final(examen, tareas, /, *, peso_examen=0.7):
+    return round(examen * peso_examen + tareas * (1 - peso_examen), 2)
+
+print(nota_final(6, 9))                       # 6.9
+print(nota_final(6, 9, peso_examen=0.5))      # 7.5
+try:
+    nota_final(examen=6, tareas=9)            # examen y tareas no se pueden pasar por nombre
+except TypeError as e:
+    print("TypeError:", e)                    # TypeError: ... positional-only arguments passed as keyword arguments: 'examen, tareas'
+try:
+    nota_final(6, 9, 0.5)                     # peso_examen hay que escribirlo con su nombre
+except TypeError as e:
+    print("TypeError:", e)                    # TypeError: nota_final() takes 2 positional arguments but 3 were given
+
+# 2. next con valor por defecto e iter con centinela
+vacio = iter([])
+print(next(vacio, "sin datos"))               # sin datos
+archivo = io.StringIO("ola\nque tal\n\nfin\n")   # simula un archivo abierto
+for linea in iter(archivo.readline, ""):      # llama a readline hasta que devuelva ""
+    print(repr(linea.strip()), end=" ")
+print()                                       # 'ola' 'que tal' '' 'fin'
+
+# 3. zip estricto: avisa si las listas no tienen la misma longitud
+nombres, notas = ["Uxía", "Brais", "Noa"], [8, 6]
+print(list(zip(nombres, notas)))              # [('Uxía', 8), ('Brais', 6)]: Noa desaparece sin avisar
+try:
+    list(zip(nombres, notas, strict=True))
+except ValueError as e:
+    print("ValueError:", e)                   # ValueError: zip() argument 2 is shorter than argument 1
+
+# 4. Ignorar a propósito un error concreto
+import os
+with suppress(FileNotFoundError):
+    os.remove("temporal_que_no_existe.txt")   # si no existe, no pasa nada
+print("seguimos")                             # seguimos
+
+# 5. __slots__: objetos más ligeros cuando hay muchísimos
+class Lectura:
+    def __init__(self, t, valor):
+        self.t, self.valor = t, valor
+class LecturaLigera:
+    __slots__ = ("t", "valor")
+    def __init__(self, t, valor):
+        self.t, self.valor = t, valor
+for clase in (Lectura, LecturaLigera):
+    tracemalloc.start()
+    datos = [clase(i, 20.5) for i in range(100_000)]
+    print(clase.__name__, round(tracemalloc.get_traced_memory()[0] / 1e6, 1), "MB")
+    tracemalloc.stop()
+# Lectura 12.8 MB
+# LecturaLigera 8.8 MB
+try:
+    LecturaLigera(0, 1).unidad = "ºC"
+except AttributeError as e:
+    print("AttributeError:", e)              # AttributeError: 'LecturaLigera' object has no attribute 'unidad' and no __dict__ ...
+```
+
+Con `__slots__` cada objeto ocupa un tercio menos (aquí, 8,8 MB frente a 12,8 MB para 100 000 lecturas), pero ya no se le pueden añadir atributos nuevos sobre la marcha. Solo compensa cuando hay muchísimos objetos.
+
+```python
+# 6. Varios errores a la vez: ExceptionGroup y except* (Python 3.11+)
+def validar(fila):
+    errores = []
+    if not fila["nombre"]:
+        errores.append(ValueError("falta el nombre"))
+    if not isinstance(fila["nota"], (int, float)):
+        errores.append(TypeError(f"la nota {fila['nota']!r} no es un número"))
+    if errores:
+        raise ExceptionGroup("fila no válida", errores)
+
+try:
+    validar({"nombre": "", "nota": "siete"})
+except* ValueError as grupo:
+    print("Valores:", [str(e) for e in grupo.exceptions])
+except* TypeError as grupo:
+    print("Tipos:", [str(e) for e in grupo.exceptions])
+# Valores: ['falta el nombre']
+# Tipos: ["la nota 'siete' no es un número"]
+
+# 7. __init_subclass__: la clase madre se entera de cada clase hija
+class Sensor:
+    registrados = {}
+    def __init_subclass__(cls, unidad, **kwargs):
+        super().__init_subclass__(**kwargs)
+        cls.unidad = unidad
+        Sensor.registrados[cls.__name__] = unidad
+
+class Termometro(Sensor, unidad="ºC"): pass
+class Luxometro(Sensor, unidad="lx"): pass
+print(Sensor.registrados)                     # {'Termometro': 'ºC', 'Luxometro': 'lx'}
+```
+
+`except*` recibe un **grupo** con todos los errores de ese tipo, aunque haya otros distintos en el mismo `ExceptionGroup`: cada rama se ocupa de los suyos. Es útil para validar una fila y devolver todos sus fallos a la vez, o con tareas en paralelo (`asyncio.TaskGroup`). Los `dataclasses`, `Counter`, `defaultdict`, `@cache`, `divmod`, `pow(a, b, m)`, la morsa y `match` de esas mismas listas ya están en esta teoría (14.14, 5.2, 4.x, 3.1 y 3.2).
+
 #### Excepciones completas: `try / except / else / finally` y `raise`
 
 ```python
@@ -7066,6 +7326,12 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | «Programming Fundamentals – Python. Complete Handwritten Notes» (@abhi_techhub, PDF de 20 págs. sin capa de texto, OCR con Tesseract) | Casi todo ya estaba en las secciones 1–5 y 14.14. Se añaden en 14.14 «Herramientas del proyecto: uv, Ruff y anotaciones de tipo», «Programas para la terminal: argparse», «Métodos especiales y dataclasses», el orden real al encadenar decoradores y la hoja visual «Python en una hoja»; se corrige `__init__.py` (opcional desde 3.3) en dos tablas. Errores usados en E141 | 14.14; ejercicios E141–E142 |
 | Carrusel «Neural Networks – Complete Handwritten Study Handbook» (@aditechnova18, 16 láminas, marcado como generado con IA) | Casi todo ya estaba en 14.7. Se añadieron la hoja «Una red neuronal en una hoja», la nota sobre la neurona biológica, la regularización L1 y L2 con números, el redondeo de los pasos por época y la nota sobre los lotes en potencias de 2. Sus errores (pasos por época, Adam sin corrección del sesgo, «menos pérdida = mejor modelo»…) están en E143, y sus cuentas, en E144 | [14.7](#147-redes-neuronales-desde-cero), [E143–E144](ejercicios.html#bloque-aa--aprendizaje-profundo-con-criterio-e117-y-e143e144) |
 | «150+ Basic Python Programs» (PDF de 37 págs., sin autor; 150 programas comentados) | Casi todo ya estaba en las secciones 1–5, 14.12 y 14.14. Se añadieron `match`/`case` (3.1), el operador morsa (3.2), la nota sobre UTF-8 en Python 3.15 (5.9), «Tres problemas clásicos» con la hoja «Algoritmos clásicos en una hoja» (14.12) y «Código de ejemplo que no conviene copiar tal cual» (14.14). Sus errores están en E145 y la práctica, en E146 | [3.1](#31-condicionales-ifelifelse), [14.12](#1412-algoritmia-pensar-antes-de-programar), [14.14](#1414-buenas-prácticas-de-python-y-conceptos-avanzados), [E145–E146](ejercicios.html#bloque-s--python-a-fondo-preguntas-tipo-entrevista-e95e98-e141e142-y-e145e146) |
+| *Beginner's Python Cheat Sheets* (E. Matthes, 26 págs.) | Muy correctas; todo lo de Python básico ya estaba. Se añadió el enlace a las chuletas en 14.16 | [14.16](#1416-recursos-gratuitos-para-seguir-aprendiendo-ia) |
+| *Data Analytics – Complete Detailed Guide* (38 págs., sin autor) | Nueva 6.11 (escalas de medida, teorema central del límite, intervalos de confianza, errores de tipo I y II, potencia, sesgos al recoger datos) con la hoja «De la muestra a la población en una hoja»; en Análisis de datos, 2.4 «Resumir con SQL» (CTE, `CASE`, funciones de ventana, KPI y ley de Goodhart) y D2.9. Sus errores, en E147 | [6.11](#611-de-la-muestra-a-la-población-intervalos-de-confianza-y-errores), [datos 2.4](datos.html#24-resumir-con-sql-cte-case-y-funciones-de-ventana) |
+| *Deep Learning Notes* y *Generative AI Notes* (@codingwithmee_18, 18 y 22 págs.) | Muy completas y casi todo ya estaba. Se añadió en 14.7 la explosión del gradiente y el recorte | [14.7](#147-redes-neuronales-desde-cero) |
+| *LLM Cheatsheet* (Dataiku, 7 págs.) | En la UD4: leyes de escala (Chinchilla), capacidades emergentes discutidas, mezcla de expertos, ajuste fino completo frente a PEFT, LoRA y QLoRA con números, ¿RAG o ajuste fino? | [UD4 10.10](ud4-lenguaje.html) |
+| *25 Python Features Most Developers Never Use* y *Python Libraries for AI* (P. Kumar, 9 págs. cada uno, sin capa de texto) | En 14.14, «Funciones de Python poco conocidas» (`/` y `*`, `next` con valor, `iter` con centinela, `zip(strict=True)`, `suppress`, `__slots__` medido, `ExceptionGroup`, `__init_subclass__`). La de librerías no aportaba nada nuevo | [14.14](#1414-buenas-prácticas-de-python-y-conceptos-avanzados) |
+| *Master Machine Learning in Just 20 Days* (Bosscoder Academy, 23 págs., publicidad de un curso) | Plan de 20 días cubierto por el [itinerario](itinerario.html). Se añadieron AutoML y aprendizaje federado en la UD5, sección 11 | [UD5 11](ud5-ml.html#11-el-ml-en-el-mundo-real-ampliación) |
 | «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |
@@ -7119,6 +7385,7 @@ Revisión de la lista «The 25 Best Free Resources for Learning AI in 2026» (H.
 | [Hugging Face Learn](https://huggingface.co/learn) | Cursos prácticos de LLM, agentes, visión y difusión con las librerías de Hugging Face. El curso de LLM tiene [traducción parcial al castellano](https://huggingface.co/docs/course/es/chapter1/1) | Proyectos de UD3 y UD4 |
 | [DAIR.AI: *Prompt Engineering Guide*](https://www.promptingguide.ai/es) ([repositorio](https://github.com/dair-ai/Prompt-Engineering-Guide)) | Guía de técnicas de instrucciones (*prompting*): pocos ejemplos, cadena de razonamiento, RAG, agentes, riesgos. **Tiene versión en castellano**, aunque menos completa que la inglesa | [UD4](ud4-lenguaje.html), apartado de modelos de lenguaje |
 | [Microsoft: *Generative AI for Beginners*](https://github.com/microsoft/generative-ai-for-beginners) | 21 lecciones cortas sobre aplicaciones de IA generativa: instrucciones, RAG, agentes, seguridad, modelos abiertos. **Traducido al castellano** (carpeta `translations/es`) | Las lecciones «Learn» se leen sin programar. Las «Build» usan Azure u OpenAI, con cuenta y clave de pago, normalmente para mayores de edad: en clase, como demostración del profesorado |
+| [Eric Matthes: *Beginner's Python Cheat Sheets*](https://ehmatthes.github.io/pcc_3e/cheat_sheets/) | Chuletas de Python en inglés del autor de *Python Crash Course*: una general, una por tema (listas, diccionarios, funciones, clases, archivos) y otras de pytest, Matplotlib, Plotly y Git. Gratuitas para usar y compartir | Repaso de las secciones 1–5 y 14.14; para imprimir y tener al lado al programar |
 
 **Para quien quiera ir más lejos.** Alumnado muy motivado o profesorado. Requieren más tiempo, más inglés y, a veces, derivadas.
 

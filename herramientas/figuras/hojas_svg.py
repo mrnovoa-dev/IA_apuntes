@@ -1142,6 +1142,87 @@ def hoja_algoritmos():
     return "\n".join(h)
 
 
+# ---------- Estadística inferencial ----------
+def _medias_svg(n, semilla=1):
+    import numpy as np
+    rng = np.random.default_rng(semilla)
+    espera = rng.exponential(scale=10, size=200_000)
+    medias = rng.choice(espera, size=(20_000, n)).mean(axis=1)
+    cuentas, bordes = np.histogram(medias, bins=24, range=(0, 40))
+    W, H, m = 200, 120, 14
+    ancho = (W - 2 * m) / len(cuentas)
+    alto_max = cuentas.max()
+    b = f'<path d="M{m},{H - m} H{W - m}" class="sv-llave"/>'
+    for i, c in enumerate(cuentas):
+        h = (H - 2 * m - 10) * c / alto_max
+        if h > 0.5:
+            b += f'<rect x="{m + i * ancho + 0.5:.1f}" y="{H - m - h:.1f}" width="{ancho - 1:.1f}" height="{h:.1f}" class="sv-barra"/>'
+    x10 = m + (W - 2 * m) * 10 / 40
+    b += f'<path d="M{x10:.1f},{m} V{H - m}" class="sv-r-tenue"/>' + texto(x10 + 4, m + 8, "media real 10", "sv-et", "start")
+    b += texto(m, H - 1, "0", "sv-et", "start") + texto(W - m, H - 1, "40 min", "sv-et", "end")
+    desc = (f"Histograma de 20 000 medias de muestras de {n} esperas del autobús. "
+            f"Desviación de las medias: {medias.std():.1f} minutos.")
+    return svg(f"tcl{n}", f"0 0 {W} {H}", f"Medias de muestras de tamaño {n}", desc, b, "sv-mini"), medias.std()
+
+
+def _intervalos_svg():
+    import numpy as np
+    from math import sqrt
+    rng = np.random.default_rng(11)
+    W, H, m = 360, 250, 16
+    mu, filas, fallos = 60, 20, 0
+    b = ""
+    x = lambda v: m + (W - 2 * m) * (v - 40) / 40
+    b += f'<path d="M{x(mu):.1f},{m - 4} V{H - 22}" class="sv-llave"/>' + texto(x(mu), H - 6, "media real: 60 min", "sv-et")
+    for i in range(filas):
+        muestra = rng.gamma(shape=4, scale=15, size=40)
+        c = muestra.mean()
+        e = 2.023 * muestra.std(ddof=1) / sqrt(40)
+        y = m + i * 10.5
+        acierta = c - e <= mu <= c + e
+        fallos += not acierta
+        cls = "sv-l-pen" if acierta else "sv-l-rojo"
+        b += f'<path d="M{x(c - e):.1f},{y:.1f} H{x(c + e):.1f}" class="{cls}"/>'
+        b += f'<circle cx="{x(c):.1f}" cy="{y:.1f}" r="2.5" class="sv-n-main"/>'
+        if not acierta:
+            b += texto(x(c - e) - 6, y + 4, "✗ no la contiene", "sv-et sv-et-no", "end")
+    desc = (f"Veinte intervalos de confianza del 95 % calculados con veinte muestras distintas de 40 alumnos. "
+            f"{filas - fallos} contienen la media real de 60 minutos y {fallos} no.")
+    return svg("tic", f"0 0 {W} {H}", "Veinte intervalos del 95 %", desc, b, "sv-ic"), fallos
+
+
+def hoja_inferencia():
+    figs = [(_medias_svg(n), n) for n in (1, 5, 30)]
+    ic, fallos = _intervalos_svg()
+    escalas = [("Nominal", "solo nombres: concello, color favorito. Se cuentan (moda)"),
+               ("Ordinal", "tienen orden: insuficiente < bien < notable. Mediana, pero no restar"),
+               ("Intervalo", "restar tiene sentido, pero el 0 no es «nada»: 20 ºC no es el doble de 10 ºC"),
+               ("Razón", "cero real: minutos, alturas, euros. 40 min sí es el doble de 20")]
+    sesgos = [("Selección", "la muestra no se parece a la población: encuesta solo al alumnado de la biblioteca"),
+              ("No respuesta", "contestan sobre todo los más interesados o los más enfadados"),
+              ("Supervivencia", "solo ves los casos que llegaron al final: los negocios que no cerraron"),
+              ("Voluntarios", "quien se apunta a un estudio ya es distinto de quien no")]
+    h = ['<section class="hoja" aria-labelledby="hoja-inf-t">',
+         '<p class="hoja-titulo" id="hoja-inf-t">De la muestra a la población en una hoja</p>',
+         '<p class="hoja-nota">Una muestra pequeña dice algo de toda la población, pero con un margen de error. Todo simulado con el código de esta sección.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>Teorema central del límite: las medias se vuelven normales</h5><div class="ramas">',
+         "".join(f'<figure>{svgm}<figcaption><b>Muestras de {n}</b>: las medias varían {d:.1f} min'
+                 f'{" (es la población: muy asimétrica)" if n == 1 else ""}.</figcaption></figure>' for (svgm, d), n in figs),
+         '</div><p class="ficha-pie">Esperas del autobús de 10 minutos de media. Con muestras de 30, las medias forman una campana estrecha alrededor de 10, aunque la población no sea normal.</p></div>',
+         f'<div class="ficha"><h5>¿Qué significa «95 %»?</h5>{ic}<p class="ficha-pie">Cada línea es el intervalo de una muestra distinta. A la larga, unos 95 de cada 100 contienen la media real; aquí fallan {fallos} de 20. Para una muestra concreta no se sabe si acertó.</p></div>',
+         '<div class="ficha"><h5>Sesgos al recoger datos</h5><dl class="vocab">', "".join(f"<dt>{a}</dt><dd>{d}</dd>" for a, d in sesgos), '</dl></div>',
+         '<div class="ficha ancha"><h5>Dos formas de equivocarse</h5><ul class="semaforo">'
+         '<li class="no"><b>No hay efecto, y digo que sí</b><span class="marca">✗ tipo I</span><span class="que">falso positivo: pasa un 5 % de las veces (α)</span></li>'
+         '<li class="no"><b>Hay efecto, y digo «no hay pruebas»</b><span class="marca">✗ tipo II</span><span class="que">falso negativo: frecuente con muestras pequeñas</span></li>'
+         '<li><b>Hay efecto, y lo detecto</b><span class="marca">✓ potencia</span><span class="que">se busca que sea al menos del 80 %</span></li>'
+         '<li><b>No hay efecto, y no lo afirmo</b><span class="marca">✓ acierto</span><span class="que">«no significativo» no demuestra que no haya efecto</span></li>'
+         '</ul><p class="ficha-pie">Con una diferencia real de media desviación, 12 alumnos por grupo la detectan solo 1 de cada 5 veces; 64, unas 4 de cada 5.</p></div>',
+         '<div class="ficha ancha"><h5>Escalas de medida</h5><dl class="vocab">', "".join(f"<dt>{a}</dt><dd>{d}</dd>" for a, d in escalas), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -1161,6 +1242,7 @@ if __name__ == "__main__":
     t = insertar(t, "python", hoja_python())
     t = insertar(t, "redes", hoja_redes())
     t = insertar(t, "algoritmos", hoja_algoritmos())
+    t = insertar(t, "inferencia", hoja_inferencia())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

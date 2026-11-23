@@ -1414,6 +1414,98 @@ def hoja_eda():
     return "\n".join(h)
 
 
+# ---------- Agentes en producción ----------
+PRO_BUCLE = ["Percibir", "Planificar", "Actuar", "Observar", "Revisar"]
+PRO_SALIDAS = [("Objetivo cumplido", "y comprobado"), ("Límite de pasos", "p. ej., 10"),
+               ("Presupuesto", "tokens, euros, tiempo"), ("Fallo repetido", "misma llamada dos veces"),
+               ("Hace falta una persona", "acción con efectos o duda")]
+PRO_DESC = ("Bucle del agente: percibir, planificar, actuar, observar y revisar, y vuelta a empezar. "
+            "Cinco salidas escritas en el código: objetivo cumplido y comprobado, límite de pasos, presupuesto, "
+            "fallo repetido y hace falta una persona.")
+
+
+def produccion_h():
+    p = "ph"
+    b = texto(10, 16, "EL BUCLE", "sv-zona", "start")
+    pos = [(190, 168), (50, 168), (10, 90), (120, 28), (230, 90)]   # Revisar a la derecha, junto a las salidas
+    for (x, y), t in zip(pos, PRO_BUCLE):
+        b += caja(x, y, 120, 34, t, None, "sv-caja sv-caja-ml" if t == "Revisar" else "sv-caja")
+    b += linea("M240,45 C280,50 290,70 290,86", p)
+    b += linea("M290,124 C290,150 280,165 270,168", p)
+    b += linea("M190,185 H174", p)
+    b += linea("M50,170 C40,150 70,130 70,128", p)
+    b += linea("M70,90 C70,60 100,48 116,46", p)
+    b += texto(400, 16, "CINCO SALIDAS, EN EL CÓDIGO", "sv-zona", "start")
+    for i, (t, sub) in enumerate(PRO_SALIDAS):
+        cls = "sv-caja sv-caja-ok" if i == 0 else "sv-caja"
+        b += caja(400, 26 + i * 40, 330, 34, f"{t}: {sub}", None, cls)
+    b += linea("M352,106 H394", p, "rojo")
+    return svg(p, "0 0 740 228", "El bucle de un agente y sus cinco salidas", PRO_DESC, b, "sv-h")
+
+
+def produccion_v():
+    p = "pv"
+    b = texto(10, 14, "EL BUCLE", "sv-zona", "start")
+    y = 22
+    for i, t in enumerate(PRO_BUCLE):
+        b += caja(40, y, 180, 30, t, None, "sv-caja sv-caja-ml" if t == "Revisar" else "sv-caja")
+        if i < 4:
+            b += linea(f"M130,{y + 31} V{y + 38}", p)
+        y += 40
+    b += linea(f"M222,{y - 25} H250 V37 H224", p, "vuelta") + texto(256, 110, "repite", "sv-et", "start")
+    y += 10
+    b += texto(10, y, "CINCO SALIDAS", "sv-zona", "start")
+    y += 8
+    for i, (t, sub) in enumerate(PRO_SALIDAS):
+        b += caja(10, y, 290, 42, t, sub, "sv-caja sv-caja-ok" if i == 0 else "sv-caja")
+        y += 48
+    return svg(p, f"0 0 310 {y + 2}", "El bucle de un agente y sus cinco salidas", PRO_DESC, b, "sv-v")
+
+
+def enchufes_svg():
+    p = "pe"
+    b = caja(150, 36, 110, 40, "Agente", None, "sv-caja sv-caja-ml")
+    b += caja(4, 10, 120, 34, "Calendario", None) + caja(4, 68, 120, 34, "Base de datos", None)
+    b += caja(286, 10, 120, 34, "Agente B", None) + caja(286, 68, 120, 34, "Agente C", None)
+    b += linea("M148,50 H128", p) + linea("M148,64 L128,82", p)
+    b += linea("M262,50 H282", p) + linea("M262,64 L282,82", p)
+    b += texto(64, 124, "MCP: herramientas y datos", "sv-et", "middle")
+    b += texto(346, 124, "A2A: otros agentes", "sv-et", "middle")
+    return svg(p, "0 0 410 132", "MCP y A2A", "El agente usa MCP para conectarse a herramientas y datos, como un calendario o una base de datos, y A2A para encargar tareas a otros agentes.", b)
+
+
+def hoja_produccion():
+    autonomia = [("ok", "✓ solo", "Leer datos, buscar, resumir", "sin efectos fuera: el agente lo hace y lo registra"),
+                 ("medio", "⚠ en seco", "Preparar un borrador o un cambio", "lo propone; una persona o una prueba lo revisa"),
+                 ("no", "✗ aprobación", "Enviar, pagar, borrar, publicar", "una persona dice «sí» antes, viendo qué y con qué datos")]
+    memoria = [("De trabajo", "lo de esta tarea: objetivo, plan, últimos resultados"),
+               ("Episódica", "qué pasó en tareas anteriores"),
+               ("Semántica", "datos y preferencias que se mantienen"),
+               ("Procedimental", "cómo se hacen las cosas: instrucciones versionadas")]
+    confundir = [("Idempotente", "repetir la llamada no repite el efecto (clave por intención)"),
+                 ("Coste", "crece más que los pasos: cada llamada relee todo lo anterior"),
+                 ("«Ya está»", "lo dice el modelo; lo confirma una comprobación"),
+                 ("Juicio del modelo", "no es una barrera de seguridad: los límites, en el código"),
+                 ("Más agentes", "más coste, más espera y más formas de fallar: solo si se mide que ayudan")]
+    h = ['<section class="hoja" aria-labelledby="hoja-pro-t">',
+         '<p class="hoja-titulo" id="hoja-pro-t">Un agente que se pueda dejar trabajando</p>',
+         '<p class="hoja-nota">El bucle es la parte fácil. Lo que hace fiable a un agente son sus salidas, sus permisos y lo que recuerda.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>El bucle y cuándo parar</h5>', produccion_h(), produccion_v(),
+         '<p class="ficha-pie">La primera salida es la única buena, y solo si una comprobación objetiva (una prueba, un esquema, el dato real) lo confirma.</p></div>',
+         '<div class="ficha"><h5>¿Cuánta autonomía?</h5><ul class="semaforo">',
+         "".join(f'<li class="{c}"><b>{escape(o)}</b><span class="marca">{m}</span><span class="que">{escape(q)}</span></li>' for c, m, o, q in autonomia),
+         '</ul><p class="ficha-pie">La autonomía se decide acción por acción, no para todo el producto.</p></div>',
+         '<div class="ficha"><h5>Cuatro memorias</h5><dl class="vocab">',
+         "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in memoria),
+         '</dl><p class="ficha-pie">Solo se guarda lo comprobado, y la persona puede ver y borrar lo suyo.</p></div>',
+         f'<div class="ficha"><h5>Dos enchufes</h5>{enchufes_svg()}<p class="ficha-pie">Un servidor MCP o un agente ajeno es código de terceros: solo de confianza y con los permisos justos.</p></div>',
+         '<div class="ficha"><h5>No confundir</h5><dl class="vocab">',
+         "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in confundir), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -1434,6 +1526,7 @@ if __name__ == "__main__":
     t = insertar(t, "redes", hoja_redes())
     t = insertar(t, "algoritmos", hoja_algoritmos())
     t = insertar(t, "inferencia", hoja_inferencia())
+    t = insertar(t, "produccion", hoja_produccion())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

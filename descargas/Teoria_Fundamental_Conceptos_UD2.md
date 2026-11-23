@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E153 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E155 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -7334,6 +7334,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *Master Machine Learning in Just 20 Days* (Bosscoder Academy, 23 págs., publicidad de un curso) | Plan de 20 días cubierto por el [itinerario](itinerario.html). Se añadieron AutoML y aprendizaje federado en la UD5, sección 11 | [UD5 11](ud5-ml.html#11-el-ml-en-el-mundo-real-ampliación) |
 | Infografía «Computer Vision Explained» (ML Tut) | En la UD3: «El recorrido completo, de un vistazo» con la hoja «La visión artificial en una hoja» (entrenar frente a usar, red base y cabezas, semántica frente a instancias, «No confundir»), segmentación semántica, de instancias y panóptica con código, red base y cabezas, y el orden BGR de OpenCV. Sus errores, en E150 | [UD3](ud3-vision.html), [E150–E151](ejercicios.html#bloque-af--guías-y-chuletas-con-criterio-e147e153) |
 | Carrusel «EDA Notes – Python + SQL» (@thedataguy16) | En Análisis de datos 2.5: un EDA completo en orden, en Python y en SQL sobre la tabla sin limpiar, con datos inventados descargables (`cafeteria_pedidos.csv`), la hoja «Un EDA en una hoja», Spearman, semanas incompletas y atípico frente a error. Sus errores, en E152 | [Datos 2.5](datos.html#25-un-eda-completo-en-orden-python-y-sql-a-la-vez), [E152–E153](ejercicios.html#bloque-af--guías-y-chuletas-con-criterio-e147e153) |
+| «Agentic AI Complete Guide» (codingwithmee_18, PDF de 16 págs.) | En 14.19, «Un agente que se pueda dejar trabajando»: cinco condiciones de parada con código, coste que crece más que los pasos, diseño de herramientas e idempotencia, cuatro tipos de memoria, MCP frente a A2A, envenenamiento de herramientas, fallos típicos, parada de emergencia y auditoría; hoja «Un agente que se pueda dejar trabajando»; tabla de bibliotecas al día (Microsoft Agent Framework, SDK de proveedores, observabilidad). Sus errores, en E154 | [14.19](#un-agente-que-se-pueda-dejar-trabajando-cuándo-parar-memoria-herramientas-y-fallos-típicos), [E154–E155](ejercicios.html#bloque-ac--agentes-patrones-estado-y-fiabilidad-e120e123-e132-y-e154e155) |
 | «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |
@@ -8790,6 +8791,182 @@ Mirando solo la respuesta, el agente parece bueno (3 de 4). Mirando el recorrido
 
 **Trazas.** Para encontrar dónde falló un agente de varios pasos se guarda una **traza** por ejecución: cada paso con su entrada, su salida, la herramienta usada, el tiempo y los errores. Es el registro de la [evaluación](#evaluar-una-aplicación-con-llm), pero paso a paso; LangSmith, Langfuse u OpenTelemetry lo muestran como una línea de tiempo. Los ejercicios E120–E123 practican todo esto.
 
+#### Un agente que se pueda dejar trabajando: cuándo parar, memoria, herramientas y fallos típicos
+
+Un agente de demostración funciona una vez delante de quien lo ha programado. Uno que se pueda dejar trabajando necesita algo más: saber **cuándo parar**, recordar lo justo, usar herramientas que no hagan daño si se repiten y dejar rastro de todo. Esta hoja lo resume; debajo están el código y los detalles.
+
+<!-- hoja:produccion -->
+<section class="hoja" aria-labelledby="hoja-pro-t">
+<p class="hoja-titulo" id="hoja-pro-t">Un agente que se pueda dejar trabajando</p>
+<p class="hoja-nota">El bucle es la parte fácil. Lo que hace fiable a un agente son sus salidas, sus permisos y lo que recuerda.</p>
+<div class="hoja-grid">
+<div class="ficha ancha"><h5>El bucle y cuándo parar</h5>
+<svg class="sv sv-h" viewBox="0 0 740 228" role="img" aria-labelledby="ph-t ph-d"><title id="ph-t">El bucle de un agente y sus cinco salidas</title><desc id="ph-d">Bucle del agente: percibir, planificar, actuar, observar y revisar, y vuelta a empezar. Cinco salidas escritas en el código: objetivo cumplido y comprobado, límite de pasos, presupuesto, fallo repetido y hace falta una persona.</desc><defs><marker id="ph-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="ph-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="ph-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="ph-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="ph-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><text x="10" y="16" class="sv-zona" text-anchor="start">EL BUCLE</text><rect x="190" y="168" width="120" height="34" rx="8" class="sv-caja"/><text x="250.0" y="190.0" class="sv-tit" text-anchor="middle">Percibir</text><rect x="50" y="168" width="120" height="34" rx="8" class="sv-caja"/><text x="110.0" y="190.0" class="sv-tit" text-anchor="middle">Planificar</text><rect x="10" y="90" width="120" height="34" rx="8" class="sv-caja"/><text x="70.0" y="112.0" class="sv-tit" text-anchor="middle">Actuar</text><rect x="120" y="28" width="120" height="34" rx="8" class="sv-caja"/><text x="180.0" y="50.0" class="sv-tit" text-anchor="middle">Observar</text><rect x="230" y="90" width="120" height="34" rx="8" class="sv-caja sv-caja-ml"/><text x="290.0" y="112.0" class="sv-tit" text-anchor="middle">Revisar</text><path d="M240,45 C280,50 290,70 290,86" class="sv-l-pen" marker-end="url(#ph-pen)"/><path d="M290,124 C290,150 280,165 270,168" class="sv-l-pen" marker-end="url(#ph-pen)"/><path d="M190,185 H174" class="sv-l-pen" marker-end="url(#ph-pen)"/><path d="M50,170 C40,150 70,130 70,128" class="sv-l-pen" marker-end="url(#ph-pen)"/><path d="M70,90 C70,60 100,48 116,46" class="sv-l-pen" marker-end="url(#ph-pen)"/><text x="400" y="16" class="sv-zona" text-anchor="start">CINCO SALIDAS, EN EL CÓDIGO</text><rect x="400" y="26" width="330" height="34" rx="8" class="sv-caja sv-caja-ok"/><text x="565.0" y="48.0" class="sv-tit" text-anchor="middle">Objetivo cumplido: y comprobado</text><rect x="400" y="66" width="330" height="34" rx="8" class="sv-caja"/><text x="565.0" y="88.0" class="sv-tit" text-anchor="middle">Límite de pasos: p. ej., 10</text><rect x="400" y="106" width="330" height="34" rx="8" class="sv-caja"/><text x="565.0" y="128.0" class="sv-tit" text-anchor="middle">Presupuesto: tokens, euros, tiempo</text><rect x="400" y="146" width="330" height="34" rx="8" class="sv-caja"/><text x="565.0" y="168.0" class="sv-tit" text-anchor="middle">Fallo repetido: misma llamada dos veces</text><rect x="400" y="186" width="330" height="34" rx="8" class="sv-caja"/><text x="565.0" y="208.0" class="sv-tit" text-anchor="middle">Hace falta una persona: acción con efectos o duda</text><path d="M352,106 H394" class="sv-l-rojo" marker-end="url(#ph-rojo)"/></svg>
+<svg class="sv sv-v" viewBox="0 0 310 482" role="img" aria-labelledby="pv-t pv-d"><title id="pv-t">El bucle de un agente y sus cinco salidas</title><desc id="pv-d">Bucle del agente: percibir, planificar, actuar, observar y revisar, y vuelta a empezar. Cinco salidas escritas en el código: objetivo cumplido y comprobado, límite de pasos, presupuesto, fallo repetido y hace falta una persona.</desc><defs><marker id="pv-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="pv-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="pv-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="pv-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="pv-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><text x="10" y="14" class="sv-zona" text-anchor="start">EL BUCLE</text><rect x="40" y="22" width="180" height="30" rx="8" class="sv-caja"/><text x="130.0" y="42.0" class="sv-tit" text-anchor="middle">Percibir</text><path d="M130,53 V60" class="sv-l-pen" marker-end="url(#pv-pen)"/><rect x="40" y="62" width="180" height="30" rx="8" class="sv-caja"/><text x="130.0" y="82.0" class="sv-tit" text-anchor="middle">Planificar</text><path d="M130,93 V100" class="sv-l-pen" marker-end="url(#pv-pen)"/><rect x="40" y="102" width="180" height="30" rx="8" class="sv-caja"/><text x="130.0" y="122.0" class="sv-tit" text-anchor="middle">Actuar</text><path d="M130,133 V140" class="sv-l-pen" marker-end="url(#pv-pen)"/><rect x="40" y="142" width="180" height="30" rx="8" class="sv-caja"/><text x="130.0" y="162.0" class="sv-tit" text-anchor="middle">Observar</text><path d="M130,173 V180" class="sv-l-pen" marker-end="url(#pv-pen)"/><rect x="40" y="182" width="180" height="30" rx="8" class="sv-caja sv-caja-ml"/><text x="130.0" y="202.0" class="sv-tit" text-anchor="middle">Revisar</text><path d="M222,197 H250 V37 H224" class="sv-l-vuelta" marker-end="url(#pv-vuelta)"/><text x="256" y="110" class="sv-et" text-anchor="start">repite</text><text x="10" y="232" class="sv-zona" text-anchor="start">CINCO SALIDAS</text><rect x="10" y="240" width="290" height="42" rx="8" class="sv-caja sv-caja-ok"/><text x="155.0" y="258.0" class="sv-tit" text-anchor="middle">Objetivo cumplido</text><text x="155.0" y="275.0" class="sv-sub" text-anchor="middle">y comprobado</text><rect x="10" y="288" width="290" height="42" rx="8" class="sv-caja"/><text x="155.0" y="306.0" class="sv-tit" text-anchor="middle">Límite de pasos</text><text x="155.0" y="323.0" class="sv-sub" text-anchor="middle">p. ej., 10</text><rect x="10" y="336" width="290" height="42" rx="8" class="sv-caja"/><text x="155.0" y="354.0" class="sv-tit" text-anchor="middle">Presupuesto</text><text x="155.0" y="371.0" class="sv-sub" text-anchor="middle">tokens, euros, tiempo</text><rect x="10" y="384" width="290" height="42" rx="8" class="sv-caja"/><text x="155.0" y="402.0" class="sv-tit" text-anchor="middle">Fallo repetido</text><text x="155.0" y="419.0" class="sv-sub" text-anchor="middle">misma llamada dos veces</text><rect x="10" y="432" width="290" height="42" rx="8" class="sv-caja"/><text x="155.0" y="450.0" class="sv-tit" text-anchor="middle">Hace falta una persona</text><text x="155.0" y="467.0" class="sv-sub" text-anchor="middle">acción con efectos o duda</text></svg>
+<p class="ficha-pie">La primera salida es la única buena, y solo si una comprobación objetiva (una prueba, un esquema, el dato real) lo confirma.</p></div>
+<div class="ficha"><h5>¿Cuánta autonomía?</h5><ul class="semaforo">
+<li class="ok"><b>Leer datos, buscar, resumir</b><span class="marca">✓ solo</span><span class="que">sin efectos fuera: el agente lo hace y lo registra</span></li><li class="medio"><b>Preparar un borrador o un cambio</b><span class="marca">⚠ en seco</span><span class="que">lo propone; una persona o una prueba lo revisa</span></li><li class="no"><b>Enviar, pagar, borrar, publicar</b><span class="marca">✗ aprobación</span><span class="que">una persona dice «sí» antes, viendo qué y con qué datos</span></li>
+</ul><p class="ficha-pie">La autonomía se decide acción por acción, no para todo el producto.</p></div>
+<div class="ficha"><h5>Cuatro memorias</h5><dl class="vocab">
+<dt>De trabajo</dt><dd>lo de esta tarea: objetivo, plan, últimos resultados</dd><dt>Episódica</dt><dd>qué pasó en tareas anteriores</dd><dt>Semántica</dt><dd>datos y preferencias que se mantienen</dd><dt>Procedimental</dt><dd>cómo se hacen las cosas: instrucciones versionadas</dd>
+</dl><p class="ficha-pie">Solo se guarda lo comprobado, y la persona puede ver y borrar lo suyo.</p></div>
+<div class="ficha"><h5>Dos enchufes</h5><svg class="sv " viewBox="0 0 410 132" role="img" aria-labelledby="pe-t pe-d"><title id="pe-t">MCP y A2A</title><desc id="pe-d">El agente usa MCP para conectarse a herramientas y datos, como un calendario o una base de datos, y A2A para encargar tareas a otros agentes.</desc><defs><marker id="pe-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="pe-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="pe-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="pe-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="pe-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><rect x="150" y="36" width="110" height="40" rx="8" class="sv-caja sv-caja-ml"/><text x="205.0" y="61.0" class="sv-tit" text-anchor="middle">Agente</text><rect x="4" y="10" width="120" height="34" rx="8" class="sv-caja"/><text x="64.0" y="32.0" class="sv-tit" text-anchor="middle">Calendario</text><rect x="4" y="68" width="120" height="34" rx="8" class="sv-caja"/><text x="64.0" y="90.0" class="sv-tit" text-anchor="middle">Base de datos</text><rect x="286" y="10" width="120" height="34" rx="8" class="sv-caja"/><text x="346.0" y="32.0" class="sv-tit" text-anchor="middle">Agente B</text><rect x="286" y="68" width="120" height="34" rx="8" class="sv-caja"/><text x="346.0" y="90.0" class="sv-tit" text-anchor="middle">Agente C</text><path d="M148,50 H128" class="sv-l-pen" marker-end="url(#pe-pen)"/><path d="M148,64 L128,82" class="sv-l-pen" marker-end="url(#pe-pen)"/><path d="M262,50 H282" class="sv-l-pen" marker-end="url(#pe-pen)"/><path d="M262,64 L282,82" class="sv-l-pen" marker-end="url(#pe-pen)"/><text x="64" y="124" class="sv-et" text-anchor="middle">MCP: herramientas y datos</text><text x="346" y="124" class="sv-et" text-anchor="middle">A2A: otros agentes</text></svg><p class="ficha-pie">Un servidor MCP o un agente ajeno es código de terceros: solo de confianza y con los permisos justos.</p></div>
+<div class="ficha"><h5>No confundir</h5><dl class="vocab">
+<dt>Idempotente</dt><dd>repetir la llamada no repite el efecto (clave por intención)</dd><dt>Coste</dt><dd>crece más que los pasos: cada llamada relee todo lo anterior</dd><dt>«Ya está»</dt><dd>lo dice el modelo; lo confirma una comprobación</dd><dt>Juicio del modelo</dt><dd>no es una barrera de seguridad: los límites, en el código</dd><dt>Más agentes</dt><dd>más coste, más espera y más formas de fallar: solo si se mide que ayudan</dd>
+</dl></div>
+</div></section>
+<!-- /hoja:produccion -->
+
+**Cinco razones para parar.** Todo bucle de agente necesita estas cinco salidas, y escritas **en el código**, no solo pedidas en el *prompt*:
+
+1. **Objetivo cumplido**, y comprobado con algo objetivo (una prueba, un esquema, un dato del sistema), no porque el modelo diga «ya está».
+2. **Límite de pasos.**
+3. **Presupuesto**: *tokens*, dinero o tiempo por tarea.
+4. **Fallo repetido**: la misma herramienta con los mismos datos por segunda vez significa que está atascado.
+5. **Hace falta una persona**: la acción siguiente tiene efectos (enviar, pagar, borrar) o el agente no está seguro.
+
+```python
+import json
+
+PRECIO = {"buscar_libro": 0, "ver_prestamos": 0, "enviar_aviso": 1}   # 1 = acción con efectos
+
+def ejecutar(modelo, herramientas, objetivo_cumplido, max_pasos=8, max_tokens=4000):
+    memoria, vistos, tokens = [], set(), 0
+    for paso in range(1, max_pasos + 1):
+        tokens += 300 + 120 * len(memoria)          # el contexto crece con cada resultado guardado
+        if tokens > max_tokens:
+            return f"PARADA: presupuesto agotado ({tokens} tokens) en el paso {paso}", memoria
+        orden = json.loads(modelo(memoria))
+        if "fin" in orden:
+            if objetivo_cumplido(memoria):
+                return f"HECHO en {paso} pasos ({tokens} tokens): {orden['fin']}", memoria
+            return "PARADA: dice que ha terminado, pero la comprobación falla", memoria
+        llamada = (orden["herramienta"], json.dumps(orden["args"], sort_keys=True))
+        if llamada in vistos:
+            return f"PARADA: repite {orden['herramienta']} con los mismos datos; aviso a una persona", memoria
+        vistos.add(llamada)
+        if PRECIO.get(orden["herramienta"]):
+            return f"PAUSA: {orden['herramienta']} necesita aprobación humana", memoria
+        memoria.append(herramientas[orden["herramienta"]](**orden["args"]))
+    return f"PARADA: límite de {max_pasos} pasos", memoria
+
+herramientas = {"buscar_libro": lambda titulo: {"titulo": titulo, "id": 31},
+                "ver_prestamos": lambda socio: {"socio": socio, "libros": [31]}}
+
+def guion(*pasos):                                  # modelo simulado: responde lo siguiente del guion
+    pasos = list(pasos)
+    return lambda memoria: json.dumps(pasos.pop(0))
+
+bien = guion({"herramienta": "ver_prestamos", "args": {"socio": 17}}, {"fin": "Tienes 1 libro: el 31"})
+atascado = guion(*[{"herramienta": "buscar_libro", "args": {"titulo": "Os eidos"}}] * 3)
+prisas = guion({"fin": "Ya está"})
+aviso = guion({"herramienta": "ver_prestamos", "args": {"socio": 17}},
+              {"herramienta": "enviar_aviso", "args": {"socio": 17}})
+comprueba = lambda memoria: any("libros" in m for m in memoria)
+
+for nombre, modelo in [("bien", bien), ("atascado", atascado), ("prisas", prisas), ("aviso", aviso)]:
+    print(f"{nombre:9}", ejecutar(modelo, herramientas, comprueba)[0])
+
+largo = lambda memoria: json.dumps({"herramienta": "buscar_libro", "args": {"titulo": f"t{len(memoria)}"}})
+print("largo    ", ejecutar(largo, herramientas, comprueba, max_pasos=20)[0])
+# bien      HECHO en 2 pasos (720 tokens): Tienes 1 libro: el 31
+# atascado  PARADA: repite buscar_libro con los mismos datos; aviso a una persona
+# prisas    PARADA: dice que ha terminado, pero la comprobación falla
+# aviso     PAUSA: enviar_aviso necesita aprobación humana
+# largo     PARADA: presupuesto agotado (4620 tokens) en el paso 7
+```
+
+El caso `prisas` es un fallo real y frecuente: el agente dice que ha terminado sin haber hecho nada. Solo lo para una comprobación que no depende del modelo.
+
+**El coste crece más deprisa que los pasos.** Se suele decir que un agente de 20 pasos cuesta como 20 llamadas. Es más: en cada paso el modelo vuelve a leer todo lo anterior, así que cada llamada es más larga que la anterior.
+
+```python
+inicial, por_paso, pasos = 1500, 400, 20          # tokens del prompt y de cada resultado que se añade
+llamadas = [inicial + por_paso * k for k in range(pasos)]
+print(llamadas[:3], "...", llamadas[-1])          # [1500, 1900, 2300] ... 9100
+print(sum(llamadas), "tokens de entrada")          # 106000
+print(round(sum(llamadas) / inicial), "veces una sola llamada")   # 71
+```
+
+Con estos números (inventados, pero de un tamaño realista), 20 pasos leen unas 71 veces más *tokens* que una llamada. Lo reducen el resumen de los pasos viejos, guardar solo lo que hace falta y la **caché de prompts** de los proveedores, que cobra menos por la parte repetida del principio. Lo controla un **presupuesto por tarea** con aviso.
+
+**Herramientas que no hacen daño si se repiten.** Las reglas de diseño:
+
+| Pregunta | Buena respuesta |
+|----------|-----------------|
+| ¿Hace una sola cosa clara? | `buscar_pedidos`, no `hacer_cualquier_cosa`. El modelo elige herramienta por su nombre y su descripción |
+| ¿Tiene pocos datos de entrada y con tipo? | Pocos argumentos, con listas cerradas de valores cuando se pueda |
+| ¿Devuelve poco y ordenado? | Lo que necesita el paso siguiente, no documentos enteros |
+| ¿Cómo falla? | Con un mensaje que el agente pueda leer y corregir, no con un cuelgue |
+| ¿Es reversible? | Si no lo es, aprobación humana |
+| ¿Qué pasa si se repite? | Nada: tiene que ser **idempotente** |
+
+Una herramienta es **idempotente** si llamarla dos veces con la misma petición deja el mismo resultado que llamarla una. Importa porque los agentes reintentan: si una devolución de dinero tarda en contestar, el agente la vuelve a pedir. La solución habitual es una **clave de idempotencia**, una por intención (no por intento):
+
+```python
+import uuid
+
+pagos_hechos = {}                                  # lo que el sistema de pagos ya ha procesado
+
+def devolver(pedido, euros, clave):
+    if clave in pagos_hechos:                      # misma clave: no se repite, se devuelve lo de antes
+        return pagos_hechos[clave] + " (repetida, no se cobra dos veces)"
+    pagos_hechos[clave] = f"Devueltos {euros} € del pedido {pedido}"
+    return pagos_hechos[clave]
+
+clave = str(uuid.uuid4())                          # una clave por intención, no por intento
+print(devolver(812, 12.5, clave))                  # Devueltos 12.5 € del pedido 812
+# ... la respuesta tarda, salta el tiempo de espera y el agente reintenta ...
+print(devolver(812, 12.5, clave))                  # Devueltos 12.5 € del pedido 812 (repetida, no se cobra dos veces)
+print(len(pagos_hechos), "devolución")             # 1 devolución
+```
+
+Por eso la tabla de [reintentos](#fiabilidad-de-un-agente-reintentos-alternativas-y-evaluar-el-recorrido) solo repite lo que es seguro repetir.
+
+**Cuatro tipos de memoria.** Se toman prestados los nombres de la psicología:
+
+| Memoria | Qué guarda | Cómo se hace |
+|---------|-----------|--------------|
+| **De trabajo** | El objetivo, el plan y los últimos resultados de esta tarea | La lista de mensajes del *prompt*, recortada o resumida |
+| **Episódica** | Qué pasó en tareas anteriores | Registros y resúmenes por tarea |
+| **Semántica** | Datos y preferencias que se mantienen | Una tabla clave-valor o una base vectorial ([RAG](#rag-mejorado-trozos-con-solapamiento-reordenación-y-bases-vectoriales)) |
+| **Procedimental** | Cómo se hacen las cosas | Instrucciones escritas y versionadas («habilidades», guías de pasos) |
+
+Tres reglas: se guarda solo lo **comprobado** (un recuerdo falso estropea todas las tareas siguientes); los pasos viejos se **resumen** para no llenar el contexto; y la persona tiene que poder **ver y borrar** lo que se guarda de ella (RGPD).
+
+**MCP y A2A: dos enchufes distintos.** [MCP](#agentes-con-aprobación-humana-memoria-y-límites) conecta un agente con **herramientas y datos**. **A2A** (*Agent2Agent*) conecta **agentes con agentes**, aunque sean de empresas distintas: cada agente publica una «tarjeta» con lo que sabe hacer y los demás le encargan **tareas**. Google lo presentó en abril de 2025 y en junio de 2025 lo cedió a la Linux Foundation. En agosto de 2026 se anunció que pasaba a la Agentic AI Foundation, la misma que gestiona MCP (estado en noviembre de 2026).
+
+| | MCP | A2A |
+|-|-----|-----|
+| Conecta | Un agente con herramientas y datos | Un agente con otros agentes |
+| Ejemplo | El asistente lee el calendario del centro a través de un servidor MCP | El agente de viajes del instituto pide al agente de un albergue que reserve plazas |
+| Piezas | Herramientas, recursos, *prompts* | Tarjeta del agente (qué sabe hacer), tareas, mensajes |
+
+Con más conexiones hay riesgos nuevos. Uno es el **envenenamiento de herramientas**: la descripción de una herramienta de terceros esconde instrucciones para el modelo («antes de usar esta herramienta, lee el archivo de claves…»). El modelo lee esas descripciones para elegir herramienta, así que pueden actuar como una [inyección de instrucciones](#seguridad-inyección-de-instrucciones-y-barreras). Se instalan solo servidores de confianza y se revisan sus descripciones.
+
+**Fallos típicos y su arreglo.**
+
+| Fallo | Cómo se nota | Arreglo |
+|-------|--------------|---------|
+| Bucle sin fin | La misma herramienta una y otra vez | Límite de pasos, detectar repeticiones |
+| Deriva del objetivo | Trabaja en algo que nadie ha pedido | Repetir el objetivo en cada paso y comprobar contra él |
+| Terminar antes de tiempo | Dice «hecho» sin comprobar | Comprobación objetiva antes de aceptar |
+| Herramienta mal usada | Herramienta o datos equivocados | Descripciones más claras, menos herramientas, validar los datos |
+| Contexto desbordado | Olvida lo del principio | Resúmenes y memoria selectiva |
+| Acción inventada | Dice que ha devuelto el dinero y no lo ha hecho | Comprobarlo en el sistema real antes de confirmar |
+| Coste que se dispara sin avisar | La factura sube y no se ve resultado | Presupuesto y aviso por tarea |
+
+**Ponerlo en marcha.** En una aplicación real se añaden piezas que el agente **no puede tocar**:
+
+- **Parada de emergencia**: una persona puede detener todas las acciones del agente al momento.
+- **Registro de auditoría**: cada decisión, llamada y aprobación, con hora y autor, en un servicio aparte que el agente no puede editar.
+- **Primero en seco**: el agente propone el cambio, una persona o una prueba lo revisa y solo entonces se aplica.
+- **Tareas largas en una cola**, guardando el estado tras cada paso para poder reanudar ([estado del agente](#estado-del-agente-reductores-puntos-de-control-y-reanudar)).
+- **Versiones juntas**: *prompt*, herramientas y modelo cambian a la vez y se prueban primero con unos pocos usuarios (despliegue «canario»).
+- **Medir tiempos con percentiles**: la mediana (p50) dice el tiempo normal; el percentil 95 (p95), lo que tardan los casos lentos, que son los que generan quejas.
+
+> **El juicio del modelo no es una barrera de seguridad.** Los límites, permisos y aprobaciones se aplican en el código y en el sistema, no solo en el *prompt*: un modelo puede equivocarse o ser engañado.
+
 #### ¿Agente, sistema agéntico o varios agentes? Elegir el más sencillo que funcione
 
 Las expresiones «agente de IA» e **IA agéntica** (*agentic AI*) se usan mucho y no siempre igual. La idea más repetida: un **agente** hace **una tarea** con un modelo y herramientas (buscar vuelos, resumir los correos importantes), y un **sistema agéntico** persigue **un objetivo más grande** con varios pasos que planifica, ejecuta y corrige, a veces repartidos entre **varios agentes especializados** (un **sistema multiagente**). No son dos cajas separadas, sino los extremos de una escala de **autonomía**. Y en esa escala falta un peldaño que muchas chuletas olvidan: el **flujo fijo**.
@@ -8848,6 +9025,9 @@ Es un modelo simplificado (los pasos no son siempre independientes), pero explic
 | **OpenAI Agents SDK** | Agentes con herramientas, **traspasos** entre agentes y barreras de seguridad | Pensado para los modelos de OpenAI, aunque admite otros |
 | **LlamaIndex** | Agentes conectados a **documentos y datos** (RAG) | Su punto fuerte es la búsqueda en documentos, no el reparto entre agentes |
 | **AutoGen** | Conversaciones entre varios agentes | **En modo mantenimiento**: Microsoft ya no lo amplía y recomienda Microsoft Agent Framework para proyectos nuevos |
+| **Microsoft Agent Framework** | Sucesor de AutoGen y Semantic Kernel (versión 1.0 en abril de 2026): agentes y flujos con varios agentes en Python y .NET | Muy ligado al ecosistema de Microsoft y Azure |
+| **SDK de los proveedores** (Claude Agent SDK, Google ADK) | El bucle, las herramientas y los permisos ya hechos, cerca de los modelos de cada empresa | Atan el proyecto a un proveedor |
+| **Observabilidad** (Langfuse, LangSmith, OpenTelemetry) | Guardar y revisar las trazas de cada ejecución | No construyen agentes: los vigilan |
 
 En clase no hace falta ninguna: los ejemplos de esta sección hacen lo mismo con funciones de Python, y así se ve lo que la biblioteca esconde. Además, las API comerciales de modelos exigen **18 años**; con menores, modelos simulados o locales.
 

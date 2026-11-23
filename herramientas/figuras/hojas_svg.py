@@ -1335,6 +1335,85 @@ def hoja_vision():
     return "\n".join(h)
 
 
+# ---------- EDA: doce pasos en orden ----------
+EDA_FASES = [("Arreglar", ["1 Mirar: tamaño y tipos", "2 Fechas a fecha", "3 Quitar repetidos", "4 Contar huecos", "5 Limpiar texto"]),
+             ("Describir", ["6 Mínimo y máximo", "7 Distribución", "8 Atípicos: uno a uno"]),
+             ("Comparar", ["9 Categorías y tamaños", "10 Grupos", "11 Relaciones", "12 Tendencia"])]
+EDA_ORDEN = ["los repetidos, antes de contar huecos", "el texto limpio, antes de agrupar", "las fechas, antes de la tendencia"]
+EDA_DESC = ("Doce pasos en tres fases. Arreglar: mirar, fechas, repetidos, huecos y texto. Describir: mínimo y máximo, "
+            "distribución y atípicos. Comparar: categorías, grupos, relaciones y tendencia. El orden importa: "
+            + "; ".join(EDA_ORDEN) + ".")
+
+
+def eda_h():
+    p = "eh"
+    b = ""
+    xs = [10, 262, 514]
+    for k, (fase, pasos) in enumerate(EDA_FASES):
+        x = xs[k]
+        b += texto(x, 16, fase.upper(), "sv-zona", "start")
+        for i, paso in enumerate(pasos):
+            cls = "sv-caja sv-caja-ok" if (k, i) in [(0, 2), (0, 4), (0, 1)] else "sv-caja"
+            b += caja(x, 26 + i * 42, 216, 34, paso, None, cls)
+        if k < 2:
+            b += linea(f"M{x + 220},{26 + 17} H{xs[k + 1] - 6}", p)
+    b += texto(262, 186, "El orden importa:", "sv-zona", "start")
+    for j, t in enumerate(EDA_ORDEN):
+        b += texto(262, 204 + j * 16, f"• {t}", "sv-et", "start")
+    return svg(p, "0 0 740 240", "Un EDA en doce pasos", EDA_DESC, b, "sv-h")
+
+
+def eda_v():
+    p = "ev"
+    b = ""
+    y = 4
+    for k, (fase, pasos) in enumerate(EDA_FASES):
+        b += texto(10, y + 12, fase.upper(), "sv-zona", "start")
+        y += 20
+        for i, paso in enumerate(pasos):
+            cls = "sv-caja sv-caja-ok" if (k, i) in [(0, 2), (0, 4), (0, 1)] else "sv-caja"
+            b += caja(20, y, 260, 32, paso, None, cls)
+            y += 38
+        y += 6
+    b += texto(10, y + 12, "El orden importa:", "sv-zona", "start")
+    y += 18
+    for t in EDA_ORDEN:
+        b += texto(10, y + 12, f"• {t}", "sv-et", "start")
+        y += 18
+    return svg(p, f"0 0 300 {y + 4}", "Un EDA en doce pasos", EDA_DESC, b, "sv-v")
+
+
+def hoja_eda():
+    sql_sucio = [("MIN(fecha) con fechas «dd-mm-aaaa»", "compara letra a letra: «02-02» sale antes que «30-01»"),
+                 ("COUNT(*) − COUNT(valoracion)", "cuenta bien los huecos, pero también los de las filas repetidas"),
+                 ("GROUP BY edificio", "«B» y «B » son dos grupos: seis edificios en vez de tres"),
+                 ("strftime('%W', fecha)", "solo entiende «aaaa-mm-dd»: NULL en todas las filas, sin avisar")]
+    raros = [("no", "✗ error", "espera de −4 min", "imposible: se quita y se dice cuántos"),
+             ("medio", "⚠ real", "encargo de 60 €", "atípico pero cierto: se separa y se informa"),
+             ("ok", "✓ normal", "bocadillo de 5,71 €", "fuera del bigote, pero un pedido corriente")]
+    contar = [("Media o mediana", "con datos asimétricos, el pedido típico es la mediana"),
+              ("Cada media, con su n", "una media de 3 pedidos no pesa como una de 300"),
+              ("Huecos", "el % se calcula después de quitar repetidos"),
+              ("Correlación", "dice que van juntas, no cuál causa cuál"),
+              ("Semana incompleta", "la primera y la última pueden tener menos días: comparar por día")]
+    h = ['<section class="hoja" aria-labelledby="hoja-eda-t">',
+         '<p class="hoja-titulo" id="hoja-eda-t">Un EDA en una hoja</p>',
+         '<p class="hoja-nota">Doce pasos antes de cualquier gráfico bonito. En verde, los que cambian el resultado de los demás si se hacen tarde.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>Doce pasos, en este orden</h5>', eda_h(), eda_v(),
+         '<p class="ficha-pie">Cuenta las filas antes y después de cada limpieza y apúntalo: es lo primero que preguntará quien lea el informe.</p></div>',
+         '<div class="ficha"><h5>SQL sobre la tabla sin limpiar</h5><ul class="semaforo">',
+         "".join(f'<li class="no"><code>{escape(a)}</code><span class="marca">✗</span><span class="que">{escape(d)}</span></li>' for a, d in sql_sucio),
+         '</ul><p class="ficha-pie">La limpieza se repite en la consulta: <code>TRIM</code>, <code>UPPER</code>, fechas a formato ISO y <code>COUNT(DISTINCT id)</code>.</p></div>',
+         '<div class="ficha"><h5>¿Atípico o error?</h5><ul class="semaforo">',
+         "".join(f'<li class="{c}"><b>{escape(o)}</b><span class="marca">{m}</span><span class="que">{escape(q)}</span></li>' for c, m, o, q in raros),
+         '</ul><p class="ficha-pie">La regla del rango intercuartílico solo marca; la decisión es tuya, valor a valor.</p></div>',
+         '<div class="ficha ancha"><h5>Qué contar al final</h5><dl class="vocab">',
+         "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in contar), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -1360,6 +1439,10 @@ if __name__ == "__main__":
     if UD4.exists():
         u = UD4.read_text(encoding="utf-8")
         UD4.write_text(insertar(u, "llm", hoja_llm()), encoding="utf-8")
+    DATOS = RAIZ / "contenidos" / "datos.md"
+    if DATOS.exists():
+        u = DATOS.read_text(encoding="utf-8")
+        DATOS.write_text(insertar(u, "eda", hoja_eda()), encoding="utf-8")
     UD3 = RAIZ / "contenidos" / "ud3-vision.md"
     if UD3.exists():
         u = UD3.read_text(encoding="utf-8")

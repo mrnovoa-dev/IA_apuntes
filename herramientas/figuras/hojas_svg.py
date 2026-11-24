@@ -1506,6 +1506,71 @@ def hoja_produccion():
     return "\n".join(h)
 
 
+# ---------- Ciberseguridad ----------
+CIB_TRES = [("Codificar", "Base64, UTF-8", "lo deshace cualquiera", "sv-caja"),
+            ("Resumir (hash)", "SHA-256, scrypt", "no se puede deshacer", "sv-caja sv-caja-ml"),
+            ("Cifrar", "AES, Fernet", "solo con la clave", "sv-caja sv-caja-ok")]
+CIB_DESC = ("Un mismo mensaje se puede codificar, resumir o cifrar. Codificar, con Base64 o UTF-8, lo deshace cualquiera y no protege nada. "
+            "Resumir, con SHA-256 o scrypt, no se puede deshacer y sirve para comprobar integridad y guardar contraseñas. "
+            "Cifrar, con AES o Fernet, solo lo deshace quien tiene la clave y protege la confidencialidad.")
+
+
+def ciber_h():
+    p = "ch"
+    b = caja(10, 76, 120, 40, "Mensaje", None, "sv-caja")
+    for i, (t, ej, deshacer, cls) in enumerate(CIB_TRES):
+        y = 10 + i * 64
+        b += linea(f"M132,96 C160,96 160,{y + 22} 190,{y + 22}", p)
+        b += caja(196, y, 200, 46, t, ej, cls)
+        b += linea(f"M398,{y + 23} H426", p, punta=False, cls="sv-l-pen")
+        b += texto(434, y + 28, deshacer, "sv-et", "start")
+    return svg(p, "0 0 640 200", "Codificar, resumir y cifrar", CIB_DESC, b, "sv-h")
+
+
+def ciber_v():
+    p = "cv"
+    b = caja(10, 6, 150, 34, "Mensaje", None, "sv-caja")
+    y, medios = 56, []
+    for t, ej, deshacer, cls in CIB_TRES:
+        b += caja(50, y, 250, 46, t, ej, cls)
+        b += texto(175, y + 62, deshacer, "sv-et", "middle")
+        medios.append(y + 23)
+        y += 82
+    b += linea(f"M30,41 V{medios[-1]}", p, punta=False, cls="sv-l-pen")
+    for m in medios:
+        b += linea(f"M30,{m} H46", p)
+    return svg(p, f"0 0 310 {y - 10}", "Codificar, resumir y cifrar", CIB_DESC, b, "sv-v")
+
+
+def hoja_ciberseguridad():
+    donde = [("ok", "✓ sí", "Lo mío", "mi equipo, mis archivos, una máquina virtual o una web montada en local"),
+             ("medio", "⚠ con normas", "Plataformas de práctica y CTF", "solo contra lo que ofrecen y dentro de sus reglas"),
+             ("no", "✗ no", "Lo ajeno sin permiso escrito", "red y web del centro, aula virtual, wifi de otros: delito (art. 197 bis CP)")]
+    claves = [("no", "✗", "Texto plano o cifrado", "si roban la base de datos (o la clave), salen todas"),
+              ("no", "✗", "MD5, SHA-1, SHA-256 a secas", "millones de intentos por segundo y sin sal"),
+              ("ok", "✓", "Argon2id, scrypt, bcrypt", "lentos a propósito y con sal aleatoria de secrets")]
+    confundir = [("Base64", "no es cifrado: se lee con una línea de Python"),
+                 ("Sal", "no es secreta: se guarda junto al resumen; su trabajo es que dos claves iguales no se parezcan"),
+                 ("MD5", "vale para ver si una copia salió mal, no para defenderse de nadie"),
+                 ("OSINT", "que algo esté publicado no permite juntarlo en el perfil de una persona"),
+                 ("Herramienta", "la misma sirve para defender o atacar: lo que cambia es el permiso")]
+    sem = lambda filas: "".join(f'<li class="{c}"><b>{escape(o)}</b><span class="marca">{m}</span><span class="que">{escape(q)}</span></li>' for c, m, o, q in filas)
+    h = ['<section class="hoja" aria-labelledby="hoja-cib-t">',
+         '<p class="hoja-titulo" id="hoja-cib-t">Ciberseguridad en una hoja</p>',
+         '<p class="hoja-nota">Primero, dónde se puede practicar. Después, las tres operaciones que más se confunden y cómo guardar una contraseña.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha"><h5>¿Dónde puedo probar?</h5><ul class="semaforo">', sem(donde),
+         '</ul><p class="ficha-pie">¿Problema de seguridad? INCIBE, en el 017, gratis y confidencial.</p></div>',
+         '<div class="ficha"><h5>Guardar contraseñas</h5><ul class="semaforo">', sem(claves),
+         '</ul><p class="ficha-pie">Comparar con <code>hmac.compare_digest</code>, nunca con <code>==</code>.</p></div>',
+         '<div class="ficha ancha"><h5>Tres cosas distintas</h5>', ciber_h(), ciber_v(),
+         '<p class="ficha-pie">Codificar no protege; resumir protege la integridad; cifrar, la confidencialidad.</p></div>',
+         '<div class="ficha ancha"><h5>No confundir</h5><dl class="vocab">',
+         "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in confundir), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -1527,6 +1592,7 @@ if __name__ == "__main__":
     t = insertar(t, "algoritmos", hoja_algoritmos())
     t = insertar(t, "inferencia", hoja_inferencia())
     t = insertar(t, "produccion", hoja_produccion())
+    t = insertar(t, "ciberseguridad", hoja_ciberseguridad())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

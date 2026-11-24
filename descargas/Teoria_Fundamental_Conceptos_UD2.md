@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E155 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E157 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -7340,6 +7340,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | Carrusel «EDA Notes – Python + SQL» (@thedataguy16) | En Análisis de datos 2.5: un EDA completo en orden, en Python y en SQL sobre la tabla sin limpiar, con datos inventados descargables (`cafeteria_pedidos.csv`), la hoja «Un EDA en una hoja», Spearman, semanas incompletas y atípico frente a error. Sus errores, en E152 | [Datos 2.5](datos.html#25-un-eda-completo-en-orden-python-y-sql-a-la-vez), [E152–E153](ejercicios.html#bloque-af--guías-y-chuletas-con-criterio-e147e153) |
 | «Agentic AI Complete Guide» (codingwithmee_18, PDF de 16 págs.) | En 14.19, «Un agente que se pueda dejar trabajando»: cinco condiciones de parada con código, coste que crece más que los pasos, diseño de herramientas e idempotencia, cuatro tipos de memoria, MCP frente a A2A, envenenamiento de herramientas, fallos típicos, parada de emergencia y auditoría; hoja «Un agente que se pueda dejar trabajando»; tabla de bibliotecas al día (Microsoft Agent Framework, SDK de proveedores, observabilidad). Sus errores, en E154 | [14.19](#un-agente-que-se-pueda-dejar-trabajando-cuándo-parar-memoria-herramientas-y-fallos-típicos), [E154–E155](ejercicios.html#bloque-ac--agentes-patrones-estado-y-fiabilidad-e120e123-e132-y-e154e155) |
 | Lista «16 webs para ver la IA por dentro» (publicación de Instagram, noviembre de 2026) | En 14.16, tabla «Para ver la IA por dentro» con 13 webs nuevas comprobadas; enlaces en la UD4 (tokens, *embeddings*, Transformer, MoE, inferencia), UD3 (filtros), UD5 (PCA), sección 6 y 14.7. Las otras tres (3Blue1Brown, Alammar, Karpathy) ya estaban | [14.16](#1416-recursos-gratuitos-para-seguir-aprendiendo-ia) |
+| «Python Cybersecurity Toolkit» (@anastasis_king, carrusel de 7 láminas que la propia publicación marca como «Contenido generado con IA») | Treinta herramientas en seis áreas, revisadas una a una con su estado (Passlib sin mantener, YARA-X, PyShark y `tshark`), marco legal, contraseñas con sal, integridad de archivos, registros y la hoja «Ciberseguridad en una hoja» (figuras propias); errores usados en E156 | 14.20 «Ciberseguridad con Python»; ejercicios E156–E157 |
 | «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |
@@ -9164,6 +9165,235 @@ Es **integración continua** (CI). Si además, cuando las pruebas pasan, se publ
 Para un proyecto del curso basta con la primera fila del esquema: una app de Streamlit o una API sencilla, con las claves fuera del código, pruebas y un registro de errores. El resto es lo que se añade cuando la usan cientos de personas.
 
 Los ejercicios [E100–E105](ejercicios.html#bloque-u--de-prototipo-a-aplicación-e100e105) practican esta sección.
+
+### 14.20 Ciberseguridad con Python: proteger lo propio
+
+Los sistemas de IA son programas: guardan contraseñas, reciben datos de fuera, se publican en servidores y se conectan a otros servicios. Todo lo que se ha visto sobre [inyección de instrucciones](#seguridad-inyección-de-instrucciones-y-barreras), [claves de API](#proteger-una-api-claves-secretos-y-autenticación) o [datos personales](#1410-automatización-con-python) es parte de la **ciberseguridad**. Esta sección da las ideas básicas y las herramientas de Python más conocidas, con un criterio claro: **en clase se protege lo propio**. Las herramientas para atacar se conocen para saber de qué hay que defenderse, no para usarlas.
+
+#### Antes de nada: la ley
+
+Entrar en un sistema ajeno sin permiso es delito en España, aunque no se rompa ni se robe nada. El artículo 197 bis del Código Penal castiga con prisión de seis meses a dos años el acceso a un sistema de información vulnerando sus medidas de seguridad sin estar autorizado, y también interceptar datos que no son públicos. El 197 ter castiga producir, conseguir o facilitar programas o contraseñas pensados para cometer esos delitos, y el 264 bis, entorpecer el funcionamiento de un sistema ajeno.
+
+| Situación | ¿Se puede? |
+|-----------|-----------|
+| Mi ordenador, mis archivos, una máquina virtual o una web que monto yo en mi equipo | ✓ Sí: es el laboratorio |
+| Una plataforma de práctica o una competición de seguridad (CTF) | ⚠ Sí, dentro de sus normas y solo contra lo que la propia plataforma ofrece |
+| La red del centro, la web del instituto, el aula virtual, la wifi del vecino | ✗ No, sin un permiso por escrito de quien es responsable |
+| Buscar información de una persona concreta (compañeros, profesorado) | ✗ No: son datos personales, aunque estén publicados (RGPD) |
+
+Ante un problema de seguridad en Internet (acoso, suplantación, fraude, una cuenta robada), INCIBE atiende gratis y de forma confidencial en el **017**, por WhatsApp (900 116 117) y por Telegram (@INCIBE017). Tiene además [recursos para el aula](https://www.incibe.es/menores/kit-para-educadores).
+
+<!-- hoja:ciberseguridad -->
+<section class="hoja" aria-labelledby="hoja-cib-t">
+<p class="hoja-titulo" id="hoja-cib-t">Ciberseguridad en una hoja</p>
+<p class="hoja-nota">Primero, dónde se puede practicar. Después, las tres operaciones que más se confunden y cómo guardar una contraseña.</p>
+<div class="hoja-grid">
+<div class="ficha"><h5>¿Dónde puedo probar?</h5><ul class="semaforo">
+<li class="ok"><b>Lo mío</b><span class="marca">✓ sí</span><span class="que">mi equipo, mis archivos, una máquina virtual o una web montada en local</span></li><li class="medio"><b>Plataformas de práctica y CTF</b><span class="marca">⚠ con normas</span><span class="que">solo contra lo que ofrecen y dentro de sus reglas</span></li><li class="no"><b>Lo ajeno sin permiso escrito</b><span class="marca">✗ no</span><span class="que">red y web del centro, aula virtual, wifi de otros: delito (art. 197 bis CP)</span></li>
+</ul><p class="ficha-pie">¿Problema de seguridad? INCIBE, en el 017, gratis y confidencial.</p></div>
+<div class="ficha"><h5>Guardar contraseñas</h5><ul class="semaforo">
+<li class="no"><b>Texto plano o cifrado</b><span class="marca">✗</span><span class="que">si roban la base de datos (o la clave), salen todas</span></li><li class="no"><b>MD5, SHA-1, SHA-256 a secas</b><span class="marca">✗</span><span class="que">millones de intentos por segundo y sin sal</span></li><li class="ok"><b>Argon2id, scrypt, bcrypt</b><span class="marca">✓</span><span class="que">lentos a propósito y con sal aleatoria de secrets</span></li>
+</ul><p class="ficha-pie">Comparar con <code>hmac.compare_digest</code>, nunca con <code>==</code>.</p></div>
+<div class="ficha ancha"><h5>Tres cosas distintas</h5>
+<svg class="sv sv-h" viewBox="0 0 640 200" role="img" aria-labelledby="ch-t ch-d"><title id="ch-t">Codificar, resumir y cifrar</title><desc id="ch-d">Un mismo mensaje se puede codificar, resumir o cifrar. Codificar, con Base64 o UTF-8, lo deshace cualquiera y no protege nada. Resumir, con SHA-256 o scrypt, no se puede deshacer y sirve para comprobar integridad y guardar contraseñas. Cifrar, con AES o Fernet, solo lo deshace quien tiene la clave y protege la confidencialidad.</desc><defs><marker id="ch-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="ch-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="ch-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="ch-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="ch-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><rect x="10" y="76" width="120" height="40" rx="8" class="sv-caja"/><text x="70.0" y="101.0" class="sv-tit" text-anchor="middle">Mensaje</text><path d="M132,96 C160,96 160,32 190,32" class="sv-l-pen" marker-end="url(#ch-pen)"/><rect x="196" y="10" width="200" height="46" rx="8" class="sv-caja"/><text x="296.0" y="30.0" class="sv-tit" text-anchor="middle">Codificar</text><text x="296.0" y="47.0" class="sv-sub" text-anchor="middle">Base64, UTF-8</text><path d="M398,33 H426" class="sv-l-pen"/><text x="434" y="38" class="sv-et" text-anchor="start">lo deshace cualquiera</text><path d="M132,96 C160,96 160,96 190,96" class="sv-l-pen" marker-end="url(#ch-pen)"/><rect x="196" y="74" width="200" height="46" rx="8" class="sv-caja sv-caja-ml"/><text x="296.0" y="94.0" class="sv-tit" text-anchor="middle">Resumir (hash)</text><text x="296.0" y="111.0" class="sv-sub" text-anchor="middle">SHA-256, scrypt</text><path d="M398,97 H426" class="sv-l-pen"/><text x="434" y="102" class="sv-et" text-anchor="start">no se puede deshacer</text><path d="M132,96 C160,96 160,160 190,160" class="sv-l-pen" marker-end="url(#ch-pen)"/><rect x="196" y="138" width="200" height="46" rx="8" class="sv-caja sv-caja-ok"/><text x="296.0" y="158.0" class="sv-tit" text-anchor="middle">Cifrar</text><text x="296.0" y="175.0" class="sv-sub" text-anchor="middle">AES, Fernet</text><path d="M398,161 H426" class="sv-l-pen"/><text x="434" y="166" class="sv-et" text-anchor="start">solo con la clave</text></svg>
+<svg class="sv sv-v" viewBox="0 0 310 292" role="img" aria-labelledby="cv-t cv-d"><title id="cv-t">Codificar, resumir y cifrar</title><desc id="cv-d">Un mismo mensaje se puede codificar, resumir o cifrar. Codificar, con Base64 o UTF-8, lo deshace cualquiera y no protege nada. Resumir, con SHA-256 o scrypt, no se puede deshacer y sirve para comprobar integridad y guardar contraseñas. Cifrar, con AES o Fernet, solo lo deshace quien tiene la clave y protege la confidencialidad.</desc><defs><marker id="cv-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="cv-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="cv-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="cv-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="cv-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><rect x="10" y="6" width="150" height="34" rx="8" class="sv-caja"/><text x="85.0" y="28.0" class="sv-tit" text-anchor="middle">Mensaje</text><rect x="50" y="56" width="250" height="46" rx="8" class="sv-caja"/><text x="175.0" y="76.0" class="sv-tit" text-anchor="middle">Codificar</text><text x="175.0" y="93.0" class="sv-sub" text-anchor="middle">Base64, UTF-8</text><text x="175" y="118" class="sv-et" text-anchor="middle">lo deshace cualquiera</text><rect x="50" y="138" width="250" height="46" rx="8" class="sv-caja sv-caja-ml"/><text x="175.0" y="158.0" class="sv-tit" text-anchor="middle">Resumir (hash)</text><text x="175.0" y="175.0" class="sv-sub" text-anchor="middle">SHA-256, scrypt</text><text x="175" y="200" class="sv-et" text-anchor="middle">no se puede deshacer</text><rect x="50" y="220" width="250" height="46" rx="8" class="sv-caja sv-caja-ok"/><text x="175.0" y="240.0" class="sv-tit" text-anchor="middle">Cifrar</text><text x="175.0" y="257.0" class="sv-sub" text-anchor="middle">AES, Fernet</text><text x="175" y="282" class="sv-et" text-anchor="middle">solo con la clave</text><path d="M30,41 V243" class="sv-l-pen"/><path d="M30,79 H46" class="sv-l-pen" marker-end="url(#cv-pen)"/><path d="M30,161 H46" class="sv-l-pen" marker-end="url(#cv-pen)"/><path d="M30,243 H46" class="sv-l-pen" marker-end="url(#cv-pen)"/></svg>
+<p class="ficha-pie">Codificar no protege; resumir protege la integridad; cifrar, la confidencialidad.</p></div>
+<div class="ficha ancha"><h5>No confundir</h5><dl class="vocab">
+<dt>Base64</dt><dd>no es cifrado: se lee con una línea de Python</dd><dt>Sal</dt><dd>no es secreta: se guarda junto al resumen; su trabajo es que dos claves iguales no se parezcan</dd><dt>MD5</dt><dd>vale para ver si una copia salió mal, no para defenderse de nadie</dd><dt>OSINT</dt><dd>que algo esté publicado no permite juntarlo en el perfil de una persona</dd><dt>Herramienta</dt><dd>la misma sirve para defender o atacar: lo que cambia es el permiso</dd>
+</dl></div>
+</div></section>
+<!-- /hoja:ciberseguridad -->
+
+#### Codificar, resumir y cifrar no son lo mismo
+
+Se confunden constantemente, y la diferencia es justo lo que importa para la seguridad:
+
+```python
+import base64
+import hashlib
+from cryptography.fernet import Fernet
+
+mensaje = "Examen de Tecnoloxías: martes".encode()
+
+codificado = base64.b64encode(mensaje)                 # 1. codificar: cualquiera lo deshace
+print(codificado.decode())                             # RXhhbWVuIGRlIFRlY25vbG94w61hczogbWFydGVz
+print(base64.b64decode(codificado).decode())           # Examen de Tecnoloxías: martes
+
+huella = hashlib.sha256(mensaje).hexdigest()           # 2. resumen (hash): no se puede deshacer
+print(huella[:16], len(huella))                        # siempre 64 caracteres hexadecimales
+print(hashlib.sha256(b"Examen de Tecnoloxias: martes").hexdigest()[:16])   # una tilde menos: otro resumen
+
+clave = Fernet.generate_key()                          # 3. cifrar: solo lo deshace quien tiene la clave
+caja = Fernet(clave)
+cifrado = caja.encrypt(mensaje)
+print(cifrado[:12], "...")
+print(caja.decrypt(cifrado).decode())                  # Examen de Tecnoloxías: martes
+try:
+    Fernet(Fernet.generate_key()).decrypt(cifrado)     # con otra clave, no hay forma
+except Exception as e:
+    print(type(e).__name__)                            # InvalidToken
+```
+
+| | Codificar (Base64, UTF-8) | Resumir (*hash*: SHA-256) | Cifrar (AES, Fernet) |
+|-|---------------------------|---------------------------|----------------------|
+| ¿Se puede deshacer? | Sí, cualquiera | **No** | Sí, con la clave |
+| Para qué sirve | Transportar datos (correo, URL) | Comprobar que algo no ha cambiado; guardar contraseñas (con sal y lento) | Que solo lo lea quien tiene la clave |
+| ¿Protege algo? | **Nada** | La integridad | La confidencialidad |
+
+Un cambio mínimo en el mensaje (una tilde) da un resumen totalmente distinto: por eso sirve para detectar cambios. **MD5 y SHA-1 están rotos** para seguridad: se pueden fabricar dos archivos distintos con el mismo resumen. Siguen sirviendo para detectar errores de copia, pero no para defenderse de un atacante; para eso, SHA-256 o superior.
+
+#### Guardar contraseñas: sal y lentitud
+
+Una web nunca debe guardar las contraseñas tal cual, ni cifradas (si roban la clave, se descifran todas), sino un **resumen** hecho con una función **lenta** y con **sal** (un valor aleatorio distinto para cada persona):
+
+```python
+import hashlib
+import hmac
+import secrets
+import time
+
+# MAL: SHA-256 a secas. Rápido y sin sal
+def mal(clave):
+    return hashlib.sha256(clave.encode()).hexdigest()
+
+print(mal("praia2026") == mal("praia2026"))     # True: dos personas con la misma clave, el mismo resumen
+
+inicio = time.perf_counter()
+for i in range(100_000):
+    mal(f"clave{i}")
+print(f"SHA-256: {100_000 / (time.perf_counter() - inicio):,.0f} intentos por segundo")
+
+# BIEN: scrypt (en la librería estándar), con sal aleatoria y lento a propósito
+N, R, P = 2**14, 8, 1                             # coste: 16 MiB de memoria por intento
+
+def guardar(clave):
+    sal = secrets.token_bytes(16)                 # distinta para cada persona
+    resumen = hashlib.scrypt(clave.encode(), salt=sal, n=N, r=R, p=P)
+    return sal.hex() + "$" + resumen.hex()        # se guardan juntos: la sal no es secreta
+
+def comprobar(clave, guardado):
+    sal_hex, resumen_hex = guardado.split("$")
+    nuevo = hashlib.scrypt(clave.encode(), salt=bytes.fromhex(sal_hex), n=N, r=R, p=P)
+    return hmac.compare_digest(nuevo.hex(), resumen_hex)   # compara sin delatar dónde difiere
+
+a, b = guardar("praia2026"), guardar("praia2026")
+print(a == b)                                     # False: misma clave, distinto resultado
+print(comprobar("praia2026", a), comprobar("Praia2026", a))   # True False
+
+inicio = time.perf_counter()
+for i in range(20):
+    guardar(f"clave{i}")
+print(f"scrypt: {20 / (time.perf_counter() - inicio):,.0f} intentos por segundo")
+```
+
+En este ordenador, SHA-256 a secas permite probar unos **2 millones** de contraseñas por segundo; scrypt, unas **decenas** (el número exacto depende del equipo). Para quien ha robado una base de datos e intenta adivinar contraseñas, esa diferencia lo es todo. Y sin sal, dos personas con la misma contraseña tienen el mismo resumen, y existen tablas enormes con los resúmenes de las contraseñas más comunes.
+
+La guía de OWASP para guardar contraseñas recomienda primero **Argon2id** (librería `argon2-cffi`), después **scrypt** (que ya viene en `hashlib`), **bcrypt** para sistemas antiguos y PBKDF2 con 600 000 iteraciones cuando se exige el estándar FIPS. Lo que no cambia: nunca SHA-256 a secas, nunca MD5, y sal aleatoria con `secrets` (no con `random`, como en el [P4](apps.html#p4--generador-de-contraseñas)). Comparar con `hmac.compare_digest` evita que el tiempo de respuesta delate cuántos caracteres coinciden.
+
+#### Comprobar que nada ha cambiado
+
+Una forma sencilla de detectar que alguien ha tocado una web o una carpeta: guardar el resumen de cada archivo y compararlo después. Es lo que hacen los sistemas de integridad (y lo que haría un programa con `watchdog`, pero en el momento en que ocurre el cambio):
+
+```python
+import hashlib
+import json
+from pathlib import Path
+
+def huella(ruta):
+    h = hashlib.sha256()
+    with open(ruta, "rb") as f:
+        for trozo in iter(lambda: f.read(65536), b""):   # por trozos: vale para archivos grandes
+            h.update(trozo)
+    return h.hexdigest()
+
+def foto(carpeta):
+    return {p.name: huella(p) for p in sorted(Path(carpeta).glob("*")) if p.is_file()}
+
+# Carpeta de prueba con tres archivos inventados
+web = Path("web_centro"); web.mkdir(exist_ok=True)
+(web / "index.html").write_text("<h1>IES de proba</h1>")
+(web / "horario.csv").write_text("lunes;8:30\n")
+(web / "logo.txt").write_text("logo")
+Path("referencia.json").write_text(json.dumps(foto(web)))       # 1. foto inicial, guardada aparte
+
+(web / "index.html").write_text("<h1>IES de proba</h1><script src=//malo.example></script>")   # 2. alguien cambia algo
+(web / "logo.txt").unlink()
+(web / "nuevo.php").write_text("?")
+
+antes, ahora = json.loads(Path("referencia.json").read_text()), foto(web)   # 3. comparar
+for nombre in sorted(antes.keys() | ahora.keys()):
+    if nombre not in ahora:
+        print("BORRADO   ", nombre)
+    elif nombre not in antes:
+        print("NUEVO     ", nombre)
+    elif antes[nombre] != ahora[nombre]:
+        print("CAMBIADO  ", nombre)
+# CAMBIADO   index.html
+# BORRADO    logo.txt
+# NUEVO      nuevo.php
+```
+
+La lista de referencia tiene que guardarse **en otro sitio**: si el atacante puede cambiar también la referencia, la comprobación no sirve.
+
+#### Leer los registros
+
+Los servidores apuntan cada acceso en un **registro** (*log*). Revisarlo con Python es una de las tareas más habituales en seguridad, y es lo mismo que el [análisis de datos](datos.html#25-un-eda-completo-en-orden-python-y-sql-a-la-vez) de siempre:
+
+```python
+import re
+from collections import Counter
+
+# Registro inventado de accesos al aula virtual (direcciones de los rangos reservados para ejemplos)
+registro = """\
+2026-11-24 08:01:12 LOGIN OK   usuario=a101 ip=192.0.2.15
+2026-11-24 08:02:40 LOGIN FAIL usuario=a102 ip=192.0.2.16
+2026-11-24 08:02:55 LOGIN OK   usuario=a102 ip=192.0.2.16
+2026-11-24 03:10:01 LOGIN FAIL usuario=admin ip=203.0.113.7
+2026-11-24 03:10:02 LOGIN FAIL usuario=admin ip=203.0.113.7
+2026-11-24 03:10:03 LOGIN FAIL usuario=root ip=203.0.113.7
+2026-11-24 03:10:04 LOGIN FAIL usuario=a101 ip=203.0.113.7
+2026-11-24 03:10:05 LOGIN FAIL usuario=a103 ip=203.0.113.7
+2026-11-24 03:11:30 LOGIN FAIL usuario=a104 ip=198.51.100.9
+"""
+patron = re.compile(r"(\d{2}):\d{2}:\d{2} LOGIN (OK|FAIL)\s+usuario=(\S+) ip=(\S+)")
+fallos, usuarios = Counter(), {}
+for linea in registro.splitlines():
+    m = patron.search(linea)
+    if m and m[2] == "FAIL":
+        fallos[m[4]] += 1
+        usuarios.setdefault(m[4], set()).add(m[3])
+
+for ip, n in fallos.most_common():
+    aviso = "  ← revisar: muchos fallos y muchos usuarios" if n >= 5 and len(usuarios[ip]) >= 3 else ""
+    print(f"{ip:<14} fallos: {n}, usuarios distintos: {len(usuarios[ip])}{aviso}")
+# 203.0.113.7    fallos: 5, usuarios distintos: 4  ← revisar: muchos fallos y muchos usuarios
+# 192.0.2.16     fallos: 1, usuarios distintos: 1
+# 198.51.100.9   fallos: 1, usuarios distintos: 1
+```
+
+Muchos fallos seguidos, en pocos segundos, de madrugada y contra usuarios distintos es el patrón de quien prueba contraseñas. Las direcciones IP del ejemplo son de los rangos reservados para documentación (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24): no son de nadie. Una IP sola no identifica a una persona, y un registro con IP y usuarios ya contiene datos personales.
+
+#### Las herramientas de Python más conocidas
+
+Circulan listas de «herramientas esenciales de ciberseguridad en Python». Conviene saber qué hace cada una y, sobre todo, **contra qué está pensada**:
+
+| Área | Herramientas | Para qué | En clase |
+|------|--------------|----------|----------|
+| Criptografía y contraseñas | `hashlib`, `secrets`, `hmac` (de serie); [cryptography](https://cryptography.io/); bcrypt, argon2-cffi | Resúmenes, cifrado, contraseñas | ✓ Es lo de esta sección |
+| Automatizar tareas defensivas | `watchdog` (cambios en carpetas), APScheduler (tareas programadas), Paramiko y Fabric (administrar por SSH los equipos propios), Rich (salida bonita en la terminal) | Vigilar, copiar, revisar registros | ✓ En equipos propios. Rich no es de seguridad: sirve para cualquier programa |
+| Análisis de malware y forense | pefile, oletools, YARA-X, capa, Volatility 3 | Estudiar archivos sospechosos y volcados de memoria | ⚠ Solo leer sobre ellas: el malware real no se maneja fuera de un laboratorio aislado |
+| Redes | Scapy, PyShark, dnspython, Netmiko, Impacket | Crear y analizar paquetes, consultar DNS, configurar *routers* | ⚠ dnspython para consultar dominios públicos; el resto, solo con capturas de ejemplo (`.pcap`) o una red de laboratorio. Capturar el tráfico de una red ajena es interceptar comunicaciones |
+| Aplicaciones web | Requests y BeautifulSoup (generales), mitmproxy, Wapiti, sqlmap | Probar la seguridad de una web | ⚠ Contra una aplicación vulnerable a propósito instalada en el propio equipo (por ejemplo, OWASP Juice Shop). Contra webs ajenas, ✗ |
+| OSINT (información pública) | theHarvester, SpiderFoot, Recon-ng, Sherlock, Maigret | Reunir información pública de una organización o una persona | ✗ En clase no. Juntar lo que hay publicado de una persona crea un perfil que la expone: es justo lo que la protección de datos intenta evitar |
+
+#### Lo que nunca se hace
+
+- Probar herramientas contra la red, la web o las cuentas del centro, aunque «solo sea para ver si funciona».
+- Buscar a compañeros o profesorado con herramientas de OSINT.
+- Descargar malware «para estudiarlo» fuera de un laboratorio preparado.
+- Guardar contraseñas en texto, en el código o en un repositorio (`.env` fuera de Git: [14.19](#proteger-una-api-claves-secretos-y-autenticación)).
+
+Quien quiera dedicarse a esto tiene un camino legal: los ciclos de FP y las titulaciones de ciberseguridad, las competiciones CTF para estudiantes y los programas de recompensas de las empresas (*bug bounty*), que **autorizan por escrito** qué se puede probar.
 
 ---
 

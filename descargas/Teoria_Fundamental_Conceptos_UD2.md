@@ -7412,8 +7412,11 @@ Revisión de la lista «The 25 Best Free Resources for Learning AI in 2026» (H.
 | [*A Visual Guide to Attention Variants*](https://magazine.sebastianraschka.com/p/visual-attention-variants) (S. Raschka) | Las variantes de atención de los modelos de 2026 | UD4 10.10. Avanzado |
 | [*LLM Inference Handbook*](https://handbook.modular.com/llm-inference-basics/what-is-llm-inference/) (Modular) | Cómo se sirve un LLM: prefill, decode, caché KV, lotes, métricas | UD4 10.10, [14.19](#1419-de-prototipo-a-aplicación-herramientas-de-ingeniería-de-ia). Para profesorado |
 | [Neuronpedia](https://www.neuronpedia.org/) | Plataforma abierta de **interpretabilidad**: los «rasgos» que se encuentran dentro de modelos como GPT-2 o Gemma, y cómo cambia la respuesta al activarlos | Ampliación de [explicar un modelo](ud5-ml.html#10-sesgos-ética-y-explicabilidad). Para profesorado: es material de investigación |
+| [3Blue1Brown: *Neural Networks*](https://www.3blue1brown.com/topics/neural-networks) | Vídeos con animaciones: qué es una red, descenso de gradiente, retropropagación, Transformers y atención (con subtítulos en castellano) | [14.7](#147-redes-neuronales-desde-cero), UD4 10.10 |
+| [Jay Alammar: *The Illustrated Transformer*](https://jalammar.github.io/illustrated-transformer/) | El Transformer explicado con dibujos, paso a paso | [UD4 10.10](ud4-lenguaje.html#1010-el-transformer-por-dentro) |
+| [A. Karpathy: *Neural Networks: Zero to Hero*](https://karpathy.ai/zero-to-hero.html) | Vídeos que construyen desde cero una red, un modelo de lenguaje y un GPT pequeño | 14.7, UD4. Avanzado |
 
-Las de la tabla de arriba con 3Blue1Brown, Jay Alammar y Karpathy completan la misma lista de 16 webs, muy compartida en redes en noviembre de 2026. Dos avisos: lo que se ve es un modelo **pequeño o antiguo** (GPT-2 es de 2019), con las mismas ideas que los actuales pero no con su tamaño ni sus trucos; y una visualización ayuda a entender, pero no sustituye a hacer las cuentas una vez a mano.
+Las 16 webs salen de una lista muy compartida en redes en noviembre de 2026 (las tres últimas también están en la tabla de arriba). Dos avisos: lo que se ve es un modelo **pequeño o antiguo** (GPT-2 es de 2019), con las mismas ideas que los actuales pero no con su tamaño ni sus trucos; y una visualización ayuda a entender, pero no sustituye a hacer las cuentas una vez a mano.
 
 **Para quien quiera ir más lejos.** Alumnado muy motivado o profesorado. Requieren más tiempo, más inglés y, a veces, derivadas.
 

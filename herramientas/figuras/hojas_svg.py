@@ -1571,6 +1571,75 @@ def hoja_ciberseguridad():
     return "\n".join(h)
 
 
+# ---------- Aprendizaje automático: qué es ----------
+ML_DESC = ("Programación tradicional: una persona escribe las reglas; el programa recibe datos y devuelve respuestas. "
+           "Aprendizaje automático: se dan datos con sus respuestas, un algoritmo de aprendizaje obtiene el modelo, "
+           "que hace de reglas, y el modelo da predicciones para datos nuevos.")
+
+
+def ml_h():
+    p = "mh"
+    b = texto(10, 16, "PROGRAMACIÓN TRADICIONAL", "sv-zona", "start")
+    b += caja(10, 26, 150, 34, "Datos", None) + caja(10, 70, 150, 34, "Reglas (persona)", None, "sv-caja sv-caja-ml")
+    b += linea("M162,43 C185,43 185,62 204,62", p) + linea("M162,87 C185,87 185,66 204,66", p)
+    b += caja(208, 46, 140, 36, "Programa", None) + linea("M350,64 H384", p)
+    b += caja(388, 46, 150, 36, "Respuestas", None)
+    b += texto(10, 140, "APRENDIZAJE AUTOMÁTICO", "sv-zona", "start")
+    b += caja(10, 150, 150, 34, "Datos", None) + caja(10, 194, 150, 34, "Respuestas", None, "sv-caja sv-caja-ml")
+    b += linea("M162,167 C185,167 185,186 204,186", p) + linea("M162,211 C185,211 185,190 204,190", p)
+    b += caja(208, 170, 140, 36, "Aprendizaje", None) + linea("M350,188 H384", p)
+    b += caja(388, 170, 150, 36, "Modelo («reglas»)", None, "sv-caja sv-caja-ok")
+    b += linea("M463,208 V236", p) + caja(388, 240, 150, 40, "Predicción", "para datos nuevos")
+    b += texto(560, 194, "se entrena una vez;", "sv-et", "start") + texto(560, 212, "después solo se usa", "sv-et", "start")
+    return svg(p, "0 0 720 290", "Programación tradicional frente a aprendizaje automático", ML_DESC, b, "sv-h")
+
+
+def ml_v():
+    p = "mv"
+    b = texto(10, 16, "TRADICIONAL", "sv-zona", "start")
+    b += caja(10, 24, 140, 32, "Datos", None) + caja(160, 24, 140, 32, "Reglas (persona)", None, "sv-caja sv-caja-ml")
+    b += linea("M80,58 V72", p) + linea("M230,58 V72", p)
+    b += caja(10, 76, 290, 32, "Programa", None) + linea("M155,110 V122", p)
+    b += caja(10, 126, 290, 32, "Respuestas", None)
+    b += texto(10, 190, "APRENDIZAJE AUTOMÁTICO", "sv-zona", "start")
+    b += caja(10, 198, 140, 32, "Datos", None) + caja(160, 198, 140, 32, "Respuestas", None, "sv-caja sv-caja-ml")
+    b += linea("M80,232 V246", p) + linea("M230,232 V246", p)
+    b += caja(10, 250, 290, 32, "Aprendizaje", None) + linea("M155,284 V296", p)
+    b += caja(10, 300, 290, 32, "Modelo («reglas»)", None, "sv-caja sv-caja-ok") + linea("M155,334 V346", p)
+    b += caja(10, 350, 290, 42, "Predicción", "para datos nuevos")
+    return svg(p, "0 0 310 400", "Programación tradicional frente a aprendizaje automático", ML_DESC, b, "sv-v")
+
+
+def hoja_ml():
+    hace_falta = [("no", "✗ no", "Regla clara y fija", "IVA, nóminas, calculadora, horario: se programa y se comprueba"),
+                  ("medio", "⚠ quizá", "Regla sencilla con pocos datos", "5 ejemplos de horas y aprobados: un umbral lo hace igual de bien"),
+                  ("ok", "✓ sí", "Nadie sabe escribir la regla", "reconocer letras o voz, filtrar spam: muchos ejemplos y una medida de acierto")]
+    formas = [("Supervisado", "cada ejemplo con su respuesta: precio, spam o no"),
+              ("No supervisado", "sin respuestas: grupos, resumen, cosas raras"),
+              ("Semisupervisado", "pocas respuestas y muchos datos sin ellas"),
+              ("Autosupervisado", "la respuesta sale del propio dato: la palabra que falta (así se preentrenan los LLM)"),
+              ("Por refuerzo", "prueba, recibe premios o castigos, mejora su estrategia")]
+    confundir = [("Algoritmo y modelo", "la receta (regresión lineal) y lo que sale de aplicarla a unos datos (sus coeficientes)"),
+                 ("«Aprende solo»", "aprende mientras se entrena; publicado, no cambia hasta que alguien lo reentrena"),
+                 ("Acertar con lo visto", "no prueba nada: se mide con datos que el modelo no vio"),
+                 ("IA, ML y DL", "el DL es parte del ML y el ML de la IA, pero hay IA que no aprende: búsqueda, reglas"),
+                 ("Más datos", "ayudan si son buenos y representan bien a quien se va a usar el modelo")]
+    sem = lambda filas: "".join(f'<li class="{c}"><b>{escape(o)}</b><span class="marca">{m}</span><span class="que">{escape(q)}</span></li>' for c, m, o, q in filas)
+    dl = lambda filas: "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in filas)
+    h = ['<section class="hoja" aria-labelledby="hoja-ml-t">',
+         '<p class="hoja-titulo" id="hoja-ml-t">El aprendizaje automático en una hoja</p>',
+         '<p class="hoja-nota">Qué cambia frente a programar, cuándo merece la pena y cinco formas de aprender según qué datos haya.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>Escribir las reglas o sacarlas de ejemplos</h5>', ml_h(), ml_v(),
+         '<p class="ficha-pie">El modelo hace el papel de las reglas, pero nadie las ha escrito: hay que comprobar que funcionan con casos nuevos.</p></div>',
+         '<div class="ficha"><h5>¿Hace falta aprendizaje automático?</h5><ul class="semaforo">', sem(hace_falta),
+         '</ul><p class="ficha-pie">Primero la regla más sencilla; el modelo tiene que mejorarla con datos nuevos.</p></div>',
+         '<div class="ficha"><h5>Cinco formas de aprender</h5><dl class="vocab">', dl(formas), '</dl></div>',
+         '<div class="ficha ancha"><h5>No confundir</h5><dl class="vocab">', dl(confundir), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -1606,4 +1675,8 @@ if __name__ == "__main__":
     if UD3.exists():
         u = UD3.read_text(encoding="utf-8")
         UD3.write_text(insertar(u, "vision", hoja_vision()), encoding="utf-8")
+    UD1 = RAIZ / "contenidos" / "ud1.md"
+    if UD1.exists():
+        u = UD1.read_text(encoding="utf-8")
+        UD1.write_text(insertar(u, "ml", hoja_ml()), encoding="utf-8")
     print("hojas insertadas")

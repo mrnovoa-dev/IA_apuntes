@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E159 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E161 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -5066,6 +5066,42 @@ for eta in (0.01, 0.1, 0.5, 0.9, 1.1):
 
 El valor «bueno» depende del problema: 0,001 es el punto de partida habitual con Adam, pero no una ley.
 
+#### Retropropagación y optimizador: dos trabajos distintos
+
+Se suelen nombrar juntos, pero hacen cosas distintas. La **retropropagación** solo **calcula** el gradiente: cuánto cambiaría la pérdida si cada peso cambiara un poco. El **optimizador** **decide** cómo usar ese gradiente para cambiar los pesos. Con una neurona de dos entradas (0,7 y 0,9), pesos 0,8 y −0,5, sesgo 0,1 (su suma ponderada es 0,21) y una respuesta correcta de 1:
+
+```python
+import numpy as np
+
+# La neurona del ejemplo: dos entradas, sus pesos y el sesgo
+x = np.array([0.7, 0.9])
+w = np.array([0.8, -0.5])
+b, y = 0.1, 1.0                           # el caso real es «sí» (1)
+
+z = x @ w + b
+a = 1 / (1 + np.exp(-z))                  # sigmoide
+perdida = -(y * np.log(a) + (1 - y) * np.log(1 - a))
+print(round(z, 2), round(a, 3), round(perdida, 3))        # 0.21 0.552 0.594
+
+# 1. Retropropagación: SOLO calcula el gradiente (cuánto cambia la pérdida con cada peso)
+grad_w = (a - y) * x                      # con sigmoide + entropía cruzada, dL/dz = a - y
+print(grad_w.round(3))                    # [-0.313 -0.403]
+
+# 2. El optimizador decide CÓMO usar ese gradiente
+eta = 0.1
+sgd = w - eta * grad_w                    # descenso del gradiente: paso proporcional
+m = 0.9 * 0 + 0.1 * grad_w                # Adam, primer paso (momentos empezando en 0)
+v = 0.999 * 0 + 0.001 * grad_w ** 2
+m_hat, v_hat = m / (1 - 0.9), v / (1 - 0.999)
+adam = w - eta * m_hat / (np.sqrt(v_hat) + 1e-8)
+print("SGD: ", sgd.round(3))              # [ 0.831 -0.46 ]
+print("Adam:", adam.round(3))             # [ 0.9 -0.4]: el primer paso mide η en cada peso
+```
+
+El gradiente es el mismo para los dos; lo que cambia es el paso. El descenso del gradiente mueve cada peso en proporción a su gradiente. Adam, en el primer paso, mueve todos los pesos lo mismo (η), porque divide cada gradiente entre su propio tamaño. En PyTorch se ve en dos líneas separadas: `perdida.backward()` hace la retropropagación y `optimizador.step()` aplica el optimizador.
+
+Con **lotes**, el gradiente se calcula con los ejemplos de ese lote, no con todos: es una estimación. Por eso cada paso es un poco «ruidoso» y la pérdida baja en zigzag.
+
 #### Optimizadores: momento y Adam
 
 El descenso de gradiente básico (SGD) tiene dos problemas: avanza despacio por zonas casi planas y un mismo `η` puede ser pequeño para unos pesos y enorme para otros. Los optimizadores modernos lo corrigen:
@@ -5394,6 +5430,29 @@ print((np.exp(logits) / np.exp(logits).sum()).round(3))    # softmax:  [0.786 0.
 ```
 
 Una curiosidad que ayuda a entenderlo: una sigmoide con una neurona es **lo mismo** que una softmax con dos neuronas cuando la primera vale 0. Con z = 1,5, sigmoide(1,5) = 0,8176, y la softmax de [0; 1,5] da 0,8176 para la segunda clase. Por eso en binaria basta con una neurona.
+
+**No aplicar la activación dos veces.** Muchas librerías juntan la última activación y la pérdida en un solo cálculo, porque así es más estable numéricamente. En PyTorch, `CrossEntropyLoss` ya incluye la softmax y `BCEWithLogitsLoss` la sigmoide; en Keras pasa lo mismo con `from_logits=True`. En esos casos la red debe terminar en los **logits**, sin activación. Si además se añade una sigmoide o una softmax en la última capa, se aplican dos veces:
+
+```python
+import numpy as np
+
+def sigmoide(z):
+    return 1 / (1 + np.exp(-z))
+
+def softmax(z):
+    e = np.exp(z - z.max())
+    return e / e.sum()
+
+logit = 2.0
+print(round(sigmoide(logit), 3), round(sigmoide(sigmoide(logit)), 3))   # 0.881 0.707
+print(round(sigmoide(sigmoide(-10.0)), 3))                               # 0.5: nunca baja de 0,5
+
+logits = np.array([4.0, 1.0, 0.0])
+print(softmax(logits).round(3), softmax(softmax(logits)).round(3))
+# [0.936 0.047 0.017] [0.553 0.227 0.22 ]: la segunda vez casi iguala las clases
+```
+
+Con la sigmoide aplicada dos veces, la «probabilidad» nunca baja de 0,5: el modelo no puede decir «no» con seguridad. Con la softmax doble, una clase con el 94 % pasa a parecer del 55 %. El código no da ningún error: simplemente aprende mal o muy despacio. Se comprueba leyendo qué espera la función de pérdida.
 
 #### Arquitecturas: cuál se usa para qué
 
@@ -7330,7 +7389,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *Python Module 9: Dictionaries* (@Mastercode.sagar, PDF escaneado de 16 págs., OCR con Tesseract y MarkItDown), chuleta «NumPy Complete Cheatsheet» (@thedataguy16, 11 láminas) y carrusel «12 Machine Learning Algorithms» (@code.withnarayan, 20 láminas, generado con IA) | Diccionarios a fondo, NumPy a fondo (difusión, vistas, trampas), fichas de árbol, Naive Bayes, SVM, boosting y jerárquico con figuras propias | 5.2, 7.1, [Algoritmos](algoritmos.html), ejercicios E115–E116 y A4–A5 |
 | «10 GitHub repos for AI/ML eng beginners» (@marina.wyss, PDF de 3 págs. hecho con Canva) | Diez repositorios revisados uno a uno (licencia, actividad en noviembre de 2026, traducciones, requisitos) | 14.16 |
 | «Programming Fundamentals – Python. Complete Handwritten Notes» (@abhi_techhub, PDF de 20 págs. sin capa de texto, OCR con Tesseract) | Casi todo ya estaba en las secciones 1–5 y 14.14. Se añaden en 14.14 «Herramientas del proyecto: uv, Ruff y anotaciones de tipo», «Programas para la terminal: argparse», «Métodos especiales y dataclasses», el orden real al encadenar decoradores y la hoja visual «Python en una hoja»; se corrige `__init__.py` (opcional desde 3.3) en dos tablas. Errores usados en E141 | 14.14; ejercicios E141–E142 |
-| Carrusel «Neural Networks – Complete Handwritten Study Handbook» (@aditechnova18, 16 láminas, marcado como generado con IA) | Casi todo ya estaba en 14.7. Se añadieron la hoja «Una red neuronal en una hoja», la nota sobre la neurona biológica, la regularización L1 y L2 con números, el redondeo de los pasos por época y la nota sobre los lotes en potencias de 2. Sus errores (pasos por época, Adam sin corrección del sesgo, «menos pérdida = mejor modelo»…) están en E143, y sus cuentas, en E144 | [14.7](#147-redes-neuronales-desde-cero), [E143–E144](ejercicios.html#bloque-aa--aprendizaje-profundo-con-criterio-e117-y-e143e144) |
+| Carrusel «Neural Networks – Complete Handwritten Study Handbook» (@aditechnova18, 16 láminas, marcado como generado con IA) | Casi todo ya estaba en 14.7. Se añadieron la hoja «Una red neuronal en una hoja», la nota sobre la neurona biológica, la regularización L1 y L2 con números, el redondeo de los pasos por época y la nota sobre los lotes en potencias de 2. Sus errores (pasos por época, Adam sin corrección del sesgo, «menos pérdida = mejor modelo»…) están en E143, y sus cuentas, en E144 | [14.7](#147-redes-neuronales-desde-cero), [E143–E144](ejercicios.html#bloque-aa--aprendizaje-profundo-con-criterio-e117-e143e144-y-e160e161) |
 | «150+ Basic Python Programs» (PDF de 37 págs., sin autor; 150 programas comentados) | Casi todo ya estaba en las secciones 1–5, 14.12 y 14.14. Se añadieron `match`/`case` (3.1), el operador morsa (3.2), la nota sobre UTF-8 en Python 3.15 (5.9), «Tres problemas clásicos» con la hoja «Algoritmos clásicos en una hoja» (14.12) y «Código de ejemplo que no conviene copiar tal cual» (14.14). Sus errores están en E145 y la práctica, en E146 | [3.1](#31-condicionales-ifelifelse), [14.12](#1412-algoritmia-pensar-antes-de-programar), [14.14](#1414-buenas-prácticas-de-python-y-conceptos-avanzados), [E145–E146](ejercicios.html#bloque-s--python-a-fondo-preguntas-tipo-entrevista-e95e98-e141e142-y-e145e146) |
 | *Beginner's Python Cheat Sheets* (E. Matthes, 26 págs.) | Muy correctas; todo lo de Python básico ya estaba. Se añadió el enlace a las chuletas en 14.16 | [14.16](#1416-recursos-gratuitos-para-seguir-aprendiendo-ia) |
 | *Data Analytics – Complete Detailed Guide* (38 págs., sin autor) | Nueva 6.11 (escalas de medida, teorema central del límite, intervalos de confianza, errores de tipo I y II, potencia, sesgos al recoger datos) con la hoja «De la muestra a la población en una hoja»; en Análisis de datos, 2.4 «Resumir con SQL» (CTE, `CASE`, funciones de ventana, KPI y ley de Goodhart) y D2.9. Sus errores, en E147 | [6.11](#611-de-la-muestra-a-la-población-intervalos-de-confianza-y-errores), [datos 2.4](datos.html#24-resumir-con-sql-cte-case-y-funciones-de-ventana) |
@@ -7344,6 +7403,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | Lista «16 webs para ver la IA por dentro» (publicación de Instagram, noviembre de 2026) | En 14.16, tabla «Para ver la IA por dentro» con 13 webs nuevas comprobadas; enlaces en la UD4 (tokens, *embeddings*, Transformer, MoE, inferencia), UD3 (filtros), UD5 (PCA), sección 6 y 14.7. Las otras tres (3Blue1Brown, Alammar, Karpathy) ya estaban | [14.16](#1416-recursos-gratuitos-para-seguir-aprendiendo-ia) |
 | «Python Cybersecurity Toolkit» (@anastasis_king, carrusel de 7 láminas que la propia publicación marca como «Contenido generado con IA») | Treinta herramientas en seis áreas, revisadas una a una con su estado (Passlib sin mantener, YARA-X, PyShark y `tshark`), marco legal, contraseñas con sal, integridad de archivos, registros y la hoja «Ciberseguridad en una hoja» (figuras propias); errores usados en E156 | 14.20 «Ciberseguridad con Python»; ejercicios E156–E157 |
 | «Machine Learning Complete Guide» (@cse_aspirant_v, carrusel de 7 láminas con el índice y los capítulos 1–2 de unos apuntes de pago de B. K. Pandit; la propia publicación lo marca como «Contenido generado con IA») | Programación tradicional frente a aprendizaje automático, origen de la definición «sin ser programadas explícitamente» y definición de Mitchell, aprendizaje semisupervisado y autosupervisado con código, la hoja «El aprendizaje automático en una hoja» (figuras propias); errores usados en E158 | UD1 sección 5, UD5 sección 2 y teoría 10.1; ejercicios E158–E159 |
+| «Neural Networks Explained — Complete Practical Guide» (@thedataguy16, carrusel de 13 láminas) | Retropropagación frente a optimizador con una neurona (SGD y Adam), no aplicar la activación dos veces (sigmoide y softmax dobles), entrenamiento, validación y prueba con línea base, la hoja «Evaluar bien, en una hoja» (figuras propias) y el Reglamento europeo de IA para la concesión de créditos; erratas y omisiones usadas en E160 | Teoría 14.7; UD5 secciones 6 y 10; ejercicios E160–E161 |
 | «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |

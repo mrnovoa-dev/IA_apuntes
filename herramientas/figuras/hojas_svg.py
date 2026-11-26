@@ -1640,6 +1640,68 @@ def hoja_ml():
     return "\n".join(h)
 
 
+# ---------- Evaluar bien: entrenamiento, validación y prueba ----------
+EV_DESC = ("Los datos se separan primero en entrenamiento, validación y prueba. Con el de entrenamiento se ajustan la "
+           "preparación (escalado, imputación) y el modelo. Con el de validación se eligen hiperparámetros y cuándo parar. "
+           "La prueba se usa una sola vez, al final, con el modelo ya elegido.")
+
+
+def ev_h():
+    p = "eh2"
+    b = caja(10, 82, 120, 46, "Datos", "filas + etiqueta")
+    b += linea("M132,105 H156", p)
+    b += caja(160, 82, 120, 46, "Separar", "antes de nada", "sv-caja sv-caja-ml")
+    b += linea("M282,105 C300,105 300,34 318,34", p) + linea("M282,105 H318", p) + linea("M282,105 C300,105 300,176 318,176", p)
+    b += caja(322, 10, 190, 48, "Entrenamiento · 60 %", "ajusta preparación y modelo")
+    b += caja(322, 82, 190, 48, "Validación · 20 %", "elige ajustes y cuándo parar")
+    b += caja(322, 152, 190, 48, "Prueba · 20 %", "no se toca hasta el final", "sv-caja sv-caja-ok")
+    b += linea("M514,106 C540,106 540,170 566,172", p)
+    b += linea("M514,176 H566", p)
+    b += caja(570, 152, 150, 48, "Evaluación final", "una sola vez", "sv-caja sv-caja-ok")
+    b += texto(552, 124, "modelo elegido", "sv-et", "start")
+    return svg(p, "0 0 730 210", "Entrenamiento, validación y prueba", EV_DESC, b, "sv-h")
+
+
+def ev_v():
+    p = "ev2"
+    b = caja(55, 6, 200, 40, "Datos", None)
+    b += linea("M155,48 V60", p)
+    b += caja(55, 64, 200, 40, "Separar antes de nada", None, "sv-caja sv-caja-ml")
+    b += linea("M155,106 V118", p)
+    y = 122
+    for t, sub, cls in [("Entrenamiento · 60 %", "ajusta preparación y modelo", "sv-caja"),
+                        ("Validación · 20 %", "elige ajustes y cuándo parar", "sv-caja"),
+                        ("Prueba · 20 %", "no se toca hasta el final", "sv-caja sv-caja-ok")]:
+        b += caja(10, y, 290, 46, t, sub, cls)
+        y += 56
+    b += linea(f"M155,{y - 8} V{y + 4}", p)
+    b += caja(55, y + 8, 200, 46, "Evaluación final", "una sola vez", "sv-caja sv-caja-ok")
+    return svg(p, f"0 0 310 {y + 62}", "Entrenamiento, validación y prueba", EV_DESC, b, "sv-v")
+
+
+def hoja_evaluacion():
+    fugas = [("no", "✗", "Escalar o rellenar huecos con todos los datos", "la media ya «ha visto» la prueba"),
+             ("no", "✗", "Elegir el modelo mirando la prueba", "la prueba deja de medir datos nuevos"),
+             ("no", "✗", "Mezclar al azar fechas pasadas y futuras", "se entrena con el futuro"),
+             ("ok", "✓", "Pipeline ajustado solo con entrenamiento", "la prueba se transforma con lo aprendido")]
+    medir = [("Línea base", "compara con un modelo que no mira los datos (la clase más frecuente)"),
+             ("Exactitud", "engaña con clases desequilibradas: mira precisión, exhaustividad, F1"),
+             ("Validación al 100 %", "es sospechosa: con pocos datos, la prueba suele salir peor"),
+             ("Pocos datos", "mejor validación cruzada que una sola separación")]
+    sem = "".join(f'<li class="{c}"><b>{escape(o)}</b><span class="marca">{m}</span><span class="que">{escape(q)}</span></li>' for c, m, o, q in fugas)
+    h = ['<section class="hoja" aria-labelledby="hoja-ev-t">',
+         '<p class="hoja-titulo" id="hoja-ev-t">Evaluar bien, en una hoja</p>',
+         '<p class="hoja-nota">Un modelo puede parecer muy bueno porque se ha evaluado mal. Tres conjuntos, tres trabajos, y las fugas más frecuentes.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>Tres conjuntos, tres trabajos</h5>', ev_h(), ev_v(),
+         '<p class="ficha-pie">Los porcentajes son orientativos. Con <code>validation_split</code> o con validación cruzada, la validación sale del propio entrenamiento.</p></div>',
+         '<div class="ficha"><h5>¿Hay fuga de datos?</h5><ul class="semaforo">', sem, '</ul></div>',
+         '<div class="ficha"><h5>Antes de fiarte del número</h5><dl class="vocab">',
+         "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in medir), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -1675,6 +1737,10 @@ if __name__ == "__main__":
     if UD3.exists():
         u = UD3.read_text(encoding="utf-8")
         UD3.write_text(insertar(u, "vision", hoja_vision()), encoding="utf-8")
+    UD5 = RAIZ / "contenidos" / "ud5-ml.md"
+    if UD5.exists():
+        u = UD5.read_text(encoding="utf-8")
+        UD5.write_text(insertar(u, "evaluacion", hoja_evaluacion()), encoding="utf-8")
     UD1 = RAIZ / "contenidos" / "ud1.md"
     if UD1.exists():
         u = UD1.read_text(encoding="utf-8")

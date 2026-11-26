@@ -1,0 +1,1174 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recursos para aprender · IA Apuntes</title>
+<meta name="description" content="Todos los vídeos, cursos, webs
+interactivas, libros, documentación y datos abiertos que se citan en la
+web de Tecnoloxías Intelixentes, juntos y con la unidad en la que encaja
+cada uno.">
+<!-- cabeza -->
+<meta name="color-scheme" content="light dark">
+<script>try{var cs=localStorage.getItem("color-scheme");if(cs)document.querySelector('meta[name="color-scheme"]').content=cs}catch(e){}</script>
+<meta name="theme-color" content="#F8FAFD" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15211C" media="(prefers-color-scheme: dark)">
+<link rel="preload" href="assets/fonts/atkinson-next.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/menu.css">
+<script src="assets/menu.js" defer></script>
+<!-- /cabeza -->
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="top"><div class="in">
+  <a class="brand" href="./">IA<span>·</span>Apuntes</a>
+  <nav class="menu" aria-label="Principal"><button type="button" class="menu-boton" popovertarget="menu-lista" aria-controls="menu-lista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menú</button><ul class="menu-lista" id="menu-lista" popover="auto"><li><a href="./">Inicio</a></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-unidades">Unidades<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><ul class="menu-sub" id="menu-unidades"><li><a href="asignatura.html">La asignatura<small>Programación, criterios y evaluación</small></a></li><li><a href="ud1.html">UD1 · Conceptos de IA<small>Qué es la IA, búsqueda, agentes, ética</small></a></li><li><a href="teoria.html#1️⃣-fundamentos-de-programación">UD2 · Python y datos<small>En la teoría y los ejercicios del curso</small></a></li><li><a href="ud3-vision.html">UD3 · Visión artificial<small>Imágenes, CNN, YOLO, OCR</small></a></li><li><a href="ud4-lenguaje.html">UD4 · Lenguaje<small>PLN, embeddings, Transformers</small></a></li><li><a href="ud5-ml.html">UD5 · Aprendizaje automático<small>Modelos, métricas, validación, ética</small></a></li></ul></li><li><a href="teoria.html">Teoría</a></li><li><a href="ejercicios.html">Ejercicios</a></li><li><a href="teoria.html#git-y-github-paso-a-paso">Git y GitHub</a></li><li class="menu-grupo"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-guías">Guías<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><ul class="menu-sub" id="menu-guías"><li><a href="itinerario.html">Itinerario IA con Python<small>De Python a experto en IA en seis etapas</small></a></li><li><a href="datos.html">Análisis de datos<small>De los datos al modelo</small></a></li><li><a href="algoritmos.html">Algoritmos de IA<small>Catálogo: qué hace cada uno y cuándo usarlo</small></a></li><li><a href="mapa.html">Mapa de librerías<small>Guía visual de Python para IA</small></a></li></ul></li><li class="menu-grupo actual"><button type="button" class="menu-grupo-boton" aria-expanded="false" aria-controls="menu-recursos">Recursos<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button><ul class="menu-sub" id="menu-recursos"><li><a href="recursos.html" aria-current="page">Recursos para aprender<small>Vídeos, cursos y webs, por unidad</small></a></li><li><a href="apps.html">Apps y juegos<small>Proyectos con rúbrica</small></a></li><li><a href="chuletas.html">Chuletas<small>Infografías de las librerías</small></a></li><li><a href="libro.html">El libro<small>J. F. Puentes, capítulo a capítulo</small></a></li></ul></li></ul></nav><button type="button" class="tema"><span class="a-oscuro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="solo-lector">Cambiar a modo oscuro</span></span><span class="a-claro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="solo-lector">Cambiar a modo claro</span></span></button>
+</div></header>
+<main class="doc">
+  <div class="toc-side">
+    <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="toc-cajon"><span class="toc-ico" aria-hidden="true">☰</span><b>Índice</b><span class="toc-cur"></span></button>
+    <div class="toc-drawer" id="toc-cajon" aria-label="Índice de la página">
+      <div class="toc-scroller">
+<nav id="TOC" aria-label="Índice de la página">
+<div class="toc-head"><span>Índice</span><button class="toc-close" type="button" aria-label="Cerrar el índice">✕</button></div>
+<ul>
+<li><a href="#recursos-para-aprender"
+id="toc-recursos-para-aprender">Recursos para aprender</a>
+<ul>
+<li><a href="#1-vídeos" id="toc-1-vídeos">1. Vídeos</a></li>
+<li><a href="#2-cursos-gratuitos" id="toc-2-cursos-gratuitos">2. Cursos
+gratuitos</a></li>
+<li><a href="#3-webs-interactivas-ver-la-ia-por-dentro"
+id="toc-3-webs-interactivas-ver-la-ia-por-dentro">3. Webs interactivas:
+ver la IA por dentro</a></li>
+<li><a href="#4-libros-guías-y-chuletas-gratuitas"
+id="toc-4-libros-guías-y-chuletas-gratuitas">4. Libros, guías y chuletas
+gratuitas</a></li>
+<li><a href="#5-documentación-oficial-de-las-librerías"
+id="toc-5-documentación-oficial-de-las-librerías">5. Documentación
+oficial de las librerías</a></li>
+<li><a href="#6-datos-abiertos" id="toc-6-datos-abiertos">6. Datos
+abiertos</a></li>
+<li><a href="#7-proyectos-y-directorios-para-practicar"
+id="toc-7-proyectos-y-directorios-para-practicar">7. Proyectos y
+directorios para practicar</a></li>
+<li><a href="#8-para-estar-al-día-profesorado"
+id="toc-8-para-estar-al-día-profesorado">8. Para estar al día
+(profesorado)</a></li>
+<li><a href="#cómo-elegir-un-recurso-nuevo"
+id="toc-cómo-elegir-un-recurso-nuevo">Cómo elegir un recurso
+nuevo</a></li>
+</ul></li>
+</ul>
+</nav>
+      </div>
+    </div>
+  </div>
+  <article class="content" id="contenido" tabindex="-1">
+<h1 id="recursos-para-aprender">Recursos para aprender</h1>
+<p>Esta página reúne en un solo sitio los recursos externos que se citan
+por toda la web: vídeos, cursos gratuitos, webs interactivas, libros y
+guías, documentación de las librerías y fuentes de datos abiertos. Cada
+uno lleva la <strong>unidad</strong> en la que encaja y, cuando lo hay,
+un enlace al apartado de la web que complementa. Revisados en noviembre
+de 2026.</p>
+<p><strong>Cómo usarla.</strong></p>
+<ul>
+<li><strong>Para repasar lo de clase</strong>, empieza por los vídeos y
+las webs interactivas de tu unidad: son cortos y muy visuales.</li>
+<li><strong>Para ampliar</strong>, los cursos de la segunda tabla. Están
+ordenados de más fácil a más exigente.</li>
+<li><strong>Para programar</strong>, la documentación oficial de cada
+librería: es la fuente más fiable cuando algo no funciona.</li>
+<li>Casi todo está <strong>en inglés</strong>. Se indica cuándo hay
+versión en castellano o subtítulos. Los vídeos de YouTube tienen
+subtítulos automáticos que se pueden traducir.</li>
+<li>Algunos recursos piden <strong>crear una cuenta</strong> (Kaggle,
+DeepLearning.AI, Coursera). Antes de pedirlo en clase, comprueba la edad
+mínima de cada servicio y la política del centro sobre cuentas del
+alumnado. Nunca hace falta pagar nada para seguir la asignatura.</li>
+</ul>
+<p><strong>Unidades:</strong> UD1 Conceptos de IA · UD2 Python y datos ·
+UD3 Visión artificial · UD4 Lenguaje natural · UD5 Aprendizaje
+automático. «Todas» significa que sirve para todo el curso.</p>
+<hr />
+<h2 id="1-vídeos">1. Vídeos</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Recurso</th>
+<th>Qué se ve</th>
+<th>Idioma</th>
+<th>Unidad</th>
+<th>En la web</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.youtube.com/watch?v=a0_lo_GDcFw">Crash Course
+AI</a>, episodios 1 y 2</td>
+<td>Qué es la IA y su historia, en dos vídeos cortos</td>
+<td>Inglés, subtítulos</td>
+<td>UD1</td>
+<td><a
+href="teoria.html#011-de-la-ud1-a-la-ud2-mapa-de-conexiones">Teoría
+0.11</a></td>
+</tr>
+<tr class="even">
+<td><a
+href="https://www.youtube.com/playlist?list=PL_h2yd2CGtBHEKwEH5iqTZH85wLS-eUzv">3Blue1Brown:
+<em>Neural Networks</em></a> (<a
+href="https://www.3blue1brown.com/topics/neural-networks">web</a>)</td>
+<td><strong>Cap. 1–4</strong> (entre 10 y 20 min): qué es una red,
+descenso del gradiente, retropropagación con dibujos y con derivadas.
+<strong>Cap. 5–7</strong> (entre 20 y 30 min): Transformers, atención y
+dónde guarda un LLM lo que sabe. <em>Large Language Models explained
+briefly</em> (8 min): presentación general</td>
+<td>Inglés, subtítulos en castellano</td>
+<td>Cap. 1–4: UD1, UD5. Cap. 5–7: UD4</td>
+<td><a href="ud5-ml.html#9-redes-neuronales">UD5 sección 9</a>, <a
+href="teoria.html#147-redes-neuronales-desde-cero">teoría 14.7</a>, <a
+href="ud4-lenguaje.html#1010-el-transformer-por-dentro">UD4
+10.10</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.youtube.com/@statquest">StatQuest (Josh
+Starmer)</a></td>
+<td>Un algoritmo o una idea de estadística por vídeo, paso a paso y con
+dibujos: árboles, regresión logística, validación cruzada, sesgo y
+varianza</td>
+<td>Inglés, subtítulos</td>
+<td>UD2 (estadística), UD5</td>
+<td><a href="ud5-ml.html">UD5</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://karpathy.ai/zero-to-hero.html">A. Karpathy:
+<em>Neural Networks: Zero to Hero</em></a> (<a
+href="https://github.com/karpathy/nn-zero-to-hero">código</a>)</td>
+<td>Construye desde cero una red, un modelo de lenguaje y un GPT
+pequeño, programando delante de la cámara</td>
+<td>Inglés</td>
+<td>UD4, UD5 (avanzado)</td>
+<td><a href="teoria.html#147-redes-neuronales-desde-cero">Teoría
+14.7</a></td>
+</tr>
+<tr class="odd">
+<td><a href="http://introtodeeplearning.com/">MIT 6.S191:
+<em>Introduction to Deep Learning</em></a></td>
+<td>Clases grabadas de un curso intensivo que se renueva cada año, con
+prácticas en Python</td>
+<td>Inglés</td>
+<td>UD3, UD4, UD5 (avanzado)</td>
+<td><a
+href="teoria.html#1416-recursos-gratuitos-para-seguir-aprendiendo-ia">Teoría
+14.16</a></td>
+</tr>
+<tr class="even">
+<td><a
+href="https://www.deeplearning.ai/courses/machine-learning-specialization/">Andrew
+Ng: <em>Machine Learning Specialization</em></a></td>
+<td>Las clases del curso de ML más conocido: supervisado, redes y
+árboles, no supervisado, recomendación y refuerzo. Con la cuenta
+gratuita de DeepLearning.AI se ven <strong>todos los vídeos</strong>;
+los laboratorios y el certificado son de pago. En Coursera solo es
+gratis el primer módulo</td>
+<td>Inglés, subtítulos</td>
+<td>UD5 (para profesorado o alumnado muy motivado)</td>
+<td><a
+href="teoria.html#1416-recursos-gratuitos-para-seguir-aprendiendo-ia">Teoría
+14.16</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cómo aprovechar 3Blue1Brown en clase.</strong> Antes de ver
+el capítulo 1, haz la neurona de la <a
+href="ud5-ml.html#9-redes-neuronales">UD5 sección 9</a>; después de ver
+los capítulos 2 y 3, la retropropagación a mano de la teoría 14.7. Para
+la UD4, el capítulo 6 (atención) va justo antes de la matriz de atención
+de la <a
+href="ud4-lenguaje.html#1010-el-transformer-por-dentro">10.10</a>. Si lo
+pones en clase, para el vídeo cada pocos minutos y pide que alguien
+explique lo que se acaba de ver.</p>
+<hr />
+<h2 id="2-cursos-gratuitos">2. Cursos gratuitos</h2>
+<p>De más fácil a más exigente.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Recurso</th>
+<th>Qué es</th>
+<th>Idioma</th>
+<th>Unidad</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.elementsofai.com/"><em>Elements of AI</em></a>
+(Universidad de Helsinki)</td>
+<td>Curso de introducción a la IA sin programar: qué es, qué puede
+hacer, cómo aprende, qué implica para la sociedad</td>
+<td><strong>Castellano</strong> (versión de la UNED)</td>
+<td>UD1</td>
+<td>Primer curso de IA, para cualquiera</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.kaggle.com/learn">Kaggle Learn</a></td>
+<td>Microcursos de unas 3–5 horas con cuadernos en el navegador:
+<em>Python</em>, <em>Pandas</em>, <em>Data Visualization</em>, <a
+href="https://www.kaggle.com/learn/intro-to-machine-learning"><em>Intro
+to Machine Learning</em></a> (árboles, validación, sobreajuste,
+<em>random forest</em>), <a
+href="https://www.kaggle.com/learn/computer-vision"><em>Computer
+Vision</em></a>… Pide cuenta para ejecutar el código</td>
+<td>Inglés</td>
+<td>UD2, UD3, UD5</td>
+<td>Practicar con código lo de clase. <em>Intro to ML</em> va después de
+las secciones 4, 6 y 7 de la UD5</td>
+</tr>
+<tr class="odd">
+<td><a
+href="https://developers.google.com/machine-learning/crash-course">Google
+<em>Machine Learning Crash Course</em></a></td>
+<td>Módulos cortos con vídeos, visualizaciones interactivas y
+ejercicios: regresión lineal y logística, clasificación y métricas,
+datos, sobreajuste, redes, <em>embeddings</em>, LLM y ML
+responsable</td>
+<td>Inglés; <a
+href="https://developers.google.com/machine-learning/crash-course?hl=es-419">versión
+en castellano</a></td>
+<td>UD4, UD5</td>
+<td>Repasar vocabulario y métricas antes de un examen</td>
+</tr>
+<tr class="even">
+<td><a
+href="https://www.khanacademy.org/math/statistics-probability">Khan
+Academy: Estadística y probabilidad</a></td>
+<td>Vídeos y ejercicios de estadística desde cero</td>
+<td>Inglés (también hay versión en castellano de parte del
+contenido)</td>
+<td>UD2 (estadística)</td>
+<td><a href="teoria.html#6️⃣-conceptos-estadísticos-básicos">Teoría,
+sección 6</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://docs.python.org/3/tutorial/">Tutorial oficial de
+Python</a></td>
+<td>El tutorial de la documentación de Python, de los tipos básicos a
+las clases</td>
+<td>Inglés (existe traducción al castellano en docs.python.org/es)</td>
+<td>UD2</td>
+<td>Repasar las secciones 1–5 de la teoría</td>
+</tr>
+<tr class="even">
+<td><a href="https://realpython.com/">Real Python</a></td>
+<td>Artículos y tutoriales de Python muy cuidados; parte del contenido
+es de pago</td>
+<td>Inglés</td>
+<td>UD2</td>
+<td>Ampliar un tema concreto</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.w3schools.com/python/">W3Schools
+Python</a></td>
+<td>Referencia rápida con ejemplos que se ejecutan en el navegador</td>
+<td>Inglés</td>
+<td>UD2</td>
+<td>Consultar una función</td>
+</tr>
+<tr class="even">
+<td><a href="https://mp5101-ad.vercel.app/">Módulo «Análisis de datos
+(AD)»</a></td>
+<td>Cuatro unidades: adquisición, EDA, limpieza y modelado, con
+ejercicios resueltos. De nivel de FP</td>
+<td>Castellano</td>
+<td>UD2, UD5</td>
+<td>Ampliar el <a href="datos.html">itinerario de análisis de
+datos</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://inria.github.io/scikit-learn-mooc/">Curso de
+scikit-learn de Inria</a></td>
+<td>Cuadernos, ejercicios con solución y cuestionarios:
+<em>pipelines</em>, validación, hiperparámetros, modelos lineales,
+árboles, ensembles</td>
+<td>Inglés</td>
+<td>UD5</td>
+<td><strong>El mejor paso siguiente</strong> a la UD5: sigue casi su
+mismo orden</td>
+</tr>
+<tr class="even">
+<td><a href="https://huggingface.co/learn">Hugging Face Learn</a></td>
+<td>Cursos prácticos de LLM, agentes, visión y difusión con las
+librerías de Hugging Face</td>
+<td>Inglés; el <a
+href="https://huggingface.co/docs/course/es/chapter1/1">curso de LLM</a>
+tiene traducción parcial al castellano</td>
+<td>UD3, UD4</td>
+<td>Proyectos con modelos ya entrenados</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.promptingguide.ai/es">DAIR.AI: <em>Prompt
+Engineering Guide</em></a></td>
+<td>Técnicas de instrucciones: pocos ejemplos, cadena de razonamiento,
+RAG, agentes, riesgos</td>
+<td><strong>Castellano</strong> (más completa en inglés)</td>
+<td>UD4</td>
+<td><a href="ud4-lenguaje.html#8-modelos-de-lenguaje">UD4 sección
+8</a></td>
+</tr>
+<tr class="even">
+<td><a
+href="https://github.com/microsoft/generative-ai-for-beginners">Microsoft:
+<em>Generative AI for Beginners</em></a></td>
+<td>21 lecciones sobre aplicaciones de IA generativa. Las «Learn» se
+leen sin programar; las «Build» piden cuentas de pago de Azure u
+OpenAI</td>
+<td><strong>Castellano</strong> (carpeta
+<code>translations/es</code>)</td>
+<td>UD4</td>
+<td>Las «Build», solo como demostración del profesorado</td>
+</tr>
+<tr class="odd">
+<td><a href="https://course.fast.ai/">fast.ai: <em>Practical Deep
+Learning for Coders</em></a> (<a
+href="https://github.com/fastai/fastbook">libro</a>)</td>
+<td>Entrena modelos que funcionan desde la primera clase; la teoría
+llega después. Funciona en Colab</td>
+<td>Inglés</td>
+<td>UD3, UD5 (avanzado)</td>
+<td>Proyectos de visión</td>
+</tr>
+<tr class="even">
+<td><a href="https://mlcourse.ai/">mlcourse.ai</a></td>
+<td>Curso práctico con tareas y soluciones sobre datos reales</td>
+<td>Inglés</td>
+<td>UD5 (avanzado)</td>
+<td>Alternativa práctica al curso de Andrew Ng</td>
+</tr>
+<tr class="odd">
+<td><a
+href="https://github.com/DataTalksClub/machine-learning-zoomcamp">DataTalksClub:
+<em>Machine Learning Zoomcamp</em></a></td>
+<td>Unos 4 meses por proyectos, del modelo al despliegue con Docker y la
+nube</td>
+<td>Inglés</td>
+<td>UD5 (avanzado)</td>
+<td><a href="ud5-ml.html#proyecto-final-ca57">Proyecto final de la
+UD5</a>, <a
+href="teoria.html#1419-de-prototipo-a-aplicación-herramientas-de-ingeniería-de-ia">teoría
+14.19</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/mlabonne/llm-course">M. Labonne: <em>LLM
+Course</em></a></td>
+<td>Hoja de ruta y cuadernos sobre ajuste fino, cuantización, RAG y
+despliegue</td>
+<td>Inglés</td>
+<td>UD4 (profesorado)</td>
+<td>Ampliar la <a
+href="teoria.html#148-ia-generativa-y-modelos-de-lenguaje-llm">teoría
+14.8</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>De pago (no hace falta para la asignatura).</strong>
+DataCamp, la mayoría de los cursos de Coursera (solo es gratis el primer
+módulo) y libros como <em>Fluent Python</em> (O'Reilly).</p>
+<hr />
+<h2 id="3-webs-interactivas-ver-la-ia-por-dentro">3. Webs interactivas:
+ver la IA por dentro</h2>
+<p>Funcionan en el navegador, sin instalar nada ni crear cuenta. Sirven
+para la pizarra digital o como tarea («cambia la temperatura y explica
+qué pasa»). Lo que enseñan son modelos pequeños o antiguos, con las
+mismas ideas que los actuales pero no con su tamaño.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Web</th>
+<th>Qué se ve</th>
+<th>Unidad</th>
+<th>En la web</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://playground.tensorflow.org/">TensorFlow
+Playground</a></td>
+<td>Una red pequeña que aprende delante de ti: capas, activaciones, tasa
+de aprendizaje, regularización</td>
+<td>UD1, UD5</td>
+<td><a href="ud5-ml.html#9-redes-neuronales">UD5 sección 9</a>, <a
+href="teoria.html#147-redes-neuronales-desde-cero">teoría 14.7</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://seeing-theory.brown.edu/"><em>Seeing
+Theory</em></a> (Brown)</td>
+<td>Probabilidad, distribuciones, inferencia y regresión con
+animaciones. Ya no se actualiza</td>
+<td>UD2</td>
+<td><a href="teoria.html#6️⃣-conceptos-estadísticos-básicos">Teoría,
+sección 6</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://setosa.io/ev/"><em>Explained Visually</em></a> (V.
+Powell y L. Lehe)</td>
+<td><a href="https://setosa.io/ev/image-kernels/">Filtros de imagen</a>,
+<a href="https://setosa.io/ev/principal-component-analysis/">PCA</a>,
+mínimos cuadrados, probabilidad condicionada</td>
+<td>UD3, UD5</td>
+<td><a href="ud3-vision.html#3-filtros-y-convolución">UD3 sección 3</a>,
+<a href="ud5-ml.html#8-aprendizaje-no-supervisado-agrupar-y-reducir">UD5
+sección 8</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://mlu-explain.github.io/">MLU-Explain</a>
+(Amazon)</td>
+<td>Ensayos interactivos: regresión, árboles, bosques, validación
+cruzada, sesgo y varianza, ROC, redes</td>
+<td>UD5</td>
+<td><a href="ud5-ml.html">UD5</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://tiktokenizer.vercel.app/">Tiktokenizer</a></td>
+<td>Cómo trocean un texto los tokenizadores de los LLM y cuántos
+<em>tokens</em> salen</td>
+<td>UD4</td>
+<td><a href="ud4-lenguaje.html#3-tokenización-y-preprocesado">UD4
+sección 3</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://projector.tensorflow.org/">Embedding Projector</a>
+(TensorFlow)</td>
+<td>Miles de <em>embeddings</em> de palabras en 3D y los vecinos de cada
+una</td>
+<td>UD4, UD5</td>
+<td><a href="ud4-lenguaje.html#104-embeddings-de-palabras-word2vec">UD4
+10.4</a></td>
+</tr>
+<tr class="odd">
+<td><a
+href="https://poloclub.github.io/transformer-explainer/">Transformer
+Explainer</a> (Georgia Tech)</td>
+<td>GPT-2 funcionando en el navegador con tu frase: <em>tokens</em>,
+atención, probabilidades y temperatura. <strong>La mejor para
+empezar</strong></td>
+<td>UD4</td>
+<td><a href="ud4-lenguaje.html#1010-el-transformer-por-dentro">UD4
+10.10</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://bbycroft.net/llm">LLM Visualization</a> (B.
+Bycroft)</td>
+<td>Un GPT diminuto en 3D, cálculo a cálculo. Necesita un ordenador con
+buena tarjeta gráfica</td>
+<td>UD4</td>
+<td><a href="ud4-lenguaje.html#1010-el-transformer-por-dentro">UD4
+10.10</a></td>
+</tr>
+<tr class="odd">
+<td><a href="https://hfviewer.com/">HF Viewer</a></td>
+<td>La arquitectura de un modelo de Hugging Face dibujada como
+grafo</td>
+<td>UD4</td>
+<td><a href="ud4-lenguaje.html#1010-el-transformer-por-dentro">UD4
+10.10</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://jalammar.github.io/illustrated-transformer/">Jay
+Alammar: <em>The Illustrated Transformer</em></a></td>
+<td>El Transformer explicado con dibujos, paso a paso</td>
+<td>UD4</td>
+<td><a href="ud4-lenguaje.html#1010-el-transformer-por-dentro">UD4
+10.10</a></td>
+</tr>
+<tr class="odd">
+<td><a
+href="https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-mixture-of-experts"><em>A
+Visual Guide to Mixture of Experts</em></a> (M. Grootendorst)</td>
+<td>Mezcla de expertos con más de 50 dibujos</td>
+<td>UD4 (avanzado)</td>
+<td><a href="ud4-lenguaje.html#1010-el-transformer-por-dentro">UD4
+10.10</a></td>
+</tr>
+<tr class="even">
+<td><a
+href="https://magazine.sebastianraschka.com/p/visual-attention-variants"><em>A
+Visual Guide to Attention Variants</em></a> (S. Raschka)</td>
+<td>Las variantes de atención de los modelos actuales</td>
+<td>UD4 (avanzado)</td>
+<td><a href="ud4-lenguaje.html#1010-el-transformer-por-dentro">UD4
+10.10</a></td>
+</tr>
+<tr class="odd">
+<td><a
+href="https://handbook.modular.com/llm-inference-basics/what-is-llm-inference/"><em>LLM
+Inference Handbook</em></a> (Modular)</td>
+<td>Cómo se sirve un LLM: prefill, decode, caché KV, lotes</td>
+<td>UD4 (profesorado)</td>
+<td><a
+href="teoria.html#1419-de-prototipo-a-aplicación-herramientas-de-ingeniería-de-ia">Teoría
+14.19</a></td>
+</tr>
+<tr class="even">
+<td><a href="https://www.neuronpedia.org/">Neuronpedia</a></td>
+<td>Los «rasgos» que se encuentran dentro de modelos como GPT-2 o Gemma,
+y qué pasa al activarlos</td>
+<td>UD4, UD5 (profesorado)</td>
+<td><a href="ud5-ml.html#10-sesgos-ética-y-explicabilidad">UD5 sección
+10</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-libros-guías-y-chuletas-gratuitas">4. Libros, guías y chuletas
+gratuitas</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Recurso</th>
+<th>Qué es</th>
+<th>Idioma</th>
+<th>Unidad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="libro.html">J. F. Puentes: <em>Tecnologías
+Inteligentes</em></a> (<a
+href="https://github.com/FranPuentes/iTI2025">cuadernos</a>)</td>
+<td>El libro de referencia de la asignatura (CC BY-NC-ND), resumido
+capítulo a capítulo en esta web</td>
+<td>Castellano</td>
+<td>Todas</td>
+</tr>
+<tr class="even">
+<td><a href="https://ehmatthes.github.io/pcc_3e/cheat_sheets/">Eric
+Matthes: <em>Beginner's Python Cheat Sheets</em></a></td>
+<td>Chuletas de Python por tema para imprimir, más Matplotlib, Plotly,
+pytest y Git</td>
+<td>Inglés</td>
+<td>UD2</td>
+</tr>
+<tr class="odd">
+<td><a href="chuletas.html">Chuletas de la documentación</a></td>
+<td>Chuletas oficiales de <a
+href="https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf">Pandas</a> y <a
+href="https://matplotlib.org/cheatsheets/">Matplotlib</a>, <a
+href="https://www.pythoncheatsheet.org/">Python Cheat Sheet</a> y las de
+la página <a href="chuletas.html">Chuletas</a></td>
+<td>Inglés</td>
+<td>UD2</td>
+</tr>
+<tr class="even">
+<td><a
+href="https://github.com/afshinea/stanford-cs-229-machine-learning/tree/master/es">Chuletas
+de CS229 (Stanford)</a></td>
+<td>Resumen de aprendizaje supervisado, no supervisado y profundo, con
+fórmulas</td>
+<td><strong>Castellano</strong></td>
+<td>UD5</td>
+</tr>
+<tr class="odd">
+<td><a href="https://git-scm.com/book/es/v2"><em>Pro Git</em></a></td>
+<td>El libro oficial de Git</td>
+<td><strong>Castellano</strong></td>
+<td>UD2 (<a href="teoria.html#git-y-github-paso-a-paso">Git y
+GitHub</a>)</td>
+</tr>
+<tr class="even">
+<td><a href="https://christophm.github.io/interpretable-ml-book/">C.
+Molnar: <em>Interpretable Machine Learning</em></a></td>
+<td>Cómo explicar modelos: dependencia parcial, SHAP,
+contrafactuales</td>
+<td>Inglés</td>
+<td>UD5 (<a href="ud5-ml.html#10-sesgos-ética-y-explicabilidad">sección
+10</a>)</td>
+</tr>
+<tr class="odd">
+<td><a href="https://d2l.ai/"><em>Dive into Deep Learning</em></a></td>
+<td>Libro interactivo con código en cada capítulo (necesita
+PyTorch)</td>
+<td>Inglés</td>
+<td>UD3, UD4, UD5 (avanzado)</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/rasbt/machine-learning-book">S. Raschka:
+<em>Machine Learning with PyTorch and Scikit-Learn</em></a> y <a
+href="https://github.com/rasbt/LLMs-from-scratch"><em>LLMs from
+Scratch</em></a></td>
+<td>Código de dos libros (los libros son de pago; el código, libre): del
+ML clásico a construir un GPT pequeño</td>
+<td>Inglés</td>
+<td>UD4, UD5 (avanzado)</td>
+</tr>
+<tr class="odd">
+<td><a href="https://genai.owasp.org/llm-top-10/">OWASP <em>Top 10 for
+LLM Applications</em></a></td>
+<td>Los diez riesgos de seguridad más frecuentes en aplicaciones con
+LLM</td>
+<td>Inglés</td>
+<td>UD4 (<a
+href="teoria.html#1419-de-prototipo-a-aplicación-herramientas-de-ingeniería-de-ia">teoría
+14.19</a>)</td>
+</tr>
+<tr class="even">
+<td><a href="https://www.incibe.es/menores/kit-para-educadores">INCIBE:
+kit para educadores</a></td>
+<td>Recursos de ciberseguridad y uso seguro de internet para el
+aula</td>
+<td><strong>Castellano</strong></td>
+<td>Todas (<a
+href="teoria.html#1420-ciberseguridad-con-python-proteger-lo-propio">teoría
+14.20</a>)</td>
+</tr>
+<tr class="odd">
+<td><a href="https://developer.mozilla.org/es/docs/Web/HTTP">HTTP en
+MDN</a> y <a href="https://fastapi.tiangolo.com/es/tutorial/">tutorial
+de FastAPI</a></td>
+<td>Cómo funciona la web y cómo publicar un modelo como servicio</td>
+<td><strong>Castellano</strong></td>
+<td>UD5 (<a
+href="teoria.html#137-del-notebook-a-la-app-desplegar-un-modelo">teoría
+13.7</a>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Para después del Bachillerato</strong> (material
+universitario, con álgebra lineal, cálculo y probabilidad): <a
+href="https://mml-book.github.io/"><em>Mathematics for Machine
+Learning</em></a>, <a
+href="https://udlbook.github.io/udlbook/"><em>Understanding Deep
+Learning</em></a>, <a href="https://www.deeplearningbook.org/"><em>Deep
+Learning</em></a> de Goodfellow y otros (de 2016, sin Transformers), los
+cursos de Stanford <a href="https://cs229.stanford.edu/">CS229</a> (ML),
+<a href="https://cs231n.stanford.edu/">CS231n</a> (visión), <a
+href="https://web.stanford.edu/class/cs224n/">CS224n</a> (lenguaje) y <a
+href="https://stanford-cs336.github.io/">CS336</a> (modelos de
+lenguaje), y para el aprendizaje por refuerzo, <a
+href="http://incompleteideas.net/book/the-book-2nd.html">Sutton y
+Barto</a> y <a href="https://spinningup.openai.com/"><em>Spinning
+Up</em></a>.</p>
+<hr />
+<h2 id="5-documentación-oficial-de-las-librerías">5. Documentación
+oficial de las librerías</h2>
+<p>Cuando algo no funciona, la documentación oficial es la fuente más
+fiable: está al día con la versión instalada, cosa que no siempre pasa
+con un tutorial o con una IA.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Unidad</th>
+<th>Librerías</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>UD2 · Python</td>
+<td><a href="https://docs.python.org/3/">Python</a> · <a
+href="https://docs.python.org/3/library/tkinter.html">tkinter</a> y <a
+href="https://tkdocs.com/tutorial/">TkDocs</a> · <a
+href="https://docs.pydantic.dev/">Pydantic</a> · <a
+href="https://cryptography.io/">cryptography</a></td>
+</tr>
+<tr class="even">
+<td>UD2 · Datos y gráficos</td>
+<td><a href="https://numpy.org/doc/stable/">NumPy</a> · <a
+href="https://pandas.pydata.org/docs/">Pandas</a> · <a
+href="https://matplotlib.org/stable/contents.html">Matplotlib</a> · <a
+href="https://seaborn.pydata.org/tutorial.html">Seaborn</a> · <a
+href="https://geopandas.org/">GeoPandas</a> · <a
+href="https://networkx.org/">NetworkX</a> · <a
+href="https://spark.apache.org/docs/latest/">Apache Spark</a> · <a
+href="https://dask.org/">Dask</a></td>
+</tr>
+<tr class="odd">
+<td>UD3 · Visión</td>
+<td><a href="https://opencv.org/">OpenCV</a> · <a
+href="https://python-pillow.org/">Pillow</a> · <a
+href="https://scikit-image.org/docs/stable/">scikit-image</a> · <a
+href="https://docs.ultralytics.com/">Ultralytics (YOLO)</a> · <a
+href="https://github.com/PaddlePaddle/PaddleOCR">PaddleOCR</a></td>
+</tr>
+<tr class="even">
+<td>UD4 · Lenguaje</td>
+<td><a href="https://github.com/huggingface/transformers">Hugging Face
+Transformers</a> · <a href="https://ollama.com/">Ollama</a> (modelos en
+tu ordenador) · <a
+href="https://docs.langchain.com/oss/python/langgraph/overview">LangGraph</a></td>
+</tr>
+<tr class="odd">
+<td>UD5 · Aprendizaje automático</td>
+<td><a
+href="https://scikit-learn.org/stable/user_guide.html">scikit-learn</a>
+(<a href="https://scikit-learn.org/stable/getting_started.html">primeros
+pasos</a>, <a
+href="https://scikit-learn.org/stable/machine_learning_map.html">qué
+estimador elegir</a>) · <a href="https://shap.readthedocs.io/">SHAP</a>
+· <a href="https://keras.io/">Keras</a> · <a
+href="https://pytorch.org/tutorials/">PyTorch</a> (<a
+href="https://pytorch.org/tutorials/beginner/basics/intro.html"><em>Learn
+the Basics</em></a>)</td>
+</tr>
+<tr class="even">
+<td>Publicar un proyecto</td>
+<td><a href="https://docs.streamlit.io/">Streamlit</a> · <a
+href="https://www.gradio.app/docs">Gradio</a> · <a
+href="https://flask.palletsprojects.com/">Flask</a> · <a
+href="https://fastapi.tiangolo.com/">FastAPI</a> · <a
+href="https://docs.docker.com/get-started/">Docker</a> · <a
+href="https://docs.github.com/es/actions">GitHub Actions</a></td>
+</tr>
+</tbody>
+</table>
+<p>Qué hace cada librería y cuál elegir: <a href="mapa.html">Mapa de
+librerías</a>.</p>
+<hr />
+<h2 id="6-datos-abiertos">6. Datos abiertos</h2>
+<p>La lista completa, con criterios para elegir y código para cargarlos,
+está en <a
+href="datos.html#16-dónde-encontrar-datos-más-allá-de-kaggle">Análisis
+de datos 1.6</a>. Las más útiles para un proyecto de clase:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Fuente</th>
+<th>Qué tiene</th>
+<th>Unidad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://abertos.xunta.gal/">abertos.xunta.gal</a>, <a
+href="https://www.ige.gal/">IGE</a>, <a
+href="https://www.meteogalicia.gal/">MeteoGalicia</a></td>
+<td>Datos de Galicia: educación, población, tiempo, calidad del
+aire</td>
+<td>UD2, UD5</td>
+</tr>
+<tr class="even">
+<td><a href="https://datos.gob.es/">datos.gob.es</a>, <a
+href="https://www.ine.es/">INE</a>, <a
+href="https://ec.europa.eu/eurostat">Eurostat</a></td>
+<td>Datos de España y de la Unión Europea</td>
+<td>UD2, UD5</td>
+</tr>
+<tr class="odd">
+<td><a href="https://ourworldindata.org/">Our World in Data</a>, <a
+href="https://data.worldbank.org/">Banco Mundial</a>, <a
+href="https://www.who.int/data/gho">OMS</a>, <a
+href="https://data.nasa.gov/">NASA</a></td>
+<td>Series largas de salud, clima, energía, economía y educación por
+país</td>
+<td>UD2, UD5</td>
+</tr>
+<tr class="even">
+<td><a href="https://datasetsearch.research.google.com/">Google Dataset
+Search</a>, <a href="https://archive.ics.uci.edu/">UCI</a>, <a
+href="https://www.kaggle.com/datasets">Kaggle Datasets</a></td>
+<td>Buscadores y repositorios de conjuntos de datos</td>
+<td>UD5</td>
+</tr>
+<tr class="odd">
+<td><a href="https://huggingface.co/datasets">Hugging Face
+Datasets</a></td>
+<td>Texto, imágenes y audio, muchos en gallego y castellano</td>
+<td>UD3, UD4</td>
+</tr>
+<tr class="even">
+<td><a href="https://centrodedescargas.cnig.es/">CNIG</a> y <a
+href="https://mapas.xunta.gal/">mapas de la Xunta</a></td>
+<td>Límites, carreteras y capas geográficas</td>
+<td>UD2 (<a
+href="datos.html#23-datos-con-ubicación-mapas-con-geopandas">mapas</a>)</td>
+</tr>
+<tr class="odd">
+<td><a href="https://open-meteo.com/">Open-Meteo</a></td>
+<td>API del tiempo sin clave</td>
+<td>UD2 (<a href="apps.html">apps</a>)</td>
+</tr>
+<tr class="even">
+<td><a href="https://quotes.toscrape.com/">quotes.toscrape.com</a> y <a
+href="https://books.toscrape.com/">books.toscrape.com</a></td>
+<td>Webs hechas <strong>para practicar</strong> <em>scraping</em> sin
+molestar a nadie</td>
+<td>UD2 (<a
+href="datos.html#14-recoger-datos-de-la-web-vigilar-páginas-y-scraping">recoger
+datos de la web</a>)</td>
+</tr>
+<tr class="odd">
+<td><a href="https://nos.gal/">Proxecto Nós</a></td>
+<td>Recursos y modelos de lenguaje para el gallego</td>
+<td>UD4</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-proyectos-y-directorios-para-practicar">7. Proyectos y
+directorios para practicar</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Recurso</th>
+<th>Qué es</th>
+<th>Unidad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a
+href="https://github.com/practical-tutorials/project-based-learning"><em>project-based-learning</em></a>,
+<a
+href="https://github.com/Python-World/python-mini-projects"><em>python-mini-projects</em></a>,
+<a
+href="https://github.com/arpit-omprakash/100ProjectsOfCode"><em>100ProjectsOfCode</em></a>,
+<a
+href="https://github.com/larymak/Python-project-Scripts"><em>Python-project-Scripts</em></a>,
+<a href="https://github.com/realpython/materials">Real Python
+<em>materials</em></a></td>
+<td>Listas de proyectos de Python con código, de pequeños a grandes</td>
+<td>UD2</td>
+</tr>
+<tr class="even">
+<td><a
+href="https://github.com/markusschanta/awesome-jupyter"><em>awesome-jupyter</em></a></td>
+<td>Herramientas y extensiones para cuadernos Jupyter</td>
+<td>UD2</td>
+</tr>
+<tr class="odd">
+<td><a
+href="https://github.com/eugeneyan/applied-ml"><em>applied-ml</em></a>
+(E. Yan)</td>
+<td>Cientos de artículos de empresas que cuentan cómo usan el ML</td>
+<td>UD5 (<a
+href="ud5-ml.html#11-el-ml-en-el-mundo-real-ampliación">sección 11</a>),
+profesorado</td>
+</tr>
+<tr class="even">
+<td><a
+href="https://github.com/josephmisiti/awesome-machine-learning"><em>awesome-machine-learning</em></a>
+y <a
+href="https://github.com/ml-tooling/best-of-ml-python"><em>best-of-ml-python</em></a></td>
+<td>Directorios de librerías de ML: para saber qué existe y si sigue
+viva, no para aprender</td>
+<td>UD5</td>
+</tr>
+<tr class="odd">
+<td><a href="https://github.com/karpathy/nanochat">A. Karpathy:
+<em>nanochat</em></a></td>
+<td>Todo el proceso de un chat tipo ChatGPT en poco código. Para leer,
+no para ejecutar en clase</td>
+<td>UD4 (profesorado)</td>
+</tr>
+<tr class="even">
+<td><a
+href="https://github.com/dgtlmoon/changedetection.io">changedetection.io</a>
+y <a href="https://github.com/D4Vinci/Scrapling">Scrapling</a></td>
+<td>Vigilar cambios en una web y extraer datos</td>
+<td>UD2 (<a
+href="datos.html#14-recoger-datos-de-la-web-vigilar-páginas-y-scraping">datos
+1.4</a>)</td>
+</tr>
+<tr class="odd">
+<td>En esta web: <a href="apps.html">Apps y juegos</a> y <a
+href="itinerario.html">proyectos del itinerario</a></td>
+<td>Proyectos con rúbrica para cada unidad</td>
+<td>Todas</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-para-estar-al-día-profesorado">8. Para estar al día
+(profesorado)</h2>
+<p><a href="https://lilianweng.github.io/">Lil'Log</a> (artículos de
+repaso muy documentados), <a
+href="https://huggingface.co/papers">Hugging Face Papers</a> (selección
+diaria de artículos de investigación) y <a
+href="https://github.com/dair-ai/ML-Papers-of-the-Week"><em>ML Papers of
+the Week</em></a>.</p>
+<hr />
+<h2 id="cómo-elegir-un-recurso-nuevo">Cómo elegir un recurso nuevo</h2>
+<p>Cada semana circulan listas de «los mejores cursos gratis de IA».
+Antes de añadir uno, conviene hacerse las preguntas de la <a
+href="teoria.html#124-librerías-poco-conocidas-cuáles-merecen-la-pena">teoría
+12.4</a>:</p>
+<ol type="1">
+<li><strong>¿Quién lo publica?</strong> Una universidad, la propia
+librería o una persona reconocida en el tema, mejor que una cuenta que
+vende cursos.</li>
+<li><strong>¿Está al día?</strong> Mira la fecha de la última
+actualización. En IA, dos años es mucho.</li>
+<li><strong>¿Es gratis de verdad?</strong> Muchos son gratis solo al
+principio, o piden pagar para hacer los ejercicios.</li>
+<li><strong>¿Qué nivel exige?</strong> Muchos recursos «para
+principiantes» dan por sabido el cálculo o el inglés técnico.</li>
+<li><strong>¿Pide cuenta o datos personales?</strong> Si es para el
+alumnado, comprueba la edad mínima y la política del centro.</li>
+</ol>
+  </article>
+</main>
+<footer class="site"><div class="in">
+  <span>IA·Apuntes. Tecnoloxías Intelixentes, 1.º de Bacharelato</span>
+  <span>Contenidos inspirados en J. F. Puentes Calvo, <i>Tecnologías Inteligentes</i> (2025, CC BY-NC-ND 4.0).</span>
+  <span>Textos y figuras propias: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">CC BY-NC-SA 4.0</a>. Código: <a href="https://github.com/mrnovoa-dev/IA_apuntes/blob/main/LICENSE">MIT</a>. Los materiales de terceros conservan su propia licencia.</span>
+</div></footer>
+<a class="up" href="#">↑ Arriba</a>
+<script>
+/* Tablas: contenedor desplazable; si no cabe, región con nombre y alcanzable con el teclado */
+(function () {
+  var n = 0;
+  document.querySelectorAll("article.content table").forEach(function (t) {
+    var w = document.createElement("div"); w.className = "table-wrap";
+    t.parentNode.insertBefore(w, t); w.appendChild(t);
+  });
+  function revisar() {
+    document.querySelectorAll(".table-wrap").forEach(function (w) {
+      var desborda = w.scrollWidth > w.clientWidth + 1;
+      if (desborda && !w.hasAttribute("tabindex")) {
+        w.tabIndex = 0; w.setAttribute("role", "region");
+        w.setAttribute("aria-label", "Tabla desplazable " + (++n));
+      } else if (!desborda && w.hasAttribute("tabindex")) {
+        w.removeAttribute("tabindex"); w.removeAttribute("role"); w.removeAttribute("aria-label");
+      }
+    });
+  }
+  window.addEventListener("load", revisar);
+  var t0; window.addEventListener("resize", function () { clearTimeout(t0); t0 = setTimeout(revisar, 200); });
+})();
+
+/* Copiar código: botón con Invoker Commands (command / commandfor) y alternativa con clic */
+(function () {
+  var ICO = '<svg class="doc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>' +
+            '<svg class="ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>';
+  var i = 0, ultimo = "", timers = new WeakMap();
+  document.querySelectorAll("article.content pre > code").forEach(function (code) {
+    var pre = code.parentNode, bloque = pre.parentNode.classList.contains("sourceCode") ? pre.parentNode : pre;
+    if (!code.id) code.id = "codigo-" + (++i);
+    var caja = document.createElement("div"); caja.className = "codigo";
+    bloque.parentNode.insertBefore(caja, bloque); caja.appendChild(bloque);
+    var c = document.createElement("span"); c.className = "copiar-caja";
+    c.innerHTML = '<button type="button" class="copiar" command="--copiar" commandfor="' + code.id + '" aria-label="Copiar el código">' + ICO +
+                  '</button><span class="copiar-aviso" role="status"></span>';
+    caja.appendChild(c);
+  });
+  function avisar(b, ok) {
+    var aviso = b.nextElementSibling;
+    clearTimeout(timers.get(b));
+    b.removeAttribute("data-copied"); b.removeAttribute("data-failed");
+    var msg = ok ? "Copiado" : "No se pudo copiar";
+    if (msg === ultimo) msg += "\u00A0";
+    ultimo = msg; aviso.textContent = "";
+    b.setAttribute(ok ? "data-copied" : "data-failed", "");
+    requestAnimationFrame(function () { aviso.textContent = msg; });
+    timers.set(b, setTimeout(function () { b.removeAttribute("data-copied"); b.removeAttribute("data-failed"); aviso.textContent = ""; }, 2000));
+  }
+  function copiar(b, destino) {
+    var texto = destino.innerText.replace(/\s+$/, "");
+    if (!texto) return;
+    navigator.clipboard.writeText(texto).then(function () { avisar(b, true); }, function () { avisar(b, false); });
+  }
+  if ("CommandEvent" in window) {
+    document.addEventListener("command", function (e) { if (e.command === "--copiar") copiar(e.source, e.target); }, true);
+  } else {
+    document.addEventListener("click", function (e) {
+      var b = e.target.closest('button[command="--copiar"]'); if (!b) return;
+      var d = document.getElementById(b.getAttribute("commandfor")); if (d) copiar(b, d);
+    });
+  }
+})();
+
+/* Índice: sección actual marcada y, en móvil, cajón lateral que se desliza con el dedo */
+(function () {
+  var root = document.documentElement, header = document.querySelector(".top");
+  var toc = document.getElementById("TOC"), side = document.querySelector(".toc-side");
+  if (!toc || !side) return;
+  var btn = side.querySelector(".toc-toggle"), cur = side.querySelector(".toc-cur"),
+      cajon = side.querySelector(".toc-drawer"), scroller = side.querySelector(".toc-scroller"),
+      closeBtn = toc.querySelector(".toc-close");
+  var movil = window.matchMedia("(max-width: 900px)");
+  side.classList.add("con-js");
+  toc.querySelectorAll(":scope > ul > li > ul > li").forEach(function (li) {
+    var sub = li.querySelector(":scope > ul"), a = li.querySelector(":scope > a");
+    if (!sub || !a) return;
+    li.classList.add("has-sub");
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "toc-exp"; b.setAttribute("aria-expanded", "false");
+    b.setAttribute("aria-label", "Mostrar u ocultar los apartados de " + a.textContent.trim());
+    b.addEventListener("click", function () {
+      var abierto = li.classList.contains("open") || li.classList.contains("exp");
+      li.classList.toggle("exp", !abierto); li.classList.toggle("cerrado", abierto);
+      b.setAttribute("aria-expanded", String(!abierto));
+    });
+    li.insertBefore(b, sub);
+  });
+  var links = {}, heads = [];
+  toc.querySelectorAll("a[href^='#']").forEach(function (a) { links[decodeURIComponent(a.getAttribute("href").slice(1))] = a; });
+  document.querySelectorAll("article.content h1[id], article.content h2[id], article.content h3[id]").forEach(function (h) {
+    if (links[h.id]) heads.push(h);
+  });
+  function offset() {
+    var h = header ? header.offsetHeight : 0;
+    return movil.matches ? h + side.offsetHeight + 12 : h + 20;
+  }
+  function medir() {
+    root.style.setProperty("--top-h", (header ? header.offsetHeight : 0) + "px");
+    root.style.scrollPaddingTop = offset() + "px";
+  }
+  function verEnIndice(a) {
+    var t = toc.getBoundingClientRect(), r = a.getBoundingClientRect();
+    if (r.top < t.top + 40 || r.bottom > t.bottom - 20) toc.scrollTop += r.top - t.top - toc.clientHeight / 3;
+  }
+  var activo = null;
+  function marcar() {
+    var lim = offset() + 8, h = heads[0];
+    for (var i = 0; i < heads.length; i++) { if (heads[i].getBoundingClientRect().top <= lim) h = heads[i]; else break; }
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) h = heads[heads.length - 1];
+    if (!h || h === activo) return;
+    activo = h;
+    toc.querySelectorAll(".on, .on-parent").forEach(function (x) { x.classList.remove("on", "on-parent"); });
+    toc.querySelectorAll("li.open, li.cerrado").forEach(function (x) { x.classList.remove("open", "cerrado"); });
+    var a = links[h.id]; a.classList.add("on"); a.setAttribute("aria-current", "location");
+    toc.querySelectorAll("a[aria-current]").forEach(function (x) { if (x !== a) x.removeAttribute("aria-current"); });
+    var li = a.closest("li");
+    while (li && toc.contains(li)) {
+      li.classList.add("open");
+      var la = li.querySelector(":scope > a");
+      if (la && la !== a) la.classList.add("on-parent");
+      li = li.parentNode.closest("li");
+    }
+    toc.querySelectorAll(".toc-exp").forEach(function (b) {
+      var l = b.parentNode; b.setAttribute("aria-expanded", String(l.classList.contains("open") || l.classList.contains("exp")));
+    });
+    cur.textContent = a.textContent.trim();
+    if (!movil.matches || cajon.matches(":popover-open")) verEnIndice(a);
+  }
+
+  /* Cajón (patrón «navigation drawer» que también es barra lateral): popover manual + role=dialog solo en móvil */
+  var fuera = [header, document.querySelector("article.content"), document.querySelector("footer.site"),
+               document.querySelector(".up"), document.querySelector(".saltar"), btn].filter(Boolean);
+  var abierto = false, abriendo = false;
+  function modo() {
+    if (movil.matches) { cajon.setAttribute("popover", "manual"); cajon.setAttribute("role", "dialog"); }
+    else { cerrado(true); cajon.removeAttribute("popover"); cajon.removeAttribute("role"); }
+  }
+  function abrir() {
+    cajon.showPopover(); abierto = true; abriendo = true;
+    fuera.forEach(function (el) { el.inert = true; });
+    cajon.setAttribute("aria-modal", "true");
+    btn.setAttribute("aria-expanded", "true");
+    var ir = function () { scroller.scrollTo({ left: 0, behavior: "auto" }); closeBtn.focus({ preventScroll: true }); if (activo) verEnIndice(links[activo.id]); };
+    if (!CSS.supports("scroll-initial-target", "nearest")) {
+      scroller.scrollTo({ left: scroller.scrollWidth, behavior: "instant" });
+      requestAnimationFrame(function () { requestAnimationFrame(ir); });
+    } else ir();
+  }
+  function cerrar() { if (abierto) scroller.scrollTo({ left: scroller.scrollWidth, behavior: "auto" }); }
+  function cerrado(sinFoco) {
+    if (!abierto) return;
+    abierto = false; abriendo = false;
+    if (cajon.matches(":popover-open")) cajon.hidePopover();
+    fuera.forEach(function (el) { el.inert = false; });
+    cajon.removeAttribute("aria-modal");
+    btn.setAttribute("aria-expanded", "false");
+    if (!sinFoco) btn.focus({ preventScroll: true });
+  }
+  if (window.IntersectionObserver) {
+    var umbral = 1 / Math.max(window.innerWidth, 1);
+    new IntersectionObserver(function (entradas) {
+      var e = entradas[entradas.length - 1];
+      if (!movil.matches || !abierto) return;
+      if (e.intersectionRatio >= 0.99) abriendo = false;
+      else if (e.intersectionRatio < umbral && !abriendo) cerrado(false);
+    }, { root: cajon, threshold: [umbral, 1] }).observe(toc);
+  }
+  if (!CSS.supports("animation-timeline: scroll()")) {
+    scroller.addEventListener("scroll", function () {
+      cajon.style.setProperty("--fondo-cajon", String(Math.max(0, 1 - scroller.scrollLeft / Math.max(toc.offsetWidth, 1))));
+    }, { passive: true });
+  }
+  btn.addEventListener("click", function () { abierto ? cerrar() : abrir(); });
+  closeBtn.addEventListener("click", cerrar);
+  cajon.addEventListener("click", function (e) {
+    if (!movil.matches || !abierto) return;
+    if (!toc.contains(e.target)) cerrar();
+    else if (e.target.closest("a")) cerrar();
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && abierto) cerrar(); });
+
+  var pend = false;
+  window.addEventListener("scroll", function () {
+    if (pend) return; pend = true;
+    requestAnimationFrame(function () { pend = false; marcar(); });
+  }, { passive: true });
+  window.addEventListener("resize", function () { medir(); activo = null; marcar(); });
+  movil.addEventListener("change", function () { modo(); medir(); });
+  modo(); medir(); marcar();
+  window.addEventListener("load", function () {
+    medir();
+    var id = decodeURIComponent(location.hash.slice(1)), t = id && document.getElementById(id);
+    if (t) t.scrollIntoView({ behavior: "instant", block: "start" });
+    activo = null; marcar();
+  });
+})();
+</script>
+<script>
+/* Soluciones cifradas (AES-GCM + PBKDF2). Sin la contraseña, el contenido no se puede leer. */
+(function () {
+  var art = document.querySelector("article.content[data-salt]");
+  if (!art) return;
+  var locks = art.querySelectorAll(".sol-lock");
+  if (!locks.length) return;
+  var KEY = "ia-apuntes-sol";
+  function b64(s) { var b = atob(s), u = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; }
+  function derive(pass) {
+    var enc = new TextEncoder();
+    return crypto.subtle.importKey("raw", enc.encode(pass), "PBKDF2", false, ["deriveKey"]).then(function (k) {
+      return crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(art.dataset.salt), iterations: +art.dataset.iter, hash: "SHA-256" },
+        k, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+    });
+  }
+  function unlockAll(pass) {
+    return derive(pass).then(function (key) {
+      var first = locks[0];
+      return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(first.dataset.iv) }, key, b64(first.dataset.ct)).then(function () {
+        var dec = new TextDecoder();
+        return Promise.all(Array.prototype.map.call(locks, function (el) {
+          return crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(el.dataset.iv) }, key, b64(el.dataset.ct)).then(function (buf) {
+            var tmp = document.createElement("div"); tmp.innerHTML = dec.decode(buf);
+            var d = tmp.firstElementChild; el.replaceWith(d);
+            return d;
+          });
+        }));
+      });
+    }).then(function (opened) {
+      try { sessionStorage.setItem(KEY, pass); } catch (e) {}
+      return opened;
+    });
+  }
+  locks.forEach(function (el) {
+    var label = el.dataset.label || "Solución";
+    el.innerHTML =
+      '<button type="button" class="sol-btn"><span aria-hidden="true">🔒</span> ' + label + ' <small>· con contraseña</small></button>' +
+      '<form class="sol-form" hidden><label>Contraseña del profesorado <input type="password" autocomplete="off" required></label>' +
+      '<button type="submit">Abrir</button><span class="sol-msg" role="status"></span></form>';
+    var b = el.querySelector(".sol-btn"), f = el.querySelector(".sol-form"), msg = el.querySelector(".sol-msg");
+    b.addEventListener("click", function () { f.hidden = !f.hidden; if (!f.hidden) f.querySelector("input").focus(); });
+    f.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var pass = f.querySelector("input").value;
+      msg.textContent = "Comprobando…";
+      var idx = Array.prototype.indexOf.call(locks, el);
+      unlockAll(pass).then(function (opened) {
+        var mine = opened[idx]; if (mine) { mine.open = true; mine.scrollIntoView({ block: "nearest" }); }
+      }).catch(function () { msg.textContent = "Contraseña incorrecta."; });
+    });
+  });
+  var saved = null; try { saved = sessionStorage.getItem(KEY); } catch (e) {}
+  if (saved) unlockAll(saved).catch(function () { try { sessionStorage.removeItem(KEY); } catch (e) {} });
+})();
+</script>
+</body>
+</html>

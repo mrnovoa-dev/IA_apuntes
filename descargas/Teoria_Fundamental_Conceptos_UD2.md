@@ -7385,11 +7385,13 @@ La lista no menciona ningún repositorio en castellano ni en gallego, y casi nin
 
 Revisión de la lista «The 25 Best Free Resources for Learning AI in 2026» (H. Sheikho, octubre de 2026). Todos son buenos, pero casi todos están pensados para la universidad o para profesionales. Aquí se ordenan según lo que sirve en 1º de Bachillerato (estado a noviembre de 2026).
 
+> **Todos juntos.** La página [Recursos para aprender](recursos.html) reúne los vídeos, cursos, webs interactivas, libros, documentación y datos abiertos que se citan en toda la web, con la unidad en la que encaja cada uno.
+
 **Para usar durante el curso.** Nivel adecuado, muy visuales y sin matemáticas universitarias. Están en inglés, pero los vídeos tienen subtítulos automáticos en castellano.
 
 | Recurso | Qué es | Dónde encaja |
 |---------|--------|--------------|
-| [3Blue1Brown: *Neural Networks*](https://www.3blue1brown.com/topics/neural-networks) | Vídeos con animaciones: qué es una red, descenso de gradiente, retropropagación y, en los últimos capítulos, cómo funcionan los Transformers y la atención | 14.7, [UD4](ud4-lenguaje.html) 10.10 |
+| [3Blue1Brown: *Neural Networks*](https://www.3blue1brown.com/topics/neural-networks) ([lista de YouTube](https://www.youtube.com/playlist?list=PL_h2yd2CGtBHEKwEH5iqTZH85wLS-eUzv)) | Vídeos con animaciones. Capítulos 1–4: qué es una red, descenso de gradiente y retropropagación (el 4.º, con derivadas). Capítulos 5–7: Transformers, atención y dónde guarda un LLM lo que sabe | Capítulos 1–4: 14.7 y [UD5 sección 9](ud5-ml.html#9-redes-neuronales). Capítulos 5–7: [UD4](ud4-lenguaje.html) 10.10 |
 | [StatQuest (Josh Starmer)](https://www.youtube.com/@statquest) | Vídeos cortos que explican paso a paso un algoritmo o una idea de estadística | [UD5](ud5-ml.html): árboles, regresión logística, validación cruzada, *bias-variance* |
 | [Google *Machine Learning Crash Course*](https://developers.google.com/machine-learning/crash-course) | Curso corto de Google con visualizaciones interactivas y ejercicios | UD5, para repasar vocabulario y métricas |
 | [Kaggle Learn](https://www.kaggle.com/learn) | Microcursos en el navegador: Python, Pandas, *Intro to Machine Learning*, *Computer Vision*… | UD2, [UD3](ud3-vision.html), UD5 |
@@ -7430,7 +7432,8 @@ Las 16 webs salen de una lista muy compartida en redes en noviembre de 2026 (las
 | [fast.ai: *Practical Deep Learning for Coders*](https://course.fast.ai/) | Entrena modelos que funcionan desde la primera clase; la teoría llega después | Funciona en Colab Los cuadernos del libro están en [fastbook](https://github.com/fastai/fastbook). |
 | [MIT 6.S191: *Introduction to Deep Learning*](http://introtodeeplearning.com/) | Curso intensivo que se renueva cada año, con prácticas en Python | Buena panorámica de lo más reciente |
 | [*Dive into Deep Learning*](https://d2l.ai/) | Libro interactivo con código ejecutable en cada capítulo | Necesita PyTorch |
-| [mlcourse.ai](https://mlcourse.ai/) | Curso práctico con tareas y soluciones sobre datos reales | Alternativa al curso de Coursera |
+| [Andrew Ng: *Machine Learning Specialization*](https://www.deeplearning.ai/courses/machine-learning-specialization/) (DeepLearning.AI y Stanford) | El curso de introducción al ML más conocido: tres cursos (supervisado; redes y árboles; no supervisado, recomendación y refuerzo) con Python, NumPy y scikit-learn. Unas 90 horas | **Cómo verlo gratis (noviembre de 2026):** en la web de DeepLearning.AI, la cuenta gratuita da acceso a todos los vídeos; los laboratorios de código, los cuestionarios y el certificado son de pago (plan Pro). En Coursera, desde agosto de 2025 ya no existe el modo oyente: solo se ve gratis el primer módulo de cada curso |
+| [mlcourse.ai](https://mlcourse.ai/) | Curso práctico con tareas y soluciones sobre datos reales | Alternativa práctica al curso de Andrew Ng |
 | [DataTalksClub: *Machine Learning Zoomcamp*](https://github.com/DataTalksClub/machine-learning-zoomcamp) | Curso gratuito de unos 4 meses, por proyectos: del modelo en Python al despliegue con Docker, Kubernetes y AWS Lambda. Hay una edición en grupo cada otoño, pero los materiales se pueden seguir solos | Encaja con el [proyecto final de la UD5](ud5-ml.html#proyecto-final-ca57) y la [14.19](#1419-de-prototipo-a-aplicación-herramientas-de-ingeniería-de-ia); la parte de la nube pide cuenta |
 | [Curso de scikit-learn de Inria](https://inria.github.io/scikit-learn-mooc/) | Cuadernos, ejercicios con solución y cuestionarios: *pipelines*, validación, hiperparámetros, modelos lineales, árboles, ensembles y evaluación | Sigue casi el orden de la [UD5](ud5-ml.html): es el mejor paso siguiente |
 | [S. Raschka: *Machine Learning with PyTorch and Scikit-Learn*](https://github.com/rasbt/machine-learning-book) | Código de los 19 capítulos del libro, de la clasificación a los Transformers | El libro es de pago; los cuadernos, libres |
@@ -7452,7 +7455,6 @@ Las 16 webs salen de una lista muy compartida en redes en noviembre de 2026 (las
 **Lo que no conviene recomendar.**
 
 - *Machine Learning Handbook* de Yandex y *Deep Learning School* del MIPT: están **en ruso**.
-- *Machine Learning Specialization* de Andrew Ng (Coursera): la lista dice que se puede seguir gratis como oyente, pero desde agosto de 2025 Coursera **retiró ese modo** en muchos cursos y en los de DeepLearning.AI solo deja ver gratis la primera semana. Antes de recomendarlo, comprueba cómo está el acceso.
 
 **Para encontrar herramientas.** [*awesome-machine-learning*](https://github.com/josephmisiti/awesome-machine-learning) ordena librerías y recursos por lenguaje de programación. [*best-of-ml-python*](https://github.com/ml-tooling/best-of-ml-python) es un directorio de cientos de librerías de ML ordenadas por categorías (texto, imagen, datos geográficos, explicabilidad…) y por popularidad, que se actualiza cada semana. No sirve para aprender, pero sí para saber qué existe y si una librería sigue viva.
 

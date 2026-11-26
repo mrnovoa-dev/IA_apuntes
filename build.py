@@ -43,6 +43,7 @@ PAGINAS = [
     ("contenidos/chuletas.md", "chuletas.html", "chuletas"),
     ("contenidos/itinerario.md", "itinerario.html", "itinerario"),
     ("contenidos/algoritmos.md", "algoritmos.html", "algoritmos"),
+    ("contenidos/recursos.md", "recursos.html", "recursos"),
     ("descargas/Teoria_Fundamental_Conceptos_UD2.md", "teoria.html", "teoria"),
 ]
 
@@ -169,6 +170,7 @@ MENU = [
         ("Mapa de librerías", "Guía visual de Python para IA", "mapa.html", "mapa"),
     ]),
     ("Recursos", [
+        ("Recursos para aprender", "Vídeos, cursos y webs, por unidad", "recursos.html", "recursos"),
         ("Apps y juegos", "Proyectos con rúbrica", "apps.html", "apps"),
         ("Chuletas", "Infografías de las librerías", "chuletas.html", "chuletas"),
         ("El libro", "J. F. Puentes, capítulo a capítulo", "libro.html", "libro"),

@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E161 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E163 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -7399,11 +7399,12 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | *Master Machine Learning in Just 20 Days* (Bosscoder Academy, 23 págs., publicidad de un curso) | Plan de 20 días cubierto por el [itinerario](itinerario.html). Se añadieron AutoML y aprendizaje federado en la UD5, sección 11 | [UD5 11](ud5-ml.html#11-el-ml-en-el-mundo-real-ampliación) |
 | Infografía «Computer Vision Explained» (ML Tut) | En la UD3: «El recorrido completo, de un vistazo» con la hoja «La visión artificial en una hoja» (entrenar frente a usar, red base y cabezas, semántica frente a instancias, «No confundir»), segmentación semántica, de instancias y panóptica con código, red base y cabezas, y el orden BGR de OpenCV. Sus errores, en E150 | [UD3](ud3-vision.html), [E150–E151](ejercicios.html#bloque-af--guías-y-chuletas-con-criterio-e147e153) |
 | Carrusel «EDA Notes – Python + SQL» (@thedataguy16) | En Análisis de datos 2.5: un EDA completo en orden, en Python y en SQL sobre la tabla sin limpiar, con datos inventados descargables (`cafeteria_pedidos.csv`), la hoja «Un EDA en una hoja», Spearman, semanas incompletas y atípico frente a error. Sus errores, en E152 | [Datos 2.5](datos.html#25-un-eda-completo-en-orden-python-y-sql-a-la-vez), [E152–E153](ejercicios.html#bloque-af--guías-y-chuletas-con-criterio-e147e153) |
-| «Agentic AI Complete Guide» (codingwithmee_18, PDF de 16 págs.) | En 14.19, «Un agente que se pueda dejar trabajando»: cinco condiciones de parada con código, coste que crece más que los pasos, diseño de herramientas e idempotencia, cuatro tipos de memoria, MCP frente a A2A, envenenamiento de herramientas, fallos típicos, parada de emergencia y auditoría; hoja «Un agente que se pueda dejar trabajando»; tabla de bibliotecas al día (Microsoft Agent Framework, SDK de proveedores, observabilidad). Sus errores, en E154 | [14.19](#un-agente-que-se-pueda-dejar-trabajando-cuándo-parar-memoria-herramientas-y-fallos-típicos), [E154–E155](ejercicios.html#bloque-ac--agentes-patrones-estado-y-fiabilidad-e120e123-e132-y-e154e155) |
+| «Agentic AI Complete Guide» (codingwithmee_18, PDF de 16 págs.) | En 14.19, «Un agente que se pueda dejar trabajando»: cinco condiciones de parada con código, coste que crece más que los pasos, diseño de herramientas e idempotencia, cuatro tipos de memoria, MCP frente a A2A, envenenamiento de herramientas, fallos típicos, parada de emergencia y auditoría; hoja «Un agente que se pueda dejar trabajando»; tabla de bibliotecas al día (Microsoft Agent Framework, SDK de proveedores, observabilidad). Sus errores, en E154 | [14.19](#un-agente-que-se-pueda-dejar-trabajando-cuándo-parar-memoria-herramientas-y-fallos-típicos), [E154–E155](ejercicios.html#bloque-ac--agentes-patrones-estado-y-fiabilidad-e120e123-e132-y-e154e155-e162e163) |
 | Lista «16 webs para ver la IA por dentro» (publicación de Instagram, noviembre de 2026) | En 14.16, tabla «Para ver la IA por dentro» con 13 webs nuevas comprobadas; enlaces en la UD4 (tokens, *embeddings*, Transformer, MoE, inferencia), UD3 (filtros), UD5 (PCA), sección 6 y 14.7. Las otras tres (3Blue1Brown, Alammar, Karpathy) ya estaban | [14.16](#1416-recursos-gratuitos-para-seguir-aprendiendo-ia) |
 | «Python Cybersecurity Toolkit» (@anastasis_king, carrusel de 7 láminas que la propia publicación marca como «Contenido generado con IA») | Treinta herramientas en seis áreas, revisadas una a una con su estado (Passlib sin mantener, YARA-X, PyShark y `tshark`), marco legal, contraseñas con sal, integridad de archivos, registros y la hoja «Ciberseguridad en una hoja» (figuras propias); errores usados en E156 | 14.20 «Ciberseguridad con Python»; ejercicios E156–E157 |
 | «Machine Learning Complete Guide» (@cse_aspirant_v, carrusel de 7 láminas con el índice y los capítulos 1–2 de unos apuntes de pago de B. K. Pandit; la propia publicación lo marca como «Contenido generado con IA») | Programación tradicional frente a aprendizaje automático, origen de la definición «sin ser programadas explícitamente» y definición de Mitchell, aprendizaje semisupervisado y autosupervisado con código, la hoja «El aprendizaje automático en una hoja» (figuras propias); errores usados en E158 | UD1 sección 5, UD5 sección 2 y teoría 10.1; ejercicios E158–E159 |
 | «Neural Networks Explained — Complete Practical Guide» (@thedataguy16, carrusel de 13 láminas) | Retropropagación frente a optimizador con una neurona (SGD y Adam), no aplicar la activación dos veces (sigmoide y softmax dobles), entrenamiento, validación y prueba con línea base, la hoja «Evaluar bien, en una hoja» (figuras propias) y el Reglamento europeo de IA para la concesión de créditos; erratas y omisiones usadas en E160 | Teoría 14.7; UD5 secciones 6 y 10; ejercicios E160–E161 |
+| «AI Agents: Architecture, Planning, Memory & Tool Calling» (@abhi_techhub, PDF de 15 págs. sin capa de texto, con la pág. 2 repetida) | Tipos clásicos de agente con código (reactivo, por objetivos, por utilidad), contexto, estado, memoria y RAG, construir el contexto con un presupuesto de *tokens*, la hoja «Un agente por dentro» (figuras propias); afirmaciones desfasadas o engañosas usadas en E162 | UD1 sección 8; teoría 14.19; ejercicios E162–E163 |
 | «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |
@@ -8633,6 +8634,90 @@ Lo que enseña el ejemplo:
 | Dónde | Un diccionario en memoria; un archivo o una base de datos si hay que reanudar | Una base de datos o una base vectorial ([RAG mejorado](#rag-mejorado-trozos-con-solapamiento-reordenación-y-bases-vectoriales)) |
 
 La memoria larga se **actualiza** (sobrescribir «prefiere comida tailandesa» en vez de añadirlo junto a «prefiere comida italiana»), se **resume** cuando crece demasiado y, si contiene datos personales, necesita permiso y una forma de borrarlos.
+
+#### Contexto, estado, memoria y RAG: qué ve el modelo en cada paso
+
+Las guías de agentes usan estas cuatro palabras casi como sinónimos, y no lo son. La tabla de arriba separa el estado de la memoria; faltan otras dos:
+
+| | Qué es | Cuánto dura | Ejemplo con el asistente de la biblioteca |
+|-|--------|-------------|-------------------------------------------|
+| **Contexto** | Todo lo que el modelo recibe en **esta** llamada: instrucciones, mensajes, resultados, documentos | Un paso. Se rehace cada vez | Las instrucciones, la pregunta de Uxía y la norma de préstamos |
+| **Estado** | El registro de la tarea que lleva el programa | Lo que dure la tarea | Objetivo «renovar el préstamo», pasos hechos y pendientes |
+| **Memoria** | Lo que se guarda entre conversaciones | Semanas o meses | «Uxía prefiere que le respondan en gallego» |
+| **RAG** | Documentos externos que se buscan para responder | Están en su sitio; se recuperan cuando hacen falta | El reglamento de la biblioteca |
+
+El modelo solo «sabe» lo que está en el contexto, y el contexto tiene un límite (la **ventana de contexto**) y un coste por *token*. Hoy hay modelos con ventanas de cientos de miles de *tokens*, pero meterlo todo sigue siendo mala idea: cuesta más, tarda más, y la información útil se pierde entre la que sobra. Por eso, en cada paso, el programa **construye** el contexto: lo relevante, lo reciente y los resultados resumidos.
+
+<!-- hoja:agentedentro -->
+<section class="hoja" aria-labelledby="hoja-ad-t">
+<p class="hoja-titulo" id="hoja-ad-t">Un agente por dentro</p>
+<p class="hoja-nota">Quién hace qué en cada vuelta del bucle, qué decide el modelo y qué no, y cuatro palabras que se confunden.</p>
+<div class="hoja-grid">
+<div class="ficha ancha"><h5>Una vuelta del bucle</h5>
+<svg class="sv sv-h" viewBox="0 0 730 250" role="img" aria-labelledby="adh-t adh-d"><title id="adh-t">Un agente por dentro</title><desc id="adh-d">El orquestador recibe el objetivo y dirige el bucle. Construye el contexto (estado, memoria y documentos de RAG) y se lo da al LLM, que propone el siguiente paso en JSON. Antes de ejecutar, se valida el esquema y los permisos; después se ejecuta la herramienta y su observación vuelve al orquestador, que actualiza el estado y decide si seguir.</desc><defs><marker id="adh-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="adh-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="adh-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="adh-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="adh-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><rect x="10" y="100" width="120" height="46" rx="8" class="sv-caja"/><text x="70.0" y="120.0" class="sv-tit" text-anchor="middle">Objetivo</text><text x="70.0" y="137.0" class="sv-sub" text-anchor="middle">y límites</text><path d="M132,123 H176" class="sv-l-pen" marker-end="url(#adh-pen)"/><rect x="180" y="100" width="150" height="46" rx="8" class="sv-caja sv-caja-ml"/><text x="255.0" y="120.0" class="sv-tit" text-anchor="middle">Orquestador</text><text x="255.0" y="137.0" class="sv-sub" text-anchor="middle">bucle, estado, paradas</text><rect x="180" y="10" width="150" height="46" rx="8" class="sv-caja"/><text x="255.0" y="30.0" class="sv-tit" text-anchor="middle">LLM</text><text x="255.0" y="47.0" class="sv-sub" text-anchor="middle">propone el paso</text><path d="M228,98 V60" class="sv-l-pen" marker-end="url(#adh-pen)"/><path d="M282,58 V96" class="sv-l-pen" marker-end="url(#adh-pen)"/><text x="222" y="82" class="sv-et" text-anchor="end">contexto</text><text x="288" y="82" class="sv-et" text-anchor="start">JSON</text><rect x="180" y="196" width="150" height="46" rx="8" class="sv-caja"/><text x="255.0" y="216.0" class="sv-tit" text-anchor="middle">Contexto</text><text x="255.0" y="233.0" class="sv-sub" text-anchor="middle">estado, memoria, RAG</text><path d="M255,148 V192" class="sv-l-pen" marker-end="url(#adh-pen)"/><path d="M332,123 H376" class="sv-l-pen" marker-end="url(#adh-pen)"/><rect x="380" y="100" width="140" height="46" rx="8" class="sv-caja sv-caja-ok"/><text x="450.0" y="120.0" class="sv-tit" text-anchor="middle">Validar</text><text x="450.0" y="137.0" class="sv-sub" text-anchor="middle">esquema y permisos</text><path d="M522,123 H566" class="sv-l-pen" marker-end="url(#adh-pen)"/><rect x="570" y="100" width="150" height="46" rx="8" class="sv-caja"/><text x="645.0" y="120.0" class="sv-tit" text-anchor="middle">Herramienta</text><text x="645.0" y="137.0" class="sv-sub" text-anchor="middle">API, datos, código</text><path d="M645,148 V176 H310 V152" class="sv-l-vuelta" marker-end="url(#adh-pen)"/><text x="480" y="192" class="sv-et" text-anchor="middle">observación (resultado o error)</text></svg>
+<svg class="sv sv-v" viewBox="0 0 330 310" role="img" aria-labelledby="adv-t adv-d"><title id="adv-t">Un agente por dentro</title><desc id="adv-d">El orquestador recibe el objetivo y dirige el bucle. Construye el contexto (estado, memoria y documentos de RAG) y se lo da al LLM, que propone el siguiente paso en JSON. Antes de ejecutar, se valida el esquema y los permisos; después se ejecuta la herramienta y su observación vuelve al orquestador, que actualiza el estado y decide si seguir.</desc><defs><marker id="adv-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="adv-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="adv-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="adv-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="adv-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><rect x="100" y="6" width="150" height="36" rx="8" class="sv-caja"/><text x="175.0" y="29.0" class="sv-tit" text-anchor="middle">Objetivo</text><path d="M175,44 V56" class="sv-l-pen" marker-end="url(#adv-pen)"/><rect x="75" y="60" width="200" height="44" rx="8" class="sv-caja sv-caja-ml"/><text x="175.0" y="79.0" class="sv-tit" text-anchor="middle">Orquestador</text><text x="175.0" y="96.0" class="sv-sub" text-anchor="middle">bucle, estado, paradas</text><path d="M140,106 V124" class="sv-l-pen" marker-end="url(#adv-pen)"/><path d="M210,124 V108" class="sv-l-pen" marker-end="url(#adv-pen)"/><rect x="34" y="128" width="144" height="44" rx="8" class="sv-caja"/><text x="106.0" y="147.0" class="sv-tit" text-anchor="middle">Contexto</text><text x="106.0" y="164.0" class="sv-sub" text-anchor="middle">estado, memoria, RAG</text><rect x="184" y="128" width="136" height="44" rx="8" class="sv-caja"/><text x="252.0" y="147.0" class="sv-tit" text-anchor="middle">LLM</text><text x="252.0" y="164.0" class="sv-sub" text-anchor="middle">propone en JSON</text><path d="M252,174 V190" class="sv-l-pen" marker-end="url(#adv-pen)"/><rect x="75" y="194" width="200" height="44" rx="8" class="sv-caja sv-caja-ok"/><text x="175.0" y="213.0" class="sv-tit" text-anchor="middle">Validar</text><text x="175.0" y="230.0" class="sv-sub" text-anchor="middle">esquema y permisos</text><path d="M175,240 V252" class="sv-l-pen" marker-end="url(#adv-pen)"/><rect x="75" y="256" width="200" height="44" rx="8" class="sv-caja"/><text x="175.0" y="275.0" class="sv-tit" text-anchor="middle">Herramienta</text><text x="175.0" y="292.0" class="sv-sub" text-anchor="middle">API, datos, código</text><path d="M73,278 H18 V82 H71" class="sv-l-vuelta" marker-end="url(#adv-pen)"/><text transform="rotate(-90 10 200)" x="10" y="200" class="sv-et" text-anchor="middle">observación</text></svg>
+<p class="ficha-pie">El modelo propone; el programa valida, ejecuta y decide cuándo parar.</p></div>
+<div class="ficha"><h5>¿Lo decide el modelo?</h5><ul class="semaforo">
+<li class="ok"><b>Proponer la herramienta y sus argumentos</b><span class="marca">✓</span><span class="que">es su trabajo: sale en JSON</span></li><li class="medio"><b>Los argumentos</b><span class="marca">⚠</span><span class="que">se validan contra el esquema antes de usarlos</span></li><li class="no"><b>Permisos, borrar, pagar, enviar</b><span class="marca">✗</span><span class="que">lo decide el programa, y una persona si no se puede deshacer</span></li><li class="no"><b>Cuándo parar del todo</b><span class="marca">✗</span><span class="que">límites de pasos, tiempo y coste fijados en el código</span></li>
+</ul></div>
+<div class="ficha"><h5>Tipos clásicos de agente</h5><dl class="vocab">
+<dt>Reactivo</dt><dd>regla con lo que percibe ahora: el termostato</dd><dt>Reactivo con modelo</dt><dd>recuerda algo del mundo: qué casillas ya limpió</dd><dt>Por objetivos</dt><dd>busca cualquier camino que llegue a la meta</dd><dt>Por utilidad</dt><dd>compara caminos con una puntuación: tiempo, coste, riesgo</dd><dt>Que aprende</dt><dd>mejora con la experiencia cambiando su modelo</dd>
+</dl></div>
+<div class="ficha ancha"><h5>No confundir</h5><dl class="vocab">
+<dt>Contexto</dt><dd>lo que el modelo ve en este paso; se rehace cada vez</dd><dt>Estado</dt><dd>el registro de la tarea: objetivo, pasos hechos, resultados; dura toda la tarea</dd><dt>Memoria</dt><dd>lo que se guarda entre conversaciones: preferencias, casos pasados</dd><dt>RAG</dt><dd>documentos externos que se buscan para responder; no son recuerdos del agente</dd><dt>«Aprende»</dt><dd>recordar no es aprender: los pesos del modelo no cambian</dd>
+</dl></div>
+</div></section>
+<!-- /hoja:agentedentro -->
+
+```python
+# Construir el contexto de cada paso con un presupuesto de tokens (datos inventados).
+# Aproximación: 1 token ≈ 0,75 palabras; en un modelo real se cuenta con su tokenizador.
+def tokens(texto):
+    return round(len(texto.split()) / 0.75)
+
+instrucciones = "Eres el asistente de la biblioteca del IES. Responde en gallego y cita la norma."
+estado = {"objetivo": "renovar préstamo de Uxía", "hecho": ["buscar_prestamo"], "pendiente": ["renovar"]}
+historial = [f"mensaje {i}: " + "texto de la conversación " * 12 for i in range(1, 21)]   # 20 mensajes largos
+salida_herramienta = "fila " * 900                                                        # 900 palabras de un listado
+normas = {"préstamo": "Os libros préstanse 15 días e renóvanse unha vez.",
+          "comedor": "O comedor abre ás 14:20.",
+          "ordenadores": "Os portátiles non saen da biblioteca."}
+
+def resumir_herramienta(texto, max_palabras=40):
+    palabras = texto.split()
+    return " ".join(palabras[:max_palabras]) + f" … ({len(palabras)} palabras en total; guardado en el estado)"
+
+def construir_contexto(pregunta, presupuesto=600):
+    partes = [instrucciones, f"Estado: {estado}"]
+    partes += [n for clave, n in normas.items() if clave in pregunta.lower()]   # solo lo relevante
+    partes.append("Resultado de la herramienta: " + resumir_herramienta(salida_herramienta))
+    usado = sum(tokens(p) for p in partes) + tokens(pregunta)
+    recientes = []
+    for m in reversed(historial):                       # los mensajes más recientes primero
+        if usado + tokens(m) > presupuesto:
+            break
+        recientes.insert(0, m)
+        usado += tokens(m)
+    viejos = len(historial) - len(recientes)
+    if viejos:
+        partes.insert(1, f"(Resumen de {viejos} mensajes anteriores)")
+    return partes + recientes + [f"Pregunta: {pregunta}"], usado   # la pregunta, al final
+
+sin_cuidado = sum(tokens(t) for t in [instrucciones, *historial, salida_herramienta, *normas.values()])
+contexto, usado = construir_contexto("¿Podo renovar o préstamo outra vez?")
+print("Todo junto:", sin_cuidado, "tokens")                        # Todo junto: 2587 tokens
+print("Contexto construido:", usado, "tokens,", len(contexto), "partes")   # 593 tokens, 13 partes
+print([p[:30] for p in contexto[:5]])
+# instrucciones, «(Resumen de 13 mensajes anteriores)», estado, la norma del préstamo y la herramienta resumida;
+# después, los 7 mensajes más recientes y, al final, la pregunta
+```
+
+- Las **instrucciones** y el **estado** van siempre; de las normas, solo la que tiene que ver con la pregunta.
+- La salida de 900 palabras de la herramienta se **resume** y se guarda entera en el estado, por si hace falta después.
+- Del historial entran los mensajes **más recientes** que caben; los demás, como un resumen (aquí, solo el aviso de que existen; en una aplicación real, un resumen hecho por el propio modelo).
+- **La pregunta va al final**, donde el modelo la tiene más «a mano».
+
+Contar *tokens* por palabras es una aproximación. Los modelos los cuentan con su propio tokenizador, y en gallego o castellano salen más *tokens* por palabra que en inglés ([UD4, sección 3](ud4-lenguaje.html#3-tokenización-y-preprocesado)).
 
 #### Estado del agente: reductores, puntos de control y reanudar
 

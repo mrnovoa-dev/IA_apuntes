@@ -1702,6 +1702,78 @@ def hoja_evaluacion():
     return "\n".join(h)
 
 
+# ---------- Un agente por dentro ----------
+AD_DESC = ("El orquestador recibe el objetivo y dirige el bucle. Construye el contexto (estado, memoria y documentos de RAG) "
+           "y se lo da al LLM, que propone el siguiente paso en JSON. Antes de ejecutar, se valida el esquema y los permisos; "
+           "después se ejecuta la herramienta y su observación vuelve al orquestador, que actualiza el estado y decide si seguir.")
+
+
+def ad_h():
+    p = "adh"
+    b = caja(10, 100, 120, 46, "Objetivo", "y límites")
+    b += linea("M132,123 H176", p)
+    b += caja(180, 100, 150, 46, "Orquestador", "bucle, estado, paradas", "sv-caja sv-caja-ml")
+    b += caja(180, 10, 150, 46, "LLM", "propone el paso")
+    b += linea("M228,98 V60", p) + linea("M282,58 V96", p)
+    b += texto(222, 82, "contexto", "sv-et", "end") + texto(288, 82, "JSON", "sv-et", "start")
+    b += caja(180, 196, 150, 46, "Contexto", "estado, memoria, RAG")
+    b += linea("M255,148 V192", p)
+    b += linea("M332,123 H376", p)
+    b += caja(380, 100, 140, 46, "Validar", "esquema y permisos", "sv-caja sv-caja-ok")
+    b += linea("M522,123 H566", p)
+    b += caja(570, 100, 150, 46, "Herramienta", "API, datos, código")
+    b += linea("M645,148 V176 H310 V152", p, cls="sv-l-vuelta")
+    b += texto(480, 192, "observación (resultado o error)", "sv-et", "middle")
+    return svg(p, "0 0 730 250", "Un agente por dentro", AD_DESC, b, "sv-h")
+
+
+def ad_v():
+    p = "adv"
+    b = caja(100, 6, 150, 36, "Objetivo", None)
+    b += linea("M175,44 V56", p)
+    b += caja(75, 60, 200, 44, "Orquestador", "bucle, estado, paradas", "sv-caja sv-caja-ml")
+    b += linea("M140,106 V124", p) + linea("M210,124 V108", p)
+    b += caja(34, 128, 144, 44, "Contexto", "estado, memoria, RAG")
+    b += caja(184, 128, 136, 44, "LLM", "propone en JSON")
+    b += linea("M252,174 V190", p)
+    b += caja(75, 194, 200, 44, "Validar", "esquema y permisos", "sv-caja sv-caja-ok")
+    b += linea("M175,240 V252", p)
+    b += caja(75, 256, 200, 44, "Herramienta", "API, datos, código")
+    b += linea("M73,278 H18 V82 H71", p, cls="sv-l-vuelta")
+    b += texto(10, 200, "observación", "sv-et", "middle").replace("<text", '<text transform="rotate(-90 10 200)"', 1)
+    return svg(p, "0 0 330 310", "Un agente por dentro", AD_DESC, b, "sv-v")
+
+
+def hoja_agentedentro():
+    decide = [("ok", "✓", "Proponer la herramienta y sus argumentos", "es su trabajo: sale en JSON"),
+              ("medio", "⚠", "Los argumentos", "se validan contra el esquema antes de usarlos"),
+              ("no", "✗", "Permisos, borrar, pagar, enviar", "lo decide el programa, y una persona si no se puede deshacer"),
+              ("no", "✗", "Cuándo parar del todo", "límites de pasos, tiempo y coste fijados en el código")]
+    confundir = [("Contexto", "lo que el modelo ve en este paso; se rehace cada vez"),
+                 ("Estado", "el registro de la tarea: objetivo, pasos hechos, resultados; dura toda la tarea"),
+                 ("Memoria", "lo que se guarda entre conversaciones: preferencias, casos pasados"),
+                 ("RAG", "documentos externos que se buscan para responder; no son recuerdos del agente"),
+                 ("«Aprende»", "recordar no es aprender: los pesos del modelo no cambian")]
+    tipos = [("Reactivo", "regla con lo que percibe ahora: el termostato"),
+             ("Reactivo con modelo", "recuerda algo del mundo: qué casillas ya limpió"),
+             ("Por objetivos", "busca cualquier camino que llegue a la meta"),
+             ("Por utilidad", "compara caminos con una puntuación: tiempo, coste, riesgo"),
+             ("Que aprende", "mejora con la experiencia cambiando su modelo")]
+    sem = "".join(f'<li class="{c}"><b>{escape(o)}</b><span class="marca">{m}</span><span class="que">{escape(q)}</span></li>' for c, m, o, q in decide)
+    dl = lambda f: "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in f)
+    h = ['<section class="hoja" aria-labelledby="hoja-ad-t">',
+         '<p class="hoja-titulo" id="hoja-ad-t">Un agente por dentro</p>',
+         '<p class="hoja-nota">Quién hace qué en cada vuelta del bucle, qué decide el modelo y qué no, y cuatro palabras que se confunden.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>Una vuelta del bucle</h5>', ad_h(), ad_v(),
+         '<p class="ficha-pie">El modelo propone; el programa valida, ejecuta y decide cuándo parar.</p></div>',
+         '<div class="ficha"><h5>¿Lo decide el modelo?</h5><ul class="semaforo">', sem, '</ul></div>',
+         '<div class="ficha"><h5>Tipos clásicos de agente</h5><dl class="vocab">', dl(tipos), '</dl></div>',
+         '<div class="ficha ancha"><h5>No confundir</h5><dl class="vocab">', dl(confundir), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -1724,6 +1796,7 @@ if __name__ == "__main__":
     t = insertar(t, "inferencia", hoja_inferencia())
     t = insertar(t, "produccion", hoja_produccion())
     t = insertar(t, "ciberseguridad", hoja_ciberseguridad())
+    t = insertar(t, "agentedentro", hoja_agentedentro())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

@@ -1774,6 +1774,91 @@ def hoja_agentedentro():
     return "\n".join(h)
 
 
+# ---------- Llamar a herramientas ----------
+def her_protocolo():
+    p = "hep"
+    A, B = 62, 238
+    b = caja(12, 6, 100, 30, "Tu programa", None) + caja(188, 6, 100, 30, "Modelo", None)
+    b += linea(f"M{A},38 V292", p, punta=False, cls="sv-l-tenue") + linea(f"M{B},38 V292", p, punta=False, cls="sv-l-tenue")
+    pasos = [(60, A, B, "pen", "1 mensajes + herramientas", None),
+             (106, B, A, "ml", "2 tool_use 01 y 02", "stop_reason: tool_use"),
+             (204, A, B, "pen", "4 UN mensaje: result 01, 02", "el que falla, con is_error"),
+             (262, B, A, "ml", "5 respuesta final", "max_tokens = cortada")]
+    for y, x0, x1, color, et, sub in pasos:
+        b += linea(f"M{x0},{y} H{x1 + (-6 if x1 > x0 else 6)}", p, color=color)
+        b += texto(150, y - 7, et, "sv-et", "middle")
+        if sub:
+            b += texto(150, y + 16, sub, "sv-sub", "middle")
+    b += caja(14, 138, 96, 44, "3 ejecuta", "cada petición", "sv-caja sv-caja-ok")
+    desc = ("Tu programa envía los mensajes y las herramientas. El modelo se para y pide dos herramientas, cada una con su id. "
+            "Tu programa las ejecuta y contesta con un solo mensaje que lleva los dos resultados; el que falla va marcado con is_error. "
+            "El modelo da la respuesta final; si se para por max_tokens, la respuesta está cortada.")
+    return svg(p, "0 0 300 300", "El protocolo de la llamada a herramientas", desc, b, "sv-tab")
+
+
+def her_triada():
+    p = "het"
+    b = caja(90, 6, 120, 44, "Datos privados", "notas, correo")
+    b += caja(4, 140, 128, 44, "Texto de fuera", "webs, correos")
+    b += caja(168, 140, 128, 44, "Enviar fuera", "correo, URL")
+    b += linea("M120,52 L72,138", p, punta=False, cls="sv-l-rojo")
+    b += linea("M180,52 L228,138", p, punta=False, cls="sv-l-rojo")
+    b += linea("M134,162 H166", p, punta=False, cls="sv-l-rojo")
+    b += texto(150, 104, "las tres juntas:", "sv-et", "middle")
+    b += texto(150, 120, "fuga de datos", "sv-et-no", "middle")
+    b += texto(150, 208, "Defensa: quitar una de las tres", "sv-et", "middle")
+    desc = ("Un agente con acceso a datos privados, contacto con texto de fuera y una forma de enviar hacia fuera puede "
+            "filtrar datos. La defensa es quitarle una de las tres cosas.")
+    return svg(p, "0 0 300 216", "La tríada letal", desc, b, "sv-tab")
+
+
+def her_passk():
+    p = "hek"
+    b = ""
+    datos = [(1, 0.9, 0.9), (3, 0.999, 0.729), (8, 1.0, 0.43)]
+    for i, (k, arroba, todas) in enumerate(datos):
+        x = 30 + i * 92
+        for j, (v, cls) in enumerate([(arroba, "sv-barra"), (todas, "sv-barra-mala")]):
+            h = round(v * 110)
+            b += f'<rect x="{x + j * 30}" y="{130 - h}" width="26" height="{h}" rx="3" class="{cls}"/>'
+            b += texto(x + j * 30 + 13, 124 - h, f"{v:.2f}".replace(".", ","), "sv-et", "middle")
+        b += texto(x + 28, 148, f"k = {k}", "sv-et", "middle")
+    b += f'<rect x="20" y="162" width="12" height="12" rx="2" class="sv-barra"/>' + texto(38, 172, "pass@k: alguno bien", "sv-et", "start")
+    b += f'<rect x="168" y="162" width="12" height="12" rx="2" class="sv-barra-mala"/>' + texto(186, 172, "pass^k: todos bien", "sv-et", "start")
+    desc = ("Un agente que acierta el 90 % de las veces. Con 1 intento, las dos medidas valen 0,90. Con 3, pass@k vale 1,00 "
+            "y pass^k 0,73. Con 8, pass@k vale 1,00 y pass^k solo 0,43.")
+    return svg(p, "0 0 300 182", "pass@k frente a pass^k", desc, b, "sv-tab")
+
+
+def hoja_herramientas():
+    ctx = [("Limpiar", "los resultados viejos pasan a ser una nota corta"),
+           ("Compactar", "cerca del límite, resumir y seguir desde el resumen"),
+           ("Notas", "el agente apunta su avance en un archivo"),
+           ("Aislar", "un subagente busca en su propio contexto y devuelve un resumen"),
+           ("Justo a tiempo", "rutas y nombres al principio; el detalle, cuando haga falta (Agent Skills)")]
+    errores = [("no", "✗", "Atender solo el primer tool_use", "cada petición necesita su resultado: si no, error 400"),
+               ("no", "✗", "Dar por terminada una respuesta con max_tokens", "está cortada"),
+               ("medio", "⚠", "Devolver el error como texto normal", "mejor con is_error, para que cambie de plan"),
+               ("medio", "⚠", "Más contexto, mejor respuesta", "el contexto largo se «pudre»"),
+               ("ok", "✓", "Romper una pata de la tríada", "más seguro que cualquier filtro")]
+    sem = "".join(f'<li class="{c}"><b>{escape(o)}</b><span class="marca">{m}</span><span class="que">{escape(q)}</span></li>' for c, m, o, q in errores)
+    h = ['<section class="hoja" aria-labelledby="hoja-her-t">',
+         '<p class="hoja-titulo" id="hoja-her-t">Llamar a herramientas sin romper nada</p>',
+         '<p class="hoja-nota">El protocolo, el contexto, la seguridad y cómo medir si el agente es fiable.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha"><h5>El protocolo</h5>', her_protocolo(),
+         '<p class="ficha-pie">El modelo solo pide; ejecuta tu programa.</p></div>',
+         '<div class="ficha"><h5>La tríada letal</h5>', her_triada(),
+         '<p class="ficha-pie">Una búsqueda web ya envía datos: van en la dirección.</p></div>',
+         '<div class="ficha ancha"><h5>Ingeniería del contexto</h5><dl class="vocab">',
+         "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in ctx), '</dl></div>',
+         '<div class="ficha"><h5>¿Fiable o a veces acierta?</h5>', her_passk(),
+         '<p class="ficha-pie">Agente que acierta 9 de cada 10 veces.</p></div>',
+         '<div class="ficha"><h5>Errores frecuentes</h5><ul class="semaforo">', sem, '</ul></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 # ---------- Matemáticas de la IA ----------
 def mat_autovectores():
     p = "mae"
@@ -1865,6 +1950,7 @@ if __name__ == "__main__":
     t = insertar(t, "ciberseguridad", hoja_ciberseguridad())
     t = insertar(t, "agentedentro", hoja_agentedentro())
     t = insertar(t, "matematicas", hoja_matematicas())
+    t = insertar(t, "herramientas", hoja_herramientas())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

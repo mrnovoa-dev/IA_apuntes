@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E163 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E165 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -7405,6 +7405,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | «Machine Learning Complete Guide» (@cse_aspirant_v, carrusel de 7 láminas con el índice y los capítulos 1–2 de unos apuntes de pago de B. K. Pandit; la propia publicación lo marca como «Contenido generado con IA») | Programación tradicional frente a aprendizaje automático, origen de la definición «sin ser programadas explícitamente» y definición de Mitchell, aprendizaje semisupervisado y autosupervisado con código, la hoja «El aprendizaje automático en una hoja» (figuras propias); errores usados en E158 | UD1 sección 5, UD5 sección 2 y teoría 10.1; ejercicios E158–E159 |
 | «Neural Networks Explained — Complete Practical Guide» (@thedataguy16, carrusel de 13 láminas) | Retropropagación frente a optimizador con una neurona (SGD y Adam), no aplicar la activación dos veces (sigmoide y softmax dobles), entrenamiento, validación y prueba con línea base, la hoja «Evaluar bien, en una hoja» (figuras propias) y el Reglamento europeo de IA para la concesión de créditos; erratas y omisiones usadas en E160 | Teoría 14.7; UD5 secciones 6 y 10; ejercicios E160–E161 |
 | «AI Agents: Architecture, Planning, Memory & Tool Calling» (@abhi_techhub, PDF de 15 págs. sin capa de texto, con la pág. 2 repetida) | Tipos clásicos de agente con código (reactivo, por objetivos, por utilidad), contexto, estado, memoria y RAG, construir el contexto con un presupuesto de *tokens*, la hoja «Un agente por dentro» (figuras propias); afirmaciones desfasadas o engañosas usadas en E162 | UD1 sección 8; teoría 14.19; ejercicios E162–E163 |
+| «Mathematics for AI & ML» (@abhi_techhub, PDF de 15 págs. manuscritas, sin capa de texto) | Álgebra lineal con código (producto, `solve`, autovalores, SVD y su relación con PCA), derivadas parciales y gradiente, Bayes con la tasa base, Poisson, chi-cuadrado con y sin corrección de Yates, ANOVA y Tukey, curtosis en exceso, entropía, entropía cruzada, KL e información mutua, tipos de muestreo, la hoja «Las matemáticas de la IA, en una hoja» (figuras propias); cuentas erróneas usadas en E164 | Teoría 14.21; ejercicios E164–E165 |
 | «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |
@@ -9544,6 +9545,238 @@ Circulan listas de «herramientas esenciales de ciberseguridad en Python». Conv
 - Guardar contraseñas en texto, en el código o en un repositorio (`.env` fuera de Git: [14.19](#proteger-una-api-claves-secretos-y-autenticación)).
 
 Quien quiera dedicarse a esto tiene un camino legal: los ciclos de FP y las titulaciones de ciberseguridad, las competiciones CTF para estudiantes y los programas de recompensas de las empresas (*bug bounty*), que **autorizan por escrito** qué se puede probar.
+
+### 14.21 Las matemáticas de la IA: lo que hay debajo de cada modelo
+
+Casi todas las secciones anteriores usan matemáticas sin pararse en ellas: las matrices de NumPy, el gradiente del entrenamiento, las probabilidades de un clasificador, la entropía de un árbol. Esta sección las junta y explica las piezas que faltaban, siempre con código. No hace falta saberlas todas para usar los modelos, pero sí para entender **por qué** funcionan y **cuándo** fallan. La estadística descriptiva e inferencial está en la [sección 6](#6️⃣-conceptos-estadísticos-básicos), y el gradiente y la retropropagación, en la [14.7](#147-redes-neuronales-desde-cero).
+
+<!-- hoja:matematicas -->
+<section class="hoja" aria-labelledby="hoja-mat-t">
+<p class="hoja-titulo" id="hoja-mat-t">Las matemáticas de la IA, en una hoja</p>
+<p class="hoja-nota">Cinco ramas, para qué sirve cada una y dos ideas que se entienden mejor dibujadas.</p>
+<div class="hoja-grid">
+<div class="ficha ancha"><h5>Qué matemática hay detrás de qué</h5><dl class="vocab">
+<dt>Álgebra lineal</dt><dd>datos como matrices, capas X·W + b, embeddings y coseno, PCA y SVD</dd><dt>Cálculo</dt><dd>derivadas y gradiente para entrenar; regla de la cadena = retropropagación</dd><dt>Probabilidad</dt><dd>salidas como probabilidades, Bayes, Naive Bayes, incertidumbre</dd><dt>Estadística</dt><dd>describir datos, evaluar modelos, intervalos, pruebas A/B</dd><dt>Información</dt><dd>entropía en los árboles, entropía cruzada como pérdida, KL, selección de variables</dd>
+</dl></div>
+<div class="ficha"><h5>Autovectores: direcciones que no giran</h5>
+<svg class="sv sv-tab" viewBox="0 0 300 255" role="img" aria-labelledby="mae-t mae-d"><title id="mae-t">Autovectores</title><desc id="mae-d">La matriz M estira la dirección (1, 1) tres veces y deja igual la dirección (1, −1): son sus autovectores, con autovalores 3 y 1. La dirección (1, 0) pasa a (2, 1): cambia de dirección, así que no es autovector.</desc><defs><marker id="mae-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="mae-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="mae-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="mae-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="mae-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><path d="M20,150 H280" class="sv-llave"/><path d="M150,220 V10" class="sv-llave"/><circle cx="190" cy="110" r="5" class="sv-llave"/><path d="M150,150 L270,30" class="sv-l-pen" marker-end="url(#mae-pen)"/><text x="272.0" y="22.0" class="sv-et" text-anchor="start">×3</text><circle cx="190" cy="190" r="5" class="sv-llave"/><path d="M150,150 L190,190" class="sv-l-ml" marker-end="url(#mae-ml)"/><text x="196.0" y="200.0" class="sv-et" text-anchor="start">×1</text><circle cx="190" cy="150" r="5" class="sv-llave"/><path d="M150,150 L230,110" class="sv-l-rojo" marker-end="url(#mae-rojo)"/><text x="234.0" y="120.0" class="sv-et" text-anchor="start">gira</text><text x="150" y="245" class="sv-et" text-anchor="middle">○ vector antes; flecha: después de aplicar M</text></svg>
+<p class="ficha-pie">PCA busca estas direcciones en la matriz de covarianza de los datos.</p></div>
+<div class="ficha"><h5>Bayes con 1000 personas</h5>
+<svg class="sv sv-tab" viewBox="0 0 300 250" role="img" aria-labelledby="mab-t mab-d"><title id="mab-t">Bayes con 1000 personas</title><desc id="mab-d">De 1000 personas, 10 están enfermas y 990 sanas. Casi las 10 enfermas dan positivo, pero también unas 50 sanas (el 5 %). De unos 60 positivos, solo 10 están enfermos: alrededor de 1 de cada 6.</desc><defs><marker id="mab-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="mab-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="mab-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="mab-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="mab-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><rect x="90" y="6" width="120" height="36" rx="8" class="sv-caja"/><text x="150.0" y="29.0" class="sv-tit" text-anchor="middle">1000 personas</text><path d="M120,44 C120,60 60,60 60,74" class="sv-l-pen" marker-end="url(#mab-pen)"/><path d="M180,44 C180,60 240,60 240,74" class="sv-l-pen" marker-end="url(#mab-pen)"/><rect x="10" y="78" width="100" height="44" rx="8" class="sv-caja"/><text x="60.0" y="97.0" class="sv-tit" text-anchor="middle">10 enfermas</text><text x="60.0" y="114.0" class="sv-sub" text-anchor="middle">1 %</text><rect x="190" y="78" width="100" height="44" rx="8" class="sv-caja"/><text x="240.0" y="97.0" class="sv-tit" text-anchor="middle">990 sanas</text><text x="240.0" y="114.0" class="sv-sub" text-anchor="middle">99 %</text><path d="M60,124 V146" class="sv-l-pen" marker-end="url(#mab-pen)"/><path d="M240,124 V146" class="sv-l-pen" marker-end="url(#mab-pen)"/><rect x="10" y="150" width="100" height="44" rx="8" class="sv-caja sv-caja-ok"/><text x="60.0" y="169.0" class="sv-tit" text-anchor="middle">≈ 10 positivos</text><text x="60.0" y="186.0" class="sv-sub" text-anchor="middle">99 % de 10</text><rect x="190" y="150" width="100" height="44" rx="8" class="sv-caja sv-caja-ml"/><text x="240.0" y="169.0" class="sv-tit" text-anchor="middle">≈ 50 positivos</text><text x="240.0" y="186.0" class="sv-sub" text-anchor="middle">5 % de 990: falsos</text><text x="150" y="222" class="sv-et" text-anchor="middle">De 60 positivos, solo 10 enfermos:</text><text x="150" y="240" class="sv-et" text-anchor="middle">P(enfermo | positivo) ≈ 1 de 6 (0,17)</text></svg>
+<p class="ficha-pie">Prueba con 99 % de aciertos en enfermos y 5 % de falsos positivos; enfermedad del 1 %.</p></div>
+<div class="ficha ancha"><h5>Errores frecuentes</h5><ul class="semaforo">
+<li class="no"><b>Divergencia KL como distancia</b><span class="marca">✗</span><span class="que">no es simétrica: D(p‖q) ≠ D(q‖p)</span></li><li class="no"><b>Positivo en una prueba = enfermo</b><span class="marca">✗</span><span class="que">depende de lo frecuente que sea (tasa base)</span></li><li class="medio"><b>Curtosis de la normal</b><span class="marca">⚠</span><span class="que">3, o 0 si es «en exceso» (SciPy, Pandas)</span></li><li class="medio"><b>Con n ≥ 30, prueba z</b><span class="marca">⚠</span><span class="que">sin la desviación de la población, siempre t</span></li><li class="ok"><b>Comprobar una cuenta con código</b><span class="marca">✓</span><span class="que">dos chuletas de estas traen ejemplos mal calculados</span></li>
+</ul></div>
+</div></section>
+<!-- /hoja:matematicas -->
+
+#### Álgebra lineal: los datos son matrices
+
+Un ejemplo es un **vector** (sus características), un conjunto de datos es una **matriz** (una fila por ejemplo) y un lote de imágenes en color es un **tensor** de 4 dimensiones. Una capa de una red es un producto de matrices más un sesgo (`X @ W + b`), y el parecido entre dos *embeddings* es un producto escalar.
+
+```python
+import numpy as np
+
+# Notas de 3 estudiantes (filas) en 2 materias (columnas): un conjunto de datos ES una matriz
+X = np.array([[7.0, 8.0], [5.0, 4.0], [9.0, 9.5]])
+pesos = np.array([0.6, 0.4])                     # ponderación de cada materia
+print(X.shape, X @ pesos)                        # (3, 2) [7.4 4.6 9.2]: producto matriz-vector
+
+# Producto escalar y coseno: cuánto se parecen dos vectores (embeddings, UD4)
+a, b = np.array([1, 2, 3]), np.array([4, 5, 6])
+print(a @ b, round(a @ b / (np.linalg.norm(a) * np.linalg.norm(b)), 3))   # 32 0.975
+
+# Resolver un sistema: mejor np.linalg.solve que calcular la inversa
+A = np.array([[2.0, 1.0], [1.0, 3.0]])
+y = np.array([5.0, 10.0])
+print(np.linalg.solve(A, y), np.linalg.det(A).round(6))                   # [1. 3.] 5.0
+
+# Autovalores y autovectores: direcciones que la matriz solo estira
+M = np.array([[2.0, 1.0], [1.0, 2.0]])
+valores, vectores = np.linalg.eigh(M)            # eigh: para matrices simétricas
+print(valores, vectores.round(3))                # [1. 3.] columnas (−0.707, 0.707) y (0.707, 0.707)
+v = vectores[:, 1]
+print(M @ v, 3 * v)                              # iguales: M·v = 3·v
+print(M @ np.array([1.0, 0.0]))                  # [2. 1.]: este vector sí cambia de dirección
+```
+
+- **Producto de matrices:** `A @ B` solo funciona si las columnas de A coinciden con las filas de B; el resultado tiene las filas de A y las columnas de B. Es el error más frecuente al programar redes («*shapes not aligned*»).
+- **Inversa:** solo existe si el **determinante** no es 0. En la práctica casi nunca se calcula: `np.linalg.solve` resuelve el sistema directamente, más rápido y con menos error de redondeo.
+- **Autovalores y autovectores:** para una matriz M, un autovector v es una dirección que M **no gira**, solo estira: M·v = λ·v, y λ es el autovalor. En el ejemplo, la dirección (1, 1) se estira 3 veces y la (1, −1) se queda igual; cualquier otra dirección, como (1, 0), cambia.
+
+**SVD: descomponer para resumir.** La **descomposición en valores singulares** escribe cualquier matriz como A = U·Σ·Vᵀ: un giro, un estiramiento y otro giro. Los números de Σ (los **valores singulares**) dicen cuánto pesa cada «dirección» de los datos. Quedarse con los más grandes da una versión resumida de la matriz: es la base de muchos recomendadores, de la compresión de imágenes y de PCA.
+
+```python
+import numpy as np
+from sklearn.decomposition import PCA
+
+# Valoraciones inventadas (1–5) de 6 estudiantes a 5 lecturas del plan lector
+R = np.array([[5, 4, 1, 1, 2],
+              [4, 5, 2, 1, 1],
+              [5, 5, 1, 2, 1],
+              [1, 2, 5, 4, 5],
+              [2, 1, 4, 5, 4],
+              [1, 1, 5, 5, 5]], dtype=float)
+U, s, Vt = np.linalg.svd(R, full_matrices=False)
+print(s.round(2))                                       # [16.58  8.93  1.87  1.28  0.42]
+print(round((s[:2] ** 2).sum() / (s ** 2).sum(), 3))    # 0.985: dos «gustos» explican casi todo
+R2 = U[:, :2] @ np.diag(s[:2]) @ Vt[:2]                 # reconstruir con solo 2 valores singulares
+print(np.abs(R - R2).max().round(2))                    # 0.69: el error más grande, menos de un punto
+
+# PCA hace lo mismo con los datos centrados: sus componentes son los vectores de V
+Rc = R - R.mean(axis=0)
+pca = PCA(n_components=2).fit(R)
+_, _, Vtc = np.linalg.svd(Rc, full_matrices=False)
+print(np.allclose(np.abs(pca.components_), np.abs(Vtc[:2])))   # True (el signo puede cambiar)
+```
+
+Con solo dos valores singulares se recupera el 98,5 % de la información de las valoraciones: hay dos «gustos» (las tres primeras lecturas frente a las dos últimas) y el resto es ruido. **PCA** ([UD5, sección 8](ud5-ml.html#8-aprendizaje-no-supervisado-agrupar-y-reducir)) es esto mismo aplicado a los datos centrados: sus componentes principales son los autovectores de la matriz de covarianza, que coinciden con los vectores V de la SVD.
+
+#### Cálculo: derivadas parciales y gradiente
+
+La **derivada** mide cuánto cambia una función cuando cambia un poco su entrada. Con varias entradas, la **derivada parcial** respecto a una mide el cambio moviendo solo esa y dejando fijas las demás. El **gradiente** junta todas las parciales en un vector que apunta hacia donde la función **sube** más deprisa; el descenso del gradiente va en sentido contrario.
+
+```python
+# Derivadas parciales y gradiente de f(x, y) = x²·y + 3y², comprobados con números
+def f(x, y):
+    return x ** 2 * y + 3 * y ** 2
+
+def gradiente_analitico(x, y):
+    return 2 * x * y, x ** 2 + 6 * y          # ∂f/∂x = 2xy · ∂f/∂y = x² + 6y
+
+def gradiente_numerico(x, y, h=1e-6):          # mover un poco cada variable, dejando fija la otra
+    return ((f(x + h, y) - f(x - h, y)) / (2 * h),
+            (f(x, y + h) - f(x, y - h)) / (2 * h))
+
+print(gradiente_analitico(1.0, 2.0))                          # (4.0, 13.0)
+print([round(g, 4) for g in gradiente_numerico(1.0, 2.0)])    # [4.0, 13.0]
+```
+
+Comparar la derivada calculada a mano con la numérica es justo la **comprobación del gradiente** que se usa para depurar redes ([14.7](#147-redes-neuronales-desde-cero), «Cuando la red no aprende»). La **regla de la cadena** (derivar una función de una función multiplicando las derivadas) es lo que hace la retropropagación capa a capa.
+
+#### Probabilidad: Bayes y la tasa base
+
+El **teorema de Bayes** actualiza una probabilidad con una evidencia nueva: P(A|B) = P(B|A)·P(A) / P(B). Para calcular P(B) se usa la **probabilidad total**: se suma por todos los casos posibles. El ejemplo clásico es una prueba médica muy buena para una enfermedad rara:
+
+```python
+from math import exp, factorial
+
+# Teorema de Bayes: una prueba con 99 % de aciertos en enfermos y 5 % de falsos positivos
+prevalencia, sensibilidad, falsos_pos = 0.01, 0.99, 0.05
+positivo = sensibilidad * prevalencia + falsos_pos * (1 - prevalencia)   # probabilidad total
+print(round(positivo, 4), round(sensibilidad * prevalencia / positivo, 3))   # 0.0594 0.167
+
+# Lo mismo con 1000 personas («frecuencias naturales»)
+enfermos = 1000 * prevalencia                       # 10
+verdaderos = enfermos * sensibilidad                # 9,9: casi todos dan positivo
+falsos = (1000 - enfermos) * falsos_pos             # 49,5 sanos dan positivo
+print(round(verdaderos / (verdaderos + falsos), 3))  # 0.167: de cada 6 positivos, solo 1 está enfermo
+
+for p in (0.001, 0.01, 0.1, 0.3):                   # cuanto más rara la enfermedad, menos vale un positivo
+    print(p, round(sensibilidad * p / (sensibilidad * p + falsos_pos * (1 - p)), 3))
+# 0.001 0.019
+# 0.01 0.167
+# 0.1 0.688
+# 0.3 0.895
+
+# Poisson: llegan de media 3 personas por minuto a la cafetería. ¿Probabilidad de que lleguen 0, 3 o 6 o más?
+lam = 3
+p = lambda k: lam ** k * exp(-lam) / factorial(k)
+print(round(p(0), 3), round(p(3), 3), round(1 - sum(p(k) for k in range(6)), 3))   # 0.05 0.224 0.084
+```
+
+Una prueba que acierta el 99 % de las veces con los enfermos da positivo a **6 personas de cada 100** que se la hacen, y solo **1** de esas 6 está enferma, porque hay muchísimos más sanos que enfermos. Ignorar lo frecuente que es algo (la **tasa base**) es un error muy común, y es el mismo problema de las clases desequilibradas en un clasificador ([UD5, sección 5](ud5-ml.html#5-evaluar-un-clasificador)): con muy pocos casos positivos, la precisión se hunde aunque el modelo sea bueno.
+
+La **distribución de Poisson** cuenta cuántas veces pasa algo en un intervalo cuando los sucesos son independientes y tienen un ritmo medio λ: llegadas por minuto, errores por página, correos por hora. Su media y su varianza valen las dos λ. Las demás distribuciones frecuentes (uniforme, binomial, normal) están en la [6.10](#610-probabilidad-y-distribuciones-frecuentes).
+
+#### Contrastes para tablas y para varios grupos: chi-cuadrado y ANOVA
+
+La [sección 6](#69-diferencia-real-o-casualidad-contraste-de-hipótesis) compara **dos** medias. Otras dos pruebas muy usadas:
+
+- **Chi-cuadrado (χ²) de independencia:** dos variables **categóricas** en una tabla de frecuencias. Compara lo observado con lo esperado si fueran independientes.
+- **ANOVA de un factor:** compara las medias de **tres o más** grupos a la vez. Si sale significativo, dice que **alguna** media es distinta, pero no cuál: después se compara por parejas con una corrección (por ejemplo, Tukey).
+
+```python
+import numpy as np
+from scipy import stats
+
+# Chi-cuadrado de independencia: ¿cambia la preferencia de recreo según el curso? (datos inventados)
+tabla = np.array([[30, 20],      # 1.º: patio, biblioteca
+                  [20, 30]])     # 2.º: patio, biblioteca
+for corregir in (False, True):
+    chi2, p, gl, esperadas = stats.chi2_contingency(tabla, correction=corregir)
+    print(corregir, round(chi2, 2), round(p, 3))
+# False 4.0 0.046     sin corrección: p < 0,05
+# True 3.24 0.072     con la corrección de Yates (la que aplica SciPy por defecto en tablas 2×2)
+print(esperadas.tolist())   # [[25.0, 25.0], [25.0, 25.0]]: lo esperado si fueran independientes
+
+# ANOVA: ¿difieren las notas medias con tres métodos de estudio?
+A, B, C = [78, 80, 76], [85, 88, 84], [90, 92, 89]
+F, p = stats.f_oneway(A, B, C)
+print(round(F, 1), round(p, 4))                  # 32.7 0.0006
+print(stats.tukey_hsd(A, B, C).pvalue.round(3)[[0, 0, 1], [1, 2, 2]])   # [0.006 0.    0.052]
+# ¿Cuáles difieren? A con B y A con C; B con C, por poco no (0,052)
+
+# Asimetría y curtosis: ojo con el 3
+rng = np.random.default_rng(0)
+normal = rng.normal(size=100_000)
+print(round(stats.kurtosis(normal), 2), round(stats.kurtosis(normal, fisher=False), 2))   # 0.02 3.02
+```
+
+- La misma tabla da p = 0,046 **sin** corrección y p = 0,072 **con** la corrección de Yates, que SciPy aplica por defecto en las tablas 2×2. Con un umbral de 0,05, la conclusión cambia: cuando un resultado depende de un detalle así, es una prueba débil y hacen falta más datos.
+- Tres grupos de 3 notas son muy pocos: el ANOVA sale muy significativo porque las diferencias son grandes y las notas de cada grupo casi no varían. Con datos reales conviene revisar las condiciones (normalidad aproximada, varianzas parecidas, independencia) y mirar el **tamaño** de la diferencia, no solo el valor p.
+- **Curtosis:** mide lo «pesadas» que son las colas. SciPy y Pandas dan por defecto la curtosis **en exceso**, que vale **0** en la normal; otros textos usan la curtosis sin restar, que vale **3**. Antes de interpretar un número, hay que saber cuál es.
+
+#### Teoría de la información: entropía, entropía cruzada, KL e información mutua
+
+| Medida | Qué mide | Dónde aparece en la web |
+|--------|----------|-------------------------|
+| **Entropía** H(p) = −Σ p·log p | La incertidumbre de una distribución: máxima si todo es igual de probable, 0 si no hay duda | Árboles de decisión ([ficha del árbol](algoritmos.html)) |
+| **Entropía cruzada** H(p, q) = −Σ p·log q | Lo que cuesta describir la realidad p con la predicción q | La pérdida de los clasificadores ([14.7](#147-redes-neuronales-desde-cero)) |
+| **Divergencia KL** D(p‖q) = Σ p·log(p/q) | Cuánto se aleja q de p. Es la entropía cruzada menos la entropía | Destilación de modelos, VAE, ajuste por preferencias |
+| **Información mutua** I(X; Y) | Cuánto sabes de Y al conocer X; 0 si son independientes | Selección de variables (`mutual_info_classif`, [UD5, sección 2](ud5-ml.html#2-tipos-de-aprendizaje-y-de-problemas)) |
+
+```python
+import numpy as np
+from scipy import stats
+from sklearn.metrics import mutual_info_score
+
+# Entropía (en bits): cuánta incertidumbre hay
+for p in ([0.5, 0.5], [0.9, 0.1], [1.0, 0.0]):
+    print(p, round(stats.entropy(p, base=2), 3))       # 1.0 · 0.469 · 0.0
+
+# Entropía cruzada: la pérdida de clasificación (con logaritmo natural, como en las librerías)
+real, predicho = np.array([1.0, 0.0]), np.array([0.9, 0.1])
+print(round(-(real * np.log(predicho)).sum(), 3))      # 0.105
+
+# Divergencia KL: cuánto se aleja q de p. NO es simétrica
+p, q = [0.5, 0.5], [0.9, 0.1]
+print(round(stats.entropy(p, q), 3), round(stats.entropy(q, p), 3))   # 0.511 0.368
+
+# Información mutua: cuánto dice una variable de otra (datos inventados de 8 días)
+llueve   = ["si", "si", "si", "no", "no", "no", "si", "no"]
+paraguas = ["si", "si", "no", "no", "no", "no", "si", "no"]
+moneda   = ["cara", "cruz", "cara", "cruz", "cara", "cruz", "cruz", "cara"]
+print(round(mutual_info_score(llueve, paraguas), 3), round(mutual_info_score(llueve, moneda), 3))   # 0.38 0.0 (en nats: logaritmo natural)
+```
+
+- Con logaritmo en base 2, las unidades son **bits**; con logaritmo natural, *nats*. Las librerías de aprendizaje automático usan el natural.
+- La KL **no es simétrica**: D(p‖q) = 0,511 y D(q‖p) = 0,368. Por eso no es una «distancia» en sentido estricto.
+- La información mutua detecta relaciones de cualquier tipo, no solo lineales como la correlación. Con 8 días, cualquier número es orientativo.
+
+#### Muestreo: de dónde salen los datos
+
+Ninguna fórmula arregla una muestra mal tomada ([6.11, sesgos de recogida](#611-de-la-muestra-a-la-población-intervalos-de-confianza-y-errores)).
+
+| Muestreo | Cómo se hace | Cuándo |
+|----------|--------------|--------|
+| **Aleatorio simple** | Todos tienen la misma probabilidad de salir | Cuando se tiene la lista completa |
+| **Estratificado** | Se divide en grupos (curso, centro) y se sortea dentro de cada uno, respetando su peso | Cuando hay grupos pequeños que no deben quedarse fuera. Es lo que hace `stratify=y` al separar entrenamiento y prueba |
+| **Sistemático** | Uno de cada k, desde un punto al azar | Listas largas sin orden oculto |
+| **Por conglomerados** | Se sortean grupos enteros (aulas, concellos) | Cuando ir a todos es caro. Menos preciso |
+| **Por conveniencia** | Los que están a mano (una encuesta en redes) | Nunca para sacar conclusiones generales: no representa a nadie más que a quien respondió |
+
+**La «regla de n ≥ 30».** Muchas chuletas dicen que con 30 datos la media ya es normal (teorema central del límite) y que con menos hay que usar la t de Student. Es una costumbre, no una ley: con datos muy asimétricos hacen falta muchos más, y la prueba t se usa siempre que no se conoce la desviación típica de la población, con 10 datos o con 1000. La simulación de la [6.11](#611-de-la-muestra-a-la-población-intervalos-de-confianza-y-errores) lo muestra.
 
 ---
 

@@ -1774,6 +1774,73 @@ def hoja_agentedentro():
     return "\n".join(h)
 
 
+# ---------- Matemáticas de la IA ----------
+def mat_autovectores():
+    p = "mae"
+    o = (150, 150)
+    esc = 40
+    def pt(x, y):
+        return o[0] + x * esc, o[1] - y * esc
+    b = linea(f"M{o[0]-130},{o[1]} H{o[0]+130}", p, punta=False, cls="sv-llave")
+    b += linea(f"M{o[0]},{o[1]+70} V{o[1]-140}", p, punta=False, cls="sv-llave")
+    for (x0, y0), (x1, y1), color, et, pos in [((1, 1), (3, 3), "pen", "×3", (3.05, 3.2)),
+                                             ((1, -1), (1, -1), "ml", "×1", (1.15, -1.25)),
+                                             ((1, 0), (2, 1), "rojo", "gira", (2.1, 0.75))]:
+        ax, ay = pt(x0, y0)
+        bx, by = pt(x1, y1)
+        b += f'<circle cx="{ax}" cy="{ay}" r="5" class="sv-llave"/>'
+        b += linea(f"M{o[0]},{o[1]} L{bx},{by}", p, color=color)
+        tx, ty = pt(*pos)
+        b += texto(tx, ty, et, "sv-et", "start")
+    b += texto(150, 245, "○ vector antes; flecha: después de aplicar M", "sv-et", "middle")
+    desc = ("La matriz M estira la dirección (1, 1) tres veces y deja igual la dirección (1, −1): son sus autovectores, "
+            "con autovalores 3 y 1. La dirección (1, 0) pasa a (2, 1): cambia de dirección, así que no es autovector.")
+    return svg(p, "0 0 300 255", "Autovectores", desc, b, "sv-tab")
+
+
+def mat_bayes():
+    p = "mab"
+    b = caja(90, 6, 120, 36, "1000 personas", None)
+    b += linea("M120,44 C120,60 60,60 60,74", p) + linea("M180,44 C180,60 240,60 240,74", p)
+    b += caja(10, 78, 100, 44, "10 enfermas", "1 %")
+    b += caja(190, 78, 100, 44, "990 sanas", "99 %")
+    b += linea("M60,124 V146", p) + linea("M240,124 V146", p)
+    b += caja(10, 150, 100, 44, "≈ 10 positivos", "99 % de 10", "sv-caja sv-caja-ok")
+    b += caja(190, 150, 100, 44, "≈ 50 positivos", "5 % de 990: falsos", "sv-caja sv-caja-ml")
+    b += texto(150, 222, "De 60 positivos, solo 10 enfermos:", "sv-et", "middle")
+    b += texto(150, 240, "P(enfermo | positivo) ≈ 1 de 6 (0,17)", "sv-et", "middle")
+    desc = ("De 1000 personas, 10 están enfermas y 990 sanas. Casi las 10 enfermas dan positivo, pero también "
+            "unas 50 sanas (el 5 %). De unos 60 positivos, solo 10 están enfermos: alrededor de 1 de cada 6.")
+    return svg(p, "0 0 300 250", "Bayes con 1000 personas", desc, b, "sv-tab")
+
+
+def hoja_matematicas():
+    mapa = [("Álgebra lineal", "datos como matrices, capas X·W + b, embeddings y coseno, PCA y SVD"),
+            ("Cálculo", "derivadas y gradiente para entrenar; regla de la cadena = retropropagación"),
+            ("Probabilidad", "salidas como probabilidades, Bayes, Naive Bayes, incertidumbre"),
+            ("Estadística", "describir datos, evaluar modelos, intervalos, pruebas A/B"),
+            ("Información", "entropía en los árboles, entropía cruzada como pérdida, KL, selección de variables")]
+    errores = [("no", "✗", "Divergencia KL como distancia", "no es simétrica: D(p‖q) ≠ D(q‖p)"),
+               ("no", "✗", "Positivo en una prueba = enfermo", "depende de lo frecuente que sea (tasa base)"),
+               ("medio", "⚠", "Curtosis de la normal", "3, o 0 si es «en exceso» (SciPy, Pandas)"),
+               ("medio", "⚠", "Con n ≥ 30, prueba z", "sin la desviación de la población, siempre t"),
+               ("ok", "✓", "Comprobar una cuenta con código", "dos chuletas de estas traen ejemplos mal calculados")]
+    sem = "".join(f'<li class="{c}"><b>{escape(o)}</b><span class="marca">{m}</span><span class="que">{escape(q)}</span></li>' for c, m, o, q in errores)
+    h = ['<section class="hoja" aria-labelledby="hoja-mat-t">',
+         '<p class="hoja-titulo" id="hoja-mat-t">Las matemáticas de la IA, en una hoja</p>',
+         '<p class="hoja-nota">Cinco ramas, para qué sirve cada una y dos ideas que se entienden mejor dibujadas.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha ancha"><h5>Qué matemática hay detrás de qué</h5><dl class="vocab">',
+         "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in mapa), '</dl></div>',
+         '<div class="ficha"><h5>Autovectores: direcciones que no giran</h5>', mat_autovectores(),
+         '<p class="ficha-pie">PCA busca estas direcciones en la matriz de covarianza de los datos.</p></div>',
+         '<div class="ficha"><h5>Bayes con 1000 personas</h5>', mat_bayes(),
+         '<p class="ficha-pie">Prueba con 99 % de aciertos en enfermos y 5 % de falsos positivos; enfermedad del 1 %.</p></div>',
+         '<div class="ficha ancha"><h5>Errores frecuentes</h5><ul class="semaforo">', sem, '</ul></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 def insertar(texto_md, nombre, bloque):
     a, z = f"<!-- hoja:{nombre} -->", f"<!-- /hoja:{nombre} -->"
     assert texto_md.count(a) == 1 and texto_md.count(z) == 1, nombre
@@ -1797,6 +1864,7 @@ if __name__ == "__main__":
     t = insertar(t, "produccion", hoja_produccion())
     t = insertar(t, "ciberseguridad", hoja_ciberseguridad())
     t = insertar(t, "agentedentro", hoja_agentedentro())
+    t = insertar(t, "matematicas", hoja_matematicas())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

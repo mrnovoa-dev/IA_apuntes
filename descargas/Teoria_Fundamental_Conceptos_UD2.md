@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E169 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E171 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -7043,6 +7043,52 @@ for cosa in [Perro(), Robot()]:
 - **Atributo de clase frente a atributo de instancia.** Lo que se escribe dentro de la clase, fuera de los métodos, es **uno para todos los objetos**. Con números o textos no se nota (al asignar se crea uno propio); con una lista o un diccionario, todos comparten la misma. Regla: los datos de cada objeto, en `__init__` con `self.`.
 - **No hay atributos privados de verdad.** `_saldo` (un guion) es un aviso entre programadores; `__pin` (dos guiones) cambia el nombre a `_Cuenta__pin` para evitar choques en clases hijas, pero se puede leer igual. Para controlar el acceso se usan propiedades (`@property`, más arriba).
 - **Tipado de pato** (*duck typing*): «si anda como un pato y hace cua, es un pato». Python no comprueba de qué clase es un objeto, sino si tiene el método que se le pide. Así funciona scikit-learn: cualquier objeto con `fit` y `predict` sirve en un *pipeline*. Cuando sí se quiere obligar a que existan ciertos métodos, se usa una clase abstracta (`abc`).
+- **Validar en todos los métodos que cambian el dato, no solo en uno.** Un fallo muy frecuente en los ejemplos de «cuenta bancaria»: `depositar` comprueba que la cantidad sea positiva, pero `retirar` solo mira que haya saldo. Con `retirar(-500)`, el saldo **sube** 500. La solución es poner la regla en **un solo sitio** y usarla desde todos los métodos:
+
+```python
+class CuentaComedor:
+    def __init__(self, titular, saldo=0.0):
+        self.titular = titular
+        self._saldo = 0.0
+        self.ingresar(saldo)
+
+    @staticmethod
+    def _cantidad(valor):                     # una sola regla para todos los métodos
+        if not isinstance(valor, (int, float)) or valor < 0:
+            raise ValueError(f"Cantidad no válida: {valor!r}")
+        return float(valor)
+
+    @property
+    def saldo(self):                          # se puede leer, no asignar
+        return self._saldo
+
+    def ingresar(self, cantidad):
+        self._saldo += self._cantidad(cantidad)
+
+    def pagar(self, cantidad):
+        cantidad = self._cantidad(cantidad)
+        if cantidad > self._saldo:
+            raise ValueError("Saldo insuficiente")
+        self._saldo -= cantidad
+
+c = CuentaComedor("Noa", 20)
+c.pagar(4.5)
+print(c.saldo)                                # 15.5
+for mal in (-500, "10", 100):
+    try:
+        c.pagar(mal)
+    except ValueError as e:
+        print(e)
+# Cantidad no válida: -500
+# Cantidad no válida: '10'
+# Saldo insuficiente
+try:
+    c.saldo = 1000
+except AttributeError as e:
+    print("AttributeError:", e)            # ... property 'saldo' of 'CuentaComedor' object has no setter
+```
+
+  Con `@property` sin *setter*, `c.saldo = 1000` da error: el saldo solo cambia a través de `ingresar` y `pagar`, que pasan por la misma regla. Y si se define `__add__` para sumar dos cuentas, que devuelva lo mismo que suma (otra cuenta) o `NotImplemented`: si devuelve un número, `a + b + c` falla con `TypeError`.
 
 #### Métodos especiales y `dataclasses`
 
@@ -7559,6 +7605,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | «Mathematics for AI & ML» (@abhi_techhub, PDF de 15 págs. manuscritas, sin capa de texto) | Álgebra lineal con código (producto, `solve`, autovalores, SVD y su relación con PCA), derivadas parciales y gradiente, Bayes con la tasa base, Poisson, chi-cuadrado con y sin corrección de Yates, ANOVA y Tukey, curtosis en exceso, entropía, entropía cruzada, KL e información mutua, tipos de muestreo, la hoja «Las matemáticas de la IA, en una hoja» (figuras propias); cuentas erróneas usadas en E164 | Teoría 14.21; ejercicios E164–E165 |
 | «AI Agents Complete Notes – Theory Edition» (@codedsoul_05, PDF de 38 págs.) | En 14.19: «La llamada a herramientas por dentro y la ingeniería del contexto» (protocolo `tool_use`/`tool_result` con varias llamadas a la vez e `is_error`, `max_tokens`, *context rot*, limpiar/compactar/notas/aislar con cuentas de *tokens*, cargar justo a tiempo y *Agent Skills*), la tríada letal con comprobador, pass@k frente a pass^k y bancos de pruebas, «Agentes que programan y agentes que usan el ordenador», piezas de MCP y su especificación sin estado (julio de 2026), A2A 1.0; hoja «Llamar a herramientas sin romper nada» (figuras propias); fallos del código de la fuente usados en E166 | Teoría 14.19; ejercicios E166–E167 |
 | «Build a Safe Python Automation Environment» (@veriqta, lámina 3 de un carrusel de 15, «contenido generado con IA»; solo se ha visto esa lámina) | En 14.10, «Un script de automatización seguro»: versiones fijadas con `pip freeze`, `.env` en `.gitignore` y `.env.example`, configuración comprobada al empezar sin mostrar la clave, prueba por defecto con `--aplicar`, códigos de salida 0/1/2, plantilla ejecutada que planifica antes de actuar y no sobrescribe, *shebang*, `logging` configurado; hoja «Un script que no rompe nada» (figuras propias); simplificaciones de la lámina en E168 | Teoría 14.10; ejercicios E168–E169 |
+| «Python Complete Code Handbook» (codingwithmee_18, PDF de 48 págs. en *hinglish*) | Casi todo ya estaba (secciones 1–5, 14.14). Añadido en 14.14, «Tres trampas de la POO», validar en todos los métodos que cambian un dato (cuenta del comedor ejecutada) y qué debe devolver `__add__`; fallos de su código comprobados y usados en E170 | Teoría 14.14; ejercicios E170–E171 |
 | «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |

@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E171 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E173 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -6399,6 +6399,143 @@ Las **listas enlazadas** (cada elemento apunta al siguiente) aparecen mucho en o
 
 **Representación de datos** (de *Más de 400 ejercicios de programación*): un ordenador lo guarda todo en bits. Con `n` bits se representan 2ⁿ valores (16 bits → 0 a 65 535). Python lo muestra con `bin(10)` → `'0b1010'`, `int("1010", 2)` → `10` y `hex(255)` → `'0xff'`.
 
+#### Más técnicas para resolver problemas: ventana, sumas acumuladas, montículo, grupos y dependencias
+
+Los tres problemas anteriores enseñan una forma de trabajar que sirve para casi todo: **primero, la solución de fuerza bruta**, que es fácil de escribir y sirve para comprobar las demás. **Después**, se pregunta: ¿qué trabajo estoy repitiendo? Casi siempre la respuesta lleva a una de estas técnicas.
+
+<!-- hoja:resolver -->
+<section class="hoja" aria-labelledby="hoja-res-t">
+<p class="hoja-titulo" id="hoja-res-t">Resolver problemas en una hoja</p>
+<p class="hoja-nota">Un método, una cuenta rápida de tiempos y las pistas que llevan a cada técnica.</p>
+<div class="hoja-grid">
+<div class="ficha"><h5>Cómo atacar un problema</h5>
+<svg class="sv sv-tab" viewBox="0 0 300 330" role="img" aria-labelledby="rsf-t rsf-d"><title id="rsf-t">Cómo atacar un problema</title><desc id="rsf-d">Seis pasos: entender el problema, hacer ejemplos a mano, escribir la fuerza bruta, buscar qué trabajo se repite, elegir estructura y técnica, y probar la versión rápida comparándola con la fuerza bruta, que sirve de oráculo.</desc><defs><marker id="rsf-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="rsf-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="rsf-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="rsf-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="rsf-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><rect x="40" y="4" width="200" height="40" rx="8" class="sv-caja"/><text x="140.0" y="21.0" class="sv-tit" text-anchor="middle">1 Entender</text><text x="140.0" y="38.0" class="sv-sub" text-anchor="middle">qué entra, qué sale, límites</text><path d="M140,45 V58" class="sv-l-pen" marker-end="url(#rsf-pen)"/><rect x="40" y="60" width="200" height="40" rx="8" class="sv-caja"/><text x="140.0" y="77.0" class="sv-tit" text-anchor="middle">2 Ejemplos a mano</text><text x="140.0" y="94.0" class="sv-sub" text-anchor="middle">también vacío, uno, repetidos</text><path d="M140,101 V114" class="sv-l-pen" marker-end="url(#rsf-pen)"/><rect x="40" y="116" width="200" height="40" rx="8" class="sv-caja sv-caja-ok"/><text x="140.0" y="133.0" class="sv-tit" text-anchor="middle">3 Fuerza bruta</text><text x="140.0" y="150.0" class="sv-sub" text-anchor="middle">correcta aunque sea lenta</text><path d="M140,157 V170" class="sv-l-pen" marker-end="url(#rsf-pen)"/><rect x="40" y="172" width="200" height="40" rx="8" class="sv-caja"/><text x="140.0" y="189.0" class="sv-tit" text-anchor="middle">4 ¿Qué se repite?</text><text x="140.0" y="206.0" class="sv-sub" text-anchor="middle">ahí está la mejora</text><path d="M140,213 V226" class="sv-l-pen" marker-end="url(#rsf-pen)"/><rect x="40" y="228" width="200" height="40" rx="8" class="sv-caja sv-caja-ml"/><text x="140.0" y="245.0" class="sv-tit" text-anchor="middle">5 Estructura y técnica</text><text x="140.0" y="262.0" class="sv-sub" text-anchor="middle">diccionario, ventana, montículo…</text><rect x="40" y="284" width="200" height="40" rx="8" class="sv-caja"/><text x="140.0" y="301.0" class="sv-tit" text-anchor="middle">6 Probar</text><text x="140.0" y="318.0" class="sv-sub" text-anchor="middle">comparar con la fuerza bruta</text><path d="M140,269 V282" class="sv-l-pen" marker-end="url(#rsf-pen)"/><path d="M242,304 C292,304 292,136 244,136" class="sv-l-vuelta" marker-end="url(#rsf-pen)"/><text x="272" y="224" class="sv-sub" text-anchor="middle">oráculo</text></svg>
+<p class="ficha-pie">La fuerza bruta no se tira: comprueba la versión rápida.</p></div>
+<div class="ficha"><h5>¿Cabe en un segundo?</h5><ul class="semaforo">
+<li class="ok"><b>O(n) con n = 10⁶</b><span class="marca">✓</span><span class="que">unos 0,1 s en Python puro</span></li><li class="medio"><b>O(n log n) con n = 10⁶</b><span class="marca">⚠</span><span class="que">unos 2 s en Python puro</span></li><li class="ok"><b>O(n²) con n = 3000</b><span class="marca">✓</span><span class="que">unos 0,9 s en Python puro</span></li><li class="no"><b>O(n²) con n = 10⁵</b><span class="marca">✗</span><span class="que">unos 17 min en Python puro</span></li><li class="no"><b>O(2ⁿ) con n = 30</b><span class="marca">✗</span><span class="que">unos 2 min en Python puro</span></li>
+</ul>
+<p class="ficha-pie">Cuenta: unos 10⁷ pasos sencillos por segundo en un bucle de Python. Lo que va en C es mucho más rápido: <code>sorted()</code> ordena 10⁶ datos en 0,26 s.</p></div>
+<div class="ficha ancha"><h5>Si el problema dice… piensa en…</h5><dl class="vocab">
+<dt>¿Ya lo he visto?</dt><dd>diccionario o conjunto</dd><dt>Lista ordenada</dt><dd>búsqueda binaria, dos punteros</dd><dt>Sumas de tramos</dt><dd>sumas acumuladas, ventana</dd><dt>Los k mejores</dt><dd>montículo (heapq)</dd><dt>Qué va antes</dt><dd>orden topológico (graphlib)</dd><dt>¿Están conectados?</dt><dd>Union-Find, BFS</dd><dt>Subproblemas repetidos</dt><dd>programación dinámica, @cache</dd>
+</dl></div>
+</div></section>
+<!-- /hoja:resolver -->
+
+**1. Sumas acumuladas y ventana deslizante.** Si hay que sumar muchos tramos de una lista, se calcula una vez la suma acumulada y cada tramo sale con **una resta**. Si el tramo tiene un tamaño fijo y se va moviendo, al avanzar se suma el elemento que entra y se resta el que sale, en vez de volver a sumar todo. Es lo que hace `rolling()` de Pandas ([7.3](#73-pandas-a-fondo)).
+
+```python
+prestamos = [12, 7, 15, 9, 20, 11, 6, 18, 14, 10]     # préstamos de la biblioteca, dos semanas
+acum = [0]
+for x in prestamos:
+    acum.append(acum[-1] + x)
+print(acum[5] - acum[0], acum[10] - acum[5])          # 63 59: semana 1 y semana 2, con una resta
+
+def mejor_tramo(xs, k):                                # los k días seguidos con más préstamos
+    suma = sum(xs[:k]); mejor, inicio = suma, 0
+    for d in range(k, len(xs)):
+        suma += xs[d] - xs[d - k]                      # entra un día, sale otro
+        if suma > mejor:
+            mejor, inicio = suma, d - k + 1
+    return mejor, inicio
+print(mejor_tramo(prestamos, 3))                       # (44, 2): los días 2, 3 y 4
+```
+
+**2. Dos punteros.** En una lista **ordenada**, uno empieza por el principio y otro por el final, y se acercan según lo que falte o sobre. Recorre la lista una vez, sin bucles anidados. Es la versión de «dos que suman» cuando los datos ya están ordenados y no se quiere gastar memoria en un diccionario.
+
+```python
+precios = [0.60, 0.80, 1.10, 1.30, 1.50, 1.90, 2.20]   # cafetería, ordenados
+def pareja(precios, objetivo):
+    i, j = 0, len(precios) - 1
+    while i < j:
+        s = round(precios[i] + precios[j], 2)          # redondear: 0.1 + 0.2 no es 0.3 exacto (2.2)
+        if s == objetivo:
+            return precios[i], precios[j]
+        if s < objetivo:
+            i += 1                                     # falta: subir el pequeño
+        else:
+            j -= 1                                     # sobra: bajar el grande
+    return None
+print(pareja(precios, 3.00))                           # (0.8, 2.2)
+```
+
+**3. Montículo (`heapq`): los k mejores sin ordenarlo todo.** Para quedarse con los 3 mayores de un millón no hace falta ordenar el millón. Es lo que hace un buscador de un RAG cuando devuelve los *k* fragmentos más parecidos ([14.19](#rag-mejorado-trozos-con-solapamiento-reordenación-y-bases-vectoriales)).
+
+```python
+import heapq, random
+random.seed(7)
+puntos = [random.random() * 100 for _ in range(1_000_000)]
+print(heapq.nlargest(3, puntos) == sorted(puntos, reverse=True)[:3])   # True
+# medido aquí: sorted 0,25 s · nlargest 0,02 s
+
+distancias = {"horario": 0.31, "comedor": 0.12, "biblioteca": 0.08, "excursión": 0.55}
+print(heapq.nsmallest(2, distancias, key=distancias.get))             # ['biblioteca', 'comedor']
+```
+
+**4. Grupos conectados (Union-Find).** Cada persona apunta a un «jefe» de su grupo; unir dos grupos es hacer que un jefe apunte al otro. Responde enseguida a «¿están en el mismo grupo?», aunque la relación sea indirecta. Es lo mismo que las componentes conexas de [14.17](#1417-redes-y-grafos-con-networkx), sin librerías.
+
+```python
+padre = {}
+def raiz(x):
+    padre.setdefault(x, x)
+    while padre[x] != x:
+        padre[x] = padre[padre[x]]                     # acorta el camino para la próxima vez
+        x = padre[x]
+    return x
+def unir(a, b):
+    padre[raiz(a)] = raiz(b)
+
+for a, b in [("Uxía", "Brais"), ("Noa", "Iago"), ("Brais", "Sara"), ("Leo", "Leo")]:
+    unir(a, b)                                         # quién se pasa apuntes con quién
+grupos = {}
+for p in padre:
+    grupos.setdefault(raiz(p), []).append(p)
+print(sorted(sorted(g) for g in grupos.values()))
+# [['Brais', 'Sara', 'Uxía'], ['Iago', 'Noa'], ['Leo']]
+```
+
+**5. Dependencias: orden topológico.** Cuando unas tareas necesitan que otras acaben antes (asignaturas con requisitos, pasos de un proyecto de datos, las tareas de un agente), se busca un orden en el que todo lo necesario va antes. Python lo trae hecho en `graphlib`, y detecta los **ciclos**, que harían imposible terminar:
+
+```python
+from graphlib import TopologicalSorter, CycleError
+tareas = {"limpiar": {"recoger"}, "entrenar": {"limpiar"}, "evaluar": {"entrenar"},
+          "gráficos": {"limpiar"}, "informe": {"evaluar", "gráficos"}}
+print(list(TopologicalSorter(tareas).static_order()))
+# ['recoger', 'limpiar', 'entrenar', 'gráficos', 'evaluar', 'informe']
+try:
+    list(TopologicalSorter({"a": {"b"}, "b": {"a"}}).static_order())
+except CycleError as e:
+    print("Ciclo:", e.args[1])                         # Ciclo: ['a', 'b', 'a']
+```
+
+**¿Cabe en un segundo? En Python, no tanto como dicen las chuletas.** Muchas guías repiten que «un ordenador hace unos 10⁸ pasos por segundo», así que un algoritmo O(n) vale hasta n = 10⁸. Esa regla viene de los concursos de programación en C++. Un bucle de Python hace bastantes menos. Medido aquí (Python 3.13):
+
+| Qué | Tamaño | Tiempo |
+|-----|--------|--------|
+| Bucle `for` que suma, O(n) | n = 10⁷ | 0,32 s |
+| El mismo bucle | n = 10⁸ | 3,1 s |
+| `sum(range(n))`, el bucle está en C | n = 10⁷ | 0,14 s |
+| `np.sum` de NumPy | n = 10⁸ | 0,07 s |
+| Dos bucles anidados, O(n²) | n = 3000 (9·10⁶ pasos) | 0,25 s |
+| `sorted()`, O(n log n) | n = 10⁶ | 0,26 s |
+
+La regla práctica en Python puro es **unos 10⁷ pasos sencillos por segundo**. Y la lección importante: lo que se hace dentro de funciones escritas en C (`sum`, `sorted`, NumPy, Pandas) va de 10 a 50 veces más rápido que el mismo cálculo con un bucle propio. Por eso, en IA, los datos se procesan con NumPy y no con bucles ([7.1](#71-numpy-computación-numérica)). Antes de optimizar nada, **mide** (`time.perf_counter`, `timeit` o `cProfile`): el cuello de botella casi nunca está donde se cree.
+
+**Si el problema dice… piensa en…**
+
+| Si el problema dice… | Piensa en… | En esta web |
+|----------------------|------------|-------------|
+| «¿Ya lo he visto?», parejas, repetidos | Diccionario o conjunto | Dos que suman (arriba) |
+| Lista ordenada: buscar un valor o una pareja | Búsqueda binaria, dos punteros | Arriba |
+| Sumas o medias de muchos tramos | Sumas acumuladas, ventana | Arriba, `rolling` en 7.3 |
+| Los k mayores o los k más cercanos | Montículo (`heapq`) | Arriba, RAG en 14.19 |
+| Camino más corto sin pesos | Búsqueda en anchura (BFS) | [Algoritmos](algoritmos.html), 14.17 |
+| Camino más corto con distancias | Dijkstra, A* | [Algoritmos](algoritmos.html#a-búsqueda-informada) |
+| Qué va antes de qué | Orden topológico | Arriba |
+| Grupos, «¿están conectados?» | Union-Find, componentes conexas | Arriba, 14.17 |
+| Todas las combinaciones | Vuelta atrás (*backtracking*), poda | 8 reinas en la UD1 |
+| Subproblemas que se repiten | Programación dinámica, `@cache` | Cambio de monedas (arriba) |
+| La mejor opción en cada paso parece bastar | Voraz, pero comprobando con un contraejemplo | Cambio de monedas (arriba) |
+
 ---
 
 ### 14.13 Banco de ejercicios complementarios
@@ -7606,6 +7743,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | «AI Agents Complete Notes – Theory Edition» (@codedsoul_05, PDF de 38 págs.) | En 14.19: «La llamada a herramientas por dentro y la ingeniería del contexto» (protocolo `tool_use`/`tool_result` con varias llamadas a la vez e `is_error`, `max_tokens`, *context rot*, limpiar/compactar/notas/aislar con cuentas de *tokens*, cargar justo a tiempo y *Agent Skills*), la tríada letal con comprobador, pass@k frente a pass^k y bancos de pruebas, «Agentes que programan y agentes que usan el ordenador», piezas de MCP y su especificación sin estado (julio de 2026), A2A 1.0; hoja «Llamar a herramientas sin romper nada» (figuras propias); fallos del código de la fuente usados en E166 | Teoría 14.19; ejercicios E166–E167 |
 | «Build a Safe Python Automation Environment» (@veriqta, lámina 3 de un carrusel de 15, «contenido generado con IA»; solo se ha visto esa lámina) | En 14.10, «Un script de automatización seguro»: versiones fijadas con `pip freeze`, `.env` en `.gitignore` y `.env.example`, configuración comprobada al empezar sin mostrar la clave, prueba por defecto con `--aplicar`, códigos de salida 0/1/2, plantilla ejecutada que planifica antes de actuar y no sobrescribe, *shebang*, `logging` configurado; hoja «Un script que no rompe nada» (figuras propias); simplificaciones de la lámina en E168 | Teoría 14.10; ejercicios E168–E169 |
 | «Python Complete Code Handbook» (codingwithmee_18, PDF de 48 págs.; ediciones en *hinglish* y en inglés, con el mismo código) | Casi todo ya estaba (secciones 1–5, 14.14). Añadido en 14.14, «Tres trampas de la POO», validar en todos los métodos que cambian un dato (cuenta del comedor ejecutada) y qué debe devolver `__add__`; fallos de su código comprobados y usados en E170 | Teoría 14.14; ejercicios E170–E171 |
+| «100 Coding Concepts Explained in Depth (Python)» (PDF de 36 págs.; en sus metadatos figura como autor «Claude», es decir, generado con IA) | En 14.12, «Más técnicas para resolver problemas»: sumas acumuladas y ventana, dos punteros, montículo para los k mejores, Union-Find, orden topológico con `graphlib`, tiempos medidos en Python frente a la regla de 10⁸ pasos por segundo, y tabla «Si el problema dice… piensa en…»; hoja «Resolver problemas en una hoja» (figuras propias); fallos y matices usados en E172 | Teoría 14.12; ejercicios E172–E173 |
 | «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |

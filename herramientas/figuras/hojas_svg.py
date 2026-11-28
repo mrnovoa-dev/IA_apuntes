@@ -1774,6 +1774,60 @@ def hoja_agentedentro():
     return "\n".join(h)
 
 
+# ---------- Resolver problemas ----------
+def res_flujo():
+    p = "rsf"
+    pasos = [("1 Entender", "qué entra, qué sale, límites"), ("2 Ejemplos a mano", "también vacío, uno, repetidos"),
+             ("3 Fuerza bruta", "correcta aunque sea lenta"), ("4 ¿Qué se repite?", "ahí está la mejora"),
+             ("5 Estructura y técnica", "diccionario, ventana, montículo…")]
+    b = ""
+    for i, (t, sub) in enumerate(pasos):
+        y = 4 + i * 56
+        cls = "sv-caja sv-caja-ok" if i == 2 else ("sv-caja sv-caja-ml" if i == 4 else "sv-caja")
+        b += caja(40, y, 200, 40, t, sub, cls)
+        if i < 4:
+            b += linea(f"M140,{y + 41} V{y + 54}", p)
+    b += caja(40, 284, 200, 40, "6 Probar", "comparar con la fuerza bruta", "sv-caja")
+    b += linea("M140,269 V282", p)
+    b += linea("M242,304 C292,304 292,136 244,136", p, cls="sv-l-vuelta")
+    b += texto(272, 224, "oráculo", "sv-sub", "middle")
+    desc = ("Seis pasos: entender el problema, hacer ejemplos a mano, escribir la fuerza bruta, buscar qué trabajo se repite, "
+            "elegir estructura y técnica, y probar la versión rápida comparándola con la fuerza bruta, que sirve de oráculo.")
+    return svg(p, "0 0 300 330", "Cómo atacar un problema", desc, b, "sv-tab")
+
+
+def hoja_resolver():
+    def seg(pasos):
+        t = pasos / 1e7
+        if t < 1:
+            return f"{t:.1f} s".replace(".", ",")
+        return f"{t:.0f} s" if t < 90 else f"{t / 60:.0f} min"
+    import math
+    casos = [("O(n)", "n = 10⁶", 1e6), ("O(n log n)", "n = 10⁶", 1e6 * math.log2(1e6)),
+             ("O(n²)", "n = 3000", 9e6), ("O(n²)", "n = 10⁵", 1e10), ("O(2ⁿ)", "n = 30", 2 ** 30)]
+    def marca(pasos):
+        t = pasos / 1e7
+        return ("ok", "✓") if t < 1 else (("medio", "⚠") if t < 60 else ("no", "✗"))
+    sem = "".join(f'<li class="{marca(x)[0]}"><b>{escape(o)} con {escape(n)}</b><span class="marca">{marca(x)[1]}</span>'
+                  f'<span class="que">unos {escape(seg(x))} en Python puro</span></li>' for o, n, x in casos)
+    pistas = [("¿Ya lo he visto?", "diccionario o conjunto"), ("Lista ordenada", "búsqueda binaria, dos punteros"),
+              ("Sumas de tramos", "sumas acumuladas, ventana"), ("Los k mejores", "montículo (heapq)"),
+              ("Qué va antes", "orden topológico (graphlib)"), ("¿Están conectados?", "Union-Find, BFS"),
+              ("Subproblemas repetidos", "programación dinámica, @cache")]
+    h = ['<section class="hoja" aria-labelledby="hoja-res-t">',
+         '<p class="hoja-titulo" id="hoja-res-t">Resolver problemas en una hoja</p>',
+         '<p class="hoja-nota">Un método, una cuenta rápida de tiempos y las pistas que llevan a cada técnica.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha"><h5>Cómo atacar un problema</h5>', res_flujo(),
+         '<p class="ficha-pie">La fuerza bruta no se tira: comprueba la versión rápida.</p></div>',
+         '<div class="ficha"><h5>¿Cabe en un segundo?</h5><ul class="semaforo">', sem, '</ul>',
+         '<p class="ficha-pie">Cuenta: unos 10⁷ pasos sencillos por segundo en un bucle de Python. Lo que va en C es mucho más rápido: <code>sorted()</code> ordena 10⁶ datos en 0,26 s.</p></div>',
+         '<div class="ficha ancha"><h5>Si el problema dice… piensa en…</h5><dl class="vocab">',
+         "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in pistas), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 # ---------- Un script de automatización seguro ----------
 def scr_flujo():
     p = "scf"
@@ -2001,6 +2055,7 @@ if __name__ == "__main__":
     t = insertar(t, "matematicas", hoja_matematicas())
     t = insertar(t, "herramientas", hoja_herramientas())
     t = insertar(t, "script", hoja_script())
+    t = insertar(t, "resolver", hoja_resolver())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

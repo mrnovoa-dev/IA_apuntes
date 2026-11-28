@@ -44,6 +44,7 @@ PAGINAS = [
     ("contenidos/itinerario.md", "itinerario.html", "itinerario"),
     ("contenidos/algoritmos.md", "algoritmos.html", "algoritmos"),
     ("contenidos/recursos.md", "recursos.html", "recursos"),
+    ("contenidos/ampliacion.md", "ampliacion.html", "ampliacion"),
     ("descargas/Teoria_Fundamental_Conceptos_UD2.md", "teoria.html", "teoria"),
 ]
 
@@ -168,6 +169,7 @@ MENU = [
         ("Análisis de datos", "De los datos al modelo", "datos.html", "datos"),
         ("Algoritmos de IA", "Catálogo: qué hace cada uno y cuándo usarlo", "algoritmos.html", "algoritmos"),
         ("Mapa de librerías", "Guía visual de Python para IA", "mapa.html", "mapa"),
+        ("Ampliación", "Más allá del currículo de Bachillerato", "ampliacion.html", "ampliacion"),
     ]),
     ("Recursos", [
         ("Recursos para aprender", "Vídeos, cursos y webs, por unidad", "recursos.html", "recursos"),

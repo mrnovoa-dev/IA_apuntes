@@ -1774,6 +1774,71 @@ def hoja_agentedentro():
     return "\n".join(h)
 
 
+# ---------- Tres perfiles: agentes, IA generativa y ciencia de datos ----------
+RUTAS = [
+    ("Ingeniería de agentes", "Que la IA actúe: usa herramientas, decide pasos y se controla", [
+        ("Python", "teoria.html#11-qué-es-un-programa", "ok"),
+        ("Cómo funciona un LLM", "teoria.html#148-ia-generativa-y-modelos-de-lenguaje-llm", "ok"),
+        ("Instrucciones (prompting)", "ud4-lenguaje.html#8-modelos-de-lenguaje", "ok"),
+        ("Llamada a herramientas", "teoria.html#la-llamada-a-herramientas-por-dentro-y-la-ingeniería-del-contexto", "ok"),
+        ("Un marco: LangChain, LangGraph…", "teoria.html#patrones-de-agentes-planificar-repartir-el-trabajo-y-revisar", "medio"),
+        ("RAG y bases vectoriales", "teoria.html#rag-mejorado-trozos-con-solapamiento-reordenación-y-bases-vectoriales", "ok"),
+        ("Varios agentes", "teoria.html#patrones-de-agentes-planificar-repartir-el-trabajo-y-revisar", "ok"),
+        ("Una API (FastAPI, Flask)", "teoria.html#http-y-api-rest", "ok"),
+        ("Docker", "teoria.html#docker-y-github-actions-el-mínimo-que-funciona", "medio"),
+        ("Evaluar y vigilar el agente", "teoria.html#fiabilidad-de-un-agente-reintentos-alternativas-y-evaluar-el-recorrido", "ok"),
+        ("Publicarlo", "teoria.html#un-agente-que-se-pueda-dejar-trabajando-cuándo-parar-memoria-herramientas-y-fallos-típicos", "medio")]),
+    ("Ingeniería de IA generativa", "Construir con modelos que generan texto o imágenes, y adaptarlos", [
+        ("Python", "teoria.html#11-qué-es-un-programa", "ok"),
+        ("Cómo funciona un LLM", "ud4-lenguaje.html#1010-el-transformer-por-dentro", "ok"),
+        ("Instrucciones (prompting)", "ud4-lenguaje.html#8-modelos-de-lenguaje", "ok"),
+        ("Embeddings", "ud4-lenguaje.html#4-del-texto-al-vector", "ok"),
+        ("Bases vectoriales y RAG", "teoria.html#rag-paso-a-paso", "ok"),
+        ("PyTorch", "teoria.html#pytorch-paso-a-paso-de-los-tensores-a-guardar-el-modelo", "medio"),
+        ("Hugging Face y Transformers", "ud4-lenguaje.html#109-transformers-bert-y-gpt", "medio"),
+        ("Ajuste fino (LoRA, PEFT)", "ud4-lenguaje.html#1010-el-transformer-por-dentro", "medio"),
+        ("Evaluar un LLM", "teoria.html#evaluar-una-aplicación-con-llm", "ok"),
+        ("Una API y Docker", "teoria.html#docker-y-github-actions-el-mínimo-que-funciona", "medio"),
+        ("Publicar en la nube", "teoria.html#137-del-notebook-a-la-app-desplegar-un-modelo", "medio")]),
+    ("Ciencia de datos", "Sacar conclusiones de los datos y predecir con modelos", [
+        ("Python", "teoria.html#11-qué-es-un-programa", "ok"),
+        ("NumPy", "teoria.html#71-numpy-computación-numérica", "ok"),
+        ("Pandas", "teoria.html#73-pandas-a-fondo", "ok"),
+        ("SQL", "datos.html#24-resumir-con-sql-cte-case-y-funciones-de-ventana", "ok"),
+        ("Limpieza y análisis exploratorio", "datos.html#25-un-eda-completo-en-orden-python-y-sql-a-la-vez", "ok"),
+        ("Estadística y probabilidad", "teoria.html#610-probabilidad-y-distribuciones-frecuentes", "ok"),
+        ("Gráficos: Matplotlib y Seaborn", "datos.html#22-elegir-el-gráfico-por-la-pregunta", "ok"),
+        ("Preparar variables", "datos.html#32-transformar-agrupar-codificar-y-escalar", "ok"),
+        ("scikit-learn y sus algoritmos", "algoritmos.html", "ok"),
+        ("Entrenar, evaluar y ajustar", "ud5-ml.html#6-sobreajuste-validación-cruzada-e-hiperparámetros", "ok"),
+        ("Publicar el modelo", "teoria.html#137-del-notebook-a-la-app-desplegar-un-modelo", "ok")]),
+]
+
+
+def hoja_rutas():
+    marca = {"ok": ("✓", "explicado en la web"), "medio": ("en parte", "explicado en parte")}
+    fichas = []
+    for titulo, que, pasos in RUTAS:
+        items = "".join(
+            f'<li class="{c}"><a href="{escape(u)}">{escape(t)}</a>'
+            f'<span class="marca" title="{marca[c][1]}" aria-label="{marca[c][1]}">{marca[c][0]}</span></li>'
+            for t, u, c in pasos)
+        fichas.append(f'<div class="ficha"><h5>{escape(titulo)}</h5><p class="ficha-pie">{escape(que)}</p>'
+                      f'<ol class="pasos">{items}</ol></div>')
+    comun = [("Git y GitHub", "los tres guardan y comparten su trabajo con Git"),
+             ("Pruebas", "comprobar con código que todo sigue funcionando"),
+             ("Matemáticas", "álgebra, probabilidad y cálculo, por debajo de todo (14.21)"),
+             ("Ética y datos", "privacidad, sesgos y el Reglamento de IA")]
+    h = ['<section class="hoja" aria-labelledby="hoja-rut-t">',
+         '<p class="hoja-titulo" id="hoja-rut-t">Tres perfiles, tres caminos</p>',
+         '<p class="hoja-nota">Un orden posible para cada perfil. Cada paso enlaza a donde se explica en esta web: ✓ explicado; «en parte» y número hueco, solo en parte.</p>',
+         '<div class="hoja-grid tres">', *fichas,
+         '<div class="ficha ancha"><h5>Lo que necesitan los tres, aunque no salga en las infografías</h5><dl class="vocab">',
+         "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in comun), '</dl></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 # ---------- Resolver problemas ----------
 def res_flujo():
     p = "rsf"
@@ -2077,4 +2142,8 @@ if __name__ == "__main__":
     if UD1.exists():
         u = UD1.read_text(encoding="utf-8")
         UD1.write_text(insertar(u, "ml", hoja_ml()), encoding="utf-8")
+    ITI = RAIZ / "contenidos" / "itinerario.md"
+    if ITI.exists():
+        u = ITI.read_text(encoding="utf-8")
+        ITI.write_text(insertar(u, "rutas", hoja_rutas()), encoding="utf-8")
     print("hojas insertadas")

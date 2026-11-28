@@ -41,6 +41,11 @@ experto en IA: itinerario en seis etapas</a>
 <ul>
 <li><a href="#mapa-del-itinerario" id="toc-mapa-del-itinerario">Mapa del
 itinerario</a></li>
+<li><a
+href="#tres-perfiles-tres-caminos-agentes-ia-generativa-y-ciencia-de-datos"
+id="toc-tres-perfiles-tres-caminos-agentes-ia-generativa-y-ciencia-de-datos">Tres
+perfiles, tres caminos: agentes, IA generativa y ciencia de
+datos</a></li>
 <li><a href="#etapa-1--fundamentos-de-programación"
 id="toc-etapa-1--fundamentos-de-programación">Etapa 1 · Fundamentos de
 programación</a></li>
@@ -180,6 +185,89 @@ Despliegue</a></td>
 <p><strong>Leyenda de la columna «En esta web»:</strong> ✅ está
 explicado · 🟡 está en parte · ⬜ todavía no está (con un recurso
 externo gratuito).</p>
+<h2
+id="tres-perfiles-tres-caminos-agentes-ia-generativa-y-ciencia-de-datos">Tres
+perfiles, tres caminos: agentes, IA generativa y ciencia de datos</h2>
+<p>Las seis etapas de arriba son un camino general. En el trabajo real
+se habla de <strong>perfiles</strong>, y en redes circulan infografías
+que los comparan con una lista de pasos para cada uno. Esta es una
+versión propia de una de ellas (de @theagenticaiengineer), adaptada a
+esta web: cada paso lleva a donde se explica.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Perfil</th>
+<th>Qué hace</th>
+<th>Se parece a…</th>
+<th>Etapas de este itinerario</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ingeniería de agentes</strong></td>
+<td>Construye sistemas en los que la IA usa herramientas, decide los
+pasos y se puede controlar</td>
+<td>Programar con un LLM como pieza central</td>
+<td>1, 3, 4, 5 y 6</td>
+</tr>
+<tr class="even">
+<td><strong>Ingeniería de IA generativa</strong></td>
+<td>Construye aplicaciones con modelos que generan texto o imágenes, y
+los adapta (RAG, ajuste fino)</td>
+<td>Ingeniería de software con modelos de lenguaje</td>
+<td>1, 3, 5 y 6</td>
+</tr>
+<tr class="odd">
+<td><strong>Ciencia de datos</strong></td>
+<td>Saca conclusiones de los datos y entrena modelos que predicen</td>
+<td>Estadística con programación</td>
+<td>1 y 2 (y el <a href="datos.html">itinerario de análisis de
+datos</a>)</td>
+</tr>
+</tbody>
+</table>
+<!-- hoja:rutas -->
+
+<section class="hoja" aria-labelledby="hoja-rut-t">
+<p class="hoja-titulo" id="hoja-rut-t">Tres perfiles, tres caminos</p>
+<p class="hoja-nota">Un orden posible para cada perfil. Cada paso enlaza a donde se explica en esta web: ✓ explicado; «en parte» y número hueco, solo en parte.</p>
+<div class="hoja-grid tres">
+<div class="ficha"><h5>Ingeniería de agentes</h5><p class="ficha-pie">Que la IA actúe: usa herramientas, decide pasos y se controla</p><ol class="pasos"><li class="ok"><a href="teoria.html#11-qué-es-un-programa">Python</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="teoria.html#148-ia-generativa-y-modelos-de-lenguaje-llm">Cómo funciona un LLM</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="ud4-lenguaje.html#8-modelos-de-lenguaje">Instrucciones (prompting)</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="teoria.html#la-llamada-a-herramientas-por-dentro-y-la-ingeniería-del-contexto">Llamada a herramientas</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="medio"><a href="teoria.html#patrones-de-agentes-planificar-repartir-el-trabajo-y-revisar">Un marco: LangChain, LangGraph…</a><span class="marca" title="explicado en parte" aria-label="explicado en parte">en parte</span></li><li class="ok"><a href="teoria.html#rag-mejorado-trozos-con-solapamiento-reordenación-y-bases-vectoriales">RAG y bases vectoriales</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="teoria.html#patrones-de-agentes-planificar-repartir-el-trabajo-y-revisar">Varios agentes</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="teoria.html#http-y-api-rest">Una API (FastAPI, Flask)</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="medio"><a href="teoria.html#docker-y-github-actions-el-mínimo-que-funciona">Docker</a><span class="marca" title="explicado en parte" aria-label="explicado en parte">en parte</span></li><li class="ok"><a href="teoria.html#fiabilidad-de-un-agente-reintentos-alternativas-y-evaluar-el-recorrido">Evaluar y vigilar el agente</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="medio"><a href="teoria.html#un-agente-que-se-pueda-dejar-trabajando-cuándo-parar-memoria-herramientas-y-fallos-típicos">Publicarlo</a><span class="marca" title="explicado en parte" aria-label="explicado en parte">en parte</span></li></ol></div>
+<div class="ficha"><h5>Ingeniería de IA generativa</h5><p class="ficha-pie">Construir con modelos que generan texto o imágenes, y adaptarlos</p><ol class="pasos"><li class="ok"><a href="teoria.html#11-qué-es-un-programa">Python</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="ud4-lenguaje.html#1010-el-transformer-por-dentro">Cómo funciona un LLM</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="ud4-lenguaje.html#8-modelos-de-lenguaje">Instrucciones (prompting)</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="ud4-lenguaje.html#4-del-texto-al-vector">Embeddings</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="teoria.html#rag-paso-a-paso">Bases vectoriales y RAG</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="medio"><a href="teoria.html#pytorch-paso-a-paso-de-los-tensores-a-guardar-el-modelo">PyTorch</a><span class="marca" title="explicado en parte" aria-label="explicado en parte">en parte</span></li><li class="medio"><a href="ud4-lenguaje.html#109-transformers-bert-y-gpt">Hugging Face y Transformers</a><span class="marca" title="explicado en parte" aria-label="explicado en parte">en parte</span></li><li class="medio"><a href="ud4-lenguaje.html#1010-el-transformer-por-dentro">Ajuste fino (LoRA, PEFT)</a><span class="marca" title="explicado en parte" aria-label="explicado en parte">en parte</span></li><li class="ok"><a href="teoria.html#evaluar-una-aplicación-con-llm">Evaluar un LLM</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="medio"><a href="teoria.html#docker-y-github-actions-el-mínimo-que-funciona">Una API y Docker</a><span class="marca" title="explicado en parte" aria-label="explicado en parte">en parte</span></li><li class="medio"><a href="teoria.html#137-del-notebook-a-la-app-desplegar-un-modelo">Publicar en la nube</a><span class="marca" title="explicado en parte" aria-label="explicado en parte">en parte</span></li></ol></div>
+<div class="ficha"><h5>Ciencia de datos</h5><p class="ficha-pie">Sacar conclusiones de los datos y predecir con modelos</p><ol class="pasos"><li class="ok"><a href="teoria.html#11-qué-es-un-programa">Python</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="teoria.html#71-numpy-computación-numérica">NumPy</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="teoria.html#73-pandas-a-fondo">Pandas</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="datos.html#24-resumir-con-sql-cte-case-y-funciones-de-ventana">SQL</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="datos.html#25-un-eda-completo-en-orden-python-y-sql-a-la-vez">Limpieza y análisis exploratorio</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="teoria.html#610-probabilidad-y-distribuciones-frecuentes">Estadística y probabilidad</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="datos.html#22-elegir-el-gráfico-por-la-pregunta">Gráficos: Matplotlib y Seaborn</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="datos.html#32-transformar-agrupar-codificar-y-escalar">Preparar variables</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="algoritmos.html">scikit-learn y sus algoritmos</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="ud5-ml.html#6-sobreajuste-validación-cruzada-e-hiperparámetros">Entrenar, evaluar y ajustar</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li><li class="ok"><a href="teoria.html#137-del-notebook-a-la-app-desplegar-un-modelo">Publicar el modelo</a><span class="marca" title="explicado en la web" aria-label="explicado en la web">✓</span></li></ol></div>
+<div class="ficha ancha"><h5>Lo que necesitan los tres, aunque no salga en las infografías</h5><dl class="vocab">
+<dt>Git y GitHub</dt><dd>los tres guardan y comparten su trabajo con Git</dd><dt>Pruebas</dt><dd>comprobar con código que todo sigue funcionando</dd><dt>Matemáticas</dt><dd>álgebra, probabilidad y cálculo, por debajo de todo (14.21)</dd><dt>Ética y datos</dt><dd>privacidad, sesgos y el Reglamento de IA</dd>
+</dl></div>
+</div></section>
+<!-- /hoja:rutas -->
+
+<p><strong>Cómo leer estos caminos, con criterio:</strong></p>
+<ul>
+<li><strong>Son un orden posible, no una cadena obligatoria.</strong> En
+la infografía original, el camino de IA generativa empieza por PyTorch y
+Hugging Face y deja para después los fundamentos de los LLM y las
+instrucciones. Aquí va al revés: primero entender qué hace un modelo de
+lenguaje y usarlo bien; PyTorch hace falta sobre todo para
+<strong>entrenar o ajustar</strong> modelos, que es lo último.</li>
+<li><strong>Faltan cosas que necesitan los tres.</strong> Ninguna de las
+tres columnas dice Git, pruebas, seguridad o ética, y sin eso no se
+llega a ninguna parte en un equipo de verdad. Tampoco aparecen las <a
+href="teoria.html#1421-las-matemáticas-de-la-ia-lo-que-hay-debajo-de-cada-modelo">matemáticas</a>,
+que están debajo de todo.</li>
+<li><strong>Los perfiles se mezclan.</strong> Un agente necesita RAG y
+evaluación, igual que una aplicación generativa, y los dos se benefician
+de saber analizar datos. Muchas personas empiezan por ciencia de datos y
+acaban construyendo agentes.</li>
+<li><strong>Las herramientas caducan; las ideas no.</strong> LangChain,
+LangGraph o una base vectorial concreta pueden cambiar en un par de
+años. La llamada a herramientas, el RAG o la evaluación seguirán
+ahí.</li>
+<li><strong>En 1.º de Bachillerato</strong> se recorre casi entera la
+columna de <strong>ciencia de datos</strong> (UD2 y UD5) y los primeros
+pasos de las otras dos (UD4). El resto es para quien quiera seguir: está
+en la teoría 14.19 y en la página de <a
+href="ampliacion.html">Ampliación</a>.</li>
+</ul>
 <h2 id="etapa-1--fundamentos-de-programación">Etapa 1 · Fundamentos de
 programación</h2>
 <p>Antes de la IA, saber <strong>programar bien</strong>: código que se

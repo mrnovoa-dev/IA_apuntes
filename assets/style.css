@@ -398,6 +398,19 @@
   .ficha h5 { margin: 0 0 10px; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; line-height: 1.25; color: var(--ink); }
   .ficha :is(p, li, dd) { max-inline-size: none; }
   .ficha-pie { margin: 10px 0 0; font-size: .92rem; color: var(--muted); }
+  .hoja-grid.tres { grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+  .ficha h5 + .ficha-pie { margin: -4px 0 10px; }
+  .hoja ol.pasos { list-style: none; margin: 0; padding: 0; counter-reset: paso; }
+  .hoja ol.pasos li { counter-increment: paso; position: relative; display: flex; gap: 8px; align-items: baseline;
+    padding: 4px 0 8px 34px; font-size: .95rem; line-height: 1.35; }
+  .hoja ol.pasos li::before { content: counter(paso); position: absolute; inset-inline-start: 0; inset-block-start: 3px;
+    inline-size: 22px; block-size: 22px; border-radius: 50%; display: grid; place-items: center;
+    font: 700 .75rem/1 var(--font-mono); color: var(--paper); background: var(--pen); }
+  .hoja ol.pasos li:not(:last-child)::after { content: ""; position: absolute; inset-inline-start: 10px; inset-block: 26px -3px;
+    border-inline-start: 2px dotted var(--line); }
+  .hoja ol.pasos li.medio::before { background: var(--surface); color: var(--pen); box-shadow: inset 0 0 0 2px var(--pen); }
+  .hoja ol.pasos a { flex: 1; }
+  .hoja ol.pasos .marca { color: var(--muted); font-size: .85rem; }
   .hoja code.cmd { display: inline-block; margin: 2px 4px 2px 0; padding: 2px 8px; border-radius: 4px; font: 600 .8rem/1.6 var(--font-mono);
     background: color-mix(in oklab, var(--paper) 12%, #0B1220); color: #EEF2F8; white-space: normal; overflow-wrap: anywhere; max-inline-size: 100%; }
   .hoja code.cmd::before { content: "$ "; color: #EEF85A; }

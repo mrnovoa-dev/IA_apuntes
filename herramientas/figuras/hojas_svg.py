@@ -1774,6 +1774,55 @@ def hoja_agentedentro():
     return "\n".join(h)
 
 
+# ---------- Un script de automatización seguro ----------
+def scr_flujo():
+    p = "scf"
+    b = caja(60, 4, 180, 38, "1 Leer argumentos", "argparse: si faltan, código 2")
+    b += linea("M150,44 V58", p)
+    b += caja(60, 60, 180, 38, "2 Leer configuración", "si falta algo, parar: código 1")
+    b += linea("M150,100 V114", p)
+    b += caja(60, 116, 180, 38, "3 Planificar", "decidir sin tocar nada", "sv-caja sv-caja-ok")
+    b += linea("M150,156 V170", p)
+    b += caja(60, 172, 180, 38, "4 Comprobar el plan", "¿conflictos? no se hace nada")
+    b += linea("M120,212 C120,226 70,226 70,238", p) + linea("M180,212 C180,226 230,226 230,238", p)
+    b += caja(8, 242, 124, 38, "Mostrar el plan", "sin --aplicar", "sv-caja sv-caja-ok")
+    b += caja(168, 242, 124, 38, "Hacer los cambios", "con --aplicar", "sv-caja sv-caja-ml")
+    b += linea("M70,282 C70,296 130,296 140,304", p) + linea("M230,282 C230,296 170,296 160,304", p)
+    b += caja(60, 306, 180, 30, "5 Código de salida: 0", None)
+    desc = ("Un script seguro lee los argumentos (si faltan, termina con código 2), lee la configuración (si falta algo, "
+            "termina con código 1), planifica sin tocar nada y comprueba el plan. Sin --aplicar solo muestra el plan; "
+            "con --aplicar hace los cambios. Si todo va bien, termina con código 0.")
+    return svg(p, "0 0 300 340", "El recorrido de un script seguro", desc, b, "sv-tab")
+
+
+def hoja_script():
+    codigos = [("0", "todo bien: la integración continua sigue"),
+               ("1", "error: faltaba algo, un conflicto, un fallo al trabajar"),
+               ("2", "uso incorrecto: argumentos que faltan o no valen (argparse)"),
+               ("echo $?", "en la terminal, el código del último programa")]
+    git = [("ok", "✓", "requirements.txt y .env.example", "sí se suben: dicen qué hace falta"),
+           ("no", "✗", ".env", "nunca: lleva las claves de verdad"),
+           ("no", "✗", ".venv/", "nunca: se rehace con pip install -r")]
+    errores = [("no", "✗", "Cambiar primero y mirar después", "planificar, comprobar y luego actuar"),
+               ("no", "✗", "Imprimir la clave para comprobarla", "mejor su longitud, o «cargada»"),
+               ("medio", "⚠", "import logging y nada más", "sin basicConfig no se ven los INFO"),
+               ("medio", "⚠", "pip install sin versiones", "mañana se instala otra versión"),
+               ("ok", "✓", "La prueba como lo normal", "--aplicar para el cambio real")]
+    li = lambda xs: "".join(f'<li class="{c}"><b>{escape(o)}</b><span class="marca">{m}</span><span class="que">{escape(q)}</span></li>' for c, m, o, q in xs)
+    h = ['<section class="hoja" aria-labelledby="hoja-scr-t">',
+         '<p class="hoja-titulo" id="hoja-scr-t">Un script que no rompe nada</p>',
+         '<p class="hoja-nota">Cinco pasos, tres códigos de salida y qué se sube a GitHub.</p>',
+         '<div class="hoja-grid">',
+         '<div class="ficha"><h5>El recorrido</h5>', scr_flujo(),
+         '<p class="ficha-pie">Si algo falla antes del paso 5, no se ha cambiado nada.</p></div>',
+         '<div class="ficha"><h5>Códigos de salida</h5><dl class="vocab">',
+         "".join(f"<dt>{escape(a)}</dt><dd>{escape(d)}</dd>" for a, d in codigos), '</dl>',
+         '<h5>¿Se sube a GitHub?</h5><ul class="semaforo">', li(git), '</ul></div>',
+         '<div class="ficha ancha"><h5>Errores frecuentes</h5><ul class="semaforo">', li(errores), '</ul></div>',
+         '</div></section>']
+    return "\n".join(h)
+
+
 # ---------- Llamar a herramientas ----------
 def her_protocolo():
     p = "hep"
@@ -1951,6 +2000,7 @@ if __name__ == "__main__":
     t = insertar(t, "agentedentro", hoja_agentedentro())
     t = insertar(t, "matematicas", hoja_matematicas())
     t = insertar(t, "herramientas", hoja_herramientas())
+    t = insertar(t, "script", hoja_script())
     TEORIA.write_text(t, encoding="utf-8")
     UD4 = RAIZ / "contenidos" / "ud4-lenguaje.md"
     if UD4.exists():

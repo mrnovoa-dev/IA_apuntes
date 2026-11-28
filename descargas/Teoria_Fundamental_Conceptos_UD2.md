@@ -204,7 +204,7 @@ for _ in range(5):                      # el ciclo se repite continuamente
 | GPS calculando una ruta | Depende | Búsqueda en grafos (técnica clásica de IA) sin aprendizaje; si estima el tráfico con datos históricos, sí aprende |
 | Corrector ortográfico | Depende | Con diccionario es una regla; si sugiere por contexto, usa un modelo |
 
-**Conexión con UD2**: casi todo lo que programamos en E1–E167 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
+**Conexión con UD2**: casi todo lo que programamos en E1–E169 es **programación determinista** (no IA). Es la base imprescindible: los modelos de IA (sección 10, UD5) se construyen encima de ella.
 
 ### 0.6 Tipos de IA: IA clásica, Machine Learning y Deep Learning
 
@@ -5988,6 +5988,157 @@ while True:
     time.sleep(60)
 ```
 
+#### Un script de automatización seguro: entorno, secretos, modo de prueba y códigos de salida
+
+El ejemplo 1 funciona, pero en una carpeta real tiene dos peligros: mueve los archivos **sin enseñar antes qué va a hacer**, y si en el destino ya existe un archivo con el mismo nombre, en Linux y macOS lo **sobrescribe** sin avisar. Un *script* que va a tocar archivos, enviar correos o cambiar datos se prepara con cinco piezas:
+
+<!-- hoja:script -->
+<section class="hoja" aria-labelledby="hoja-scr-t">
+<p class="hoja-titulo" id="hoja-scr-t">Un script que no rompe nada</p>
+<p class="hoja-nota">Cinco pasos, tres códigos de salida y qué se sube a GitHub.</p>
+<div class="hoja-grid">
+<div class="ficha"><h5>El recorrido</h5>
+<svg class="sv sv-tab" viewBox="0 0 300 340" role="img" aria-labelledby="scf-t scf-d"><title id="scf-t">El recorrido de un script seguro</title><desc id="scf-d">Un script seguro lee los argumentos (si faltan, termina con código 2), lee la configuración (si falta algo, termina con código 1), planifica sin tocar nada y comprueba el plan. Sin --aplicar solo muestra el plan; con --aplicar hace los cambios. Si todo va bien, termina con código 0.</desc><defs><marker id="scf-pen" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-pen"/></marker><marker id="scf-vuelta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-vuelta"/></marker><marker id="scf-ml" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-ml"/></marker><marker id="scf-tinta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-tinta"/></marker><marker id="scf-rojo" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="sv-punta-rojo"/></marker></defs><rect x="60" y="4" width="180" height="38" rx="8" class="sv-caja"/><text x="150.0" y="20.0" class="sv-tit" text-anchor="middle">1 Leer argumentos</text><text x="150.0" y="37.0" class="sv-sub" text-anchor="middle">argparse: si faltan, código 2</text><path d="M150,44 V58" class="sv-l-pen" marker-end="url(#scf-pen)"/><rect x="60" y="60" width="180" height="38" rx="8" class="sv-caja"/><text x="150.0" y="76.0" class="sv-tit" text-anchor="middle">2 Leer configuración</text><text x="150.0" y="93.0" class="sv-sub" text-anchor="middle">si falta algo, parar: código 1</text><path d="M150,100 V114" class="sv-l-pen" marker-end="url(#scf-pen)"/><rect x="60" y="116" width="180" height="38" rx="8" class="sv-caja sv-caja-ok"/><text x="150.0" y="132.0" class="sv-tit" text-anchor="middle">3 Planificar</text><text x="150.0" y="149.0" class="sv-sub" text-anchor="middle">decidir sin tocar nada</text><path d="M150,156 V170" class="sv-l-pen" marker-end="url(#scf-pen)"/><rect x="60" y="172" width="180" height="38" rx="8" class="sv-caja"/><text x="150.0" y="188.0" class="sv-tit" text-anchor="middle">4 Comprobar el plan</text><text x="150.0" y="205.0" class="sv-sub" text-anchor="middle">¿conflictos? no se hace nada</text><path d="M120,212 C120,226 70,226 70,238" class="sv-l-pen" marker-end="url(#scf-pen)"/><path d="M180,212 C180,226 230,226 230,238" class="sv-l-pen" marker-end="url(#scf-pen)"/><rect x="8" y="242" width="124" height="38" rx="8" class="sv-caja sv-caja-ok"/><text x="70.0" y="258.0" class="sv-tit" text-anchor="middle">Mostrar el plan</text><text x="70.0" y="275.0" class="sv-sub" text-anchor="middle">sin --aplicar</text><rect x="168" y="242" width="124" height="38" rx="8" class="sv-caja sv-caja-ml"/><text x="230.0" y="258.0" class="sv-tit" text-anchor="middle">Hacer los cambios</text><text x="230.0" y="275.0" class="sv-sub" text-anchor="middle">con --aplicar</text><path d="M70,282 C70,296 130,296 140,304" class="sv-l-pen" marker-end="url(#scf-pen)"/><path d="M230,282 C230,296 170,296 160,304" class="sv-l-pen" marker-end="url(#scf-pen)"/><rect x="60" y="306" width="180" height="30" rx="8" class="sv-caja"/><text x="150.0" y="326.0" class="sv-tit" text-anchor="middle">5 Código de salida: 0</text></svg>
+<p class="ficha-pie">Si algo falla antes del paso 5, no se ha cambiado nada.</p></div>
+<div class="ficha"><h5>Códigos de salida</h5><dl class="vocab">
+<dt>0</dt><dd>todo bien: la integración continua sigue</dd><dt>1</dt><dd>error: faltaba algo, un conflicto, un fallo al trabajar</dd><dt>2</dt><dd>uso incorrecto: argumentos que faltan o no valen (argparse)</dd><dt>echo $?</dt><dd>en la terminal, el código del último programa</dd>
+</dl>
+<h5>¿Se sube a GitHub?</h5><ul class="semaforo">
+<li class="ok"><b>requirements.txt y .env.example</b><span class="marca">✓</span><span class="que">sí se suben: dicen qué hace falta</span></li><li class="no"><b>.env</b><span class="marca">✗</span><span class="que">nunca: lleva las claves de verdad</span></li><li class="no"><b>.venv/</b><span class="marca">✗</span><span class="que">nunca: se rehace con pip install -r</span></li>
+</ul></div>
+<div class="ficha ancha"><h5>Errores frecuentes</h5><ul class="semaforo">
+<li class="no"><b>Cambiar primero y mirar después</b><span class="marca">✗</span><span class="que">planificar, comprobar y luego actuar</span></li><li class="no"><b>Imprimir la clave para comprobarla</b><span class="marca">✗</span><span class="que">mejor su longitud, o «cargada»</span></li><li class="medio"><b>import logging y nada más</b><span class="marca">⚠</span><span class="que">sin basicConfig no se ven los INFO</span></li><li class="medio"><b>pip install sin versiones</b><span class="marca">⚠</span><span class="que">mañana se instala otra versión</span></li><li class="ok"><b>La prueba como lo normal</b><span class="marca">✓</span><span class="que">--aplicar para el cambio real</span></li>
+</ul></div>
+</div></section>
+<!-- /hoja:script -->
+
+**1. Un entorno por proyecto, con versiones fijadas.** El entorno virtual separa las librerías de cada proyecto. Lo que se instala se apunta en `requirements.txt` **con versión**, para que el *script* funcione igual en otro ordenador o dentro de un año:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate            # Windows: .venv\Scripts\activate
+pip install requests==2.32.5
+pip freeze > requirements.txt        # apunta las versiones exactas instaladas
+pip install -r requirements.txt      # en otro ordenador: instala lo mismo
+```
+
+Con `uv` ([14.14](#herramientas-del-proyecto-uv-ruff-y-anotaciones-de-tipo)) los mismos pasos son más rápidos y el archivo de versiones (`uv.lock`) se escribe solo.
+
+**2. Los secretos, fuera del código y de GitHub.** La configuración que cambia entre ordenadores (claves, si es una prueba o el uso real) se lee de **variables de entorno**. El archivo `.env` es una forma cómoda de guardarlas en el propio ordenador, y **tiene que estar en `.gitignore`**. Lo que sí se sube es un `.env.example` con los nombres y sin los valores, para que quien descargue el proyecto sepa qué tiene que rellenar:
+
+```text
+# .gitignore            # .env.example (se sube)      # .env (NO se sube)
+.venv/                  TIEMPO_API_KEY=               TIEMPO_API_KEY=mi-clave-real
+.env                    ENTORNO=pruebas               ENTORNO=pruebas
+```
+
+El programa comprueba la configuración **al empezar**, falla con un mensaje claro si falta algo y nunca escribe la clave en pantalla ni en el registro:
+
+```python
+import os, sys
+
+def leer_config() -> dict:
+    clave = os.environ.get("TIEMPO_API_KEY")
+    if not clave:
+        sys.exit("Falta TIEMPO_API_KEY: cópiala en .env (mira .env.example)")   # texto → código 1
+    entorno = os.environ.get("ENTORNO", "pruebas")          # valor por defecto si no está
+    if entorno not in {"pruebas", "real"}:
+        sys.exit(f"ENTORNO no válido: {entorno!r}")
+    return {"clave": clave, "entorno": entorno}
+
+cfg = leer_config()
+print("Entorno:", cfg["entorno"], "| clave cargada:", len(cfg["clave"]), "caracteres")   # nunca la clave
+# sin la variable:          Falta TIEMPO_API_KEY: cópiala en .env (mira .env.example)   (código 1)
+# TIEMPO_API_KEY=abc123xyz: Entorno: pruebas | clave cargada: 9 caracteres             (código 0)
+# ... ENTORNO=prod:         ENTORNO no válido: 'prod'                                   (código 1)
+```
+
+Para leer el `.env` desde Python se usa `python-dotenv`: `from dotenv import load_dotenv; load_dotenv()` al principio, y después `os.environ` como siempre.
+
+**3. Primero, en modo de prueba.** El *script* enseña qué haría y **no cambia nada** hasta que se le pide. Es más seguro que la prueba sea lo normal y que el cambio real necesite una opción explícita (`--aplicar`) que al revés (`--dry-run`): si alguien olvida la opción, no pasa nada.
+
+**4. Un código de salida que diga cómo ha ido.** Al terminar, todo programa devuelve un número al sistema: **0** si fue bien y otro número si falló. Lo usan la terminal (`echo $?`), los programas que lanzan otros programas y la integración continua ([GitHub Actions](#docker-y-github-actions-el-mínimo-que-funciona)), que se detiene si un paso no devuelve 0. Por costumbre, **1** es un error general y **2**, un uso incorrecto; `argparse` ya devuelve 2 cuando faltan argumentos. Con `sys.exit("mensaje")` el mensaje va a la salida de errores y el código es 1.
+
+**5. Una plantilla que se repite.** El ejemplo 1, reescrito con todo lo anterior:
+
+```python
+#!/usr/bin/env python3
+"""Ordena los archivos de una carpeta en subcarpetas según su tipo."""
+import argparse
+import logging
+import shutil
+import sys
+from pathlib import Path
+
+TIPOS = {".pdf": "Documentos", ".odt": "Documentos", ".jpg": "Imagenes", ".png": "Imagenes", ".csv": "Datos"}
+log = logging.getLogger("ordenar")
+
+
+def planificar(carpeta: Path) -> list[tuple[Path, Path]]:
+    """Decide qué se movería, sin tocar nada."""
+    plan = []
+    for archivo in sorted(carpeta.iterdir()):
+        sub = TIPOS.get(archivo.suffix.lower())
+        if archivo.is_file() and sub:
+            plan.append((archivo, carpeta / sub / archivo.name))
+    return plan
+
+
+def main(argv=None) -> int:
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("carpeta", type=Path)
+    p.add_argument("--aplicar", action="store_true", help="mover de verdad (sin esto, solo muestra el plan)")
+    p.add_argument("-v", "--verbose", action="store_true")
+    args = p.parse_args(argv)                     # si los argumentos están mal: mensaje y código 2
+    logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO,
+                        format="%(levelname)s %(message)s")
+
+    if not args.carpeta.is_dir():
+        log.error("No existe la carpeta %s", args.carpeta)
+        return 1
+    plan = planificar(args.carpeta)
+    conflictos = [d for _, d in plan if d.exists()]
+    if conflictos:                                # nunca sobrescribir sin avisar
+        log.error("Ya existen %d archivos en el destino; no se mueve nada", len(conflictos))
+        return 1
+    for origen, destino in plan:
+        if args.aplicar:
+            destino.parent.mkdir(exist_ok=True)
+            shutil.move(origen, destino)
+        log.info("%s %s -> %s", "MOVIDO" if args.aplicar else "PLAN", origen.name, destino.parent.name)
+    if not args.aplicar:
+        log.info("Prueba: no se ha movido nada. Repite con --aplicar.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())                              # el número que devuelve main es el código de salida
+```
+
+Con una carpeta `entregas` inventada que tiene `tarea1_uxia.pdf`, `foto_brais.JPG`, `notas.csv` y `lista.txt`:
+
+```text
+$ ./ordenar.py entregas                       $ ./ordenar.py entregas --aplicar
+INFO PLAN foto_brais.JPG -> Imagenes          INFO MOVIDO foto_brais.JPG -> Imagenes
+INFO PLAN notas.csv -> Datos                  INFO MOVIDO notas.csv -> Datos
+INFO PLAN tarea1_uxia.pdf -> Documentos       INFO MOVIDO tarea1_uxia.pdf -> Documentos
+INFO Prueba: no se ha movido nada. ...        (código 0)
+(código 0)
+
+$ ./ordenar.py entregas --aplicar             # aparece otro notas.csv
+ERROR Ya existen 1 archivos en el destino; no se mueve nada      (código 1)
+$ ./ordenar.py                                # sin carpeta: lo detecta argparse
+ordenar.py: error: the following arguments are required: carpeta (código 2)
+```
+
+Detalles de la plantilla:
+
+- La primera línea, `#!/usr/bin/env python3` (el *shebang*), permite lanzarlo como `./ordenar.py` en Linux y macOS después de `chmod +x ordenar.py`. En Windows se lanza con `python ordenar.py`.
+- **Primero se planifica y después se actúa.** Toda la decisión está en `planificar()`, que no toca nada: así el modo de prueba enseña exactamente lo que se hará, y la función se puede probar con `pytest` ([14.11](#1411-testing-y-bases-de-datos)).
+- **Se comprueba todo antes del primer cambio.** Si hay un conflicto, no se mueve **ningún** archivo. Así no se queda la carpeta a medias.
+- `logging` en vez de `print`: cada mensaje tiene un nivel (`DEBUG`, `INFO`, `WARNING`, `ERROR`) y con `-v` se ve más detalle sin tocar el código. `import logging` sin `basicConfig` no basta: sin configurar, los mensajes `INFO` no aparecen.
+- `main(argv=None)` acepta una lista de argumentos para poder probarla: `main(["entregas"])` devuelve `0`.
+
 > ⚠️ **Scraping responsable**: lee los términos de uso y el `robots.txt` de la web, no hagas peticiones masivas (añade pausas) y usa una API oficial si existe.
 
 **Conexión con la IA**: la automatización es la fase de **Extracción** del ETL (sección 9) y permite alimentar los modelos con datos actualizados. Los LLM también pueden llamarse desde Python (`openai`, `anthropic`) para automatizar resúmenes o clasificaciones de textos (UD3).
@@ -7407,6 +7558,7 @@ Con un candado (`candado = threading.Lock()` y `with candado:` alrededor de leer
 | «AI Agents: Architecture, Planning, Memory & Tool Calling» (@abhi_techhub, PDF de 15 págs. sin capa de texto, con la pág. 2 repetida) | Tipos clásicos de agente con código (reactivo, por objetivos, por utilidad), contexto, estado, memoria y RAG, construir el contexto con un presupuesto de *tokens*, la hoja «Un agente por dentro» (figuras propias); afirmaciones desfasadas o engañosas usadas en E162 | UD1 sección 8; teoría 14.19; ejercicios E162–E163 |
 | «Mathematics for AI & ML» (@abhi_techhub, PDF de 15 págs. manuscritas, sin capa de texto) | Álgebra lineal con código (producto, `solve`, autovalores, SVD y su relación con PCA), derivadas parciales y gradiente, Bayes con la tasa base, Poisson, chi-cuadrado con y sin corrección de Yates, ANOVA y Tukey, curtosis en exceso, entropía, entropía cruzada, KL e información mutua, tipos de muestreo, la hoja «Las matemáticas de la IA, en una hoja» (figuras propias); cuentas erróneas usadas en E164 | Teoría 14.21; ejercicios E164–E165 |
 | «AI Agents Complete Notes – Theory Edition» (@codedsoul_05, PDF de 38 págs.) | En 14.19: «La llamada a herramientas por dentro y la ingeniería del contexto» (protocolo `tool_use`/`tool_result` con varias llamadas a la vez e `is_error`, `max_tokens`, *context rot*, limpiar/compactar/notas/aislar con cuentas de *tokens*, cargar justo a tiempo y *Agent Skills*), la tríada letal con comprobador, pass@k frente a pass^k y bancos de pruebas, «Agentes que programan y agentes que usan el ordenador», piezas de MCP y su especificación sin estado (julio de 2026), A2A 1.0; hoja «Llamar a herramientas sin romper nada» (figuras propias); fallos del código de la fuente usados en E166 | Teoría 14.19; ejercicios E166–E167 |
+| «Build a Safe Python Automation Environment» (@veriqta, lámina 3 de un carrusel de 15, «contenido generado con IA»; solo se ha visto esa lámina) | En 14.10, «Un script de automatización seguro»: versiones fijadas con `pip freeze`, `.env` en `.gitignore` y `.env.example`, configuración comprobada al empezar sin mostrar la clave, prueba por defecto con `--aplicar`, códigos de salida 0/1/2, plantilla ejecutada que planifica antes de actuar y no sobrescribe, *shebang*, `logging` configurado; hoja «Un script que no rompe nada» (figuras propias); simplificaciones de la lámina en E168 | Teoría 14.10; ejercicios E168–E169 |
 | «Comparativa de librerías de visualización en Python: Pygal vs. Matplotlib y alternativas» (respuesta de Gemini, en Markdown) | Subsección «Más allá de Matplotlib y Seaborn» en 12.3: tabla con Plotly, Altair, Pygal y Bokeh, el mismo gráfico en cinco librerías con los tamaños medidos (Plotly, Altair y Pygal instaladas desde su código en GitHub), qué necesita internet y la hoja visual «Gráficos en una hoja». Errores y omisiones usados en E139 | 12.3; ejercicios E139–E140 |
 | «Generative AI for Everyone» (SingleStore, e-book gratuito de 62 págs., material promocional de 2023-2024) | Casi todo ya estaba en 14.8 y 14.19. Se añaden «Modelos pequeños y locales» (memoria, destilación, cuantización por bloques, poda, Ollama y LM Studio, estado a noviembre de 2026) con su hoja visual, tres tipos de alucinación y el límite del ajuste fino para enseñar datos, y cinco formas de trocear con la hoja «El mismo texto, troceado de tres formas». Errores usados en E137 | 14.8 y 14.19 «RAG mejorado»; ejercicios E137–E138 |
 | «LLMs Explained in 18 Concepts» (@mentalhotfix, carrusel de 20 láminas que la propia publicación marca como «Contenido generado con IA») | Correcto en lo esencial. Se añaden en la UD4 el posentrenamiento (SFT y preferencias), entrenamiento frente a inferencia, de logits a probabilidades con temperatura y top-p, prefill y decode con la caché KV (y su diferencia con la caché de respuestas) y la hoja visual «Un LLM en una hoja» | UD4 secciones 8 y 10.10; ejercicios E135–E136 |
